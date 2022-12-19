@@ -14,3 +14,7 @@ dependencyResolutionManagement {
 }
 rootProject.name = "MBP-01"
 include ':app'
+include ':screenTime'
+include ':screenTime:data'
+include ':screenTime:domain'
+include ':screenTime:presentation'

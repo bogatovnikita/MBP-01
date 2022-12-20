@@ -1,11 +1,12 @@
 package com.hedgehog.presentation.ui.first_screen
 
-import android.app.usage.UsageStats
 import androidx.lifecycle.viewModelScope
-import com.hedgehog.domain.models.CalendarScreenTime
 import com.hedgehog.domain.usacase.GetScreenTimeDataUseCase
 import com.hedgehog.domain.wrapper.CaseResult
 import com.hedgehog.presentation.base.BaseViewModel
+import com.hedgehog.presentation.extensions.mapToAppTime
+import com.hedgehog.presentation.models.AppScreenTime
+import com.hedgehog.presentation.models.CalendarScreenTime
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -18,7 +19,10 @@ class FirstScreenTimeViewModel @Inject constructor(
     fun getListTimeScreenData(calendarScreenTime: CalendarScreenTime) {
         viewModelScope.launch {
             getScreenTimeDataUseCase.invoke(
-                calendarScreenTime
+                com.hedgehog.domain.models.CalendarScreenTime(
+                    dataType = calendarScreenTime.dataType,
+                    dataCount = calendarScreenTime.dataCount
+                )
             ).collect { result ->
                 when (result) {
                     is CaseResult.Success -> {
@@ -36,13 +40,16 @@ class FirstScreenTimeViewModel @Inject constructor(
         }
     }
 
-    private fun onSuccess(result: CaseResult.Success<List<UsageStats>>) {
-        val tempList = result.response.filter {
-            it.totalTimeInForeground > 0
-        }
+    private fun onSuccess(result: CaseResult.Success<List<com.hedgehog.domain.models.AppScreenTime>>) {
         updateState {
             it.copy(
-                listDataScreenTime = tempList
+                listDataScreenTime = result.response.map { usageState ->
+                    AppScreenTime(
+                        name = usageState.name,
+                        time = usageState.time.mapToAppTime(),
+                        icon = usageState.icon
+                    )
+                }
             )
         }
     }

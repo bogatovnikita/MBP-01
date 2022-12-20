@@ -1,6 +1,6 @@
 package com.hedgehog.domain.usacase
 
-import android.app.usage.UsageStats
+import com.hedgehog.domain.models.AppScreenTime
 import com.hedgehog.domain.models.CalendarScreenTime
 import com.hedgehog.domain.repository.ScreenTimeDataRepository
 import com.hedgehog.domain.wrapper.CaseResult
@@ -13,10 +13,9 @@ import javax.inject.Inject
 
 class GetScreenTimeDataUseCase @Inject constructor(private val screenTimeDataRepository: ScreenTimeDataRepository) {
 
-    fun invoke(calendarScreenTime: CalendarScreenTime): Flow<CaseResult<List<UsageStats>, String>> =
+    fun invoke(calendarScreenTime: CalendarScreenTime): Flow<CaseResult<List<AppScreenTime>, String>> =
         screenTimeDataRepository.getScreenTimeData(calendarScreenTime)
             .catch { e -> e.printStackTrace() }
             .cancellable()
             .flowOn(Dispatchers.IO)
-
 }

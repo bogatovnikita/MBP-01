@@ -3,6 +3,7 @@ package com.hedgehog.data.repository_implementation
 import android.app.usage.UsageStats
 import android.app.usage.UsageStatsManager
 import android.content.Context
+import com.hedgehog.domain.models.AppScreenTime
 import com.hedgehog.domain.models.CalendarScreenTime
 import com.hedgehog.domain.repository.ScreenTimeDataRepository
 import com.hedgehog.domain.wrapper.CaseResult
@@ -17,7 +18,7 @@ class ScreenTimeDataRepositoryImplementation @Inject constructor(@ApplicationCon
 
     private lateinit var stats: UsageStatsManager
 
-    override fun getScreenTimeData(calendarScreenTime: CalendarScreenTime): Flow<CaseResult<List<UsageStats>, String>> =
+    override fun getScreenTimeData(calendarScreenTime: CalendarScreenTime): Flow<CaseResult<List<AppScreenTime>, String>> =
         flow {
             val cal = Calendar.getInstance()
             cal.add(calendarScreenTime.dataType, calendarScreenTime.dataCount)
@@ -27,10 +28,24 @@ class ScreenTimeDataRepositoryImplementation @Inject constructor(@ApplicationCon
                 cal.timeInMillis,
                 System.currentTimeMillis()
             )
+            val appScreenList = statsList.map {
+                appScreenTime(it)
+            }.filter {
+                it.time > 0
+            }.sortedBy {
+                it.time
+            }
             try {
-                emit(CaseResult.Success(statsList))
+                emit(CaseResult.Success(appScreenList))
             } catch (e: Exception) {
                 CaseResult.Failure(e.toString())
             }
         }
+
+    private fun appScreenTime(it: UsageStats) = AppScreenTime(
+        name = context.packageManager.getApplicationInfo(it.packageName, 0)
+            .loadLabel(context.packageManager).toString(),
+        time = it.totalTimeInForeground,
+        icon = context.packageManager.getApplicationInfo(it.packageName, 0).icon
+    )
 }

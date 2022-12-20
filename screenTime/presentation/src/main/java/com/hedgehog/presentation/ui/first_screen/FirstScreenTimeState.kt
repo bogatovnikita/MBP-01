@@ -1,9 +1,9 @@
 package com.hedgehog.presentation.ui.first_screen
 
-import android.app.usage.UsageStats
+import com.hedgehog.presentation.models.AppScreenTime
 
 data class FirstScreenTimeState(
-    val listDataScreenTime: List<UsageStats> = emptyList(),
+    val listDataScreenTime: List<AppScreenTime> = emptyList(),
     val isLoading: Boolean = false,
     val isErrorLoading: Boolean = false
 )

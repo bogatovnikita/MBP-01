@@ -25,6 +25,7 @@ internal class FileManagerTest{
         for (value in FileMode.values()) {
             coEvery { files.getFiles(value) } returns fileInfos().also { runTest { delay(50) } }
         }
+        coEvery { files.delete(listOf("path")) } returns Unit
     }
 
 
@@ -45,6 +46,17 @@ internal class FileManagerTest{
         advanceUntilIdle()
         assertFalse(state.inProgress)
         assertEquals(fileInfos(), state.files)
+    }
+
+    @Test
+    fun `updateFiles after selectAll - isAllSelected is false`() = runTest{
+        callAfterLoading {
+            switchSelectAll()
+            updateFiles()
+            advanceUntilIdle()
+        }
+        assertFalse(state.isAllSelected)
+        assertTrue(state.selectedFiles.isEmpty())
     }
 
     private fun fileInfos() = listOf(
@@ -122,7 +134,7 @@ internal class FileManagerTest{
     @Test
     fun `switchShowingMode - state contains grid showing mode`() = runTest{
         fileManager().switchShowingMode()
-        assertEquals(ShowingMode.Grid, state.showingMode)
+        assertEquals(ListShowingMode.Grid, state.listShowingMode)
     }
 
     @Test
@@ -131,7 +143,7 @@ internal class FileManagerTest{
             switchShowingMode()
             switchShowingMode()
         }
-        assertEquals(ShowingMode.List, state.showingMode)
+        assertEquals(ListShowingMode.List, state.listShowingMode)
     }
 
     @Test
@@ -222,6 +234,69 @@ internal class FileManagerTest{
         assertTrue(state.isShouldGoBack)
     }
 
+    @Test
+    fun `delete - call files_delete`() = runTest{
+        callAfterLoading {
+            switchSelectFile("path")
+            delete()
+            advanceUntilIdle()
+        }
+        coVerify { files.delete(listOf("path")) }
+    }
+
+    @Test
+    fun `askDelete - delete state is Ask`() = runTest{
+        fileManager().askDelete()
+        assertEquals(DeleteState.Ask, state.deleteState)
+    }
+
+    @Test
+    fun `cancelDelete - delete state is Wait`() = runTest {
+        fileManager().apply {
+            askDelete()
+            cancelDelete()
+        }
+        assertEquals(DeleteState.Wait, state.deleteState)
+    }
+
+    @Test
+    fun `delete - delete state is Done`() = runTest{
+        callAfterLoading {
+            switchSelectFile("path")
+            askDelete()
+            delete()
+            advanceUntilIdle()
+        }
+        assertEquals(DeleteState.Done, state.deleteState)
+    }
+
+    @Test
+    fun `delete - delete state is Progress and isShowInter is true, then delete state is Done`() = runTest {
+        callAfterLoading {
+            switchSelectFile("path")
+            askDelete()
+            delete()
+        }
+        assertEquals(DeleteState.Progress, state.deleteState)
+        assertTrue(state.isShowInter)
+        advanceUntilIdle()
+        assertEquals(DeleteState.Done, state.deleteState)
+    }
+
+    @Test
+    fun `hideInter - isShowInter is false`() = runTest {
+        fileManager().hideInter()
+        assertFalse(state.isShowInter)
+    }
+
+    @Test
+    fun `completeDelete - delete state is Wait and files are updated`() = runTest{
+        val oldFiles = state.files
+        fileManager().completeDelete()
+        advanceUntilIdle()
+        assertEquals(DeleteState.Wait, state.deleteState)
+        assertTrue(oldFiles !== state.files)
+    }
 
 
 

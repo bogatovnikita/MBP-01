@@ -17,6 +17,7 @@ class FileManager(
     fun updateFiles() {
         coroutineScope.launch {
             state.apply {
+                updateSelectAll(false)
                 hasPermission = permissionChecker.hasPermission
                 if (hasPermission) {
                     inProgress = true
@@ -45,22 +46,24 @@ class FileManager(
 
     fun switchSelectAll(){
         state.apply {
-            isAllSelected = !isAllSelected
-            files.forEach{
-                it.isSelected = isAllSelected
-            }
-            selectedFiles = if (isAllSelected) files.toMutableList() else mutableListOf()
-
+            updateSelectAll(!isAllSelected)
             updateCanDelete()
         }
     }
 
+    private fun MutableState.updateSelectAll(isAllSelected: Boolean) {
+        this.isAllSelected = isAllSelected
+        files.forEach {
+            it.isSelected = isAllSelected
+        }
+        selectedFiles = if (isAllSelected) files.toMutableList() else mutableListOf()
+    }
 
 
     fun switchShowingMode(){
-        state.showingMode = when(state.showingMode){
-            ShowingMode.Grid -> ShowingMode.List
-            ShowingMode.List -> ShowingMode.Grid
+        state.listShowingMode = when(state.listShowingMode){
+            ListShowingMode.Grid -> ListShowingMode.List
+            ListShowingMode.List -> ListShowingMode.Grid
         }
     }
 
@@ -91,6 +94,32 @@ class FileManager(
 
     fun goBack(){
         state.isShouldGoBack = true
+    }
+
+    fun delete(){
+        state.isShowInter = true
+        state.deleteState = DeleteState.Progress
+        coroutineScope.launch {
+            files.delete(state.selectedFiles.map { it.path })
+            state.deleteState = DeleteState.Done
+        }
+    }
+
+    fun askDelete(){
+        state.deleteState = DeleteState.Ask
+    }
+
+    fun cancelDelete(){
+        state.deleteState = DeleteState.Wait
+    }
+
+    fun hideInter(){
+        state.isShowInter = false
+    }
+
+    fun completeDelete(){
+        state.deleteState = DeleteState.Wait
+        updateFiles()
     }
 }
 

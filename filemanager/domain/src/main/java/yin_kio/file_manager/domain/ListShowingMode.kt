@@ -1,6 +1,6 @@
 package yin_kio.file_manager.domain
 
-enum class ShowingMode {
+enum class ListShowingMode {
     List,
     Grid
 }

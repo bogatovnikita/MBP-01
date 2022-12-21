@@ -50,7 +50,7 @@ internal class FileManagerTest{
     private fun fileInfos() = listOf(
         FileInfo(time = 1, size = 1),
         FileInfo(time = 3, size = 3),
-        FileInfo(time = 2, size = 2)
+        FileInfo(time = 2, size = 2, path = "path")
     )
 
     @Test
@@ -132,6 +132,24 @@ internal class FileManagerTest{
             switchShowingMode()
         }
         assertEquals(ShowingMode.List, state.showingMode)
+    }
+
+    @Test
+    fun `switchSelectFile - state_selectedFiles contains file and file_isSelected is true`() = runTest{
+        callAfterLoading { switchSelectFile("path") }
+        assertNotNull(state.selectedFiles.find { it.path == "path" })
+        assertTrue(state.files.find { it.path == "path" }?.isSelected ?: false)
+    }
+
+    @Test
+    fun `switchSelectFile twice - state_selectedFiles not contains file and file_isSelected is false`() = runTest{
+        callAfterLoading {
+            switchSelectFile("path")
+            switchSelectFile("path")
+        }
+        assertNull(state.selectedFiles.find { it.path == "path" })
+        assertNotNull(state.files.find { it.path == "path" })
+        assertFalse(state.files.find { it.path == "path" }?.isSelected ?: false)
     }
 
 

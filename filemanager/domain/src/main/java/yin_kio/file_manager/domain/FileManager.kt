@@ -48,7 +48,7 @@ class FileManager(
         state.files.forEach{
             it.isSelected = state.isAllSelected
         }
-        state.selectedFiles = if (state.isAllSelected) state.files else emptyList()
+        state.selectedFiles = if (state.isAllSelected) state.files.toMutableList() else mutableListOf()
 
     }
 
@@ -59,5 +59,18 @@ class FileManager(
         }
     }
 
+    fun switchSelectFile(path: String){
+        val file = state.files.find { it.path == path }
+        file?.let {
+            it.isSelected = !it.isSelected
+            if (it.isSelected){
+                state.selectedFiles.add(it)
+            } else {
+                state.selectedFiles.remove(it)
+            }
 
+        }
+    }
 }
+
+

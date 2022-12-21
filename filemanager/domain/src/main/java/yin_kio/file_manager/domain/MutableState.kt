@@ -6,7 +6,7 @@ data class MutableState(
     var files: List<FileInfo> = listOf(),
     var fileMode: FileMode = FileMode.Images,
     var sortingMode: SortingMode = SortingMode.FromNewToOld,
-    var selectedFiles: List<FileInfo> = listOf(),
+    var selectedFiles: MutableList<FileInfo> = mutableListOf(),
     var isAllSelected: Boolean = false,
     var showingMode: ShowingMode = ShowingMode.List
 )

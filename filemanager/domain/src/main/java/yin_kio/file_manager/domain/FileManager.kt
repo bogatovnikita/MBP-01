@@ -20,7 +20,7 @@ class FileManager(
                 hasPermission = permissionChecker.hasPermission
                 if (hasPermission) {
                     inProgress = true
-                    files = this@FileManager.files.getFiles()
+                    files = this@FileManager.files.getFiles(state.fileMode)
                     inProgress = false
                 } else {
                     state.inProgress = false

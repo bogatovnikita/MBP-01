@@ -1,9 +1,11 @@
 package yin_kio.file_manager.domain
 
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.*
 import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.*
@@ -21,7 +23,9 @@ internal class FileManagerTest{
     fun setup(){
         state = MutableState()
         files = mockk()
-        coEvery { files.getFiles() } returns listOf(FileInfo()).also { runTest { delay(50) } }
+        for (value in FileMode.values()) {
+            coEvery { files.getFiles(value) } returns listOf(FileInfo()).also { runTest { delay(50) } }
+        }
     }
 
 
@@ -74,7 +78,22 @@ internal class FileManagerTest{
         assertEquals(state.fileMode, FileMode.Audio)
     }
 
+    @Test
+    fun `updateFiles - call getFiles with correct FileMode`() = runTest{
+        assertGetFilesCalls(fileManager(coroutineScope = this))
+    }
 
+    private fun TestScope.assertGetFilesCalls(fileManager: FileManager){
+        for (value in FileMode.values()) {
+            fileManager.apply {
+                switchFileMode(value)
+                updateFiles()
+            }
+            advanceUntilIdle()
+            coVerify { files.getFiles(value) }
+        }
+
+    }
 
 
 

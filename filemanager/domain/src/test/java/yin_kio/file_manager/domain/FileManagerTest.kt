@@ -199,6 +199,22 @@ internal class FileManagerTest{
         assertTrue(state.canDelete)
     }
 
+    @Test
+    fun `switchSelectAll - if there are no selected files then can not delete`() = runTest {
+        callAfterLoading {
+            switchSelectAll()
+            switchSelectAll()
+        }
+        assertFalse(state.canDelete)
+    }
+
+    @Test
+    fun `switchSelectAll - if there are selected files then can delete`() = runTest {
+        callAfterLoading {
+            switchSelectAll()
+        }
+        assertTrue(state.canDelete)
+    }
 
 
 

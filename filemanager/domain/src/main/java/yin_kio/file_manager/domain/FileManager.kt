@@ -44,13 +44,18 @@ class FileManager(
     }
 
     fun switchSelectAll(){
-        state.isAllSelected = !state.isAllSelected
-        state.files.forEach{
-            it.isSelected = state.isAllSelected
-        }
-        state.selectedFiles = if (state.isAllSelected) state.files.toMutableList() else mutableListOf()
+        state.apply {
+            isAllSelected = !isAllSelected
+            files.forEach{
+                it.isSelected = isAllSelected
+            }
+            selectedFiles = if (isAllSelected) files.toMutableList() else mutableListOf()
 
+            updateCanDelete()
+        }
     }
+
+
 
     fun switchShowingMode(){
         state.showingMode = when(state.showingMode){
@@ -67,9 +72,13 @@ class FileManager(
                 addOrRemoveFromSelectedFiles(it)
                 isAllSelected = files == selectedFiles
             }
-            canDelete = state.selectedFiles.isNotEmpty()
+            updateCanDelete()
         }
 
+    }
+
+    private fun MutableState.updateCanDelete() {
+        canDelete = selectedFiles.isNotEmpty()
     }
 
     private fun MutableState.addOrRemoveFromSelectedFiles(it: FileInfo) {

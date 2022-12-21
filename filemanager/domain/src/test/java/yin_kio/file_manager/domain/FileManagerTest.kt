@@ -72,60 +72,66 @@ internal class FileManagerTest{
 
     @Test
     fun `switchSortingMode(FromOldToNew) - files are sorted from old to new`() = runTest{
-        switchSortingMode(SortingMode.FromOldToNew)
+        callAfterLoading { switchSortingMode(SortingMode.FromOldToNew) }
         val sorted = listOf(3L,2L,1L)
         assertTrue(sorted.contentEquals(state.files.map { it.time }))
     }
 
     @Test
     fun `switchSortingMode(FromNewToOld) - files are sorted from new to old`() = runTest {
-        switchSortingMode(SortingMode.FromNewToOld)
+        callAfterLoading {  switchSortingMode(SortingMode.FromNewToOld) }
         val sorted = listOf(1L,2L,3L)
         assertTrue(sorted.contentEquals(state.files.map { it.time }))
     }
 
     @Test
     fun `switchSortingMode(FromBigToSmall) - files are sorted from big to small`() = runTest{
-        switchSortingMode(SortingMode.FromBigToSmall)
+        callAfterLoading { switchSortingMode(SortingMode.FromBigToSmall) }
         val sorted = listOf(3L,2L,1L)
         assertTrue(sorted.contentEquals(state.files.map { it.size }))
     }
 
     @Test
     fun `switchSortingMode(FromSmallToBig) - files are sorted from small to big`() = runTest{
-        switchSortingMode(SortingMode.FromSmallToBig)
+        callAfterLoading { switchSortingMode(SortingMode.FromSmallToBig) }
         val sorted = listOf(1L,2L,3L)
         assertTrue(sorted.contentEquals(state.files.map { it.size }))
     }
 
+    @Test
+    fun `switchSelectAll - all files are selected and isAllSelected is true`() = runTest {
+        callAfterLoading{
+            switchSelectAll()
+        }
+        assertTrue(state.isAllSelected)
+        assertEquals(fileInfos().onEach { it.isSelected = true }, state.selectedFiles)
+        state.files.forEach{ assertTrue(it.isSelected) }
+    }
+
+    @Test
+    fun `switchSelectAll - state_selectedFiles not contains all files and each file flag isSelected is false`() = runTest {
+        callAfterLoading {
+            switchSelectAll()
+            switchSelectAll()
+        }
+        assertFalse(state.isAllSelected)
+        assertEquals(emptyList<FileInfo>(), state.selectedFiles)
+        state.files.forEach{ assertFalse(it.isSelected) }
+    }
 
 
 
 
 
 
+    private fun TestScope.callAfterLoading(fileManager: FileManager = fileManager(), action: FileManager.() -> Unit){
+        advanceUntilIdle()
+        fileManager.action()
+    }
 
     private fun List<Long>.contentEquals(other: List<Long>) : Boolean{
         return toLongArray().contentEquals(other.toLongArray())
     }
-
-
-    private fun TestScope.switchSortingMode(sortingMode: SortingMode){
-        fileManager().apply {
-            advanceUntilIdle()
-            switchSortingMode(sortingMode)
-        }
-    }
-
-
-
-
-
-
-
-
-
-
 
     private fun FileManager.assertSortingModeSwitching() {
         SortingMode.values().forEach {

@@ -43,5 +43,14 @@ class FileManager(
         }
     }
 
+    fun switchSelectAll(){
+        state.isAllSelected = !state.isAllSelected
+        state.files.forEach{
+            it.isSelected = state.isAllSelected
+        }
+        state.selectedFiles = if (state.isAllSelected) state.files else emptyList()
+
+    }
+
 
 }

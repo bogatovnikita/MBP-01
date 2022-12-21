@@ -25,7 +25,7 @@ class FirstScreenTimeFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.getListTimeScreenData(CalendarScreenTime(Calendar.DAY_OF_YEAR, 1))
+        viewModel.getListTimeScreenData(CalendarScreenTime(Calendar.DAY_OF_YEAR, -1))
         initRecyclerView()
         initObserver()
     }

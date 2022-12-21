@@ -216,6 +216,12 @@ internal class FileManagerTest{
         assertTrue(state.canDelete)
     }
 
+    @Test
+    fun `goBack - state_isShouldGoBack equals true`() = runTest{
+        fileManager().goBack()
+        assertTrue(state.isShouldGoBack)
+    }
+
 
 
 

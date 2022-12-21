@@ -9,5 +9,6 @@ data class MutableState(
     var selectedFiles: MutableList<FileInfo> = mutableListOf(),
     var isAllSelected: Boolean = false,
     var showingMode: ShowingMode = ShowingMode.List,
-    var canDelete: Boolean = false
+    var canDelete: Boolean = false,
+    var isShouldGoBack: Boolean = false
 )

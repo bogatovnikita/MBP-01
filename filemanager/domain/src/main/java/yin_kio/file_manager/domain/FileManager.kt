@@ -88,6 +88,10 @@ class FileManager(
             selectedFiles.remove(it)
         }
     }
+
+    fun goBack(){
+        state.isShouldGoBack = true
+    }
 }
 
 

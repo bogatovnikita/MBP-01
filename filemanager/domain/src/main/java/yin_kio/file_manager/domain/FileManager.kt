@@ -33,5 +33,15 @@ class FileManager(
         state.fileMode = fileMode
     }
 
+    fun switchSortingMode(sortingMode: SortingMode){
+        state.sortingMode = sortingMode
+        state.files = when(sortingMode){
+            SortingMode.FromNewToOld ->  state.files.sortedBy { it.time }
+            SortingMode.FromOldToNew ->  state.files.sortedBy { -it.time }
+            SortingMode.FromBigToSmall -> state.files.sortedBy { -it.size }
+            SortingMode.FromSmallToBig -> state.files.sortedBy { it.size }
+        }
+    }
+
 
 }

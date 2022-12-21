@@ -4,5 +4,6 @@ data class MutableState(
     var hasPermission: Boolean = false,
     var inProgress: Boolean = true,
     var files: List<FileInfo> = listOf(),
-    var fileMode: FileMode = FileMode.Images
+    var fileMode: FileMode = FileMode.Images,
+    var sortingMode: SortingMode = SortingMode.FromNewToOld
 )

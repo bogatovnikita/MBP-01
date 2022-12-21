@@ -4,7 +4,6 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.*
-import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
@@ -24,7 +23,7 @@ internal class FileManagerTest{
         state = MutableState()
         files = mockk()
         for (value in FileMode.values()) {
-            coEvery { files.getFiles(value) } returns listOf(FileInfo()).also { runTest { delay(50) } }
+            coEvery { files.getFiles(value) } returns fileInfos().also { runTest { delay(50) } }
         }
     }
 
@@ -32,7 +31,7 @@ internal class FileManagerTest{
     @Test
     fun `updateFiles - if has not permission then state does not contains files and is not in progress`() = runTest{
         assertTrue(state.inProgress)
-        fileManager(false, coroutineScope = this).updateFiles()
+        fileManager(false).updateFiles()
         assertTrue(state.inProgress)
         advanceUntilIdle()
         assertTrue(state.files.isEmpty())
@@ -41,28 +40,106 @@ internal class FileManagerTest{
 
     @Test
     fun `updateFiles - if has permission then state contains files and is not in progress after progress`() = runTest{
-        fileManager(true, coroutineScope = this).updateFiles()
+        fileManager(true).updateFiles()
         assertTrue(state.inProgress)
         advanceUntilIdle()
         assertFalse(state.inProgress)
-        assertEquals(listOf(FileInfo()), state.files)
+        assertEquals(fileInfos(), state.files)
+    }
+
+    private fun fileInfos() = listOf(
+        FileInfo(time = 1, size = 1),
+        FileInfo(time = 3, size = 3),
+        FileInfo(time = 2, size = 2)
+    )
+
+    @Test
+    fun `switchFileMode - all state values is correct`() = runTest{
+        assertFileModeSwitching(fileManager())
+    }
+
+
+
+    @Test
+    fun `updateFiles - call getFiles with correct FileMode`() = runTest{
+        assertGetFilesCalls(fileManager())
     }
 
     @Test
-    fun `switchFileMode - all state values is correct`(){
-        assertFileModeSwitching(fileManager())
+    fun `switchSortingMode - state contains selected sortingMode`() = runTest{
+        fileManager().assertSortingModeSwitching()
     }
+
+    @Test
+    fun `switchSortingMode(FromOldToNew) - files are sorted from old to new`() = runTest{
+        switchSortingMode(SortingMode.FromOldToNew)
+        val sorted = listOf(3L,2L,1L)
+        assertTrue(sorted.contentEquals(state.files.map { it.time }))
+    }
+
+    @Test
+    fun `switchSortingMode(FromNewToOld) - files are sorted from new to old`() = runTest {
+        switchSortingMode(SortingMode.FromNewToOld)
+        val sorted = listOf(1L,2L,3L)
+        assertTrue(sorted.contentEquals(state.files.map { it.time }))
+    }
+
+    @Test
+    fun `switchSortingMode(FromBigToSmall) - files are sorted from big to small`() = runTest{
+        switchSortingMode(SortingMode.FromBigToSmall)
+        val sorted = listOf(3L,2L,1L)
+        assertTrue(sorted.contentEquals(state.files.map { it.size }))
+    }
+
+    @Test
+    fun `switchSortingMode(FromSmallToBig) - files are sorted from small to big`() = runTest{
+        switchSortingMode(SortingMode.FromSmallToBig)
+        val sorted = listOf(1L,2L,3L)
+        assertTrue(sorted.contentEquals(state.files.map { it.size }))
+    }
+
+
+
+
+
+
+
+
+    private fun List<Long>.contentEquals(other: List<Long>) : Boolean{
+        return toLongArray().contentEquals(other.toLongArray())
+    }
+
+
+    private fun TestScope.switchSortingMode(sortingMode: SortingMode){
+        fileManager().apply {
+            advanceUntilIdle()
+            switchSortingMode(sortingMode)
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+    private fun FileManager.assertSortingModeSwitching() {
+        SortingMode.values().forEach {
+            switchSortingMode(it)
+            assertEquals(it, state.sortingMode)
+        }
+    }
+
 
     private fun assertFileModeSwitching(fileManager: FileManager){
         FileMode.values().forEach {
             fileManager.switchFileMode(it)
             assertEquals(state.fileMode, it)
         }
-    }
-
-    @Test
-    fun `updateFiles - call getFiles with correct FileMode`() = runTest{
-        assertGetFilesCalls(fileManager(coroutineScope = this))
     }
 
     private fun TestScope.assertGetFilesCalls(fileManager: FileManager){
@@ -79,9 +156,9 @@ internal class FileManagerTest{
 
 
 
-    private fun fileManager(hasPermission: Boolean = true, coroutineScope: CoroutineScope? = null) : FileManager{
+    private fun TestScope.fileManager(hasPermission: Boolean = true) : FileManager{
         return FileManager(state, permissionChecker(hasPermission), files,
-            coroutineScope = coroutineScope ?: CoroutineScope(StandardTestDispatcher())
+            coroutineScope = this
         )
     }
 

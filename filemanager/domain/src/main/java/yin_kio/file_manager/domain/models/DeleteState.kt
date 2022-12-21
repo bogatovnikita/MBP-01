@@ -1,4 +1,4 @@
-package yin_kio.file_manager.domain
+package yin_kio.file_manager.domain.models
 
 enum class DeleteState {
     Wait,

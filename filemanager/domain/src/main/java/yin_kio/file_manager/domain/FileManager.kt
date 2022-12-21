@@ -2,6 +2,9 @@ package yin_kio.file_manager.domain
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import yin_kio.file_manager.domain.gateways.Files
+import yin_kio.file_manager.domain.gateways.PermissionChecker
+import yin_kio.file_manager.domain.models.*
 
 class FileManager(
     private val state: MutableState,

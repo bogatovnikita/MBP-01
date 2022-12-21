@@ -10,6 +10,9 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import yin_kio.file_manager.domain.gateways.Files
+import yin_kio.file_manager.domain.gateways.PermissionChecker
+import yin_kio.file_manager.domain.models.*
 
 @OptIn(ExperimentalCoroutinesApi::class)
 internal class FileManagerTest{

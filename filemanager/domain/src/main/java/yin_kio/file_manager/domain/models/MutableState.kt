@@ -1,4 +1,4 @@
-package yin_kio.file_manager.domain
+package yin_kio.file_manager.domain.models
 
 data class MutableState(
     var hasPermission: Boolean = false,

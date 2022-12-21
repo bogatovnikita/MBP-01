@@ -25,48 +25,12 @@ internal class FileManagerTest{
         coEvery { files.getFiles() } returns listOf(FileInfo()).also { runTest { delay(50) } }
     }
 
-    @Test
-    fun `init - has permission - state_hasPermission = true`() = runTest{
-
-        fileManager(true, coroutineScope = this)
-        advanceUntilIdle()
-        assertEquals(true, state.hasPermission)
-
-    }
 
     @Test
-    fun `init - has not permission - state_hasPermission = false`() = runTest{
-        fileManager(false)
-        advanceUntilIdle()
-        assertEquals(false, state.hasPermission)
-    }
-
-
-    @Test
-    fun `init - if has permission call files_getFiles()`() = runTest {
-        fileManager(true, coroutineScope = CoroutineScope(Dispatchers.IO))
-        coVerify { files.getFiles() }
-    }
-
-    @Test
-    fun `init = if has not permission does not call files_getFiles()`(){
-        fileManager(false)
-        coVerify(exactly = 0) { files.getFiles() }
-    }
-
-    @Test
-    fun `init - if has permission then state contains files and is not in progress`() = runTest{
+    fun `updateFiles - if has not permission then state does not contains files and is not in progress`() = runTest{
         assertTrue(state.inProgress)
-        fileManager(true, coroutineScope = this)
-        advanceUntilIdle()
-        assertEquals(listOf(FileInfo()), state.files)
-        assertFalse(state.inProgress)
-    }
-
-    @Test
-    fun `init - if has not permission then state does not contains files and is not in progress`() = runTest{
+        fileManager(false, coroutineScope = this).updateFiles()
         assertTrue(state.inProgress)
-        fileManager(false, coroutineScope = this)
         advanceUntilIdle()
         assertTrue(state.files.isEmpty())
         assertFalse(state.inProgress)
@@ -78,6 +42,7 @@ internal class FileManagerTest{
         assertTrue(state.inProgress)
         advanceUntilIdle()
         assertFalse(state.inProgress)
+        assertEquals(listOf(FileInfo()), state.files)
     }
 
 

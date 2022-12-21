@@ -52,5 +52,12 @@ class FileManager(
 
     }
 
+    fun switchShowingMode(){
+        state.showingMode = when(state.showingMode){
+            ShowingMode.Grid -> ShowingMode.List
+            ShowingMode.List -> ShowingMode.Grid
+        }
+    }
+
 
 }

@@ -119,6 +119,21 @@ internal class FileManagerTest{
         state.files.forEach{ assertFalse(it.isSelected) }
     }
 
+    @Test
+    fun `switchShowingMode - state contains grid showing mode`() = runTest{
+        fileManager().switchShowingMode()
+        assertEquals(ShowingMode.Grid, state.showingMode)
+    }
+
+    @Test
+    fun `switchShowingMode twice - state contains list showing mode`() = runTest{
+        fileManager().apply {
+            switchShowingMode()
+            switchShowingMode()
+        }
+        assertEquals(ShowingMode.List, state.showingMode)
+    }
+
 
 
 

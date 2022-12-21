@@ -1,7 +1,6 @@
 package yin_kio.file_manager.domain
 
 import io.mockk.coEvery
-import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.*
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -44,6 +43,38 @@ internal class FileManagerTest{
         assertFalse(state.inProgress)
         assertEquals(listOf(FileInfo()), state.files)
     }
+
+    @Test
+    fun `switchFileMode(Images) - state contains mode images`(){
+        fileManager().switchFileMode(FileMode.Images)
+        assertEquals(state.fileMode, FileMode.Images)
+    }
+
+    @Test
+    fun `switchFileMode(AllFiles) - state contains mode AllFiles`(){
+        fileManager().switchFileMode(FileMode.AllFiles)
+        assertEquals(state.fileMode, FileMode.AllFiles)
+    }
+
+    @Test
+    fun `switchFileMode(Video) - state contains mode Video`(){
+        fileManager().switchFileMode(FileMode.Video)
+        assertEquals(state.fileMode, FileMode.Video)
+    }
+
+    @Test
+    fun `switchFileMode(Documents) - state contains mode Documents`(){
+        fileManager().switchFileMode(FileMode.Documents)
+        assertEquals(state.fileMode, FileMode.Documents)
+    }
+
+    @Test
+    fun `switchFileMode(Audio) - state contains mode Audio`(){
+        fileManager().switchFileMode(FileMode.Audio)
+        assertEquals(state.fileMode, FileMode.Audio)
+    }
+
+
 
 
 

@@ -27,7 +27,10 @@ class FileManager(
                 }
             }
         }
+    }
 
+    fun switchFileMode(fileMode: FileMode){
+        state.fileMode = fileMode
     }
 
 

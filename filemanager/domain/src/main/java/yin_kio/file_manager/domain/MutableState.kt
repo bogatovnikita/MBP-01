@@ -8,5 +8,6 @@ data class MutableState(
     var sortingMode: SortingMode = SortingMode.FromNewToOld,
     var selectedFiles: MutableList<FileInfo> = mutableListOf(),
     var isAllSelected: Boolean = false,
-    var showingMode: ShowingMode = ShowingMode.List
+    var showingMode: ShowingMode = ShowingMode.List,
+    var canDelete: Boolean = false
 )

@@ -60,15 +60,23 @@ class FileManager(
     }
 
     fun switchSelectFile(path: String){
-        val file = state.files.find { it.path == path }
-        file?.let {
-            it.isSelected = !it.isSelected
-            if (it.isSelected){
-                state.selectedFiles.add(it)
-            } else {
-                state.selectedFiles.remove(it)
+        state.apply {
+            val file = files.find { it.path == path }
+            file?.let {
+                it.isSelected = !it.isSelected
+                addOrRemoveFromSelectedFiles(it)
+                isAllSelected = files == selectedFiles
             }
+            canDelete = state.selectedFiles.isNotEmpty()
+        }
 
+    }
+
+    private fun MutableState.addOrRemoveFromSelectedFiles(it: FileInfo) {
+        if (it.isSelected) {
+            selectedFiles.add(it)
+        } else {
+            selectedFiles.remove(it)
         }
     }
 }

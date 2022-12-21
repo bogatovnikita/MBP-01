@@ -152,6 +152,53 @@ internal class FileManagerTest{
         assertFalse(state.files.find { it.path == "path" }?.isSelected ?: false)
     }
 
+    @Test
+    fun `switchSelectFile - if all files are selected then isAllSelected equals true`() = runTest{
+        callAfterLoading {
+            state.selectedFiles.addAll(state.files.filter { it.path != "path" })
+            switchSelectFile("path")
+        }
+        assertTrue(state.isAllSelected)
+        assertEquals(state.files, state.selectedFiles)
+    }
+
+    @Test
+    fun `switchSelectFile - if have not selected then isAllSelected equals false`() = runTest{
+        callAfterLoading {
+            switchSelectFile("path")
+            switchSelectFile("path")
+        }
+        assertFalse(state.isAllSelected)
+        assertEquals(emptyList<FileInfo>(), state.selectedFiles)
+    }
+
+    @Test
+    fun `switchSelectFile - if not all files selected then isAllSelected equals false`() = runTest{
+        callAfterLoading {
+            switchSelectFile("path")
+        }
+        assertFalse(state.isAllSelected)
+        val file = fileInfos().find { it.path == "path" }!!.apply { isSelected = true }
+        assertEquals(listOf(file), state.selectedFiles)
+    }
+
+    @Test
+    fun `switchSelectFile - if there are no selected files then can not delete`() = runTest{
+        callAfterLoading {
+            switchSelectFile("path")
+            switchSelectFile("path")
+        }
+        assertFalse(state.canDelete)
+    }
+
+    @Test
+    fun `switchSelectFile - if there are selected files then can delete`() = runTest{
+        callAfterLoading {
+            switchSelectFile("path")
+        }
+        assertTrue(state.canDelete)
+    }
+
 
 
 

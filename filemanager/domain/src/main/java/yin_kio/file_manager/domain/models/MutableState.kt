@@ -15,5 +15,6 @@ data class MutableState(
     var canDelete: Boolean = false,
     var isShowInter: Boolean = false,
 
-    var deleteState: DeleteState = DeleteState.Wait
+    var deleteState: DeleteState = DeleteState.Wait,
+    var isShowSortingModeSelector: Boolean = false
 )

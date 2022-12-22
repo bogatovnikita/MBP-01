@@ -301,6 +301,21 @@ internal class FileManagerTest{
         assertTrue(oldFiles !== state.files)
     }
 
+    @Test
+    fun `showSortingModeSelector - isShowSortingModePopup is true`() = runTest{
+        fileManager().showSortingModeSelector()
+        assertTrue(state.isShowSortingModeSelector)
+    }
+
+    @Test
+    fun `switchSortingMode - isShowSortingModePopup is false`() = runTest {
+        fileManager().apply {
+            showSortingModeSelector()
+            switchSortingMode(SortingMode.FromNewToOld)
+        }
+        assertFalse(state.isShowSortingModeSelector)
+    }
+
 
 
 

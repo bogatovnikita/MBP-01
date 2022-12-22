@@ -38,6 +38,7 @@ class FileManager(
     }
 
     fun switchSortingMode(sortingMode: SortingMode){
+        state.isShowSortingModeSelector = false
         state.sortingMode = sortingMode
         state.files = when(sortingMode){
             SortingMode.FromNewToOld ->  state.files.sortedBy { it.time }
@@ -123,6 +124,10 @@ class FileManager(
     fun completeDelete(){
         state.deleteState = DeleteState.Wait
         updateFiles()
+    }
+
+    fun showSortingModeSelector(){
+        state.isShowSortingModeSelector = true
     }
 }
 

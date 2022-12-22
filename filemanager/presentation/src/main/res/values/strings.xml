@@ -5,5 +5,10 @@
     <string name="from_small_to_big">От меньшего к большему</string>
     <string name="from_old_to_new">От старого к новому</string>
     <string name="from_new_to_old">От нового к сатарому</string>
-
+    <string name="file_manager">Менеджер файлов</string>
+    <string name="all_files">Все файлы</string>
+    <string name="images">Изображения</string>
+    <string name="video">Видео</string>
+    <string name="documents">Документы</string>
+    <string name="audio">Аудио</string>
 </resources>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="from_big_to_small">От большего к меньшему</string>
+    <string name="from_small_to_big">От меньшего к большему</string>
+    <string name="from_old_to_new">От старого к новому</string>
+    <string name="from_new_to_old">От нового к сатарому</string>
+
+</resources>

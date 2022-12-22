@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace 'general.resources'
+    namespace 'general'
     compileSdk 32
 
     defaultConfig {

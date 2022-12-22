@@ -14,6 +14,7 @@ class FileManager(
 ) {
 
     init {
+        state.sortingMode = SortingMode.Disabled
         updateFiles()
     }
 
@@ -25,6 +26,7 @@ class FileManager(
                 if (hasPermission) {
                     inProgress = true
                     files = this@FileManager.files.getFiles(state.fileMode)
+                    switchSortingMode(state.sortingMode)
                     inProgress = false
                 } else {
                     state.inProgress = false
@@ -45,6 +47,7 @@ class FileManager(
             SortingMode.FromOldToNew ->  state.files.sortedBy { -it.time }
             SortingMode.FromBigToSmall -> state.files.sortedBy { -it.size }
             SortingMode.FromSmallToBig -> state.files.sortedBy { it.size }
+            SortingMode.Disabled -> state.files
         }
     }
 

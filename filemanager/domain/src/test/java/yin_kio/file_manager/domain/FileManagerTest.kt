@@ -316,6 +316,23 @@ internal class FileManagerTest{
         assertFalse(state.isShowSortingModeSelector)
     }
 
+    @Test
+    fun `init - sorting mode is disabled`() = runTest {
+        fileManager()
+        assertEquals(SortingMode.Disabled, state.sortingMode)
+    }
+
+    @Test
+    fun `updateFiles - file are sorted according to sorting mode`() = runTest {
+        callAfterLoading {
+            switchSortingMode(SortingMode.FromSmallToBig)
+            updateFiles()
+            advanceUntilIdle()
+        }
+        val sizes = listOf(1L, 2L, 3L)
+        assertTrue(sizes.contentEquals(state.files.map { it.size }))
+    }
+
 
 
 

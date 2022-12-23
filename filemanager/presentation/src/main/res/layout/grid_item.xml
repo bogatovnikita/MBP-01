@@ -8,7 +8,7 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView2"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="150dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         app:cardCornerRadius="@dimen/radius_5"
@@ -16,14 +16,24 @@
         app:cardElevation="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:cardBackgroundColor="@color/gray_light">
 
         <ImageView
-            android:id="@+id/imageView"
+            android:visibility="gone"
+            android:id="@+id/image"
             android:layout_width="wrap_content"
-            android:layout_height="150dp"
+            android:layout_height="match_parent"
             android:scaleType="centerCrop"
             tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
+        <ImageView
+            android:id="@+id/icon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            tools:srcCompat="@drawable/ic_documents"
+            android:layout_gravity="center"/>
+
     </androidx.cardview.widget.CardView>
 
     <CheckBox

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:state_checked="true">
+        <layer-list>
+
+            <item>
+
+                <shape>
+                    <solid android:color="@color/green"/>
+                    <corners android:radius="@dimen/radius_5"/>
+                </shape>
+            </item>
+
+
+            <item android:drawable="@drawable/ic_checkbox_mark"
+                android:top="4dp"
+                android:right="3dp"
+                android:bottom="4dp"
+                android:left="3dp"/>
+
+        </layer-list>
+
+    </item>
+
+    <item android:state_checked="false">
+
+        <shape>
+            <solid android:color="@color/white"/>
+            <stroke android:color="@color/dark_blue"
+                android:width="@dimen/border_width"/>
+            <corners android:radius="@dimen/radius_5"/>
+        </shape>
+
+
+    </item>
+
+</selector>

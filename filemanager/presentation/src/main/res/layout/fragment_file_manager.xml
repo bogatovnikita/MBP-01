@@ -112,8 +112,10 @@
 
         <Button
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"/>
+            android:layout_height="55dp"
+            android:layout_gravity="bottom"
+            android:text="@string/delete"
+            style="@style/MainButton"/>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

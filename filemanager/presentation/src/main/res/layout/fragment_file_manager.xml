@@ -117,7 +117,7 @@
             android:clipToPadding="false"
             android:paddingBottom="120dp"/>
 
-        <Button
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="55dp"
             android:layout_gravity="bottom"

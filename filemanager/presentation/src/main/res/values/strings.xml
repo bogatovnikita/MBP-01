@@ -16,4 +16,5 @@
     <string name="ask_delete_title">Вы уверены, что хотите удалить выбранные $s</string>
     <string name="ask_delete_attention">Вы не сможете остановить удаление</string>
     <string name="cancel">Отмена</string>
+    <string name="file_search_progress">Идёт поиск файлов...</string>
 </resources>

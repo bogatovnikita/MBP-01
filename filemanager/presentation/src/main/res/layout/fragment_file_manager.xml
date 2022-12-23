@@ -102,9 +102,13 @@
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:listitem="@layout/list_item"
+            tools:listitem="@layout/grid_item"
+            app:spanCount="2"
+            android:paddingEnd="16dp"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             android:paddingTop="16dp"
-            android:clipToPadding="false"/>
+            android:clipToPadding="false"
+            android:paddingBottom="120dp"/>
 
         <Button
             android:layout_width="match_parent"

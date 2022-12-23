@@ -63,7 +63,7 @@
     <CheckBox
         android:id="@+id/checkBox"
         style="@style/CheckBox"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="0dp"
         app:layout_constraintBottom_toBottomOf="@+id/cardView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/cardView" />

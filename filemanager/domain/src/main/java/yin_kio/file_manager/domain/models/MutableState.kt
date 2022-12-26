@@ -1,20 +1,20 @@
 package yin_kio.file_manager.domain.models
 
-data class MutableState(
-    var hasPermission: Boolean = false,
-    var inProgress: Boolean = true,
-    var files: List<FileInfo> = listOf(),
-    var fileMode: FileMode = FileMode.Images,
-    var sortingMode: SortingMode = SortingMode.FromNewToOld,
-    var selectedFiles: MutableList<FileInfo> = mutableListOf(),
-    var isAllSelected: Boolean = false,
-    var listShowingMode: ListShowingMode = ListShowingMode.List,
+internal data class MutableState(
+    override var hasPermission: Boolean = false,
+    override var inProgress: Boolean = true,
+    override var files: List<FileInfo> = listOf(),
+    override var fileMode: FileMode = FileMode.Images,
+    override var sortingMode: SortingMode = SortingMode.FromNewToOld,
+    override var selectedFiles: MutableList<FileInfo> = mutableListOf(),
+    override var isAllSelected: Boolean = false,
+    override var listShowingMode: ListShowingMode = ListShowingMode.List,
 
-    var isShouldGoBack: Boolean = false,
+    override var isShouldGoBack: Boolean = false,
 
-    var canDelete: Boolean = false,
-    var isShowInter: Boolean = false,
+    override var canDelete: Boolean = false,
+    override var isShowInter: Boolean = false,
 
-    var deleteState: DeleteState = DeleteState.Wait,
-    var isShowSortingModeSelector: Boolean = false
-)
+    override var deleteState: DeleteState = DeleteState.Wait,
+    override var isShowSortingModeSelector: Boolean = false
+) : State

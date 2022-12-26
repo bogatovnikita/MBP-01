@@ -6,7 +6,7 @@ import yin_kio.file_manager.domain.gateways.Files
 import yin_kio.file_manager.domain.gateways.PermissionChecker
 import yin_kio.file_manager.domain.models.*
 
-class FileManager(
+internal class FileManager(
     private val state: MutableState,
     private val permissionChecker: PermissionChecker,
     private val files: Files,

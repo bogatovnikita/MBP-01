@@ -49,6 +49,9 @@ dependencies {
     implementation project(':general:resources')
     implementation project(':lifecycle_aware')
 
+    implementation 'com.github.bumptech.glide:glide:4.14.2'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.14.2'
+
     implementation 'com.github.kirich1409:viewbindingpropertydelegate:1.5.6'
 
     implementation 'androidx.core:core-ktx:1.7.0'

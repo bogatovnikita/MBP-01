@@ -1,6 +1,6 @@
 package yin_kio.file_manager.domain.models
 
-enum class FileMode {
+enum class FileRequest {
     AllFiles,
     Images,
     Video,

@@ -32,7 +32,7 @@ internal class FileManager(
                 if (hasPermission) {
                     inProgress = true
                     updateState()
-                    files = this@FileManager.files.getFiles(state.fileMode)
+                    files = this@FileManager.files.getFiles(state.fileRequest)
                     switchSortingMode(state.sortingMode)
                     inProgress = false
                 } else {
@@ -46,8 +46,8 @@ internal class FileManager(
 
 
 
-    fun switchFileMode(fileMode: FileMode){
-        state.fileMode = fileMode
+    fun switchFileMode(fileRequest: FileRequest){
+        state.fileRequest = fileRequest
         updateState()
     }
 

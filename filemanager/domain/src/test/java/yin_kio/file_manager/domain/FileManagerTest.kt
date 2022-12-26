@@ -26,7 +26,7 @@ internal class FileManagerTest{
     fun setup(){
         stateHolder = MutableStateHolder()
         files = mockk()
-        for (value in FileMode.values()) {
+        for (value in FileRequest.values()) {
             coEvery { files.getFiles(value) } returns fileInfos().also { runTest { delay(50) } }
         }
         coEvery { files.delete(listOf("path")) } returns Unit
@@ -355,14 +355,14 @@ internal class FileManagerTest{
 
 
     private fun assertFileModeSwitching(fileManager: FileManager){
-        FileMode.values().forEach {
+        FileRequest.values().forEach {
             fileManager.switchFileMode(it)
-            assertEquals(state.fileMode, it)
+            assertEquals(state.fileRequest, it)
         }
     }
 
     private fun TestScope.assertGetFilesCalls(fileManager: FileManager){
-        for (value in FileMode.values()) {
+        for (value in FileRequest.values()) {
             fileManager.apply {
                 switchFileMode(value)
                 updateFiles()

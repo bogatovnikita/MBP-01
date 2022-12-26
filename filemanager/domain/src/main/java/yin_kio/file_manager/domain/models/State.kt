@@ -4,7 +4,7 @@ interface State {
     val hasPermission: Boolean
     val inProgress: Boolean
     val files: List<FileInfo>
-    val fileMode: FileMode
+    val fileRequest: FileRequest
     val sortingMode: SortingMode
     val selectedFiles: MutableList<FileInfo>
     val isAllSelected: Boolean

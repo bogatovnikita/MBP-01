@@ -43,23 +43,27 @@
             android:orientation="horizontal">
 
             <RadioButton
+                android:id="@+id/all_files"
                 android:drawableLeft="@drawable/ic_all_files"
-                android:checked="true"
                 android:text="@string/all_files"
                 style="@style/ModeRadio"/>
             <RadioButton
+                android:id="@+id/images"
                 android:drawableLeft="@drawable/ic_images"
                 android:text="@string/images"
                 style="@style/ModeRadio"/>
             <RadioButton
+                android:id="@+id/video"
                 android:drawableLeft="@drawable/ic_video"
                 android:text="@string/video"
                 style="@style/ModeRadio"/>
             <RadioButton
+                android:id="@+id/documents"
                 android:drawableLeft="@drawable/ic_documents"
                 android:text="@string/documents"
                 style="@style/ModeRadio"/>
             <RadioButton
+                android:id="@+id/audio"
                 android:drawableLeft="@drawable/ic_audio"
                 android:text="@string/audio"
                 style="@style/ModeRadio"/>
@@ -76,6 +80,7 @@
         android:paddingTop="16dp">
 
         <ImageView
+            android:id="@+id/sort"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/ic_sorting_mode_selector"/>
@@ -97,7 +102,9 @@
             android:text="@string/select_all"
             android:textAppearance="@style/Text.Subtitle_1.2"
             android:paddingEnd="8dp"/>
-        <CheckBox style="@style/CheckBox"/>
+        <CheckBox
+            android:id="@+id/isAllSelected"
+            style="@style/CheckBox"/>
 
     </LinearLayout>
 
@@ -109,6 +116,7 @@
         android:visibility="visible">
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:listitem="@layout/grid_item"
@@ -120,6 +128,7 @@
             android:paddingBottom="120dp"/>
 
         <TextView
+            android:id="@+id/delete"
             android:layout_width="match_parent"
             android:layout_height="55dp"
             android:layout_gravity="bottom"

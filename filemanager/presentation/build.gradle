@@ -37,12 +37,19 @@ android {
             includeAndroidResources = true
         }
     }
+
+    buildFeatures{
+        viewBinding true
+    }
 }
 
 dependencies {
 
     implementation project(':filemanager:domain')
     implementation project(':general:resources')
+    implementation project(':lifecycle_aware')
+
+    implementation 'com.github.kirich1409:viewbindingpropertydelegate:1.5.6'
 
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.5.1'

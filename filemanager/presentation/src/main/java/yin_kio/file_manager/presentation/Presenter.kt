@@ -13,6 +13,7 @@ class Presenter(
             SortingMode.FromOldToNew -> str(R.string.from_old_to_new)
             SortingMode.FromBigToSmall -> str(R.string.from_big_to_small)
             SortingMode.FromSmallToBig -> str(R.string.from_small_to_big)
+            SortingMode.Disabled -> ""
         }
     }
 

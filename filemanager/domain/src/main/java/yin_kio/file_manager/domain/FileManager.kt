@@ -7,14 +7,18 @@ import yin_kio.file_manager.domain.gateways.PermissionChecker
 import yin_kio.file_manager.domain.models.*
 
 internal class FileManager(
-    private val state: MutableState,
+    private val stateHolder: MutableStateHolder,
     private val permissionChecker: PermissionChecker,
     private val files: Files,
     private val coroutineScope: CoroutineScope
 ) {
 
+    private val state = MutableState()
+
     init {
         state.sortingMode = SortingMode.Disabled
+        updateState()
+
         updateFiles()
     }
 
@@ -23,20 +27,28 @@ internal class FileManager(
             state.apply {
                 updateSelectAll(false)
                 hasPermission = permissionChecker.hasPermission
+                updateState()
+
                 if (hasPermission) {
                     inProgress = true
+                    updateState()
                     files = this@FileManager.files.getFiles(state.fileMode)
                     switchSortingMode(state.sortingMode)
                     inProgress = false
                 } else {
                     state.inProgress = false
                 }
+
+                updateState()
             }
         }
     }
 
+
+
     fun switchFileMode(fileMode: FileMode){
         state.fileMode = fileMode
+        updateState()
     }
 
     fun switchSortingMode(sortingMode: SortingMode){
@@ -49,6 +61,7 @@ internal class FileManager(
             SortingMode.FromSmallToBig -> state.files.sortedBy { it.size }
             SortingMode.Disabled -> state.files
         }
+        updateState()
     }
 
     fun switchSelectAll(){
@@ -56,6 +69,7 @@ internal class FileManager(
             updateSelectAll(!isAllSelected)
             updateCanDelete()
         }
+        updateState()
     }
 
     private fun MutableState.updateSelectAll(isAllSelected: Boolean) {
@@ -72,6 +86,7 @@ internal class FileManager(
             ListShowingMode.Grid -> ListShowingMode.List
             ListShowingMode.List -> ListShowingMode.Grid
         }
+        updateState()
     }
 
     fun switchSelectFile(path: String){
@@ -84,6 +99,7 @@ internal class FileManager(
             }
             updateCanDelete()
         }
+        updateState()
 
     }
 
@@ -101,27 +117,34 @@ internal class FileManager(
 
     fun goBack(){
         state.isShouldGoBack = true
+        updateState()
     }
 
     fun delete(){
         state.isShowInter = true
         state.deleteState = DeleteState.Progress
+        updateState()
         coroutineScope.launch {
             files.delete(state.selectedFiles.map { it.path })
             state.deleteState = DeleteState.Done
+            updateState()
         }
+
     }
 
     fun askDelete(){
         state.deleteState = DeleteState.Ask
+        updateState()
     }
 
     fun cancelDelete(){
         state.deleteState = DeleteState.Wait
+        updateState()
     }
 
     fun hideInter(){
         state.isShowInter = false
+        updateState()
     }
 
     fun completeDelete(){
@@ -131,6 +154,11 @@ internal class FileManager(
 
     fun showSortingModeSelector(){
         state.isShowSortingModeSelector = true
+        updateState()
+    }
+
+    private fun updateState() {
+        stateHolder.update(state.copy())
     }
 }
 

@@ -17,13 +17,14 @@ import yin_kio.file_manager.domain.models.*
 @OptIn(ExperimentalCoroutinesApi::class)
 internal class FileManagerTest{
 
-    private lateinit var state: MutableState
+    private lateinit var stateHolder: MutableStateHolder
+    private val state get() = stateHolder.value
     private lateinit var files: Files
 
 
     @BeforeEach
     fun setup(){
-        state = MutableState()
+        stateHolder = MutableStateHolder()
         files = mockk()
         for (value in FileMode.values()) {
             coEvery { files.getFiles(value) } returns fileInfos().also { runTest { delay(50) } }
@@ -375,7 +376,8 @@ internal class FileManagerTest{
 
 
     private fun TestScope.fileManager(hasPermission: Boolean = true) : FileManager{
-        return FileManager(state, permissionChecker(hasPermission), files,
+        return FileManager(
+            stateHolder, permissionChecker(hasPermission), files,
             coroutineScope = this
         )
     }

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="D_hour_D_minutes">%d hour %d min</string>
+</resources>

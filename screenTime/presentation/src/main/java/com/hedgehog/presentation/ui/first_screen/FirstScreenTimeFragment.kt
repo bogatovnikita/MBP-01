@@ -1,6 +1,8 @@
 package com.hedgehog.presentation.ui.first_screen
 
+import android.content.Intent
 import android.os.Bundle
+import android.provider.Settings
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.viewModels
@@ -25,17 +27,19 @@ class FirstScreenTimeFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.getListTimeScreenData(CalendarScreenTime(Calendar.DAY_OF_YEAR, -1))
+        viewModel.getListTimeScreenData(CalendarScreenTime(Calendar.HOUR, -24))
+//        startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
         initRecyclerView()
         initObserver()
     }
 
     private fun initRecyclerView() {
-        adapter = ScreenTimeAdapter(object : ScreenTimeAdapter.Listener {
-            override fun onChooseNote(item: AppScreenTime) {
-                Toast.makeText(requireContext(), item.name, Toast.LENGTH_SHORT).show()
-            }
-        })
+        adapter = ScreenTimeAdapter(
+            object : ScreenTimeAdapter.Listener {
+                override fun onChooseNote(item: AppScreenTime) {
+                    Toast.makeText(requireContext(), item.name, Toast.LENGTH_SHORT).show()
+                }
+            })
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.adapter = adapter
     }
@@ -49,6 +53,7 @@ class FirstScreenTimeFragment :
     }
 
     private fun renderState(state: FirstScreenTimeState) {
+        if (!state.isLoading) return
         adapter.submitList(state.listDataScreenTime)
     }
 }

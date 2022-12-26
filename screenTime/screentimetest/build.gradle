@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId "com.hedgehog.screentimetest"
-        minSdk 21
+        minSdk 22
         targetSdk 32
         versionCode 1
         versionName "1.0"
@@ -31,9 +31,6 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
-    hilt {
-        enableAggregatingTask = true
-    }
 }
 
 dependencies {
@@ -48,6 +45,6 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
 
     //Hilt
-    implementation "com.google.dagger:hilt-android:2.38.1"
-    kapt "com.google.dagger:hilt-compiler:2.38.1"
+    implementation "com.google.dagger:hilt-android:2.44"
+    kapt "com.google.dagger:hilt-compiler:2.44"
 }

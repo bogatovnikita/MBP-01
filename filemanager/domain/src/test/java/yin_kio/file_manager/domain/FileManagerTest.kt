@@ -337,7 +337,7 @@ internal class FileManagerTest{
 
 
 
-    private fun TestScope.callAfterLoading(fileManager: FileManager = fileManager(), action: FileManager.() -> Unit){
+    private fun TestScope.callAfterLoading(fileManager: FileManagerImpl = fileManager(), action: FileManagerImpl.() -> Unit){
         advanceUntilIdle()
         fileManager.action()
     }
@@ -346,7 +346,7 @@ internal class FileManagerTest{
         return toLongArray().contentEquals(other.toLongArray())
     }
 
-    private fun FileManager.assertSortingModeSwitching() {
+    private fun FileManagerImpl.assertSortingModeSwitching() {
         SortingMode.values().forEach {
             switchSortingMode(it)
             assertEquals(it, state.sortingMode)
@@ -354,14 +354,14 @@ internal class FileManagerTest{
     }
 
 
-    private fun assertFileModeSwitching(fileManager: FileManager){
+    private fun assertFileModeSwitching(fileManager: FileManagerImpl){
         FileRequest.values().forEach {
             fileManager.switchFileMode(it)
             assertEquals(state.fileRequest, it)
         }
     }
 
-    private fun TestScope.assertGetFilesCalls(fileManager: FileManager){
+    private fun TestScope.assertGetFilesCalls(fileManager: FileManagerImpl){
         for (value in FileRequest.values()) {
             fileManager.apply {
                 switchFileMode(value)
@@ -375,8 +375,8 @@ internal class FileManagerTest{
 
 
 
-    private fun TestScope.fileManager(hasPermission: Boolean = true) : FileManager{
-        return FileManager(
+    private fun TestScope.fileManager(hasPermission: Boolean = true) : FileManagerImpl{
+        return FileManagerImpl(
             stateHolder, permissionChecker(hasPermission), files,
             coroutineScope = this
         )

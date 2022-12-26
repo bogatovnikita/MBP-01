@@ -17,4 +17,5 @@
     <string name="ask_delete_attention">Вы не сможете остановить удаление</string>
     <string name="cancel">Отмена</string>
     <string name="file_search_progress">Идёт поиск файлов...</string>
+    <string name="dialog_done_button">Супер!</string>
 </resources>

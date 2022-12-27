@@ -4,7 +4,7 @@ internal data class MutableState(
     override var hasPermission: Boolean = false,
     override var inProgress: Boolean = true,
     override var files: List<FileInfo> = listOf(),
-    override var fileRequest: FileRequest = FileRequest.Images,
+    override var fileRequest: FileRequest = FileRequest.AllFiles,
     override var sortingMode: SortingMode = SortingMode.FromNewToOld,
     override var selectedFiles: MutableList<FileInfo> = mutableListOf(),
     override var isAllSelected: Boolean = false,

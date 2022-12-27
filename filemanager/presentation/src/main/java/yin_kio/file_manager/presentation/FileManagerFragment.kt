@@ -1,27 +1,24 @@
 package yin_kio.file_manager.presentation
 
-import android.content.Context
 import android.content.res.ColorStateList
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
-import com.example.recycler_adapter.recyclerAdapter
-import jamycake.lifecycle_aware.lifecycleAware
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import yin_kio.file_manager.domain.models.FileRequest
 import yin_kio.file_manager.presentation.databinding.FragmentFileManagerBinding
 import yin_kio.file_manager.presentation.models.UiState
 
 class FileManagerFragment(
-    viewModelCreator: ViewModel.(Context) -> FileManagerViewModel
 ) : Fragment(R.layout.fragment_file_manager) {
 
     private val binding: FragmentFileManagerBinding by viewBinding()
-    private val viewModel by lifecycleAware{viewModelCreator(requireContext())}
+    private val viewModel by lazy { parentViewModel() }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setupView()
@@ -46,6 +43,15 @@ class FileManagerFragment(
     private fun setupObserver() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.flow.collect {
+
+                if (!it.hasPermission){
+                    val navController = findNavController()
+                    if (navController.currentDestination?.id == R.id.fileManagerFragment){
+                        navController.navigate(R.id.permissionFragment)
+                    }
+                }
+
+
                 showIsAllSelected(it)
                 showRecycler(it)
                 showSortIcon(it)

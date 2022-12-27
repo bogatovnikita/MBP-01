@@ -17,7 +17,8 @@ class FileManagerViewModel(
                 isAllSelected = it.isAllSelected,
                 layoutManager = presenter.presentShowingMode(it.listShowingMode),
                 sortingIconColor = presenter.presentSortingMode(it.sortingMode),
-                deleteButtonColor = presenter.presentMainButton(it.canDelete)
+                deleteButtonColor = presenter.presentMainButton(it.canDelete),
+                hasPermission = it.hasPermission
             )
         }
 

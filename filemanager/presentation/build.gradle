@@ -49,12 +49,18 @@ dependencies {
     implementation project(':general:resources')
     implementation project(':lifecycle_aware')
     implementation project(':recycler_adapter')
+    implementation project(':permissions')
 
     implementation 'com.github.bumptech.glide:glide:4.14.2'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.14.2'
 
     implementation 'com.github.kirich1409:viewbindingpropertydelegate:1.5.6'
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.5.1"
+
+    def nav_version = "2.5.3"
+
+    implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
+    implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
 
 
     implementation 'androidx.core:core-ktx:1.7.0'

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/file_manager_graph"
+    app:startDestination="@id/fileManagerFragment">
+
+    <fragment
+        android:id="@+id/fileManagerFragment"
+        android:name="yin_kio.file_manager.presentation.FileManagerFragment"
+        android:label="FileManagerFragment" >
+        <action
+            android:id="@+id/toPermissionFragment"
+            app:destination="@id/permissionFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/permissionFragment"
+        android:name="yin_kio.file_manager.presentation.PermissionFragment"
+        android:label="PermissionFragment" />
+</navigation>

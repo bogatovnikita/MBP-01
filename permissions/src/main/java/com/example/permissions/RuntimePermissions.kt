@@ -13,11 +13,11 @@ import java.lang.IllegalArgumentException
 
 
 fun Fragment.runtimePermissionsLauncher(
-    onResult: (Boolean) -> Unit = {}) : RuntimePermissionsLauncher {
-    return RuntimePermissionsLauncher(this, onResult)
+    onResult: (Boolean) -> Unit = {}) : LazyPermissionLauncher {
+    return LazyPermissionLauncher(this, onResult)
 }
 
-class RuntimePermissionsLauncher(
+class LazyPermissionLauncher(
     private val fragment: Fragment,
     private val onResult: (Boolean) -> Unit
 ): Lazy<ActivityResultLauncher<Array<String>>>{

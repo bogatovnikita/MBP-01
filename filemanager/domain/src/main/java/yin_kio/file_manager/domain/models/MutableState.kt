@@ -1,7 +1,7 @@
 package yin_kio.file_manager.domain.models
 
 internal data class MutableState(
-    override var hasPermission: Boolean = false,
+    override var hasPermission: Boolean = true,
     override var inProgress: Boolean = true,
     override var files: List<FileInfo> = listOf(),
     override var fileRequest: FileRequest = FileRequest.AllFiles,

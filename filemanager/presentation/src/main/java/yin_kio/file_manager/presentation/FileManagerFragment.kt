@@ -22,12 +22,25 @@ class FileManagerFragment(
     private val binding: FragmentFileManagerBinding by viewBinding()
     private val viewModel by lazy { parentViewModel() }
 
-    private val adapter by lazy {recyclerAdapter<FileInfo, ListItemBinding>(
-            onBind = {item, _->
-                name.text = item.name
+    private val adapter by lazy { adapter() }
+
+    private fun adapter() = recyclerAdapter<FileInfo, ListItemBinding>(
+        onViewHolderCreated = { holder ->
+            observeState {
+                holder.currentItem?.let {
+                    checkBox.isChecked = it.isSelected
+                }
             }
-        )
-    }
+        },
+        onBind = { item, _ ->
+            name.text = item.name
+            checkBox.isChecked = item.isSelected
+            root.setOnClickListener { viewModel.obtainIntention(Intention.SwitchSelectFile(item.path)) }
+            checkBox.setOnClickListener { viewModel.obtainIntention(Intention.SwitchSelectFile(item.path)) }
+        },
+        areItemsTheSame = { old, new -> old.path == new.path },
+        areContentsTheSame = { _, _ -> false }
+    )
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -47,22 +60,28 @@ class FileManagerFragment(
             audio.setOnClickListener { viewModel.obtainIntention(Intention.SwitchFileMode(FileRequest.Audio)) }
             video.setOnClickListener { viewModel.obtainIntention(Intention.SwitchFileMode(FileRequest.Video)) }
             documents.setOnClickListener { viewModel.obtainIntention(Intention.SwitchFileMode(FileRequest.Documents)) }
+
+            selectAll.setOnClickListener { viewModel.obtainIntention(Intention.SwitchSelectAll) }
+            isAllSelected.setOnClickListener { viewModel.obtainIntention(Intention.SwitchSelectAll) }
         }
     }
 
     private fun setupObserver() {
+        observeState {  Log.d("FileManager", "isAllSelected: ${it.isAllSelected}")
+            adapter.submitList(it.files)
+
+            askPermission(it)
+            showFileRequest(it)
+            showIsAllSelected(it)
+            showRecycler(it)
+            showSortIcon(it)
+            showDeleteButton(it)
+        }
+    }
+
+    private fun observeState(action: (UiState) -> Unit){
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            viewModel.flow.collect {
-
-                adapter.submitList(it.files)
-
-                askPermission(it)
-                showFileRequest(it)
-                showIsAllSelected(it)
-                showRecycler(it)
-                showSortIcon(it)
-                showDeleteButton(it)
-            }
+            viewModel.flow.collect(action)
         }
     }
 
@@ -76,7 +95,9 @@ class FileManagerFragment(
     }
 
     private fun showRecycler(it: UiState) {
-        binding.recycler.layoutManager = it.layoutManager
+        if (binding.recycler.layoutManager!!::class != it.layoutManager::class){
+            binding.recycler.layoutManager = it.layoutManager
+        }
     }
 
     private fun showIsAllSelected(it: UiState) {

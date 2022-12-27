@@ -10,8 +10,8 @@ import androidx.viewbinding.ViewBinding
 
 inline fun <T, reified VB: ViewBinding> recyclerAdapter(
     noinline onBind: VB.(T, SingleTypeViewHolder<T, VB>) -> Unit,
-    noinline areItemsTheSame: (T, T) -> Boolean = { item1, item2 -> item1 == item2},
-    noinline areContentsTheSame: (T, T) -> Boolean = { item1, item2 -> item1 == item2},
+    noinline areItemsTheSame: (T, T) -> Boolean = { old, new -> old == new},
+    noinline areContentsTheSame: (T, T) -> Boolean = { old, new -> old == new},
     noinline onViewHolderCreated: VB.(SingleTypeViewHolder<T, VB>) -> Unit = {}
 ) = BindingAdapter(
     _class = VB::class.java,

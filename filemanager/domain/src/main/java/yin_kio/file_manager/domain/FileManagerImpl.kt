@@ -104,11 +104,13 @@ internal class FileManagerImpl(
 
     override fun switchSelectFile(path: String){
         state.apply {
+            version += 1
             val file = files.find { it.path == path }
+
             file?.let {
                 it.isSelected = !it.isSelected
                 addOrRemoveFromSelectedFiles(it)
-                isAllSelected = files == selectedFiles
+                isAllSelected = files.size == selectedFiles.size
             }
             updateCanDelete()
         }

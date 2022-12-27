@@ -1,6 +1,7 @@
 package yin_kio.file_manager.domain.models
 
 interface State {
+    val version: Int
     val hasPermission: Boolean
     val inProgress: Boolean
     val files: List<FileInfo>

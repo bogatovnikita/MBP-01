@@ -22,7 +22,7 @@ class Presenter(
 
     fun presentShowingMode(showingMode: ListShowingMode) : LayoutManager{
         return when(showingMode){
-            ListShowingMode.List -> LinearLayoutManager(context)
+            ListShowingMode.List -> LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             ListShowingMode.Grid -> GridLayoutManager(context, 2)
         }
     }

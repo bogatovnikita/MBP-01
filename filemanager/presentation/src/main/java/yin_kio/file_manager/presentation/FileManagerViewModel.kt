@@ -17,7 +17,8 @@ class FileManagerViewModel(
                 layoutManager = presenter.presentShowingMode(it.listShowingMode),
                 sortingIconColor = presenter.presentSortingMode(it.sortingMode),
                 deleteButtonBg = presenter.presentMainButton(it.canDelete),
-                hasPermission = it.hasPermission
+                hasPermission = it.hasPermission,
+                files = it.files
             )
         }
 

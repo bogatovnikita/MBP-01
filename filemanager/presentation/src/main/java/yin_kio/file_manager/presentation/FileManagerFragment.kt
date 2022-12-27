@@ -9,8 +9,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.example.recycler_adapter.recyclerAdapter
+import yin_kio.file_manager.domain.models.FileInfo
 import yin_kio.file_manager.domain.models.FileRequest
 import yin_kio.file_manager.presentation.databinding.FragmentFileManagerBinding
+import yin_kio.file_manager.presentation.databinding.ListItemBinding
 import yin_kio.file_manager.presentation.models.UiState
 
 class FileManagerFragment(
@@ -18,6 +21,13 @@ class FileManagerFragment(
 
     private val binding: FragmentFileManagerBinding by viewBinding()
     private val viewModel by lazy { parentViewModel() }
+
+    private val adapter by lazy {recyclerAdapter<FileInfo, ListItemBinding>(
+            onBind = {item, _->
+                name.text = item.name
+            }
+        )
+    }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -27,7 +37,7 @@ class FileManagerFragment(
     }
 
     private fun setupView(){
-//        binding.recycler.adapter = recyclerAdapter()
+        binding.recycler.adapter = adapter
     }
 
     private fun setupListeners(){
@@ -43,6 +53,8 @@ class FileManagerFragment(
     private fun setupObserver() {
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.flow.collect {
+
+                adapter.submitList(it.files)
 
                 askPermission(it)
                 showFileRequest(it)
@@ -80,7 +92,6 @@ class FileManagerFragment(
     }
 
     private fun showFileRequest(it: UiState) {
-        Log.d("!!!", "file request: ${it.fileRequest}")
         binding.apply {
             allFiles.isChecked = it.fileRequest == FileRequest.AllFiles
             images.isChecked = it.fileRequest == FileRequest.Images

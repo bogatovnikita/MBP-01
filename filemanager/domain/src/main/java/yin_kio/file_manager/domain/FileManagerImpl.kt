@@ -7,13 +7,14 @@ import yin_kio.file_manager.domain.gateways.PermissionChecker
 import yin_kio.file_manager.domain.models.*
 
 internal class FileManagerImpl(
-    private val stateHolder: MutableStateHolder,
+    private val _stateHolder: MutableStateHolder,
     private val permissionChecker: PermissionChecker,
     private val files: Files,
     private val coroutineScope: CoroutineScope
 ) : FileManager {
 
     private val state = MutableState()
+    override val stateHolder: StateHolder get() =  _stateHolder
 
     init {
         state.sortingMode = SortingMode.Disabled
@@ -158,7 +159,7 @@ internal class FileManagerImpl(
     }
 
     private fun updateState() {
-        stateHolder.update(state.copy())
+        _stateHolder.update(state.copy())
     }
 }
 

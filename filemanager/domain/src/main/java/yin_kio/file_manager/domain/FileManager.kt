@@ -2,8 +2,11 @@ package yin_kio.file_manager.domain
 
 import yin_kio.file_manager.domain.models.FileRequest
 import yin_kio.file_manager.domain.models.SortingMode
+import yin_kio.file_manager.domain.models.StateHolder
 
 interface FileManager {
+    val stateHolder: StateHolder
+
     fun updateFiles()
 
     fun switchFileMode(fileRequest: FileRequest)

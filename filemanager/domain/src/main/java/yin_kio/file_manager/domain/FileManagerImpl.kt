@@ -19,12 +19,12 @@ internal class FileManagerImpl(
     init {
         state.sortingMode = SortingMode.Disabled
         updateState()
-
         updateFiles()
     }
 
     override fun updateFiles() {
         coroutineScope.launch {
+
             state.apply {
                 updateSelectAll(false)
                 hasPermission = permissionChecker.hasPermission
@@ -34,7 +34,7 @@ internal class FileManagerImpl(
                     inProgress = true
                     updateState()
                     files = this@FileManagerImpl.files.getFiles(state.fileRequest)
-                    switchSortingMode(state.sortingMode)
+                    setSortingMode(state.sortingMode)
                     inProgress = false
                 } else {
                     state.inProgress = false
@@ -53,16 +53,20 @@ internal class FileManagerImpl(
     }
 
     override fun switchSortingMode(sortingMode: SortingMode){
+        setSortingMode(sortingMode)
+        updateState()
+    }
+
+    private fun setSortingMode(sortingMode: SortingMode) {
         state.isShowSortingModeSelector = false
         state.sortingMode = sortingMode
-        state.files = when(sortingMode){
-            SortingMode.FromNewToOld ->  state.files.sortedBy { it.time }
-            SortingMode.FromOldToNew ->  state.files.sortedBy { -it.time }
+        state.files = when (sortingMode) {
+            SortingMode.FromNewToOld -> state.files.sortedBy { it.time }
+            SortingMode.FromOldToNew -> state.files.sortedBy { -it.time }
             SortingMode.FromBigToSmall -> state.files.sortedBy { -it.size }
             SortingMode.FromSmallToBig -> state.files.sortedBy { it.size }
             SortingMode.Disabled -> state.files
         }
-        updateState()
     }
 
     override fun switchSelectAll(){

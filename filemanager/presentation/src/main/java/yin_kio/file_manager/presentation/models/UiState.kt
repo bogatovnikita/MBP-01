@@ -8,6 +8,6 @@ data class UiState(
     val isAllSelected: Boolean,
     val layoutManager: LayoutManager,
     val sortingIconColor: Int,
-    val deleteButtonColor: Int,
+    val deleteButtonBg: Int,
     val hasPermission: Boolean
 )

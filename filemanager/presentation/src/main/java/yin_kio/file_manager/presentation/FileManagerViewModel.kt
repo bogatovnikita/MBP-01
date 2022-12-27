@@ -2,7 +2,6 @@ package yin_kio.file_manager.presentation
 
 import kotlinx.coroutines.flow.map
 import yin_kio.file_manager.domain.FileManager
-import yin_kio.file_manager.domain.models.StateHolder
 import yin_kio.file_manager.presentation.models.UiState
 
 class FileManagerViewModel(
@@ -17,7 +16,7 @@ class FileManagerViewModel(
                 isAllSelected = it.isAllSelected,
                 layoutManager = presenter.presentShowingMode(it.listShowingMode),
                 sortingIconColor = presenter.presentSortingMode(it.sortingMode),
-                deleteButtonColor = presenter.presentMainButton(it.canDelete),
+                deleteButtonBg = presenter.presentMainButton(it.canDelete),
                 hasPermission = it.hasPermission
             )
         }

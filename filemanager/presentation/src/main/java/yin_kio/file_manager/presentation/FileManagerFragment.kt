@@ -4,11 +4,11 @@ import android.content.res.ColorStateList
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
-import kotlinx.coroutines.launch
 import yin_kio.file_manager.domain.models.FileRequest
 import yin_kio.file_manager.presentation.databinding.FragmentFileManagerBinding
 import yin_kio.file_manager.presentation.models.UiState
@@ -76,7 +76,7 @@ class FileManagerFragment(
     }
 
     private fun showDeleteButton(it: UiState) {
-        binding.delete.backgroundTintList = ColorStateList.valueOf(it.deleteButtonColor)
+        binding.delete.background = ContextCompat.getDrawable(requireContext(), it.deleteButtonBg)
     }
 
     private fun showFileRequest(it: UiState) {

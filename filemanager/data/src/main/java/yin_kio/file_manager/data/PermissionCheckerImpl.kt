@@ -4,7 +4,7 @@ import android.content.Context
 import com.example.permissions.hasStoragePermissions
 import yin_kio.file_manager.domain.gateways.PermissionChecker
 
-class PermissionCheckerImpl(
+internal class PermissionCheckerImpl(
     private val context: Context
 ) : PermissionChecker {
 

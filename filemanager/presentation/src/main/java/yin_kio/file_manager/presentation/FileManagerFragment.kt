@@ -41,22 +41,24 @@ class FileManagerFragment(
     }
 
     private fun setupObserver() {
-        viewLifecycleOwner.lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.flow.collect {
 
-                if (!it.hasPermission){
-                    val navController = findNavController()
-                    if (navController.currentDestination?.id == R.id.fileManagerFragment){
-                        navController.navigate(R.id.permissionFragment)
-                    }
-                }
-
-
+                askPermission(it)
+                showFileRequest(it)
                 showIsAllSelected(it)
                 showRecycler(it)
                 showSortIcon(it)
                 showDeleteButton(it)
-                showFileRequest(it)
+            }
+        }
+    }
+
+    private fun askPermission(it: UiState) {
+        if (!it.hasPermission) {
+            val navController = findNavController()
+            if (navController.currentDestination?.id == R.id.fileManagerFragment) {
+                navController.navigate(R.id.permissionFragment)
             }
         }
     }
@@ -78,6 +80,7 @@ class FileManagerFragment(
     }
 
     private fun showFileRequest(it: UiState) {
+        Log.d("!!!", "file request: ${it.fileRequest}")
         binding.apply {
             allFiles.isChecked = it.fileRequest == FileRequest.AllFiles
             images.isChecked = it.fileRequest == FileRequest.Images

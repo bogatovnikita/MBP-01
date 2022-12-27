@@ -2,6 +2,7 @@ package yin_kio.file_manager.presentation
 
 import android.content.Context
 import android.graphics.drawable.Drawable
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView.LayoutManager
@@ -29,9 +30,13 @@ class Presenter(
 
     fun presentSortingMode(sortingMode: SortingMode) : Int {
         return when(sortingMode){
-            SortingMode.Disabled -> context.getColor(general.R.color.dark_blue)
-            else -> context.getColor(general.R.color.green)
+            SortingMode.Disabled -> color(general.R.color.dark_blue)
+            else -> color(general.R.color.green)
         }
+    }
+
+    private fun color(id: Int) : Int {
+        return ContextCompat.getColor(context, id)
     }
 
     fun presentMainButton(isEnabled: Boolean) : Int{

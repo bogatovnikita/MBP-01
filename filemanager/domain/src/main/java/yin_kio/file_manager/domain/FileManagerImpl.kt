@@ -1,6 +1,7 @@
 package yin_kio.file_manager.domain
 
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import yin_kio.file_manager.domain.gateways.Files
 import yin_kio.file_manager.domain.gateways.PermissionChecker
@@ -24,32 +25,39 @@ internal class FileManagerImpl(
 
     override fun updateFiles() {
         coroutineScope.launch {
+            suspendedUpdateFiles()
+        }
+    }
 
-            state.apply {
-                updateSelectAll(false)
-                hasPermission = permissionChecker.hasPermission
+    private suspend fun suspendedUpdateFiles() {
+        state.apply {
+            updateSelectAll(false)
+            hasPermission = permissionChecker.hasPermission
+
+
+            if (hasPermission) {
+                inProgress = true
                 updateState()
-
-                if (hasPermission) {
-                    inProgress = true
-                    updateState()
-                    files = this@FileManagerImpl.files.getFiles(state.fileRequest)
-                    setSortingMode(state.sortingMode)
-                    inProgress = false
-                } else {
-                    state.inProgress = false
-                }
-
-                updateState()
+                files = this@FileManagerImpl.files.getFiles(state.fileRequest)
+                setSortingMode(state.sortingMode)
+                inProgress = false
+            } else {
+                state.inProgress = false
             }
+
+            updateState()
         }
     }
 
 
-
     override fun switchFileMode(fileRequest: FileRequest){
-        state.fileRequest = fileRequest
-        updateState()
+        coroutineScope.launch {
+            state.fileRequest = fileRequest
+            updateState()
+            delay(50)
+            suspendedUpdateFiles()
+        }
+
     }
 
     override fun switchSortingMode(sortingMode: SortingMode){

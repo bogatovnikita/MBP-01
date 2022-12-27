@@ -354,9 +354,10 @@ internal class FileManagerTest{
     }
 
 
-    private fun assertFileModeSwitching(fileManager: FileManagerImpl){
+    private fun TestScope.assertFileModeSwitching(fileManager: FileManagerImpl){
         FileRequest.values().forEach {
             fileManager.switchFileMode(it)
+            advanceUntilIdle()
             assertEquals(state.fileRequest, it)
         }
     }
@@ -365,7 +366,6 @@ internal class FileManagerTest{
         for (value in FileRequest.values()) {
             fileManager.apply {
                 switchFileMode(value)
-                updateFiles()
             }
             advanceUntilIdle()
             coVerify { files.getFiles(value) }

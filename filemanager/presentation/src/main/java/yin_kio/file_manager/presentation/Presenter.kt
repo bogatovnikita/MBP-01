@@ -42,7 +42,7 @@ class Presenter(
     fun presentFile(fileInfo: FileInfo) : FileItem{
         return FileItem(
             name = fileInfo.name,
-            description = fileInfo.description,
+            description = "",
             isSelected = fileInfo.isSelected,
             path = fileInfo.path
         )

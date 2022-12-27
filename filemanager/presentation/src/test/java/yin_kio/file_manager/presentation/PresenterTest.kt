@@ -75,7 +75,6 @@ class PresenterTest {
         val fileInfo = FileInfo()
         val fileItem = presenter.presentFile(fileInfo)
         assertEquals(fileItem.name, fileInfo.name)
-        assertEquals(fileItem.description, fileInfo.description)
         assertEquals(fileItem.isSelected, fileInfo.isSelected)
         assertEquals(fileItem.path, fileInfo.path)
     }

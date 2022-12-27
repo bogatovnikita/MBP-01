@@ -9,7 +9,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.hedgehog.presentation.databinding.ItemScreenTimeBinding
 import com.hedgehog.presentation.models.AppScreenTime
 
-class ScreenTimeAdapter(private val listener: Listener) :
+class ScreenTimeAdapter(
+    private val listener: Listener
+) :
     ListAdapter<AppScreenTime, ScreenTimeAdapter.ScreenTimeViewHolder>(ItemCallback),
     View.OnClickListener {
 
@@ -24,7 +26,7 @@ class ScreenTimeAdapter(private val listener: Listener) :
         val item = getItem(position)
         with(holder.binding) {
             root.tag = item
-            iconIv.setImageResource(item.icon)
+            iconIv.setImageDrawable(item.icon)
             titleTv.text = item.name
             descriptionTv.text = item.time
         }

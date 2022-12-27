@@ -1,7 +1,9 @@
 package com.hedgehog.presentation.models
 
+import android.graphics.drawable.Drawable
+
 data class AppScreenTime(
     val name: String = "",
     val time: String = "",
-    val icon: Int = 0
+    val icon: Drawable? = null
 )

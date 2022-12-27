@@ -4,7 +4,6 @@ import androidx.lifecycle.viewModelScope
 import com.hedgehog.domain.usacase.GetScreenTimeDataUseCase
 import com.hedgehog.domain.wrapper.CaseResult
 import com.hedgehog.presentation.base.BaseViewModel
-import com.hedgehog.presentation.extensions.mapToAppTime
 import com.hedgehog.presentation.models.AppScreenTime
 import com.hedgehog.presentation.models.CalendarScreenTime
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -46,10 +45,10 @@ class FirstScreenTimeViewModel @Inject constructor(
                 listDataScreenTime = result.response.map { usageState ->
                     AppScreenTime(
                         name = usageState.name,
-                        time = usageState.time.mapToAppTime(),
+                        time = usageState.time,
                         icon = usageState.icon
                     )
-                }
+                }, isLoading = true
             )
         }
     }

@@ -82,13 +82,14 @@
         <ImageView
             android:id="@+id/sort"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
+            android:scaleType="center"
             app:srcCompat="@drawable/ic_sorting_mode_selector"/>
 
         <ImageView
             android:id="@+id/showing_mode"
             android:layout_width="50dp"
-            android:layout_height="20dp"
+            android:layout_height="30dp"
             android:scaleType="center"
             app:srcCompat="@drawable/ic_showing_mode_list"/>
 
@@ -100,7 +101,8 @@
         <TextView
             android:id="@+id/selectAll"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
+            android:gravity="center"
             android:text="@string/select_all"
             android:textAppearance="@style/Text.Subtitle_1.2"
             android:paddingEnd="8dp"/>

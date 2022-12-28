@@ -24,13 +24,16 @@ class FirstScreenTimeFragment :
 
     private val viewModel: FirstScreenTimeViewModel by viewModels()
     private lateinit var adapter: ScreenTimeAdapter
+    private var beginTime = 0
+    private var endTime = -1
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.getListTimeScreenData(CalendarScreenTime(Calendar.HOUR, -24))
-//        startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
+        updateScreenTime(Calendar.DATE, beginTime, endTime)
+        startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS))
         initRecyclerView()
         initObserver()
+        initClickListeners()
     }
 
     private fun initRecyclerView() {
@@ -55,5 +58,38 @@ class FirstScreenTimeFragment :
     private fun renderState(state: FirstScreenTimeState) {
         if (!state.isLoading) return
         adapter.submitList(state.listDataScreenTime)
+
+    }
+
+    private fun initClickListeners() {
+        binding.backgroundArrowLeft.setOnClickListener {
+            beginTime += 1
+            endTime += 1
+            updateScreenTime(Calendar.DATE, beginTime, endTime)
+        }
+
+        binding.backgroundArrowRight.setOnClickListener {
+            if (beginTime == 0 && endTime == -1) return@setOnClickListener
+            beginTime -= 1
+            endTime -= 1
+            updateScreenTime(Calendar.DATE, beginTime, endTime)
+        }
+
+        binding.dayButton.setOnClickListener {
+            if (viewModel.screenState.value.choiceDay) return@setOnClickListener
+            viewModel.choiceDay()
+            beginTime = 0
+            endTime = -1
+            updateScreenTime(Calendar.DATE, beginTime, endTime)
+        }
+
+        binding.weekButton.setOnClickListener {
+            if (viewModel.screenState.value.choiceWeek) return@setOnClickListener
+            viewModel.choiceWeek()
+        }
+    }
+
+    private fun updateScreenTime(dataType: Int, beginTime: Int, endTime: Int) {
+        viewModel.getListTimeScreenData(CalendarScreenTime(dataType, beginTime, endTime))
     }
 }

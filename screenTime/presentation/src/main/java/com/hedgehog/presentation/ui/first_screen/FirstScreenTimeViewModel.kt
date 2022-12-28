@@ -20,7 +20,8 @@ class FirstScreenTimeViewModel @Inject constructor(
             getScreenTimeDataUseCase.invoke(
                 com.hedgehog.domain.models.CalendarScreenTime(
                     dataType = calendarScreenTime.dataType,
-                    dataCount = calendarScreenTime.dataCount
+                    beginTime = calendarScreenTime.beginTime,
+                    endTime = calendarScreenTime.endTime
                 )
             ).collect { result ->
                 when (result) {
@@ -50,6 +51,18 @@ class FirstScreenTimeViewModel @Inject constructor(
                     )
                 }, isLoading = true
             )
+        }
+    }
+
+    fun choiceDay() {
+        updateState {
+            it.copy(choiceDay = true, choiceWeek = false)
+        }
+    }
+
+    fun choiceWeek() {
+        updateState {
+            it.copy(choiceDay = false, choiceWeek = true)
         }
     }
 }

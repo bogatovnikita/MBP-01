@@ -1,7 +1,6 @@
 package yin_kio.file_manager.presentation
 
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
 import yin_kio.file_manager.domain.FileManager
 import yin_kio.file_manager.presentation.models.UiState
 
@@ -15,11 +14,12 @@ class FileManagerViewModel(
             UiState(
                 fileRequest = it.fileRequest,
                 isAllSelected = it.isAllSelected,
-                layoutManager = presenter.presentShowingMode(it.listShowingMode),
+                listShowingMode = it.listShowingMode,
                 sortingIconColor = presenter.presentSortingMode(it.sortingMode),
                 deleteButtonBg = presenter.presentMainButton(it.canDelete),
                 hasPermission = it.hasPermission,
-                files = it.files
+                files = it.files,
+                listShowingModeIconRes = presenter.presentListShowingModeIcon(it.listShowingMode)
             )
         }
 

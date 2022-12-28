@@ -86,6 +86,7 @@
             app:srcCompat="@drawable/ic_sorting_mode_selector"/>
 
         <ImageView
+            android:id="@+id/showing_mode"
             android:layout_width="50dp"
             android:layout_height="20dp"
             android:scaleType="center"
@@ -110,23 +111,23 @@
     </LinearLayout>
 
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <FrameLayout
         android:id="@+id/list_plate"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="visible">
 
-        <androidx.recyclerview.widget.RecyclerView
+        <yin_kio.file_manager.presentation.views.SwitchableRecyclerView
             android:id="@+id/recycler"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:listitem="@layout/grid_item"
             app:spanCount="2"
             android:paddingEnd="16dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             android:paddingTop="16dp"
             android:clipToPadding="false"
-            android:paddingBottom="120dp"/>
+            android:paddingBottom="120dp"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager" />
 
         <TextView
             android:id="@+id/delete"
@@ -139,7 +140,7 @@
 
 
 
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </FrameLayout>
 
 
     <LinearLayout

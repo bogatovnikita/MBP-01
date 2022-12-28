@@ -1,8 +1,6 @@
 package yin_kio.file_manager.presentation
 
 import android.content.Context
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import org.junit.Assert.*
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -33,18 +31,6 @@ class PresenterTest {
         assertEquals(true, presenter.presentIsAllSelected(true))
     }
 
-    @Test
-    fun `presentShowingMode list get LinearLayoutManager`(){
-        assertTrue(presenter.presentShowingMode(ListShowingMode.List) is LinearLayoutManager)
-    }
-
-    @Test
-    fun `presentShowingMode grid get GridLayoutManager with 2 span count`(){
-        val layoutManager = presenter.presentShowingMode(ListShowingMode.Grid)
-        assertTrue((layoutManager is GridLayoutManager))
-        layoutManager as GridLayoutManager
-        assertEquals(2, layoutManager.spanCount)
-    }
 
     @Test
     fun `presentSortingMode disabled get dark blue color`(){
@@ -98,5 +84,18 @@ class PresenterTest {
         assertEquals(IconShowingMode.Image, video)
         assertEquals(IconShowingMode.Image, images)
     }
+
+    @Test
+    fun `presentListShowingModeIcon for grid get ic_showing_mode_list`(){
+        val actual = presenter.presentListShowingModeIcon(ListShowingMode.Grid)
+        assertEquals(R.drawable.ic_showing_mode_list, actual)
+    }
+
+    @Test
+    fun `presentListShowingModeIcon for list ic_showing_mode_grid`(){
+        val actual = presenter.presentListShowingModeIcon(ListShowingMode.List)
+        assertEquals(R.drawable.ic_showing_mode_grid, actual)
+    }
+
 
 }

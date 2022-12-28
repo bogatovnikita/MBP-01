@@ -2,18 +2,14 @@ package yin_kio.file_manager.presentation
 
 import android.content.res.ColorStateList
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
-import com.example.recycler_adapter.recyclerAdapter
-import yin_kio.file_manager.domain.models.FileInfo
 import yin_kio.file_manager.domain.models.FileRequest
 import yin_kio.file_manager.presentation.databinding.FragmentFileManagerBinding
-import yin_kio.file_manager.presentation.databinding.ListItemBinding
 import yin_kio.file_manager.presentation.models.UiState
 
 class FileManagerFragment(
@@ -22,25 +18,6 @@ class FileManagerFragment(
     private val binding: FragmentFileManagerBinding by viewBinding()
     private val viewModel by lazy { parentViewModel() }
 
-    private val adapter by lazy { adapter() }
-
-    private fun adapter() = recyclerAdapter<FileInfo, ListItemBinding>(
-        onViewHolderCreated = { holder ->
-            observeState {
-                holder.currentItem?.let {
-                    checkBox.isChecked = it.isSelected
-                }
-            }
-        },
-        onBind = { item, _ ->
-            name.text = item.name
-            checkBox.isChecked = item.isSelected
-            root.setOnClickListener { viewModel.obtainIntention(Intention.SwitchSelectFile(item.path)) }
-            checkBox.setOnClickListener { viewModel.obtainIntention(Intention.SwitchSelectFile(item.path)) }
-        },
-        areItemsTheSame = { old, new -> old.path == new.path },
-        areContentsTheSame = { _, _ -> false }
-    )
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -50,7 +27,9 @@ class FileManagerFragment(
     }
 
     private fun setupView(){
-        binding.recycler.adapter = adapter
+        binding.recycler.onViewHolderCreated = {holder, checkBox ->
+            observeState { checkBox.isChecked = holder.currentItem?.isSelected?:false }
+        }
     }
 
     private fun setupListeners(){
@@ -63,19 +42,22 @@ class FileManagerFragment(
 
             selectAll.setOnClickListener { viewModel.obtainIntention(Intention.SwitchSelectAll) }
             isAllSelected.setOnClickListener { viewModel.obtainIntention(Intention.SwitchSelectAll) }
+
+            recycler.setOnItemClickListener { viewModel.obtainIntention(Intention.SwitchSelectFile(it)) }
+            showingMode.setOnClickListener { viewModel.obtainIntention(Intention.SwitchShowingMode) }
         }
     }
 
     private fun setupObserver() {
-        observeState {  Log.d("FileManager", "isAllSelected: ${it.isAllSelected}")
-            adapter.submitList(it.files)
-
+        observeState {
             askPermission(it)
             showFileRequest(it)
             showIsAllSelected(it)
             showRecycler(it)
+            binding.recycler.mutableAdapter?.submitList(it.files)
             showSortIcon(it)
             showDeleteButton(it)
+            binding.showingMode.setImageDrawable(ContextCompat.getDrawable(requireContext(), it.listShowingModeIconRes))
         }
     }
 
@@ -95,9 +77,7 @@ class FileManagerFragment(
     }
 
     private fun showRecycler(it: UiState) {
-        if (binding.recycler.layoutManager!!::class != it.layoutManager::class){
-            binding.recycler.layoutManager = it.layoutManager
-        }
+        binding.recycler.setListShowingMode(it.listShowingMode)
     }
 
     private fun showIsAllSelected(it: UiState) {

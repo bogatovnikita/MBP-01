@@ -3,30 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
-    <View
-        android:id="@+id/background_view"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@drawable/background_corner_stroke"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_percent="0.052"
+    <ImageView
+        android:id="@+id/background_icon"
+        android:layout_width="@dimen/_30sdp"
+        android:layout_height="@dimen/_30sdp"
+        android:layout_marginTop="@dimen/_4sdp"
+        android:background="@drawable/background_corner"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <View
-        android:id="@+id/background_icon"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="@dimen/_8sdp"
-        android:background="@drawable/background_corner"
-        app:layout_constraintBottom_toBottomOf="@id/background_view"
-        app:layout_constraintDimensionRatio="W,1:1"
-        app:layout_constraintHeight_percent="0.033"
-        app:layout_constraintStart_toStartOf="@id/background_view"
-        app:layout_constraintTop_toTopOf="@id/background_view" />
 
     <ImageView
         android:id="@+id/icon_iv"
@@ -41,22 +27,25 @@
 
     <TextView
         android:id="@+id/title_tv"
+        style="@style/Text.Body_1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/_6sdp"
+        android:fontFamily="@font/golos_text_regular"
+        android:textColor="@color/black"
         app:layout_constraintBottom_toTopOf="@id/description_tv"
         app:layout_constraintEnd_toStartOf="@id/icon_right_arrow"
         app:layout_constraintStart_toEndOf="@id/background_icon"
-        app:layout_constraintTop_toTopOf="@id/background_view"
-        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintTop_toTopOf="@id/background_icon"
         tools:text="Google Chrom" />
 
     <TextView
         android:id="@+id/description_tv"
+        style="@style/Text.Subtitle_1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/_6sdp"
-        app:layout_constraintBottom_toBottomOf="@id/background_view"
+        app:layout_constraintBottom_toBottomOf="@id/background_icon"
         app:layout_constraintEnd_toStartOf="@id/icon_right_arrow"
         app:layout_constraintStart_toEndOf="@id/background_icon"
         app:layout_constraintTop_toBottomOf="@id/title_tv"
@@ -66,10 +55,19 @@
         android:id="@+id/icon_right_arrow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/_8sdp"
         android:src="@drawable/ic_right_arrow"
-        app:layout_constraintBottom_toBottomOf="@id/background_view"
-        app:layout_constraintEnd_toEndOf="@id/background_view"
-        app:layout_constraintTop_toTopOf="@id/background_view" />
+        app:layout_constraintBottom_toBottomOf="@id/background_icon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/background_icon" />
+
+    <View
+        android:id="@+id/separator_line"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_1sdp"
+        android:layout_marginHorizontal="@dimen/_8sdp"
+        android:layout_marginTop="@dimen/_4sdp"
+        android:background="@color/grey_dark"
+        android:paddingBottom="@dimen/_4sdp"
+        app:layout_constraintTop_toBottomOf="@id/background_icon" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

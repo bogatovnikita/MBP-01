@@ -12,38 +12,63 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import java.util.*
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class ScreenTimeDataRepositoryImplementation @Inject constructor(@ApplicationContext val context: Context) :
     ScreenTimeDataRepository {
 
     private lateinit var stats: UsageStatsManager
-    private val MINUTE = 60000
+    private val minute = 60000
+    private var appScreenList: MutableList<AppScreenTime> = mutableListOf()
+    private lateinit var beginTime: Calendar
+    private lateinit var endTime: Calendar
 
     override fun getScreenTimeData(calendarScreenTime: CalendarScreenTime): Flow<CaseResult<List<AppScreenTime>, String>> =
         flow {
             try {
-                val cal = Calendar.getInstance()
-                cal.add(calendarScreenTime.dataType, calendarScreenTime.dataCount)
+                initBeginEndTime(calendarScreenTime)
+                appScreenList.clear()
                 stats = context.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
                 val statsList = stats.queryAndAggregateUsageStats(
-                    cal.timeInMillis,
-                    System.currentTimeMillis()
-                ).values.toList()
-
-                val appScreenList = statsList.filter {
-                    it.totalTimeInForeground > MINUTE
+                    beginTime.timeInMillis, endTime.timeInMillis
+                ).values.toMutableList()
+                appScreenList = statsList.filter {
+                    it.totalTimeInForeground > minute
                 }.sortedByDescending {
                     it.totalTimeInForeground
                 }.map {
                     appScreenTime(it)
-                }
+                }.toMutableList()
+                statsList.clear()
                 emit(CaseResult.Success(appScreenList))
             } catch (e: Exception) {
                 CaseResult.Failure(e.toString())
             }
         }
+
+    private fun initBeginEndTime(calendarScreenTime: CalendarScreenTime) {
+        beginTime = Calendar.getInstance()
+        beginTime.set(Calendar.HOUR_OF_DAY, 0)
+        beginTime.set(Calendar.MINUTE, 0)
+        beginTime.set(Calendar.SECOND, 0)
+        beginTime.set(Calendar.MILLISECOND, 0)
+
+        endTime = Calendar.getInstance()
+        endTime.set(Calendar.HOUR_OF_DAY, 0)
+        endTime.set(Calendar.MINUTE, 0)
+        endTime.set(Calendar.SECOND, -1)
+        endTime.set(Calendar.MILLISECOND, 0)
+
+        if (calendarScreenTime.dataType == Calendar.DATE) {
+            beginTime.add(calendarScreenTime.dataType, -calendarScreenTime.beginTime)
+            endTime.add(calendarScreenTime.dataType, -calendarScreenTime.endTime)
+        } else {
+            beginTime.set(Calendar.DAY_OF_WEEK, beginTime.firstDayOfWeek)
+            beginTime.add(Calendar.WEEK_OF_YEAR, -calendarScreenTime.beginTime)
+            endTime.set(Calendar.DAY_OF_WEEK, beginTime.firstDayOfWeek)
+            endTime.add(Calendar.WEEK_OF_YEAR, -calendarScreenTime.endTime)
+        }
+    }
 
     private fun appScreenTime(it: UsageStats) = AppScreenTime(
         name = getAppLabel(it).toString(),
@@ -52,8 +77,8 @@ class ScreenTimeDataRepositoryImplementation @Inject constructor(@ApplicationCon
     )
 
     private fun mapTimeToString(time: Long): String {
-        val hour = TimeUnit.MILLISECONDS.toHours(time)
-        val minutes = TimeUnit.MILLISECONDS.toMinutes(time)
+        val hour = (time / (1000 * 60 * 60))
+        val minutes = ((time / (1000 * 60)) % 60)
         return context.getString(R.string.D_hour_D_minutes, hour, minutes)
     }
 
@@ -69,5 +94,4 @@ class ScreenTimeDataRepositoryImplementation @Inject constructor(@ApplicationCon
     } catch (e: Exception) {
         null
     }
-
 }

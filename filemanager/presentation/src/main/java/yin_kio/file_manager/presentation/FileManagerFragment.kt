@@ -45,19 +45,39 @@ class FileManagerFragment(
 
             recycler.setOnItemClickListener { viewModel.obtainIntention(Intention.SwitchSelectFile(it)) }
             showingMode.setOnClickListener { viewModel.obtainIntention(Intention.SwitchShowingMode) }
+            sort.setOnClickListener { viewModel.obtainIntention(Intention.ShowSortingModeSelector) }
         }
     }
 
     private fun setupObserver() {
-        observeState {
-            askPermission(it)
-            showFileRequest(it)
-            showIsAllSelected(it)
-            showRecycler(it)
-            binding.recycler.mutableAdapter?.submitList(it.files)
-            showSortIcon(it)
-            showDeleteButton(it)
-            binding.showingMode.setImageDrawable(ContextCompat.getDrawable(requireContext(), it.listShowingModeIconRes))
+        observeState { state ->
+            askPermission(state)
+            showFileRequest(state)
+            showIsAllSelected(state)
+            showRecycler(state)
+            binding.recycler.mutableAdapter?.submitList(state.files)
+            showSortIcon(state)
+            showDeleteButton(state)
+            showListShowingMode(state)
+            showSortingPopup(state)
+        }
+    }
+
+    private fun showListShowingMode(state: UiState) {
+        binding.showingMode.setImageDrawable(
+            ContextCompat.getDrawable(
+                requireContext(),
+                state.listShowingModeIconRes
+            )
+        )
+    }
+
+    private fun showSortingPopup(state: UiState) {
+        if (state.isShowSortingModeSelector) {
+            sortingPopup(state,
+                onDismiss = { viewModel.obtainIntention(Intention.HideSortingModeSelector) },
+                onItemCLick = { viewModel.obtainIntention(Intention.SwitchSortingMode(it)) }
+            ).showAsDropDown(binding.sort)
         }
     }
 

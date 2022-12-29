@@ -19,7 +19,9 @@ class FileManagerViewModel(
                 deleteButtonBg = presenter.presentMainButton(it.canDelete),
                 hasPermission = it.hasPermission,
                 files = it.files,
-                listShowingModeIconRes = presenter.presentListShowingModeIcon(it.listShowingMode)
+                listShowingModeIconRes = presenter.presentListShowingModeIcon(it.listShowingMode),
+                isShowSortingModeSelector = it.isShowSortingModeSelector,
+                sortingMode = it.sortingMode
             )
         }
 
@@ -39,6 +41,7 @@ class FileManagerViewModel(
             Intention.SwitchShowingMode -> fileManager.switchShowingMode()
             is Intention.SwitchSortingMode -> fileManager.switchSortingMode(intention.sortingMode)
             Intention.UpdateFiles -> fileManager.updateFiles()
+            Intention.HideSortingModeSelector -> fileManager.hideSortingModeSelector()
         }
     }
 

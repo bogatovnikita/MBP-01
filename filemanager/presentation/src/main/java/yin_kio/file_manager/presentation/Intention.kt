@@ -18,5 +18,6 @@ sealed interface Intention{
     object CompleteDelete : Intention
     object HideInter : Intention
     object ShowSortingModeSelector : Intention
+    object HideSortingModeSelector: Intention
 
 }

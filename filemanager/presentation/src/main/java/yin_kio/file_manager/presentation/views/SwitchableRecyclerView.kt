@@ -58,7 +58,6 @@ class SwitchableRecyclerView : RecyclerView {
     }
 
     private fun setAdapterAndLayoutManager(listShowingMode: ListShowingMode) {
-        Log.d("!!!", "setAdapterAndLayoutManager")
         setLayoutManager(listShowingMode)
         setAdapter(listShowingMode)
     }
@@ -73,8 +72,6 @@ class SwitchableRecyclerView : RecyclerView {
     private fun setAdapter(listShowingMode: ListShowingMode) {
         _mutableAdapter = createAdapter(listShowingMode)
         adapter = _mutableAdapter
-
-        Log.d("!!!", "setAdapter")
     }
 
     private fun createAdapter(listShowingMode: ListShowingMode) : ListAdapter<FileInfo, *>{

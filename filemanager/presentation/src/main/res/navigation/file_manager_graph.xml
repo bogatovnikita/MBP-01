@@ -11,9 +11,16 @@
         <action
             android:id="@+id/toPermissionFragment"
             app:destination="@id/permissionFragment" />
+        <action
+            android:id="@+id/action_fileManagerFragment_to_askDeleteDialog"
+            app:destination="@id/askDeleteDialog" />
     </fragment>
     <fragment
         android:id="@+id/permissionFragment"
         android:name="yin_kio.file_manager.presentation.PermissionFragment"
         android:label="PermissionFragment" />
+    <dialog
+        android:id="@+id/askDeleteDialog"
+        android:name="yin_kio.file_manager.presentation.AskDeleteDialog"
+        android:label="AskDeleteDialog" />
 </navigation>

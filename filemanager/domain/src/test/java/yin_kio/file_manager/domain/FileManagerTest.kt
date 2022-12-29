@@ -249,6 +249,18 @@ internal class FileManagerTest{
     }
 
     @Test
+    fun `delete - call files uodated`() = runTest{
+        callAfterLoading {
+            switchSelectFile("path")
+            delete()
+            wait()
+        }
+
+        assertTrue(state.files.isNotEmpty())
+        assertTrue(files.getFiles(FileRequest.AllFiles) == state.files)
+    }
+
+    @Test
     fun `askDelete - delete state is Ask`() = runTest{
         fileManager().askDelete()
         assertEquals(DeleteState.Ask, state.deleteState)
@@ -335,13 +347,14 @@ internal class FileManagerTest{
     }
 
     @Test
-    fun `updateFiles after select - can not delete`() = runTest {
+    fun `updateFiles after select - can not delete and no selected files`() = runTest {
         callAfterLoading {
             switchSelectFile("path")
             updateFiles()
             wait()
         }
         assertFalse(state.canDelete)
+        assertTrue(state.selectedFiles.isEmpty())
     }
 
     private fun TestScope.wait() {

@@ -35,6 +35,7 @@ internal class FileManagerImpl(
 
     private suspend fun suspendedUpdateFiles() {
         state.apply {
+            version += 1
             files = emptyList()
             updateSelectAll(false)
             updateCanDelete()
@@ -46,6 +47,8 @@ internal class FileManagerImpl(
                 updateState()
                 delay(1)
                 files = this@FileManagerImpl.files.getFiles(state.fileRequest)
+
+                println("update")
                 setSortingMode(state.sortingMode)
                 inProgress = false
             } else {
@@ -146,10 +149,12 @@ internal class FileManagerImpl(
         state.isShowInter = true
         state.deleteState = DeleteState.Progress
         updateState()
+
         asynchronous {
             files.delete(state.selectedFiles.map { it.path })
             state.deleteState = DeleteState.Done
             updateState()
+            suspendedUpdateFiles()
         }
 
     }

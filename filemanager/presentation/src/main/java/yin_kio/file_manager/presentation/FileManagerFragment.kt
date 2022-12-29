@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
+import yin_kio.file_manager.domain.models.DeleteState
 import yin_kio.file_manager.domain.models.FileRequest
 import yin_kio.file_manager.presentation.databinding.FragmentFileManagerBinding
 import yin_kio.file_manager.presentation.models.UiState
@@ -47,6 +48,8 @@ class FileManagerFragment(
             recycler.setOnItemClickListener { viewModel.obtainIntention(Intention.SwitchSelectFile(it)) }
             showingMode.setOnClickListener { viewModel.obtainIntention(Intention.SwitchShowingMode) }
             sort.setOnClickListener { viewModel.obtainIntention(Intention.ShowSortingModeSelector) }
+
+            delete.setOnClickListener { viewModel.obtainIntention(Intention.AskDelete) }
         }
     }
 
@@ -62,6 +65,9 @@ class FileManagerFragment(
             showListShowingMode(state)
             showSortingPopup(state)
             showProgress(state)
+            if (state.deleteState == DeleteState.Ask){
+                navigate(R.id.action_fileManagerFragment_to_askDeleteDialog)
+            }
         }
     }
 
@@ -99,12 +105,17 @@ class FileManagerFragment(
 
     private fun askPermission(it: UiState) {
         if (!it.hasPermission) {
-            val navController = findNavController()
-            if (navController.currentDestination?.id == R.id.fileManagerFragment) {
-                navController.navigate(R.id.permissionFragment)
-            }
+            navigate(R.id.permissionFragment)
         }
     }
+
+    private fun navigate(id: Int){
+        val navController = findNavController()
+        if (navController.currentDestination?.id == R.id.fileManagerFragment) {
+            navController.navigate(id)
+        }
+    }
+
 
     private fun showRecycler(it: UiState) {
         binding.recycler.setListShowingMode(it.listShowingMode)

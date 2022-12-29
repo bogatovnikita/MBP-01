@@ -64,4 +64,14 @@ class Presenter(
         return if (inProgress) 0.5f else 1f
     }
 
+    fun presentAskDeleteTitle(fileRequest: FileRequest) : String{
+        return when(fileRequest){
+            FileRequest.AllFiles -> context.getString(R.string.ask_delete_title_files)
+            FileRequest.Images -> context.getString(R.string.ask_delete_title_images)
+            FileRequest.Video -> context.getString(R.string.ask_delete_title_video)
+            FileRequest.Documents -> context.getString(R.string.ask_delete_title_documents)
+            FileRequest.Audio -> context.getString(R.string.ask_delete_title_audio)
+        }
+    }
+
 }

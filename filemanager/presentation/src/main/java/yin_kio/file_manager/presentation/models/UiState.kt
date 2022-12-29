@@ -1,9 +1,6 @@
 package yin_kio.file_manager.presentation.models
 
-import yin_kio.file_manager.domain.models.FileInfo
-import yin_kio.file_manager.domain.models.FileRequest
-import yin_kio.file_manager.domain.models.ListShowingMode
-import yin_kio.file_manager.domain.models.SortingMode
+import yin_kio.file_manager.domain.models.*
 
 data class UiState(
     val fileRequest: FileRequest,
@@ -17,5 +14,7 @@ data class UiState(
     val files: List<FileInfo>,
     val isShowSortingModeSelector: Boolean,
     val inProgress: Boolean,
-    val progressAlpha: Float
+    val progressAlpha: Float,
+    val deleteState: DeleteState,
+    val askDeleteTitle: String
 )

@@ -107,5 +107,19 @@ class PresenterTest {
         assertEquals(1.0f, presenter.presentProgressAlpha(false))
     }
 
+    @Test
+    fun `presentAskDeleteTitle get according titles`(){
+        val pairs = mapOf(
+            FileRequest.AllFiles to context.getString(R.string.ask_delete_title_files),
+            FileRequest.Images to context.getString(R.string.ask_delete_title_images),
+            FileRequest.Video to context.getString(R.string.ask_delete_title_video),
+            FileRequest.Documents to context.getString(R.string.ask_delete_title_documents),
+            FileRequest.Audio to context.getString(R.string.ask_delete_title_audio),
+        )
+        FileRequest.values().forEach {
+            assertEquals(pairs[it], presenter.presentAskDeleteTitle(it))
+        }
+    }
+
 
 }

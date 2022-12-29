@@ -88,7 +88,8 @@ class SwitchableRecyclerView : RecyclerView {
             setImage(icon, image, item)
             setTexts(item, name, description)
             checkBox.isChecked = item.isSelected
-        }
+        },
+        areItemsTheSame = {_,_->false}
     )
 
     private fun gridAdapter() = recyclerAdapter<FileInfo, GridItemBinding>(
@@ -98,7 +99,8 @@ class SwitchableRecyclerView : RecyclerView {
             setImage(icon, image, item)
             setTexts(item, name, description)
             checkBox.isChecked = item.isSelected
-        }
+        },
+        areItemsTheSame = {_,_->false}
     )
 
 

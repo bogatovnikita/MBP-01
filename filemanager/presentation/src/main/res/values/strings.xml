@@ -13,7 +13,11 @@
     <string name="audio">Аудио</string>
     <string name="select_all">Выбрать всё</string>
     <string name="delete">Удалить</string>
-    <string name="ask_delete_title">Вы уверены, что хотите удалить выбранные $s</string>
+    <string name="ask_delete_title_files">Вы уверены, что хотите удалить выбранные файлы?</string>
+    <string name="ask_delete_title_images">Вы уверены, что хотите удалить выбранные изображения?</string>
+    <string name="ask_delete_title_video">Вы уверены, что хотите удалить выбранные видео?</string>
+    <string name="ask_delete_title_documents">Вы уверены, что хотите удалить выбранные документы?</string>
+    <string name="ask_delete_title_audio">Вы уверены, что хотите удалить выбранные аудио?</string>
     <string name="ask_delete_attention">Вы не сможете остановить удаление</string>
     <string name="cancel">Отмена</string>
     <string name="file_search_progress">Идёт поиск файлов...</string>

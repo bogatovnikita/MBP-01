@@ -23,7 +23,9 @@ class FileManagerViewModel(
                 isShowSortingModeSelector = it.isShowSortingModeSelector,
                 sortingMode = it.sortingMode,
                 inProgress = it.inProgress,
-                progressAlpha = presenter.presentProgressAlpha(it.inProgress)
+                progressAlpha = presenter.presentProgressAlpha(it.inProgress),
+                deleteState = it.deleteState,
+                askDeleteTitle = presenter.presentAskDeleteTitle(it.fileRequest)
             )
         }
 

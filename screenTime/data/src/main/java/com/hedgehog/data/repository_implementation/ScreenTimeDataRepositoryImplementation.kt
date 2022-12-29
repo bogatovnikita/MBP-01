@@ -17,8 +17,7 @@ import javax.inject.Inject
 class ScreenTimeDataRepositoryImplementation @Inject constructor(@ApplicationContext val context: Context) :
     ScreenTimeDataRepository {
 
-    private var stats: UsageStatsManager =
-        context.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
+    private lateinit var stats: UsageStatsManager
     private val minute = 60000
     private var appScreenList: MutableList<AppScreenTime> = mutableListOf()
     private lateinit var beginTime: Calendar
@@ -28,9 +27,8 @@ class ScreenTimeDataRepositoryImplementation @Inject constructor(@ApplicationCon
         flow {
             try {
                 initBeginEndTime(calendarScreenTime)
-//                Log.e("pie", "beginTime: ${beginTime.time}")
-//                Log.e("pie", "endTime: ${endTime.time}")
                 appScreenList.clear()
+                stats = context.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
                 val statsList = stats.queryAndAggregateUsageStats(
                     beginTime.timeInMillis, endTime.timeInMillis
                 ).values.toMutableList()
@@ -58,17 +56,17 @@ class ScreenTimeDataRepositoryImplementation @Inject constructor(@ApplicationCon
         endTime = Calendar.getInstance()
         endTime.set(Calendar.HOUR_OF_DAY, 0)
         endTime.set(Calendar.MINUTE, 0)
-        endTime.set(Calendar.SECOND, 0)
+        endTime.set(Calendar.SECOND, -1)
         endTime.set(Calendar.MILLISECOND, 0)
 
         if (calendarScreenTime.dataType == Calendar.DATE) {
             beginTime.add(calendarScreenTime.dataType, -calendarScreenTime.beginTime)
             endTime.add(calendarScreenTime.dataType, -calendarScreenTime.endTime)
         } else {
-            beginTime.add(Calendar.DAY_OF_WEEK, beginTime.firstDayOfWeek)
+            beginTime.set(Calendar.DAY_OF_WEEK, beginTime.firstDayOfWeek)
             beginTime.add(Calendar.WEEK_OF_YEAR, -calendarScreenTime.beginTime)
-            endTime.add(Calendar.DAY_OF_WEEK, beginTime.firstDayOfWeek)
-            endTime.add(Calendar.WEEK_OF_YEAR, -calendarScreenTime.beginTime)
+            endTime.set(Calendar.DAY_OF_WEEK, beginTime.firstDayOfWeek)
+            endTime.add(Calendar.WEEK_OF_YEAR, -calendarScreenTime.endTime)
         }
     }
 
@@ -79,7 +77,7 @@ class ScreenTimeDataRepositoryImplementation @Inject constructor(@ApplicationCon
     )
 
     private fun mapTimeToString(time: Long): String {
-        val hour = ((time / (1000 * 60 * 60)) % 24)
+        val hour = (time / (1000 * 60 * 60))
         val minutes = ((time / (1000 * 60)) % 60)
         return context.getString(R.string.D_hour_D_minutes, hour, minutes)
     }

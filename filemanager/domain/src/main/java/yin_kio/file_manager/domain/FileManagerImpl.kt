@@ -172,6 +172,11 @@ internal class FileManagerImpl(
         updateState()
     }
 
+    override fun hideSortingModeSelector() {
+        state.isShowSortingModeSelector = false
+        updateState()
+    }
+
     private fun updateState() {
         _stateHolder.update(state.copy())
     }

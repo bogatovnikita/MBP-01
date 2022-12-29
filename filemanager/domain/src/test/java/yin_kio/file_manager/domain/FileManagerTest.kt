@@ -334,6 +334,12 @@ internal class FileManagerTest{
         assertTrue(sizes.contentEquals(state.files.map { it.size }))
     }
 
+    @Test
+    fun `hideSortingModeSelector - isSHowSortingModeSelector is false`() = runTest{
+        fileManager().hideSortingModeSelector()
+        assertFalse(state.isShowSortingModeSelector)
+    }
+
 
 
 

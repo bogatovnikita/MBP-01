@@ -25,5 +25,6 @@ interface FileManager {
     fun hideInter()
 
     fun showSortingModeSelector()
+    fun hideSortingModeSelector()
 
 }

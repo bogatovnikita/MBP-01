@@ -15,5 +15,7 @@ data class UiState(
     val deleteButtonBg: Int,
     val hasPermission: Boolean,
     val files: List<FileInfo>,
-    val isShowSortingModeSelector: Boolean
+    val isShowSortingModeSelector: Boolean,
+    val inProgress: Boolean,
+    val progressAlpha: Float
 )

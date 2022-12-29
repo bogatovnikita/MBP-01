@@ -21,7 +21,9 @@ class FileManagerViewModel(
                 files = it.files,
                 listShowingModeIconRes = presenter.presentListShowingModeIcon(it.listShowingMode),
                 isShowSortingModeSelector = it.isShowSortingModeSelector,
-                sortingMode = it.sortingMode
+                sortingMode = it.sortingMode,
+                inProgress = it.inProgress,
+                progressAlpha = presenter.presentProgressAlpha(it.inProgress)
             )
         }
 

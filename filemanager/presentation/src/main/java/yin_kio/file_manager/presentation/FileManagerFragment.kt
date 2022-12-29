@@ -4,6 +4,7 @@ import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -60,6 +61,15 @@ class FileManagerFragment(
             showDeleteButton(state)
             showListShowingMode(state)
             showSortingPopup(state)
+            showProgress(state)
+        }
+    }
+
+    private fun showProgress(state: UiState){
+        binding.apply {
+            recycler.alpha = state.progressAlpha
+            delete.alpha = state.progressAlpha
+            progressPlate.isVisible = state.inProgress
         }
     }
 

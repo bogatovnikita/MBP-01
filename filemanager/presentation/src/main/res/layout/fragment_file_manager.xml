@@ -139,32 +139,35 @@
             android:text="@string/delete"
             style="@style/MainButton"/>
 
+        <LinearLayout
+            android:id="@+id/progress_plate"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:visibility="gone"
+            android:elevation="8dp">
 
+            <ImageView
+                android:layout_width="125dp"
+                android:layout_height="125dp"
+                app:srcCompat="@drawable/ic_spinner"
+                android:layout_marginBottom="32dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/file_search_progress"
+                android:textAppearance="@style/Text.Body_1"
+                android:textColor="@color/gray"/>
+
+        </LinearLayout>
 
 
     </FrameLayout>
 
 
-    <LinearLayout
-        android:id="@+id/progress_plate"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:visibility="gone">
 
-        <ImageView
-            android:layout_width="125dp"
-            android:layout_height="125dp"
-            app:srcCompat="@drawable/ic_spinner"
-            android:layout_marginBottom="32dp"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/file_search_progress"/>
-
-    </LinearLayout>
 
 
 

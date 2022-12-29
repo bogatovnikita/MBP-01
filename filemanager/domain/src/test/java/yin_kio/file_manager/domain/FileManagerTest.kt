@@ -38,7 +38,7 @@ internal class FileManagerTest{
         assertTrue(state.inProgress)
         fileManager(false).updateFiles()
         assertTrue(state.inProgress)
-        advanceUntilIdle()
+        wait()
         assertTrue(state.files.isEmpty())
         assertFalse(state.inProgress)
     }
@@ -47,7 +47,7 @@ internal class FileManagerTest{
     fun `updateFiles - if has permission then state contains files and is not in progress after progress`() = runTest{
         fileManager(true).updateFiles()
         assertTrue(state.inProgress)
-        advanceUntilIdle()
+        wait()
         assertFalse(state.inProgress)
         assertEquals(fileInfos(), state.files)
     }
@@ -57,7 +57,7 @@ internal class FileManagerTest{
         callAfterLoading {
             switchSelectAll()
             updateFiles()
-            advanceUntilIdle()
+            wait()
         }
         assertFalse(state.isAllSelected)
         assertTrue(state.selectedFiles.isEmpty())
@@ -243,7 +243,7 @@ internal class FileManagerTest{
         callAfterLoading {
             switchSelectFile("path")
             delete()
-            advanceUntilIdle()
+            wait()
         }
         coVerify { files.delete(listOf("path")) }
     }
@@ -269,7 +269,7 @@ internal class FileManagerTest{
             switchSelectFile("path")
             askDelete()
             delete()
-            advanceUntilIdle()
+            wait()
         }
         assertEquals(DeleteState.Done, state.deleteState)
     }
@@ -283,7 +283,7 @@ internal class FileManagerTest{
         }
         assertEquals(DeleteState.Progress, state.deleteState)
         assertTrue(state.isShowInter)
-        advanceUntilIdle()
+        wait()
         assertEquals(DeleteState.Done, state.deleteState)
     }
 
@@ -297,7 +297,7 @@ internal class FileManagerTest{
     fun `completeDelete - delete state is Wait and files are updated`() = runTest{
         val oldFiles = state.files
         fileManager().completeDelete()
-        advanceUntilIdle()
+        wait()
         assertEquals(DeleteState.Wait, state.deleteState)
         assertTrue(oldFiles !== state.files)
     }
@@ -328,10 +328,24 @@ internal class FileManagerTest{
         callAfterLoading {
             switchSortingMode(SortingMode.FromSmallToBig)
             updateFiles()
-            advanceUntilIdle()
+            wait()
         }
         val sizes = listOf(1L, 2L, 3L)
         assertTrue(sizes.contentEquals(state.files.map { it.size }))
+    }
+
+    @Test
+    fun `updateFiles after select - can not delete`() = runTest {
+        callAfterLoading {
+            switchSelectFile("path")
+            updateFiles()
+            wait()
+        }
+        assertFalse(state.canDelete)
+    }
+
+    private fun TestScope.wait() {
+        advanceUntilIdle()
     }
 
     @Test
@@ -344,7 +358,7 @@ internal class FileManagerTest{
 
 
     private fun TestScope.callAfterLoading(fileManager: FileManagerImpl = fileManager(), action: FileManagerImpl.() -> Unit){
-        advanceUntilIdle()
+        wait()
         fileManager.action()
     }
 
@@ -363,7 +377,7 @@ internal class FileManagerTest{
     private fun TestScope.assertFileModeSwitching(fileManager: FileManagerImpl){
         FileRequest.values().forEach {
             fileManager.switchFileMode(it)
-            advanceUntilIdle()
+            wait()
             assertEquals(state.fileRequest, it)
         }
     }
@@ -373,7 +387,7 @@ internal class FileManagerTest{
             fileManager.apply {
                 switchFileMode(value)
             }
-            advanceUntilIdle()
+            wait()
             coVerify { files.getFiles(value) }
         }
 
@@ -384,7 +398,8 @@ internal class FileManagerTest{
     private fun TestScope.fileManager(hasPermission: Boolean = true) : FileManagerImpl{
         return FileManagerImpl(
             stateHolder, permissionChecker(hasPermission), files,
-            coroutineScope = this
+            coroutineScope = this,
+            coroutineContext = coroutineContext
         )
     }
 

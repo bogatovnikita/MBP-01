@@ -6,12 +6,14 @@ import kotlinx.coroutines.launch
 import yin_kio.file_manager.domain.gateways.Files
 import yin_kio.file_manager.domain.gateways.PermissionChecker
 import yin_kio.file_manager.domain.models.*
+import kotlin.coroutines.CoroutineContext
 
 internal class FileManagerImpl(
     private val _stateHolder: MutableStateHolder,
     private val permissionChecker: PermissionChecker,
     private val files: Files,
-    private val coroutineScope: CoroutineScope
+    private val coroutineScope: CoroutineScope,
+    private val coroutineContext: CoroutineContext
 ) : FileManager {
 
     private val state = MutableState()
@@ -24,20 +26,25 @@ internal class FileManagerImpl(
     }
 
     override fun updateFiles() {
-        coroutineScope.launch {
-            suspendedUpdateFiles()
-        }
+        asynchronous { suspendedUpdateFiles() }
+    }
+
+    private fun asynchronous(action: suspend CoroutineScope.() -> Unit){
+        coroutineScope.launch(coroutineContext, block =  action)
     }
 
     private suspend fun suspendedUpdateFiles() {
         state.apply {
+            files = emptyList()
             updateSelectAll(false)
+            updateCanDelete()
             hasPermission = permissionChecker.hasPermission
 
 
             if (hasPermission) {
                 inProgress = true
                 updateState()
+                delay(1)
                 files = this@FileManagerImpl.files.getFiles(state.fileRequest)
                 setSortingMode(state.sortingMode)
                 inProgress = false
@@ -51,7 +58,7 @@ internal class FileManagerImpl(
 
 
     override fun switchFileMode(fileRequest: FileRequest){
-        coroutineScope.launch {
+        asynchronous {
             state.fileRequest = fileRequest
             updateState()
             delay(50)
@@ -139,7 +146,7 @@ internal class FileManagerImpl(
         state.isShowInter = true
         state.deleteState = DeleteState.Progress
         updateState()
-        coroutineScope.launch {
+        asynchronous {
             files.delete(state.selectedFiles.map { it.path })
             state.deleteState = DeleteState.Done
             updateState()

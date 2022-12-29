@@ -97,5 +97,15 @@ class PresenterTest {
         assertEquals(R.drawable.ic_showing_mode_grid, actual)
     }
 
+    @Test
+    fun `presentProgressAlpha(true) get 0,5f`(){
+        assertEquals(0.5f, presenter.presentProgressAlpha(true))
+    }
+
+    @Test
+    fun `presentProgressAlpha(false) get 1,0f`(){
+        assertEquals(1.0f, presenter.presentProgressAlpha(false))
+    }
+
 
 }

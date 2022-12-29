@@ -60,4 +60,8 @@ class Presenter(
         }
     }
 
+    fun presentProgressAlpha(inProgress: Boolean) : Float{
+        return if (inProgress) 0.5f else 1f
+    }
+
 }

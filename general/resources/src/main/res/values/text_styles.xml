@@ -3,6 +3,7 @@
 
     <style name="Text">
         <item name="fontFamily">@font/golos_text_regular</item>
+        <item name="android:textColor">@color/dark_blue</item>
     </style>
 
     <style name="Text.Header_1">

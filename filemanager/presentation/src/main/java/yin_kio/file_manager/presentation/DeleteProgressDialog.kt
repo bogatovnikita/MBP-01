@@ -35,7 +35,10 @@ class DeleteProgressDialog : DialogFragment(R.layout.dialog_delete_progress) {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.flow.collect {
                 if (it.deleteState == DeleteState.Done) {
-                    findNavController().navigateUp()
+                    findNavController().apply {
+                        navigateUp()
+                        navigate(R.id.action_fileManagerFragment_to_doneDialog)
+                    }
                 }
                 binding.title.text = it.deleteProgressTitle
             }

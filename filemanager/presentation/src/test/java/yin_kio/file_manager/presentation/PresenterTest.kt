@@ -135,5 +135,19 @@ class PresenterTest {
         }
     }
 
+    @Test
+    fun `presentDoneDialogTitle get according titles`(){
+        val pairs = mapOf(
+            FileRequest.AllFiles to context.getString(R.string.done_dialog_title_files),
+            FileRequest.Images to context.getString(R.string.done_dialog_title_images),
+            FileRequest.Video to context.getString(R.string.done_dialog_title_video),
+            FileRequest.Documents to context.getString(R.string.done_dialog_title_documents),
+            FileRequest.Audio to context.getString(R.string.done_dialog_title_audio),
+        )
+        FileRequest.values().forEach {
+            assertEquals(pairs[it], presenter.presentDoneDialogTitle(it))
+        }
+    }
+
 
 }

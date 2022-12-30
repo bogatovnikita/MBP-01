@@ -27,6 +27,12 @@
     <string name="delete_progress_title_documents">Удаляем документы</string>
     <string name="delete_progress_title_audio">Удаляем аудио</string>
 
+    <string name="done_dialog_title_files">Ваш телефон очищен от лишних файлов</string>
+    <string name="done_dialog_title_images">Ваш телефон очищен от лишних изображений</string>
+    <string name="done_dialog_title_video">Ваш телефон очищен от лишних видео</string>
+    <string name="done_dialog_title_documents">Ваш телефон очищен от лишних документов</string>
+    <string name="done_dialog_title_audio">Ваш телефон очищен от лишних аудио</string>
+
     <string name="delete_progress_description">Идёт удаление...</string>
 
     <string name="cancel">Отмена</string>

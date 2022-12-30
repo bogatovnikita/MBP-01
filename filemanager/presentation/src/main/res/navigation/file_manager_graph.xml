@@ -17,6 +17,9 @@
         <action
             android:id="@+id/action_fileManagerFragment_to_deleteProgressDialog"
             app:destination="@id/deleteProgressDialog" />
+        <action
+            android:id="@+id/action_fileManagerFragment_to_doneDialog"
+            app:destination="@id/doneDialog" />
     </fragment>
     <fragment
         android:id="@+id/permissionFragment"
@@ -30,4 +33,8 @@
         android:id="@+id/deleteProgressDialog"
         android:name="yin_kio.file_manager.presentation.DeleteProgressDialog"
         android:label="DeleteProgressDialog" />
+    <dialog
+        android:id="@+id/doneDialog"
+        android:name="yin_kio.file_manager.presentation.DoneDialog"
+        android:label="DoneDialog" />
 </navigation>

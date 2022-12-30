@@ -151,7 +151,7 @@ class FirstScreenTimeFragment :
             val formatter = SimpleDateFormat("EEEE, dd.MM.yyyy")
             binding.dateTv.text = formatter.format(calendar.time)
         } else {
-            var formatter = SimpleDateFormat("EE, dd.MM")
+            val formatter = SimpleDateFormat("EE, dd.MM")
             binding.dateTv.text =
                 "${formatter.format(calendar.time)} - ${formatter.format(secondCalendar.time)}"
         }

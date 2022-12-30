@@ -7,5 +7,6 @@ data class FirstScreenTimeState(
     val isLoading: Boolean = false,
     val isErrorLoading: Boolean = false,
     val choiceDay: Boolean = true,
-    val choiceWeek: Boolean = false
+    val choiceWeek: Boolean = false,
+    val selectionMode: Boolean = false,
 )

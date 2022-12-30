@@ -4,15 +4,18 @@ import androidx.lifecycle.viewModelScope
 import com.hedgehog.domain.usacase.GetScreenTimeDataUseCase
 import com.hedgehog.domain.wrapper.CaseResult
 import com.hedgehog.presentation.base.BaseViewModel
+import com.hedgehog.presentation.di.MultiChoice
 import com.hedgehog.presentation.models.AppScreenTime
 import com.hedgehog.presentation.models.CalendarScreenTime
+import com.hedgehog.presentation.multichoice.MultiChoiceHandler
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class FirstScreenTimeViewModel @Inject constructor(
-    private val getScreenTimeDataUseCase: GetScreenTimeDataUseCase
+    private val getScreenTimeDataUseCase: GetScreenTimeDataUseCase,
+    @MultiChoice private val multiChoiceHandler: MultiChoiceHandler<AppScreenTime>
 ) : BaseViewModel<FirstScreenTimeState>(FirstScreenTimeState()) {
 
     fun getListTimeScreenData(calendarScreenTime: CalendarScreenTime) {

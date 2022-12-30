@@ -26,7 +26,11 @@ class AskDeleteDialog : DialogFragment(R.layout.dialog_ask_delete) {
         binding.apply {
             close.setOnClickListener { cancelDelete() }
             cancel.setOnClickListener { cancelDelete() }
-            delete.setOnClickListener { viewModel.obtainIntention(Intention.Delete) }
+            delete.setOnClickListener {
+                viewModel.obtainIntention(Intention.Delete)
+                findNavController().navigateUp()
+                findNavController().navigate(R.id.action_fileManagerFragment_to_deleteProgressDialog)
+            }
         }
 
         viewLifecycleOwner.lifecycleScope.launch {

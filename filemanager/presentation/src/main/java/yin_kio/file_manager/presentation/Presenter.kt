@@ -74,4 +74,14 @@ class Presenter(
         }
     }
 
+    fun presentDeleteProgressTitle(fileRequest: FileRequest) : String{
+        return when(fileRequest){
+            FileRequest.AllFiles -> context.getString(R.string.delete_progress_title_files)
+            FileRequest.Images -> context.getString(R.string.delete_progress_title_images)
+            FileRequest.Video -> context.getString(R.string.delete_progress_title_video)
+            FileRequest.Documents -> context.getString(R.string.delete_progress_title_documents)
+            FileRequest.Audio -> context.getString(R.string.delete_progress_title_audio)
+        }
+    }
+
 }

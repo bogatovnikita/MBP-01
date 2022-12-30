@@ -16,5 +16,6 @@ data class UiState(
     val inProgress: Boolean,
     val progressAlpha: Float,
     val deleteState: DeleteState,
-    val askDeleteTitle: String
+    val askDeleteTitle: String,
+    val deleteProgressTitle: String,
 )

@@ -68,6 +68,7 @@ class FileManagerFragment(
             if (state.deleteState == DeleteState.Ask){
                 navigate(R.id.action_fileManagerFragment_to_askDeleteDialog)
             }
+
         }
     }
 

@@ -155,7 +155,6 @@ internal class FileManagerImpl(
             delay(8000)
             state.deleteState = DeleteState.Done
             updateState()
-            suspendedUpdateFiles()
         }
 
     }

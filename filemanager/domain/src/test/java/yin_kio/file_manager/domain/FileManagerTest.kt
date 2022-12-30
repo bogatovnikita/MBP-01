@@ -249,18 +249,6 @@ internal class FileManagerTest{
     }
 
     @Test
-    fun `delete - call files uodated`() = runTest{
-        callAfterLoading {
-            switchSelectFile("path")
-            delete()
-            wait()
-        }
-
-        assertTrue(state.files.isNotEmpty())
-        assertTrue(files.getFiles(FileRequest.AllFiles) == state.files)
-    }
-
-    @Test
     fun `askDelete - delete state is Ask`() = runTest{
         fileManager().askDelete()
         assertEquals(DeleteState.Ask, state.deleteState)

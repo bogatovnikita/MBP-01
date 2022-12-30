@@ -152,6 +152,7 @@ internal class FileManagerImpl(
 
         asynchronous {
             files.delete(state.selectedFiles.map { it.path })
+            delay(8000)
             state.deleteState = DeleteState.Done
             updateState()
             suspendedUpdateFiles()

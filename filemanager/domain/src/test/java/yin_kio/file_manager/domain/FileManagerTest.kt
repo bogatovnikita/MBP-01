@@ -10,6 +10,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import yin_kio.file_manager.domain.gateways.Ads
 import yin_kio.file_manager.domain.gateways.Files
 import yin_kio.file_manager.domain.gateways.PermissionChecker
 import yin_kio.file_manager.domain.models.*
@@ -20,16 +21,19 @@ internal class FileManagerTest{
     private lateinit var stateHolder: MutableStateHolder
     private val state get() = stateHolder.value
     private lateinit var files: Files
+    private lateinit var ads: Ads
 
 
     @BeforeEach
     fun setup(){
         stateHolder = MutableStateHolder()
         files = mockk()
+        ads = mockk()
         for (value in FileRequest.values()) {
             coEvery { files.getFiles(value) } returns fileInfos().also { runTest { delay(50) } }
         }
         coEvery { files.delete(listOf("path")) } returns Unit
+        coEvery { ads.preload() } returns Unit
     }
 
 
@@ -239,13 +243,18 @@ internal class FileManagerTest{
     }
 
     @Test
-    fun `delete - call files_delete`() = runTest{
+    fun `test delete`() = runTest{
         callAfterLoading {
             switchSelectFile("path")
             delete()
-            wait()
         }
+        assertEquals(DeleteState.Progress, state.deleteState)
+        assertFalse(state.isShowInter)
+        coVerify { ads.preload() }
+        wait()
         coVerify { files.delete(listOf("path")) }
+        assertEquals(DeleteState.Done, state.deleteState)
+        assertTrue(state.isShowInter)
     }
 
     @Test
@@ -263,29 +272,7 @@ internal class FileManagerTest{
         assertEquals(DeleteState.Wait, state.deleteState)
     }
 
-    @Test
-    fun `delete - delete state is Done`() = runTest{
-        callAfterLoading {
-            switchSelectFile("path")
-            askDelete()
-            delete()
-            wait()
-        }
-        assertEquals(DeleteState.Done, state.deleteState)
-    }
 
-    @Test
-    fun `delete - delete state is Progress and isShowInter is true, then delete state is Done`() = runTest {
-        callAfterLoading {
-            switchSelectFile("path")
-            askDelete()
-            delete()
-        }
-        assertEquals(DeleteState.Progress, state.deleteState)
-        assertTrue(state.isShowInter)
-        wait()
-        assertEquals(DeleteState.Done, state.deleteState)
-    }
 
     @Test
     fun `hideInter - isShowInter is false`() = runTest {
@@ -358,6 +345,7 @@ internal class FileManagerTest{
 
 
 
+
     private fun TestScope.callAfterLoading(fileManager: FileManagerImpl = fileManager(), action: FileManagerImpl.() -> Unit){
         wait()
         fileManager.action()
@@ -400,7 +388,8 @@ internal class FileManagerTest{
         return FileManagerImpl(
             stateHolder, permissionChecker(hasPermission), files,
             coroutineScope = this,
-            coroutineContext = coroutineContext
+            coroutineContext = coroutineContext,
+            ads = ads
         )
     }
 

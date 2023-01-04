@@ -1,13 +1,16 @@
 package yin_kio.file_manager.di
 
-import android.content.Context
+import android.app.Activity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentFactory
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import yin_kio.file_manager.data.DataFactory
+import yin_kio.file_manager.data.OlejaAds
 import yin_kio.file_manager.domain.FileManagerCreator
-import yin_kio.file_manager.presentation.*
+import yin_kio.file_manager.presentation.FileManagerParentFragment
+import yin_kio.file_manager.presentation.FileManagerViewModel
+import yin_kio.file_manager.presentation.Presenter
 
 class FileManagerFragmentFactory : FragmentFactory() {
 
@@ -18,13 +21,14 @@ class FileManagerFragmentFactory : FragmentFactory() {
         }
     }
 
-    private fun viewModelCreator(): ViewModel.(Context) -> FileManagerViewModel =
+    private fun viewModelCreator(): ViewModel.(Activity) -> FileManagerViewModel =
         { context ->
             FileManagerViewModel(
                 fileManager = FileManagerCreator.create(
                     permissionChecker = DataFactory.createPermissionChecker(context),
                     files = DataFactory.createFiles(),
-                    coroutineScope = viewModelScope
+                    coroutineScope = viewModelScope,
+                    ads = OlejaAds(context)
                 ),
                 presenter = Presenter(context)
             )

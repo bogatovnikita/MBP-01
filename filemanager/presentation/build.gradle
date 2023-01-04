@@ -50,6 +50,7 @@ dependencies {
     implementation project(':lifecycle_aware')
     implementation project(':recycler_adapter')
     implementation project(':permissions')
+    implementation project(':ads')
 
     implementation 'com.github.bumptech.glide:glide:4.14.2'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.14.2'

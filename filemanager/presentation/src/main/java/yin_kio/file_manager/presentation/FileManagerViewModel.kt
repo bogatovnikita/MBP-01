@@ -26,7 +26,8 @@ class FileManagerViewModel(
                 progressAlpha = presenter.presentProgressAlpha(it.inProgress),
                 deleteState = it.deleteState,
                 askDeleteTitle = presenter.presentAskDeleteTitle(it.fileRequest),
-                deleteProgressTitle = presenter.presentDeleteProgressTitle(it.fileRequest)
+                deleteProgressTitle = presenter.presentDeleteProgressTitle(it.fileRequest),
+                isShowInter = it.isShowInter
             )
         }
 

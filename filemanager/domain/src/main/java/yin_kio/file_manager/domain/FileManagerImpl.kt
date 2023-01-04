@@ -3,6 +3,7 @@ package yin_kio.file_manager.domain
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import yin_kio.file_manager.domain.gateways.Ads
 import yin_kio.file_manager.domain.gateways.Files
 import yin_kio.file_manager.domain.gateways.PermissionChecker
 import yin_kio.file_manager.domain.models.*
@@ -13,7 +14,8 @@ internal class FileManagerImpl(
     private val permissionChecker: PermissionChecker,
     private val files: Files,
     private val coroutineScope: CoroutineScope,
-    private val coroutineContext: CoroutineContext
+    private val coroutineContext: CoroutineContext,
+    private val ads: Ads
 ) : FileManager {
 
     private val state = MutableState()
@@ -48,7 +50,6 @@ internal class FileManagerImpl(
                 delay(1)
                 files = this@FileManagerImpl.files.getFiles(state.fileRequest)
 
-                println("update")
                 setSortingMode(state.sortingMode)
                 inProgress = false
             } else {
@@ -146,14 +147,16 @@ internal class FileManagerImpl(
     }
 
     override fun delete(){
-        state.isShowInter = true
+        state.isShowInter = false
         state.deleteState = DeleteState.Progress
+        ads.preload()
         updateState()
 
         asynchronous {
             files.delete(state.selectedFiles.map { it.path })
             delay(8000)
             state.deleteState = DeleteState.Done
+            state.isShowInter = true
             updateState()
         }
 

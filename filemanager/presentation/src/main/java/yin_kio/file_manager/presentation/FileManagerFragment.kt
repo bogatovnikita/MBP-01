@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.example.ads.showInter
 import yin_kio.file_manager.domain.models.DeleteState
 import yin_kio.file_manager.domain.models.FileRequest
 import yin_kio.file_manager.presentation.databinding.FragmentFileManagerBinding
@@ -67,6 +68,10 @@ class FileManagerFragment(
             showProgress(state)
             if (state.deleteState == DeleteState.Ask){
                 navigate(R.id.action_fileManagerFragment_to_askDeleteDialog)
+            }
+
+            if (state.isShowInter){
+                showInter { viewModel.obtainIntention(Intention.HideInter) }
             }
 
         }

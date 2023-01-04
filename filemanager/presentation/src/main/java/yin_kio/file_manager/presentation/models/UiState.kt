@@ -18,4 +18,5 @@ data class UiState(
     val deleteState: DeleteState,
     val askDeleteTitle: String,
     val deleteProgressTitle: String,
+    val isShowInter: Boolean
 )

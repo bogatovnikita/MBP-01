@@ -3,7 +3,6 @@ package yin_kio.file_manager.presentation.views
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
-import android.util.Log
 import android.view.View
 import android.widget.CheckBox
 import android.widget.ImageView
@@ -20,6 +19,7 @@ import com.example.recycler_adapter.recyclerAdapter
 import yin_kio.file_manager.domain.models.FileGroup
 import yin_kio.file_manager.domain.models.FileInfo
 import yin_kio.file_manager.domain.models.ListShowingMode
+import yin_kio.file_manager.presentation.DescriptionPresenter
 import yin_kio.file_manager.presentation.R
 import yin_kio.file_manager.presentation.databinding.GridItemBinding
 import yin_kio.file_manager.presentation.databinding.ListItemBinding
@@ -38,6 +38,8 @@ class SwitchableRecyclerView : RecyclerView {
     init {
         setAdapterAndLayoutManager(ListShowingMode.List)
     }
+
+    private val descriptionPresenter = DescriptionPresenter(context)
 
     private var _listShowingMode: ListShowingMode = ListShowingMode.List
     private var _mutableAdapter: ListAdapter<FileInfo, *>? = null
@@ -107,6 +109,7 @@ class SwitchableRecyclerView : RecyclerView {
 
     private fun setTexts(fileInfo: FileInfo, name: TextView, description: TextView){
         name.text = fileInfo.name
+        description.text = descriptionPresenter.present(fileInfo)
     }
 
     private fun setImage(icon: ImageView, image: ImageView, fileInfo: FileInfo){

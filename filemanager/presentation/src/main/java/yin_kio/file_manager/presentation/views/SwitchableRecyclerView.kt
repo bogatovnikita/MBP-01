@@ -114,16 +114,22 @@ class SwitchableRecyclerView : RecyclerView {
 
     private fun setImage(icon: ImageView, image: ImageView, fileInfo: FileInfo){
         val iconVisibility = presentIconVisibility(fileInfo.fileGroup)
+
         icon.isVisible = iconVisibility == IconShowingMode.Icon
         image.isVisible = iconVisibility == IconShowingMode.Image
 
-
         if (icon.isVisible) icon.setImageDrawable(iconDrawable(fileInfo.fileGroup))
-        if (image.isVisible) {
-            Glide.with(context)
-                .load(fileInfo.path)
-                .into(image)
-        }
+        if (image.isVisible) loadImage(fileInfo, image)
+    }
+
+    private fun loadImage(
+        fileInfo: FileInfo,
+        image: ImageView
+    ) {
+        Glide.with(context)
+            .load(fileInfo.path)
+            .centerCrop()
+            .into(image)
     }
 
     private fun iconDrawable(fileGroup: FileGroup) : Drawable{

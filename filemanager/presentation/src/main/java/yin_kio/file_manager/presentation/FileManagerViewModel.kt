@@ -3,10 +3,11 @@ package yin_kio.file_manager.presentation
 import kotlinx.coroutines.flow.map
 import yin_kio.file_manager.domain.FileManager
 import yin_kio.file_manager.presentation.models.UiState
+import yin_kio.file_manager.presentation.presenters.FileManagerPresenter
 
 class FileManagerViewModel(
     private val fileManager: FileManager,
-    private val presenter: Presenter
+    private val presenter: FileManagerPresenter
 ) {
 
     val flow = fileManager.stateHolder.flow

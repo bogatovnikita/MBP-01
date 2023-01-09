@@ -1,12 +1,13 @@
-package yin_kio.file_manager.presentation
+package yin_kio.file_manager.presentation.presenters
 
 import android.content.Context
 import androidx.core.content.ContextCompat
 import yin_kio.file_manager.domain.models.*
+import yin_kio.file_manager.presentation.R
 import yin_kio.file_manager.presentation.models.FileItem
 import yin_kio.file_manager.presentation.models.IconShowingMode
 
-class Presenter(
+class FileManagerPresenter(
     private val context: Context
 ) {
 

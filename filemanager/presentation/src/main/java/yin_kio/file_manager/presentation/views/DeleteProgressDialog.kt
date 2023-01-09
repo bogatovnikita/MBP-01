@@ -1,4 +1,4 @@
-package yin_kio.file_manager.presentation
+package yin_kio.file_manager.presentation.views
 
 import android.app.Dialog
 import android.os.Bundle
@@ -9,7 +9,9 @@ import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import kotlinx.coroutines.launch
 import yin_kio.file_manager.domain.models.DeleteState
+import yin_kio.file_manager.presentation.R
 import yin_kio.file_manager.presentation.databinding.DialogDeleteProgressBinding
+import yin_kio.file_manager.presentation.parentViewModel
 
 class DeleteProgressDialog : DialogFragment(R.layout.dialog_delete_progress) {
 

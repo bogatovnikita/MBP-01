@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/fileManagerFragment"
-        android:name="yin_kio.file_manager.presentation.FileManagerFragment"
+        android:name="yin_kio.file_manager.presentation.views.FileManagerFragment"
         android:label="FileManagerFragment" >
         <action
             android:id="@+id/toPermissionFragment"
@@ -23,18 +23,18 @@
     </fragment>
     <fragment
         android:id="@+id/permissionFragment"
-        android:name="yin_kio.file_manager.presentation.PermissionFragment"
+        android:name="yin_kio.file_manager.presentation.views.PermissionFragment"
         android:label="PermissionFragment" />
     <dialog
         android:id="@+id/askDeleteDialog"
-        android:name="yin_kio.file_manager.presentation.AskDeleteDialog"
+        android:name="yin_kio.file_manager.presentation.views.AskDeleteDialog"
         android:label="AskDeleteDialog" />
     <dialog
         android:id="@+id/deleteProgressDialog"
-        android:name="yin_kio.file_manager.presentation.DeleteProgressDialog"
+        android:name="yin_kio.file_manager.presentation.views.DeleteProgressDialog"
         android:label="DeleteProgressDialog" />
     <dialog
         android:id="@+id/doneDialog"
-        android:name="yin_kio.file_manager.presentation.DoneDialog"
+        android:name="yin_kio.file_manager.presentation.views.DoneDialog"
         android:label="DoneDialog" />
 </navigation>

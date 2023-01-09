@@ -19,7 +19,7 @@ import com.example.recycler_adapter.recyclerAdapter
 import yin_kio.file_manager.domain.models.FileGroup
 import yin_kio.file_manager.domain.models.FileInfo
 import yin_kio.file_manager.domain.models.ListShowingMode
-import yin_kio.file_manager.presentation.DescriptionPresenter
+import yin_kio.file_manager.presentation.presenters.DescriptionPresenter
 import yin_kio.file_manager.presentation.R
 import yin_kio.file_manager.presentation.databinding.GridItemBinding
 import yin_kio.file_manager.presentation.databinding.ListItemBinding

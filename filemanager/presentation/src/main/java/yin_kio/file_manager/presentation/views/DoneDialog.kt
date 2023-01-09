@@ -1,4 +1,4 @@
-package yin_kio.file_manager.presentation
+package yin_kio.file_manager.presentation.views
 
 import android.content.DialogInterface
 import android.os.Bundle
@@ -7,10 +7,12 @@ import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import yin_kio.file_manager.domain.models.DeleteState
+import yin_kio.file_manager.presentation.Intention
+import yin_kio.file_manager.presentation.R
 import yin_kio.file_manager.presentation.databinding.DialogDoneBinding
+import yin_kio.file_manager.presentation.parentViewModel
 
 class DoneDialog : DialogFragment(R.layout.dialog_done) {
 

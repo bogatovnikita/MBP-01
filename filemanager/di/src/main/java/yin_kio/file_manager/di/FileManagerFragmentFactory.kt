@@ -8,9 +8,9 @@ import androidx.lifecycle.viewModelScope
 import yin_kio.file_manager.data.DataFactory
 import yin_kio.file_manager.data.OlejaAds
 import yin_kio.file_manager.domain.FileManagerCreator
-import yin_kio.file_manager.presentation.FileManagerParentFragment
+import yin_kio.file_manager.presentation.views.FileManagerParentFragment
 import yin_kio.file_manager.presentation.FileManagerViewModel
-import yin_kio.file_manager.presentation.Presenter
+import yin_kio.file_manager.presentation.presenters.FileManagerPresenter
 
 class FileManagerFragmentFactory : FragmentFactory() {
 
@@ -30,7 +30,7 @@ class FileManagerFragmentFactory : FragmentFactory() {
                     coroutineScope = viewModelScope,
                     ads = OlejaAds(context)
                 ),
-                presenter = Presenter(context)
+                presenter = FileManagerPresenter(context)
             )
         }
 }

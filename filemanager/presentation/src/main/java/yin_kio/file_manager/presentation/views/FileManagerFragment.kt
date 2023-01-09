@@ -1,4 +1,4 @@
-package yin_kio.file_manager.presentation
+package yin_kio.file_manager.presentation.views
 
 import android.content.res.ColorStateList
 import android.os.Bundle
@@ -12,8 +12,13 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.ads.showInter
 import yin_kio.file_manager.domain.models.DeleteState
 import yin_kio.file_manager.domain.models.FileRequest
+import yin_kio.file_manager.presentation.Intention
+import yin_kio.file_manager.presentation.R
 import yin_kio.file_manager.presentation.databinding.FragmentFileManagerBinding
 import yin_kio.file_manager.presentation.models.UiState
+import yin_kio.file_manager.presentation.navigation.Navigation
+import yin_kio.file_manager.presentation.parentViewModel
+import yin_kio.file_manager.presentation.sortingPopup
 
 class FileManagerFragment(
 ) : Fragment(R.layout.fragment_file_manager) {
@@ -21,15 +26,20 @@ class FileManagerFragment(
     private val binding: FragmentFileManagerBinding by viewBinding()
     private val viewModel by lazy { parentViewModel() }
 
+    private lateinit var navigation: Navigation
+
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        setupView()
+        navigation = Navigation(findNavController())
+
         setupListeners()
-        setupObserver()
+
+        setupObserversOnItems()
+        setupObserverOnScreen()
     }
 
-    private fun setupView(){
+    private fun setupObserversOnItems(){
         binding.recycler.onViewHolderCreated = {holder, checkBox ->
             observeState { checkBox.isChecked = holder.currentItem?.isSelected?:false }
         }
@@ -37,16 +47,40 @@ class FileManagerFragment(
 
     private fun setupListeners(){
         binding.apply {
-            allFiles.setOnClickListener { viewModel.obtainIntention(Intention.SwitchFileMode(FileRequest.AllFiles)) }
-            images.setOnClickListener { viewModel.obtainIntention(Intention.SwitchFileMode(FileRequest.Images)) }
-            audio.setOnClickListener { viewModel.obtainIntention(Intention.SwitchFileMode(FileRequest.Audio)) }
-            video.setOnClickListener { viewModel.obtainIntention(Intention.SwitchFileMode(FileRequest.Video)) }
-            documents.setOnClickListener { viewModel.obtainIntention(Intention.SwitchFileMode(FileRequest.Documents)) }
+            allFiles.setOnClickListener { viewModel.obtainIntention(
+                Intention.SwitchFileMode(
+                    FileRequest.AllFiles
+                )
+            ) }
+            images.setOnClickListener { viewModel.obtainIntention(
+                Intention.SwitchFileMode(
+                    FileRequest.Images
+                )
+            ) }
+            audio.setOnClickListener { viewModel.obtainIntention(
+                Intention.SwitchFileMode(
+                    FileRequest.Audio
+                )
+            ) }
+            video.setOnClickListener { viewModel.obtainIntention(
+                Intention.SwitchFileMode(
+                    FileRequest.Video
+                )
+            ) }
+            documents.setOnClickListener { viewModel.obtainIntention(
+                Intention.SwitchFileMode(
+                    FileRequest.Documents
+                )
+            ) }
 
             selectAll.setOnClickListener { viewModel.obtainIntention(Intention.SwitchSelectAll) }
             isAllSelected.setOnClickListener { viewModel.obtainIntention(Intention.SwitchSelectAll) }
 
-            recycler.setOnItemClickListener { viewModel.obtainIntention(Intention.SwitchSelectFile(it)) }
+            recycler.setOnItemClickListener { viewModel.obtainIntention(
+                Intention.SwitchSelectFile(
+                    it
+                )
+            ) }
             showingMode.setOnClickListener { viewModel.obtainIntention(Intention.SwitchShowingMode) }
             sort.setOnClickListener { viewModel.obtainIntention(Intention.ShowSortingModeSelector) }
 
@@ -54,27 +88,35 @@ class FileManagerFragment(
         }
     }
 
-    private fun setupObserver() {
+    private fun setupObserverOnScreen() {
         observeState { state ->
             askPermission(state)
             showFileRequest(state)
             showIsAllSelected(state)
             showRecycler(state)
-            binding.recycler.mutableAdapter?.submitList(state.files)
+            showList(state)
             showSortIcon(state)
             showDeleteButton(state)
             showListShowingMode(state)
             showSortingPopup(state)
             showProgress(state)
-            if (state.deleteState == DeleteState.Ask){
-                navigate(R.id.action_fileManagerFragment_to_askDeleteDialog)
-            }
-
-            if (state.isShowInter){
-                showInter { viewModel.obtainIntention(Intention.HideInter) }
-            }
-
+            showAskDelete(state)
+            showInter(state)
         }
+    }
+
+    private fun showAskDelete(state: UiState) {
+        if (state.deleteState == DeleteState.Ask) navigation.askDelete()
+    }
+
+    private fun showInter(state: UiState) {
+        if (state.isShowInter) {
+            showInter { viewModel.obtainIntention(Intention.HideInter) }
+        }
+    }
+
+    private fun showList(state: UiState) {
+        binding.recycler.mutableAdapter?.submitList(state.files)
     }
 
     private fun showProgress(state: UiState){
@@ -110,16 +152,7 @@ class FileManagerFragment(
     }
 
     private fun askPermission(it: UiState) {
-        if (!it.hasPermission) {
-            navigate(R.id.permissionFragment)
-        }
-    }
-
-    private fun navigate(id: Int){
-        val navController = findNavController()
-        if (navController.currentDestination?.id == R.id.fileManagerFragment) {
-            navController.navigate(id)
-        }
+        if (!it.hasPermission) navigation.askPermission()
     }
 
 

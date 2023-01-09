@@ -1,4 +1,4 @@
-package yin_kio.file_manager.presentation
+package yin_kio.file_manager.presentation.presenters
 
 import android.content.Context
 import android.media.MediaMetadataRetriever
@@ -6,6 +6,7 @@ import android.net.Uri
 import android.text.format.Formatter.formatFileSize
 import yin_kio.file_manager.domain.models.FileGroup
 import yin_kio.file_manager.domain.models.FileInfo
+import yin_kio.file_manager.presentation.R
 
 class DescriptionPresenter(
     private val context: Context

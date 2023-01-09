@@ -4,8 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.ads.initAds
 import yin_kio.file_manager.di.FileManagerFragmentFactory
-import yin_kio.file_manager.presentation.FileManagerFragment
-import yin_kio.file_manager.presentation.FileManagerParentFragment
+import yin_kio.file_manager.presentation.views.FileManagerParentFragment
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

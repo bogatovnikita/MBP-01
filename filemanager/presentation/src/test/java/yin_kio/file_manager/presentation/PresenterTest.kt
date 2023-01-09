@@ -8,17 +8,18 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import yin_kio.file_manager.domain.models.*
 import yin_kio.file_manager.presentation.models.IconShowingMode
+import yin_kio.file_manager.presentation.presenters.FileManagerPresenter
 import java.util.*
 
 @RunWith(RobolectricTestRunner::class)
 class PresenterTest {
 
-    private val presenter: Presenter
+    private val presenter: FileManagerPresenter
     private val context: Context
 
     init {
         context = RuntimeEnvironment.getApplication()
-        presenter = Presenter(context)
+        presenter = FileManagerPresenter(context)
     }
 
     @Test

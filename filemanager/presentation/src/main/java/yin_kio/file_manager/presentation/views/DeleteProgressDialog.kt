@@ -1,6 +1,7 @@
 package yin_kio.file_manager.presentation.views
 
 import android.app.Dialog
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.DialogFragment
@@ -17,10 +18,7 @@ class DeleteProgressDialog : DialogFragment(R.layout.dialog_delete_progress) {
     private val viewModel by lazy { parentViewModel() }
 
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setStyle(STYLE_NO_TITLE, R.style.MyDialog)
-    }
+
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog = noCancelableDialog()
 
@@ -41,6 +39,8 @@ class DeleteProgressDialog : DialogFragment(R.layout.dialog_delete_progress) {
         init {
             setCancelable(false)
             setCanceledOnTouchOutside(false)
+
+            window?.setBackgroundDrawable(ColorDrawable(android.R.color.transparent))
         }
 
         override fun onBackPressed() {}

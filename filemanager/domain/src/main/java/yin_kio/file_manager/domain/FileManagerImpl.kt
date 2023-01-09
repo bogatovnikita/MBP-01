@@ -168,7 +168,7 @@ internal class FileManagerImpl(
     }
 
     override fun cancelDelete(){
-        state.deleteState = DeleteState.Wait
+        if (state.deleteState != DeleteState.Progress) state.deleteState = DeleteState.Wait
         updateState()
     }
 

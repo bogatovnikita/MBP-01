@@ -33,6 +33,7 @@ internal class FileManagerTest{
             coEvery { files.getFiles(value) } returns fileInfos().also { runTest { delay(50) } }
         }
         coEvery { files.delete(listOf("path")) } returns Unit
+        coEvery { files.delete(listOf()) } returns Unit
         coEvery { ads.preload() } returns Unit
     }
 
@@ -264,12 +265,18 @@ internal class FileManagerTest{
     }
 
     @Test
-    fun `cancelDelete - delete state is Wait`() = runTest {
-        fileManager().apply {
+    fun `cancelDelete - delete state is Wait if not in progress`() = runTest {
+        callAfterLoading() {
             askDelete()
             cancelDelete()
+
+            assertEquals(DeleteState.Wait, state.deleteState)
+
+            delete()
+            cancelDelete()
+
+            assertEquals(DeleteState.Progress, state.deleteState)
         }
-        assertEquals(DeleteState.Wait, state.deleteState)
     }
 
 

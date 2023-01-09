@@ -5,10 +5,8 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import kotlinx.coroutines.launch
-import yin_kio.file_manager.domain.models.DeleteState
 import yin_kio.file_manager.presentation.R
 import yin_kio.file_manager.presentation.databinding.DialogDeleteProgressBinding
 import yin_kio.file_manager.presentation.parentViewModel
@@ -17,9 +15,6 @@ class DeleteProgressDialog : DialogFragment(R.layout.dialog_delete_progress) {
 
     private val binding: DialogDeleteProgressBinding by viewBinding()
     private val viewModel by lazy { parentViewModel() }
-
-
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,12 +31,6 @@ class DeleteProgressDialog : DialogFragment(R.layout.dialog_delete_progress) {
     private fun setupObserver() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.flow.collect {
-                if (it.deleteState == DeleteState.Done) {
-                    findNavController().apply {
-                        navigateUp()
-                        navigate(R.id.action_fileManagerFragment_to_doneDialog)
-                    }
-                }
                 binding.title.text = it.deleteProgressTitle
             }
         }

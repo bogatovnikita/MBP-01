@@ -7,18 +7,14 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.ads.showInter
-import yin_kio.file_manager.domain.models.DeleteState
 import yin_kio.file_manager.domain.models.FileRequest
 import yin_kio.file_manager.presentation.Intention
 import yin_kio.file_manager.presentation.R
 import yin_kio.file_manager.presentation.databinding.FragmentFileManagerBinding
 import yin_kio.file_manager.presentation.models.UiState
-import yin_kio.file_manager.presentation.navigation.Navigation
 import yin_kio.file_manager.presentation.parentViewModel
-import yin_kio.file_manager.presentation.sortingPopup
 
 class FileManagerFragment(
 ) : Fragment(R.layout.fragment_file_manager) {
@@ -26,12 +22,8 @@ class FileManagerFragment(
     private val binding: FragmentFileManagerBinding by viewBinding()
     private val viewModel by lazy { parentViewModel() }
 
-    private lateinit var navigation: Navigation
-
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        navigation = Navigation(findNavController())
 
         setupListeners()
 
@@ -90,7 +82,6 @@ class FileManagerFragment(
 
     private fun setupObserverOnScreen() {
         observeState { state ->
-            askPermission(state)
             showFileRequest(state)
             showIsAllSelected(state)
             showRecycler(state)
@@ -100,13 +91,8 @@ class FileManagerFragment(
             showListShowingMode(state)
             showSortingPopup(state)
             showProgress(state)
-            showAskDelete(state)
             showInter(state)
         }
-    }
-
-    private fun showAskDelete(state: UiState) {
-        if (state.deleteState == DeleteState.Ask) navigation.askDelete()
     }
 
     private fun showInter(state: UiState) {
@@ -149,10 +135,6 @@ class FileManagerFragment(
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.flow.collect(action)
         }
-    }
-
-    private fun askPermission(it: UiState) {
-        if (!it.hasPermission) navigation.askPermission()
     }
 
 

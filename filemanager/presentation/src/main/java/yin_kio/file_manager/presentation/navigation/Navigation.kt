@@ -16,8 +16,19 @@ class Navigation(
     }
 
     fun goToDeleteProgress(){
-        navController.navigateUp()
+        goBack()
         navController.navigate(R.id.action_fileManagerFragment_to_deleteProgressDialog)
+    }
+
+    fun goBack(){
+        navController.navigateUp()
+    }
+
+    fun goToDone(){
+        navController.apply {
+            navigateUp()
+            navigate(R.id.action_fileManagerFragment_to_doneDialog)
+        }
     }
 
     private fun navigate(id: Int){

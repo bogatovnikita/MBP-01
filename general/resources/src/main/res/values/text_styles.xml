@@ -8,62 +8,63 @@
 
     <style name="Text.Header_1">
         <item name="android:textSize">30sp</item>
-        <item name="fontWeight">700</item>
+        <item name="fontFamily">@font/golos_text_bold</item>
     </style>
 
     <style name="Text.Header_2">
         <item name="android:textSize">24sp</item>
-        <item name="fontWeight">700</item>
+        <item name="fontFamily">@font/golos_text_bold</item>
     </style>
 
     <style name="Text.Header_3">
         <item name="android:textSize">20sp</item>
-        <item name="fontWeight">700</item>
+        <item name="fontFamily">@font/golos_text_bold</item>
     </style>
 
     <style name="Text.Header_4">
         <item name="android:textSize">16sp</item>
-        <item name="fontWeight">700</item>
+        <item name="fontFamily">@font/golos_text_bold</item>
     </style>
 
     <style name="Text.Header_5">
         <item name="android:textSize">14sp</item>
-        <item name="fontWeight">700</item>
+        <item name="fontFamily">@font/golos_text_bold</item>
     </style>
 
     <style name="Text.Subtitle_1">
         <item name="android:textSize">12sp</item>
+        <item name="fontFamily">@font/golos_text_regular</item>
     </style>
     <style name="Text.Subtitle_1.2">
         <item name="android:textSize">12sp</item>
-        <item name="fontWeight">600</item>
+        <item name="fontFamily">@font/golos_text_demibold</item>
     </style>
 
     <style name="Text.Body_1">
-        <item name="fontWeight">600</item>
+        <item name="fontFamily">@font/golos_text_demibold</item>
         <item name="android:textSize">14sp</item>
     </style>
 
     <style name="Text.Body_1.2">
-        <item name="fontWeight">400</item>
+        <item name="fontFamily">@font/golos_text_regular</item>
     </style>
 
     <style name="Text.Body_2">
-        <item name="fontWeight">600</item>
+        <item name="fontFamily">@font/golos_text_demibold</item>
         <item name="android:textSize">16sp</item>
     </style>
 
     <style name="Text.Body_2.1">
-        <item name="fontWeight">400</item>
+        <item name="fontFamily">@font/golos_text_regular</item>
     </style>
 
     <style name="Text.Body_3">
-        <item name="fontWeight">600</item>
+        <item name="fontFamily">@font/golos_text_demibold</item>
         <item name="android:textSize">18sp</item>
     </style>
 
     <style name="Text.Body_3.1">
-        <item name="fontWeight">400</item>
+        <item name="fontFamily">@font/golos_text_regular</item>
     </style>
 
 

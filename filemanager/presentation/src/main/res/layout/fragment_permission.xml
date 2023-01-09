@@ -23,7 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/need_permission_description"
-            android:textAppearance="@style/Text.Body_1"
+            android:textAppearance="@style/Text.Body_2.1"
             android:paddingHorizontal="16dp"
             android:layout_marginBottom="40dp"/>
 

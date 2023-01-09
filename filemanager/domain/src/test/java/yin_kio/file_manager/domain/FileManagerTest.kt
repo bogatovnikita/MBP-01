@@ -86,38 +86,36 @@ internal class FileManagerTest{
         assertGetFilesCalls(fileManager())
     }
 
-    @Test
-    fun `switchSortingMode - state contains selected sortingMode`() = runTest{
-        fileManager().assertSortingModeSwitching()
-    }
+
 
     @Test
-    fun `switchSortingMode(FromOldToNew) - files are sorted from old to new`() = runTest{
-        callAfterLoading { switchSortingMode(SortingMode.FromOldToNew) }
-        val sorted = listOf(3L,2L,1L)
-        assertTrue(sorted.contentEquals(state.files.map { it.time }))
+    fun `switchSortingMode test`() = runTest{
+        callAfterLoading {
+            assertSortingModeSwitching()
+
+
+            assertSorted(SortingMode.FromOldToNew, listOf(1L,2L,3L)) { it.time }
+            assertSorted(SortingMode.FromNewToOld, listOf(3L,2L,1L)) { it.time }
+            assertSorted(SortingMode.FromSmallToBig, listOf(1L,2L,3L)) { it.size }
+            assertSorted(SortingMode.FromBigToSmall, listOf(3L,2L,1L)) { it.size }
+
+        }
     }
 
-    @Test
-    fun `switchSortingMode(FromNewToOld) - files are sorted from new to old`() = runTest {
-        callAfterLoading {  switchSortingMode(SortingMode.FromNewToOld) }
-        val sorted = listOf(1L,2L,3L)
-        assertTrue(sorted.contentEquals(state.files.map { it.time }))
+    private fun FileManager.assertSorted(sortingMode: SortingMode, expected: List<Long>, sortBy: (FileInfo) -> Long){
+        switchSortingMode(sortingMode)
+        val actual = state.files.map(sortBy)
+        assertTrue(expected.contentEquals(actual), "expected: $expected, actual: $actual")
     }
 
-    @Test
-    fun `switchSortingMode(FromBigToSmall) - files are sorted from big to small`() = runTest{
-        callAfterLoading { switchSortingMode(SortingMode.FromBigToSmall) }
-        val sorted = listOf(3L,2L,1L)
-        assertTrue(sorted.contentEquals(state.files.map { it.size }))
+    private fun FileManagerImpl.assertSortingModeSwitching() {
+        SortingMode.values().forEach {
+            switchSortingMode(it)
+            assertEquals(it, state.sortingMode)
+        }
     }
 
-    @Test
-    fun `switchSortingMode(FromSmallToBig) - files are sorted from small to big`() = runTest{
-        callAfterLoading { switchSortingMode(SortingMode.FromSmallToBig) }
-        val sorted = listOf(1L,2L,3L)
-        assertTrue(sorted.contentEquals(state.files.map { it.size }))
-    }
+
 
     @Test
     fun `switchSelectAll - all files are selected and isAllSelected is true`() = runTest {
@@ -362,12 +360,7 @@ internal class FileManagerTest{
         return toLongArray().contentEquals(other.toLongArray())
     }
 
-    private fun FileManagerImpl.assertSortingModeSwitching() {
-        SortingMode.values().forEach {
-            switchSortingMode(it)
-            assertEquals(it, state.sortingMode)
-        }
-    }
+
 
 
     private fun TestScope.assertFileModeSwitching(fileManager: FileManagerImpl){

@@ -33,7 +33,7 @@ android {
 dependencies {
 
     implementation project(':filemanager:domain')
-    implementation project(':permissions')
+    implementation project(':general:permissions')
 
     implementation project(':ads')
 

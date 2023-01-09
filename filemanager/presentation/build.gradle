@@ -47,9 +47,9 @@ dependencies {
 
     implementation project(':filemanager:domain')
     implementation project(':general:resources')
-    implementation project(':lifecycle_aware')
-    implementation project(':recycler_adapter')
-    implementation project(':permissions')
+    implementation project(':general:lifecycle_aware')
+    implementation project(':general:recycler_adapter')
+    implementation project(':general:permissions')
     implementation project(':ads')
 
     implementation 'com.github.bumptech.glide:glide:4.14.2'

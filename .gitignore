@@ -9,3 +9,4 @@
 .cxx
 local.properties
 /filemanager/domain/build/
+*/build/*

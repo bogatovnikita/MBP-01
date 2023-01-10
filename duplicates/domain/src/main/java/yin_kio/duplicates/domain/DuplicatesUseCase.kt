@@ -1,6 +1,7 @@
 package yin_kio.duplicates.domain
 
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import yin_kio.duplicates.domain.models.DuplicatesList
@@ -22,7 +23,7 @@ class DuplicatesUseCase(
         updateFiles()
     }
 
-    private fun updateFiles() {
+    fun updateFiles() {
         coroutineScope.launch(coroutineContext) {
             updateFilesSynchronously()
         }
@@ -30,6 +31,7 @@ class DuplicatesUseCase(
 
     private suspend fun updateFilesSynchronously() {
         stateFlow.value = state.copy(isInProgress = true)
+        delay(1)
         stateFlow.value = state.copy(
             isInProgress = false,
             duplicatesList = getDuplicates()

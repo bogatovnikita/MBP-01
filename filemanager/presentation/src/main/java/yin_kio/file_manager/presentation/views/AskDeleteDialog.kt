@@ -3,6 +3,7 @@ package yin_kio.file_manager.presentation.views
 import android.content.DialogInterface
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.lifecycleScope
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -21,6 +22,20 @@ class AskDeleteDialog : DialogFragment(R.layout.dialog_ask_delete) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NO_TITLE, R.style.MyDialog)
+    }
+
+
+    override fun onStart() {
+        super.onStart()
+        setupLayoutParams()
+    }
+
+
+    private fun setupLayoutParams() {
+        dialog?.window?.setLayout(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

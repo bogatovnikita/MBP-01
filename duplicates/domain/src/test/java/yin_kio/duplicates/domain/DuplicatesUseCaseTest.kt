@@ -4,6 +4,7 @@ import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
@@ -20,23 +21,23 @@ class DuplicatesUseCaseTest {
     @Test
     fun `test init`() = runTest{
         val imagesComparator: (ImageInfo, ImageInfo) -> Boolean = {a,b -> true}
-        val state = State()
+        val stateFlow = MutableStateFlow(State())
         val files: Files = mockk()
         coEvery { files.getImages() } returns listOf(ImageInfo(), ImageInfo()).also { delay(50) }
 
         DuplicatesUseCase(
-            state = state,
+            stateFlow = stateFlow,
             files = files,
             imagesComparator = imagesComparator,
             coroutineScope = this,
             coroutineContext = coroutineContext
         )
 
-        assertTrue(state.duplicatesList.value.isEmpty())
-        assertTrue(state.isInProgress)
+        assertTrue(stateFlow.value.duplicatesList.value.isEmpty())
+        assertTrue(stateFlow.value.isInProgress)
         wait()
-        assertFalse(state.isInProgress)
-        assertTrue(state.duplicatesList.value.isNotEmpty())
+        assertFalse(stateFlow.value.isInProgress)
+        assertTrue(stateFlow.value.duplicatesList.value.isNotEmpty())
     }
 
     private fun TestScope.wait(){

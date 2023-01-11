@@ -97,6 +97,18 @@ class DuplicatesUseCaseTest {
         }
     }
 
+    @Test
+    fun isItemSelected() = runTest{
+        val useCase = duplicatesUseCase()
+        wait()
+
+        useCase.switchItemSelection(0, "a")
+        assertTrue(useCase.isItemSelected("a"))
+
+        useCase.switchItemSelection(0, "a")
+        assertFalse(useCase.isItemSelected("a"))
+    }
+
 
     private suspend fun TestScope.duplicatesUseCase(): DuplicatesUseCase {
         val imagesComparator: (ImageInfo, ImageInfo) -> Boolean = { a, b -> true }

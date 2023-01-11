@@ -67,4 +67,8 @@ class DuplicatesUseCase(
         update()
     }
 
+    fun isItemSelected(path: String) : Boolean{
+        return state.selected.contains(ImageInfo(path))
+    }
+
 }

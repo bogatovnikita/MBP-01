@@ -13,4 +13,5 @@ data class FirstScreenTimeState(
     val totalCount: Int = 0,
     val totalCheckedCount: Int = 0,
     val appScreenTimeListItems: List<AppScreenTimeListItems> = emptyList(),
+    val reverseListAppScreenTime: Boolean = false
 )

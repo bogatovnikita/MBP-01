@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.hedgehog.presentation.databinding.ItemScreenTimeBinding
 import com.hedgehog.presentation.models.AppScreenTimeListItems
 
-class ScreenTimeAdapter(private val listener: Listener, private val isSelectedMode: Boolean) :
+class ScreenTimeAdapter(private val listener: Listener) :
     ListAdapter<AppScreenTimeListItems, ScreenTimeAdapter.ScreenTimeViewHolder>(ItemCallback),
     View.OnClickListener {
 
@@ -28,11 +28,11 @@ class ScreenTimeAdapter(private val listener: Listener, private val isSelectedMo
             iconIv.setImageDrawable(item.icon)
             titleTv.text = item.name
             descriptionTv.text = item.time
-            if (isSelectedMode) {
-                iconRightArrow.visibility = View.GONE
-                checkbox.visibility = View.VISIBLE
-                checkbox.isChecked = item.isChecked
-            }
+//            if (item.isSelectedMode) {
+//                iconRightArrow.visibility = View.GONE
+//                checkbox.visibility = View.VISIBLE
+//                checkbox.isChecked = item.isChecked
+//            }
         }
     }
 

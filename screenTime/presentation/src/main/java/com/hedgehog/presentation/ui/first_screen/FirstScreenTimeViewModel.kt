@@ -75,7 +75,8 @@ class FirstScreenTimeViewModel @Inject constructor(
                 updateState { state ->
                     state.copy(
                         appScreenTimeListItems = it.appScreenTimeListItems,
-                        isLoading = true
+                        isLoading = true,
+                        reverseListAppScreenTime = false
                     )
                 }
             }
@@ -101,13 +102,40 @@ class FirstScreenTimeViewModel @Inject constructor(
 
     fun choiceDay() {
         updateState {
-            it.copy(choiceDay = true, choiceWeek = false, selectionMode = false)
+            it.copy(
+                choiceDay = true,
+                choiceWeek = false,
+                selectionMode = false,
+                reverseListAppScreenTime = false
+            )
         }
     }
 
     fun choiceWeek() {
         updateState {
-            it.copy(choiceDay = false, choiceWeek = true, selectionMode = false)
+            it.copy(
+                choiceDay = false,
+                choiceWeek = true,
+                selectionMode = false,
+                reverseListAppScreenTime = false
+            )
+        }
+    }
+
+    fun reverseList() {
+        updateState {
+            it.copy(
+                appScreenTimeListItems = it.appScreenTimeListItems.reversed(),
+                reverseListAppScreenTime = !it.reverseListAppScreenTime
+            )
+        }
+    }
+
+    fun selectedMode() {
+        updateState {
+            it.copy(
+                selectionMode = !it.selectionMode
+            )
         }
     }
 }

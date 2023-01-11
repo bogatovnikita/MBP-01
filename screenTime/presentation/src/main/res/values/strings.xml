@@ -5,4 +5,5 @@
     <string name="D_hour">%d hour</string>
     <string name="day">День</string>
     <string name="week">Неделя</string>
+    <string name="app_screen_time">Экранное время</string>
 </resources>

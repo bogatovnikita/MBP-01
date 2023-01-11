@@ -12,4 +12,6 @@
     <string name="dialog_ask_continue_continue">Продолжить объединять дубликаты</string>
     <string name="dialog_ask_continue_cancel">Перейти к оптимизации телефона</string>
 
+    <string name="dialog_all_duplicates_done_title">Все дубликаты объединены</string>
+
 </resources>

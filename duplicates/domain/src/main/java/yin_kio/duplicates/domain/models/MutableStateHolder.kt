@@ -9,7 +9,7 @@ import kotlinx.coroutines.launch
 data class MutableStateHolder(
     override var isInProgress: Boolean = true,
     override var duplicatesList: List<List<ImageInfo>> = emptyList(),
-    override var selected: MutableMap<Int, Set<ImageInfo>> = mutableMapOf()
+    override var selected: MutableSet<ImageInfo> = mutableSetOf()
 ) : State {
 
     private lateinit var coroutineScope: CoroutineScope

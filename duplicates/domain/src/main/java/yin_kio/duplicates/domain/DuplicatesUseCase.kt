@@ -26,28 +26,45 @@ class DuplicatesUseCase(
         }
     }
 
-    private suspend fun updateFilesSynchronously() {
-        state.isInProgress = true
-        state.update()
+    private suspend fun updateFilesSynchronously() = with(state) {
+        isInProgress = true
+        update()
         delay(1)
 
-        state.isInProgress = false
-        state.duplicatesList = getDuplicates()
-        state.update()
+        isInProgress = false
+        duplicatesList = getDuplicates()
+
+        update()
     }
+
 
     private suspend fun getDuplicates() = files.getImages().findDuplicates(imagesComparator)
 
 
-    fun switchGroupSelection(index: Int){
-        val group = state.duplicatesList[index]
-        if (state.selected[index] == null){
-            state.selected[index] = group.toSet()
+    fun switchGroupSelection(index: Int) = with(state){
+        val group = duplicatesList[index].toSet()
+
+        if (!selected.containsAll(group)){
+            selected.addAll(group)
         } else {
-            state.selected.remove(index)
+            selected.removeAll(group)
         }
 
-        state.update()
+        update()
+    }
+
+    fun switchItemSelection(groupIndex: Int, path: String) = with(state){
+        val item = duplicatesList[groupIndex].find { it.path == path }
+
+        item?.let {
+            if (selected.contains(item)){
+                selected.remove(item)
+            } else {
+                selected.add(item)
+            }
+        }
+
+        update()
     }
 
 }

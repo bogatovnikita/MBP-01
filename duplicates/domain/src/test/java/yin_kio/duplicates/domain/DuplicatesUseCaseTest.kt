@@ -31,27 +31,31 @@ class DuplicatesUseCaseTest {
     fun `init`() = runTest{
 
         duplicatesUseCase()
+        state.apply {
+            assertTrue(duplicatesList.isEmpty())
+            assertTrue(isInProgress)
+            wait()
+            assertFalse(isInProgress)
+            assertTrue(duplicatesList.isNotEmpty())
+        }
 
-        assertTrue(state.duplicatesList.isEmpty())
-        assertTrue(state.isInProgress)
-        wait()
-        assertFalse(state.isInProgress)
-        assertTrue(state.duplicatesList.isNotEmpty())
     }
 
     @Test
     fun updateFiles() = runTest{
-        val oldDuplicates = state.duplicatesList
+        state.apply {
+            val oldDuplicates = duplicatesList
 
-        val useCase = duplicatesUseCase()
-        wait()
+            val useCase = duplicatesUseCase()
+            wait()
 
-        useCase.updateFiles()
-        delay(1)
-        assertTrue(state.isInProgress)
-        wait()
-        assertFalse(state.isInProgress)
-        assertFalse(state.duplicatesList === oldDuplicates)
+            useCase.updateFiles()
+            delay(1)
+            assertTrue(isInProgress)
+            wait()
+            assertFalse(isInProgress)
+            assertFalse(duplicatesList === oldDuplicates)
+        }
     }
 
     @Test
@@ -61,13 +65,36 @@ class DuplicatesUseCaseTest {
 
         useCase.switchGroupSelection(0)
 
-        assertTrue(state.selected[0]?.isNotEmpty() == true)
-        assertEquals(state.duplicatesList[0].size, state.selected[0]?.size)
+        state.apply {
+            assertTrue(selected.isNotEmpty())
+            assertTrue(selected.containsAll(duplicatesList[0]))
 
-        useCase.switchGroupSelection(0)
+            useCase.switchGroupSelection(0)
 
-        assertTrue(state.selected.isEmpty())
+            assertTrue(selected.isEmpty())
+        }
+    }
 
+    @Test
+    fun switchItemSelection() = runTest {
+        val useCase = duplicatesUseCase()
+        wait()
+
+        useCase.switchItemSelection(0, "a")
+        useCase.switchItemSelection(0, "b")
+
+        state.apply {
+            assertTrue(selected.containsAll(duplicatesList[0]))
+
+            useCase.switchItemSelection(0, "a")
+
+            assertFalse(selected.contains(ImageInfo("a")))
+            assertTrue(selected.contains(ImageInfo("b")))
+
+            useCase.switchItemSelection(0, "b")
+
+            assertTrue(selected.isEmpty())
+        }
     }
 
 

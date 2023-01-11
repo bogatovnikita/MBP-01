@@ -6,9 +6,14 @@ import com.hedgehog.domain.wrapper.CaseResult
 import com.hedgehog.presentation.base.BaseViewModel
 import com.hedgehog.presentation.di.MultiChoice
 import com.hedgehog.presentation.models.AppScreenTime
+import com.hedgehog.presentation.models.AppScreenTimeListItems
 import com.hedgehog.presentation.models.CalendarScreenTime
 import com.hedgehog.presentation.multichoice.MultiChoiceHandler
+import com.hedgehog.presentation.multichoice.MultiChoiceState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -33,9 +38,7 @@ class FirstScreenTimeViewModel @Inject constructor(
                     }
                     is CaseResult.Failure -> {
                         updateState {
-                            it.copy(
-                                isErrorLoading = true
-                            )
+                            it.copy(isErrorLoading = true)
                         }
                     }
                 }
@@ -52,20 +55,59 @@ class FirstScreenTimeViewModel @Inject constructor(
                         time = usageState.time,
                         icon = usageState.icon
                     )
-                }, isLoading = true
+                }
             )
         }
+        initChoiceHandler()
+    }
+
+    private fun initChoiceHandler() {
+        val flow = flowOf(_screenState.value.listDataScreenTime)
+        viewModelScope.launch {
+            multiChoiceHandler.setItemsFlow(viewModelScope, flow)
+            val combinedFlow = combine(
+                flow,
+                multiChoiceHandler.listen(),
+                ::merge
+            )
+
+            combinedFlow.collectLatest {
+                updateState { state ->
+                    state.copy(
+                        appScreenTimeListItems = it.appScreenTimeListItems,
+                        isLoading = true
+                    )
+                }
+            }
+        }
+    }
+
+    private fun merge(
+        appScreenTimeList: List<AppScreenTime>,
+        multiChoiceState: MultiChoiceState<AppScreenTime>
+    ): FirstScreenTimeState {
+        return FirstScreenTimeState(
+            appScreenTimeListItems = appScreenTimeList.map { app ->
+                AppScreenTimeListItems(app, multiChoiceState.isChecked(app))
+            },
+            totalCount = appScreenTimeList.size,
+            totalCheckedCount = multiChoiceState.totalCheckedCount
+        )
+    }
+
+    fun toggleSelection(app: AppScreenTimeListItems) {
+        multiChoiceHandler.toggle(app.originAppScreenTime)
     }
 
     fun choiceDay() {
         updateState {
-            it.copy(choiceDay = true, choiceWeek = false)
+            it.copy(choiceDay = true, choiceWeek = false, selectionMode = false)
         }
     }
 
     fun choiceWeek() {
         updateState {
-            it.copy(choiceDay = false, choiceWeek = true)
+            it.copy(choiceDay = false, choiceWeek = true, selectionMode = false)
         }
     }
 }

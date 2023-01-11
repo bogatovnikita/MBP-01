@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.hedgehog.presentation.R
 import com.hedgehog.presentation.base.BaseFragment
 import com.hedgehog.presentation.databinding.FragmentFirstScreenTimeBinding
-import com.hedgehog.presentation.models.AppScreenTime
+import com.hedgehog.presentation.models.AppScreenTimeListItems
 import com.hedgehog.presentation.models.CalendarScreenTime
 import com.hedgehog.presentation.ui.adapters.ScreenTimeAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -42,10 +42,15 @@ class FirstScreenTimeFragment :
     private fun initRecyclerView() {
         adapter = ScreenTimeAdapter(
             object : ScreenTimeAdapter.Listener {
-                override fun onChooseNote(item: AppScreenTime) {
+                override fun onChooseNote(item: AppScreenTimeListItems) {
                     Toast.makeText(requireContext(), item.name, Toast.LENGTH_SHORT).show()
                 }
-            })
+
+                override fun onToggle(item: AppScreenTimeListItems) {
+                    viewModel.toggleSelection(item)
+                }
+            }, viewModel.screenState.value.selectionMode
+        )
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.adapter = adapter
     }
@@ -60,7 +65,7 @@ class FirstScreenTimeFragment :
 
     private fun renderState(state: FirstScreenTimeState) {
         if (!state.isLoading) return
-        adapter.submitList(state.listDataScreenTime)
+        adapter.submitList(state.appScreenTimeListItems)
         initDate()
     }
 
@@ -114,9 +119,19 @@ class FirstScreenTimeFragment :
     private fun choiceWeek() {
         viewModel.choiceWeek()
         binding.weekButton.setBackgroundResource(R.drawable.background_not_transparent_button)
-        binding.weekButton.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+        binding.weekButton.setTextColor(
+            ContextCompat.getColor(
+                requireContext(),
+                R.color.white
+            )
+        )
         binding.dayButton.setBackgroundResource(R.drawable.background_transparent_button)
-        binding.dayButton.setTextColor(ContextCompat.getColor(requireContext(), R.color.green))
+        binding.dayButton.setTextColor(
+            ContextCompat.getColor(
+                requireContext(),
+                R.color.green
+            )
+        )
         beginTime = 0
         endTime = -1
         calendar = Calendar.getInstance()
@@ -132,9 +147,18 @@ class FirstScreenTimeFragment :
     private fun choiceDay() {
         viewModel.choiceDay()
         binding.dayButton.setBackgroundResource(R.drawable.background_not_transparent_button)
-        binding.dayButton.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+        binding.dayButton.setTextColor(
+            ContextCompat.getColor(
+                requireContext(), R.color.white
+            )
+        )
         binding.weekButton.setBackgroundResource(R.drawable.background_transparent_button)
-        binding.weekButton.setTextColor(ContextCompat.getColor(requireContext(), R.color.green))
+        binding.weekButton.setTextColor(
+            ContextCompat.getColor(
+                requireContext(),
+                R.color.green
+            )
+        )
         beginTime = 0
         endTime = -1
         calendar = Calendar.getInstance()

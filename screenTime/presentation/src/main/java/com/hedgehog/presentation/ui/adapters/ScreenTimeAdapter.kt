@@ -7,12 +7,10 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.hedgehog.presentation.databinding.ItemScreenTimeBinding
-import com.hedgehog.presentation.models.AppScreenTime
+import com.hedgehog.presentation.models.AppScreenTimeListItems
 
-class ScreenTimeAdapter(
-    private val listener: Listener
-) :
-    ListAdapter<AppScreenTime, ScreenTimeAdapter.ScreenTimeViewHolder>(ItemCallback),
+class ScreenTimeAdapter(private val listener: Listener, private val isSelectedMode: Boolean) :
+    ListAdapter<AppScreenTimeListItems, ScreenTimeAdapter.ScreenTimeViewHolder>(ItemCallback),
     View.OnClickListener {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ScreenTimeViewHolder {
@@ -26,27 +24,40 @@ class ScreenTimeAdapter(
         val item = getItem(position)
         with(holder.binding) {
             root.tag = item
+            checkbox.tag = item
             iconIv.setImageDrawable(item.icon)
             titleTv.text = item.name
             descriptionTv.text = item.time
+            if (isSelectedMode) {
+                iconRightArrow.visibility = View.GONE
+                checkbox.visibility = View.VISIBLE
+                checkbox.isChecked = item.isChecked
+            }
         }
     }
 
     override fun onClick(view: View) {
-        val item = view.tag as AppScreenTime
+        val item = view.tag as AppScreenTimeListItems
         listener.onChooseNote(item)
     }
 
-    object ItemCallback : DiffUtil.ItemCallback<AppScreenTime>() {
-        override fun areItemsTheSame(oldItem: AppScreenTime, newItem: AppScreenTime) =
+    object ItemCallback : DiffUtil.ItemCallback<AppScreenTimeListItems>() {
+        override fun areItemsTheSame(
+            oldItem: AppScreenTimeListItems,
+            newItem: AppScreenTimeListItems
+        ) =
             oldItem.name == newItem.name
 
-        override fun areContentsTheSame(oldItem: AppScreenTime, newItem: AppScreenTime) =
+        override fun areContentsTheSame(
+            oldItem: AppScreenTimeListItems,
+            newItem: AppScreenTimeListItems
+        ) =
             oldItem == newItem
     }
 
     interface Listener {
-        fun onChooseNote(item: AppScreenTime)
+        fun onChooseNote(item: AppScreenTimeListItems)
+        fun onToggle(item: AppScreenTimeListItems)
     }
 
     class ScreenTimeViewHolder(val binding: ItemScreenTimeBinding) :

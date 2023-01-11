@@ -1,4 +1,4 @@
-package yin_kio.duplicates.domain
+package yin_kio.duplicates.domain.gateways
 
 import yin_kio.duplicates.domain.models.ImageInfo
 

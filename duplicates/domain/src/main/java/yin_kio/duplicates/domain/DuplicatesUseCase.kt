@@ -3,6 +3,7 @@ package yin_kio.duplicates.domain
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import yin_kio.duplicates.domain.gateways.Files
 import yin_kio.duplicates.domain.models.ImageInfo
 import yin_kio.duplicates.domain.models.MutableStateHolder
 import kotlin.coroutines.CoroutineContext

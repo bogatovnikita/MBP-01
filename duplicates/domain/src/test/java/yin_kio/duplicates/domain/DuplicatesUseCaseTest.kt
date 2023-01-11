@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import yin_kio.duplicates.domain.gateways.Files
+import yin_kio.duplicates.domain.models.Destination
 import yin_kio.duplicates.domain.models.ImageInfo
 import yin_kio.duplicates.domain.models.MutableStateHolder
 
@@ -108,6 +109,17 @@ class DuplicatesUseCaseTest {
 
         useCase.switchItemSelection(0, "a")
         assertFalse(useCase.isItemSelected("a"))
+    }
+
+    @Test
+    fun navigate() = runTest{
+        val useCase = duplicatesUseCase()
+
+        Destination.values().forEach {
+            useCase.navigate(it)
+            assertEquals(it, state.destination)
+        }
+
     }
 
 

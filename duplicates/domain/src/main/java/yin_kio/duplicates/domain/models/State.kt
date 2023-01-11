@@ -6,6 +6,7 @@ interface State {
     val isInProgress: Boolean
     val duplicatesList: List<List<ImageInfo>>
     val selected: Set<ImageInfo>
+    val destination: Destination
 
     val stateFlow: Flow<State>
 }

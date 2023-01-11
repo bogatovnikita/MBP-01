@@ -1,12 +1,10 @@
 package yin_kio.duplicates.domain.models
 
-enum class NavigationState {
-
+enum class Destination {
+    Permission,
     List,
     UniteProgress,
     Inter,
     AskContinue,
     Done
-
-
 }

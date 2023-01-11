@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="@drawable/bg_dialog">
+
+    <ImageView style="@style/DialogDoneIcon"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/dialog_ask_continue_title"
+        style="@style/DialogDoneTitle"
+        android:layout_marginBottom="4dp"/>
+    
+    <TextView
+        android:id="@+id/description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="24dp"
+        android:lines="2"
+        android:textAppearance="@style/Text.Subtitle_1"
+        android:text="@string/dialog_ask_continue_description"
+        android:gravity="center"
+        android:layout_marginBottom="8dp"/>
+
+
+    <TextView android:text="@string/dialog_ask_continue_continue"
+        style="@style/MiddleButton.Black"
+        android:layout_marginBottom="8dp"/>
+
+    <TextView android:text="@string/dialog_ask_continue_cancel"
+        style="@style/MiddleButton.Green"
+        android:layout_marginBottom="24dp"/>
+
+</LinearLayout>

@@ -16,6 +16,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import yin_kio.duplicates.domain.gateways.Files
 import yin_kio.duplicates.domain.gateways.ImagesComparator
+import yin_kio.duplicates.domain.gateways.Permissions
 import yin_kio.duplicates.domain.models.Destination
 import yin_kio.duplicates.domain.models.ImageInfo
 import yin_kio.duplicates.domain.models.MutableStateHolder
@@ -27,25 +28,40 @@ class DuplicatesUseCaseTest {
     private lateinit var state: MutableStateHolder
     private val coroutineScope = CoroutineScope(StandardTestDispatcher())
     private lateinit var files: Files
+    private lateinit var permissions: Permissions
 
     @BeforeEach
     fun setup(){
         files = mockk()
+        permissions = mockk()
         state = MutableStateHolder(coroutineScope)
+
+        every { permissions.hasStoragePermissions } returns true
     }
 
     @Test
-    fun `init`() = runTest{
+    fun `init with has permission`() = runTest{
 
         duplicatesUseCase()
         state.apply {
             assertTrue(duplicatesList.isEmpty())
             assertTrue(isInProgress)
+            assertEquals(Destination.List, state.destination)
             wait()
             assertFalse(isInProgress)
             assertTrue(duplicatesList.isNotEmpty())
+            assertEquals(Destination.List, state.destination)
         }
+    }
 
+    @Test
+    fun `init with has not permission`() = runTest {
+        every { permissions.hasStoragePermissions } returns false
+
+        duplicatesUseCase()
+        wait()
+
+        assertEquals(Destination.Permission, state.destination)
     }
 
     @Test
@@ -172,6 +188,7 @@ class DuplicatesUseCaseTest {
             state = state,
             files = files,
             imagesComparator = imagesComparator(),
+            permissions = permissions,
             coroutineScope = coroutineScope,
             coroutineContext = coroutineContext
         )

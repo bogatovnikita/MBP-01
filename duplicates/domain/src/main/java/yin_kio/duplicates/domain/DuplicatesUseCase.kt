@@ -5,6 +5,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import yin_kio.duplicates.domain.gateways.Files
 import yin_kio.duplicates.domain.gateways.ImagesComparator
+import yin_kio.duplicates.domain.gateways.Permissions
 import yin_kio.duplicates.domain.models.Destination
 import yin_kio.duplicates.domain.models.ImageInfo
 import yin_kio.duplicates.domain.models.MutableStateHolder
@@ -14,6 +15,7 @@ class DuplicatesUseCase(
     private val state: MutableStateHolder,
     private val files: Files,
     private val imagesComparator: ImagesComparator,
+    private val permissions: Permissions,
     private val coroutineScope: CoroutineScope,
     private val coroutineContext: CoroutineContext
 ) {
@@ -28,6 +30,9 @@ class DuplicatesUseCase(
     }
 
     private suspend fun updateFilesSynchronously() = with(state) {
+        if (hasNotPermission()) return@with
+
+
         isInProgress = true
         update()
         delay(1)
@@ -36,6 +41,15 @@ class DuplicatesUseCase(
         duplicatesList = getDuplicates()
 
         update()
+    }
+
+    private fun hasNotPermission(): Boolean {
+        val hasPermission = permissions.hasStoragePermissions
+        if (!hasPermission) {
+            navigate(Destination.Permission)
+            return true
+        }
+        return false
     }
 
 

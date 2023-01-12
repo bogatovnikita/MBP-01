@@ -78,6 +78,7 @@ class DuplicatesUseCaseTest {
             wait()
             assertFalse(isInProgress)
             assertFalse(duplicatesList === oldDuplicates)
+            assertEquals(Destination.List, state.destination)
         }
     }
 
@@ -152,7 +153,7 @@ class DuplicatesUseCaseTest {
         wait()
 
         useCase.switchGroupSelection(0)
-        every { files.unitedDestination() } returns destination
+        every { files.folderForUnited() } returns destination
 
         mockAndVerify(
             returned = Unit,

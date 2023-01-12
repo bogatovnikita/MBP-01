@@ -98,7 +98,7 @@ class DuplicatesUseCase(
     fun unite() = async {
         state.selected.forEach {
             val first = it.value.first()
-            files.copy(first.path, files.unitedDestination())
+            files.copy(first.path, files.folderForUnited())
 
             it.value.forEach {
                 files.delete(it.path)

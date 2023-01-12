@@ -26,7 +26,7 @@ class FilesImpl(
         fileUtils.copyFile(File(path), File(destination))
     }
 
-    override fun unitedDestination(): String {
+    override fun folderForUnited(): String {
         return Environment.getExternalStorageDirectory().absolutePath + "/" + Environment.DIRECTORY_DCIM + "/"
     }
 }

@@ -1,6 +1,6 @@
 package yin_kio.file_manager.data
 
-import yin_kio.file_manager.domain.entities.FileExtensionGroups
+import yin_kio.file_groups.FileGroups
 import yin_kio.file_manager.domain.gateways.Files
 import yin_kio.file_manager.domain.models.FileGroup
 import yin_kio.file_manager.domain.models.FileInfo
@@ -13,7 +13,7 @@ internal class FilesImpl(
     private val folders: Folders
 ) : Files {
 
-    private val groups = FileExtensionGroups()
+    private val groups = FileGroups()
 
     override suspend fun getFiles(fileRequest: FileRequest): List<FileInfo> {
         val allFiles = fileManager.getAllFiles(folders.root)

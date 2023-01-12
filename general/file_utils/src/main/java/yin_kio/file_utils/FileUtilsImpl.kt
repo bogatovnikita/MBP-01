@@ -31,8 +31,7 @@ class FileUtilsImpl : FileUtils {
     }
 
     override suspend fun copyFiles(files: List<File>, destination: File) {
-        if (destination.isFile) throw IOException("Destination is not folder: ${destination.absolutePath}")
-        files.forEach { copyFile(destination, it) }
+        files.forEach { copyFile(it, destination) }
     }
 
 
@@ -42,7 +41,9 @@ class FileUtilsImpl : FileUtils {
         deleteFiles(files)
     }
 
-    private fun copyFile(destination: File, file: File) {
+    override fun copyFile(file: File, destination: File) {
+        if (destination.isFile) throw IOException("Destination is not folder: ${destination.absolutePath}")
+
         var inputChannel: FileChannel? = null
         var outputChannel: FileChannel? = null
 
@@ -60,12 +61,26 @@ class FileUtilsImpl : FileUtils {
 
     override suspend fun deleteFiles(files: List<File>) : Long {
         var size = 0L
-        files.forEach { runCatching {
-                if (it.delete()){
-                    size += it.length()
-                }
-            }
-        }
+        files.forEach { size += deleteFile(it) }
         return size
+    }
+
+    override suspend fun deleteFile(path: String): Long {
+        return deleteFile(File(path))
+
+    }
+
+    private fun deleteFile(file: File) : Long{
+        return try {
+            val length = file.length()
+
+            if (file.delete()){
+                length
+            } else {
+                0
+            }
+        } catch (ex: Exception){
+            0
+        }
     }
 }

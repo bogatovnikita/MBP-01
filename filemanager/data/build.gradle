@@ -35,6 +35,7 @@ dependencies {
     implementation project(':filemanager:domain')
     implementation project(':general:permissions')
     implementation project(':general:file_utils')
+    implementation project(':general:file_groups')
 
     implementation project(':ads')
 

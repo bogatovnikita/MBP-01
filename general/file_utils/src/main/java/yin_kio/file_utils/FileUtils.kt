@@ -8,6 +8,8 @@ interface FileUtils {
     suspend fun copyFiles(files: List<File>, destination: File)
     suspend fun moveFiles(files: List<File>, destination: File)
     suspend fun deleteFiles(files: List<File>) : Long
+    suspend fun deleteFile(path: String) : Long
+    fun copyFile(file: File, destination: File)
 
 }
 

@@ -1,6 +1,8 @@
 package yin_kio.duplicates.domain
 
 import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -23,9 +25,11 @@ class DuplicatesUseCaseTest {
 
     private lateinit var state: MutableStateHolder
     private val coroutineScope = CoroutineScope(StandardTestDispatcher())
+    private lateinit var files: Files
 
     @BeforeEach
     fun setup(){
+        files = mockk()
         state = MutableStateHolder(coroutineScope)
     }
 
@@ -69,7 +73,7 @@ class DuplicatesUseCaseTest {
 
         state.apply {
             assertTrue(selected.isNotEmpty())
-            assertTrue(selected.containsAll(duplicatesList[0]))
+            assertTrue(selected[0]!!.containsAll(duplicatesList[0]))
 
             useCase.switchGroupSelection(0)
 
@@ -82,20 +86,20 @@ class DuplicatesUseCaseTest {
         val useCase = duplicatesUseCase()
         wait()
 
-        useCase.switchItemSelection(0, "a")
-        useCase.switchItemSelection(0, "b")
+        useCase.switchItemSelection(0, FIRST_FILE)
+        useCase.switchItemSelection(0, SECOND_FILE)
 
         state.apply {
-            assertTrue(selected.containsAll(duplicatesList[0]))
+            assertTrue(selected[0]!!.containsAll(duplicatesList[0]))
 
-            useCase.switchItemSelection(0, "a")
+            useCase.switchItemSelection(0, FIRST_FILE)
 
-            assertFalse(selected.contains(ImageInfo("a")))
-            assertTrue(selected.contains(ImageInfo("b")))
+            assertFalse(selected[0]!!.contains(ImageInfo(FIRST_FILE)))
+            assertTrue(selected[0]!!.contains(ImageInfo(SECOND_FILE)))
 
-            useCase.switchItemSelection(0, "b")
+            useCase.switchItemSelection(0, SECOND_FILE)
 
-            assertTrue(selected.isEmpty())
+            assertNull(selected[0])
         }
     }
 
@@ -104,11 +108,11 @@ class DuplicatesUseCaseTest {
         val useCase = duplicatesUseCase()
         wait()
 
-        useCase.switchItemSelection(0, "a")
-        assertTrue(useCase.isItemSelected("a"))
+        useCase.switchItemSelection(0, FIRST_FILE)
+        assertTrue(useCase.isItemSelected(0 , FIRST_FILE))
 
-        useCase.switchItemSelection(0, "a")
-        assertFalse(useCase.isItemSelected("a"))
+        useCase.switchItemSelection(0, FIRST_FILE)
+        assertFalse(useCase.isItemSelected(0 , FIRST_FILE))
     }
 
     @Test
@@ -123,10 +127,46 @@ class DuplicatesUseCaseTest {
     }
 
 
+    @Test
+    fun unite() = runTest{
+        val destination = "gallery"
+
+        val useCase = duplicatesUseCase()
+        wait()
+
+        useCase.switchGroupSelection(0)
+        every { files.unitedDestination() } returns destination
+
+        mockAndVerify(
+            returned = Unit,
+            mocked = arrayOf(
+                { files.copy(FIRST_FILE, destination) },
+                { files.delete(FIRST_FILE) },
+                { files.delete(SECOND_FILE) }
+            ),
+            action = {
+                useCase.unite()
+                wait()
+            }
+        )
+    }
+
+    private fun <T> mockAndVerify(
+        mocked: Array<suspend () -> T>,
+        action: () -> T,
+        returned: T
+    ){
+        mocked.forEach { coEvery { it() } returns returned }
+
+        action()
+
+        mocked.forEach { coVerify { it() } }
+    }
+
+
     private suspend fun TestScope.duplicatesUseCase(): DuplicatesUseCase {
         val imagesComparator: (ImageInfo, ImageInfo) -> Boolean = { a, b -> true }
-        val files: Files = mockk()
-        coEvery { files.getImages() } returns listOf(ImageInfo("a"), ImageInfo("b")).also { delay(50) }
+        coEvery { files.getImages() } returns listOf(ImageInfo(FIRST_FILE), ImageInfo(SECOND_FILE)).also { delay(50) }
 
         return DuplicatesUseCase(
             state = state,
@@ -139,6 +179,11 @@ class DuplicatesUseCaseTest {
 
     private fun TestScope.wait(){
         advanceUntilIdle()
+    }
+
+    companion object{
+        private const val FIRST_FILE = "a"
+        private const val SECOND_FILE = "b"
     }
 
 }

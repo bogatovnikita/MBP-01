@@ -13,12 +13,12 @@ class StateHolderTest {
         val stateHolder = MutableStateHolder(this)
         stateHolder.isInProgress = false
         stateHolder.duplicatesList = emptyList()
-        stateHolder.selected = mutableSetOf()
+        stateHolder.selected = mutableMapOf()
         assertEquals(
             MutableStateHolder(
             isInProgress = false,
             duplicatesList = emptyList(),
-            selected = mutableSetOf()
+            selected = mutableMapOf()
         ), stateHolder.state)
     }
 

@@ -22,10 +22,8 @@ class DuplicatesUseCase(
         updateFiles()
     }
 
-    fun updateFiles() {
-        coroutineScope.launch(coroutineContext) {
-            updateFilesSynchronously()
-        }
+    fun updateFiles() = async {
+        updateFilesSynchronously()
     }
 
     private suspend fun updateFilesSynchronously() = with(state) {
@@ -44,13 +42,14 @@ class DuplicatesUseCase(
 
 
     fun switchGroupSelection(index: Int) = with(state){
-        val group = duplicatesList[index].toSet()
-
-        if (!selected.containsAll(group)){
-            selected.addAll(group)
+        if (selected[index] == null) {
+            val set = mutableSetOf<ImageInfo>()
+            set.addAll(duplicatesList[index])
+            selected[index] = set
         } else {
-            selected.removeAll(group)
+            selected.remove(index)
         }
+
 
         update()
     }
@@ -58,24 +57,43 @@ class DuplicatesUseCase(
     fun switchItemSelection(groupIndex: Int, path: String) = with(state){
         val item = duplicatesList[groupIndex].find { it.path == path }
 
-        item?.let {
-            if (selected.contains(item)){
-                selected.remove(item)
-            } else {
-                selected.add(item)
+        item?.also {
+            val group = selected[groupIndex]
+            when{
+                group == null -> selected[groupIndex] = mutableSetOf(it)
+                group.contains(it) -> group.remove(it)
+                !group.contains(it) -> group.add(it)
             }
+
+            if (group?.isEmpty() == true) selected.remove(groupIndex)
         }
 
         update()
     }
 
-    fun isItemSelected(path: String) : Boolean{
-        return state.selected.contains(ImageInfo(path))
+    fun isItemSelected(groupIndex: Int, path: String) : Boolean{
+        return state.selected[groupIndex]?.contains(ImageInfo(path)) ?: false
     }
 
     fun navigate(destination: Destination){
         state.destination = destination
         state.update()
+    }
+
+    fun unite() = async {
+        state.selected.forEach {
+            val first = it.value.first()
+            files.copy(first.path, files.unitedDestination())
+
+            it.value.forEach {
+                files.delete(it.path)
+            }
+
+        }
+    }
+
+    private fun async(action: suspend () -> Unit){
+        coroutineScope.launch(coroutineContext) { action() }
     }
 
 }

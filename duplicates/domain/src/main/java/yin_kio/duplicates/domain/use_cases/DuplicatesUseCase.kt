@@ -1,8 +1,9 @@
-package yin_kio.duplicates.domain
+package yin_kio.duplicates.domain.use_cases
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import yin_kio.duplicates.domain.findDuplicates
 import yin_kio.duplicates.domain.gateways.Files
 import yin_kio.duplicates.domain.gateways.ImagesComparator
 import yin_kio.duplicates.domain.gateways.Permissions
@@ -17,7 +18,8 @@ class DuplicatesUseCase(
     private val imagesComparator: ImagesComparator,
     private val permissions: Permissions,
     private val coroutineScope: CoroutineScope,
-    private val coroutineContext: CoroutineContext
+    private val coroutineContext: CoroutineContext,
+    private val duplicateRemover: DuplicateRemover
 ) {
 
 
@@ -91,7 +93,6 @@ class DuplicatesUseCase(
     }
 
     fun navigate(destination: Destination){
-        println("navigate $destination")
         state.destination = destination
         state.update()
     }
@@ -99,9 +100,7 @@ class DuplicatesUseCase(
     fun uniteSelected(){
         navigate(Destination.UniteProgress)
         async {
-            state.selected.forEach {
-                copyFirstAndDeleteRest(it.value)
-            }
+            duplicateRemover.invoke(state.selected.map { it.value })
             navigate(Destination.Inter)
         }
     }
@@ -110,20 +109,8 @@ class DuplicatesUseCase(
         navigate(Destination.UniteProgress)
 
         async {
-            state.duplicatesList.forEach {
-                copyFirstAndDeleteRest(it)
-            }
-
+            duplicateRemover.invoke(state.duplicatesList)
             navigate(Destination.Inter)
-        }
-    }
-
-    private suspend fun copyFirstAndDeleteRest(list: Collection<ImageInfo>) {
-        val first = list.first()
-        files.copy(first.path, files.folderForUnited())
-
-        list.forEach {
-            files.delete(it.path)
         }
     }
 

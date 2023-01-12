@@ -11,12 +11,14 @@ import kotlinx.coroutines.test.*
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import yin_kio.duplicates.domain.use_cases.DuplicateRemover
 import yin_kio.duplicates.domain.gateways.Files
 import yin_kio.duplicates.domain.gateways.ImagesComparator
 import yin_kio.duplicates.domain.gateways.Permissions
 import yin_kio.duplicates.domain.models.Destination
 import yin_kio.duplicates.domain.models.ImageInfo
 import yin_kio.duplicates.domain.models.MutableStateHolder
+import yin_kio.duplicates.domain.use_cases.DuplicatesUseCase
 
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -28,11 +30,13 @@ class DuplicatesUseCaseTest {
     private lateinit var files: Files
     private lateinit var permissions: Permissions
     private lateinit var useCase: DuplicatesUseCase
+    private lateinit var duplicateRemover: DuplicateRemover
 
     @BeforeEach
     fun setup() = runTest{
         files = mockk()
         permissions = mockk()
+        duplicateRemover = mockk()
         state = MutableStateHolder(coroutineScope)
 
         every { permissions.hasStoragePermissions } returns true
@@ -136,12 +140,13 @@ class DuplicatesUseCaseTest {
 
     @Test
     fun uniteSelected() = runTest{
-        mockFilesCalls()
-
         val useCase = createDuplicatesUseCase()
         waitCoroutines()
 
         useCase.selectGroup(0)
+
+        val selectedCollection = state.selected.map { it.value }
+        coEvery { duplicateRemover.invoke(selectedCollection) } returns Unit
 
         useCase.uniteSelected()
 
@@ -149,18 +154,16 @@ class DuplicatesUseCaseTest {
         waitCoroutines()
         assertEquals(Destination.Inter, state.destination)
 
-        coVerify { files.copy(FIRST_FILE, GALLERY_FOLDER) }
-        coVerify { files.delete(FIRST_FILE) }
-        coVerify { files.delete(SECOND_FILE) }
+        coVerify { duplicateRemover.invoke(selectedCollection) }
     }
 
     @Test
     fun uniteAll() = runTest {
 
-        mockFilesCalls()
-
         val useCase = createDuplicatesUseCase()
         waitCoroutines()
+
+        coEvery { duplicateRemover.invoke(state.duplicatesList) } returns Unit
 
         useCase.uniteAll()
 
@@ -168,19 +171,7 @@ class DuplicatesUseCaseTest {
         waitCoroutines()
         assertEquals(Destination.Inter, state.destination)
 
-
-        coVerify { files.copy(FIRST_FILE, GALLERY_FOLDER) }
-        coVerify { files.delete(FIRST_FILE) }
-        coVerify { files.delete(SECOND_FILE) }
-    }
-
-    private fun mockFilesCalls() {
-        every { files.folderForUnited() } returns GALLERY_FOLDER
-
-        coEvery { files.copy(FIRST_FILE, GALLERY_FOLDER) } returns Unit
-        coEvery { files.copy(SECOND_FILE, GALLERY_FOLDER) } returns Unit
-        coEvery { files.delete(FIRST_FILE) } returns Unit
-        coEvery { files.delete(SECOND_FILE) } returns Unit
+        coVerify { duplicateRemover.invoke(state.duplicatesList) }
     }
 
     private suspend fun TestScope.createDuplicatesUseCase(stateHolder: MutableStateHolder = state): DuplicatesUseCase {
@@ -192,7 +183,8 @@ class DuplicatesUseCaseTest {
             imagesComparator = imagesComparator(),
             permissions = permissions,
             coroutineScope = coroutineScope,
-            coroutineContext = coroutineContext
+            coroutineContext = coroutineContext,
+            duplicateRemover = duplicateRemover
         )
     }
 
@@ -209,7 +201,6 @@ class DuplicatesUseCaseTest {
     companion object{
         private const val FIRST_FILE = "a"
         private const val SECOND_FILE = "b"
-        private const val GALLERY_FOLDER = "gallery"
     }
 
 }

@@ -10,6 +10,7 @@ import yin_kio.duplicates.domain.gateways.Permissions
 import yin_kio.duplicates.domain.models.Destination
 import yin_kio.duplicates.domain.models.ImageInfo
 import yin_kio.duplicates.domain.models.MutableStateHolder
+import yin_kio.duplicates.domain.models.UniteWay
 import kotlin.coroutines.CoroutineContext
 
 class DuplicatesUseCase(
@@ -58,7 +59,7 @@ class DuplicatesUseCase(
     private suspend fun getDuplicates() = files.getImages().findDuplicates(imagesComparator)
 
 
-    fun selectGroup(index: Int) = with(state){
+    fun switchGroupSelection(index: Int) = with(state){
         if (selected[index] == null) {
             val set = mutableSetOf<ImageInfo>()
             set.addAll(duplicatesList[index])
@@ -67,9 +68,11 @@ class DuplicatesUseCase(
             selected.remove(index)
         }
 
+        uniteWay = selectUniteWay()
 
         update()
     }
+
 
     fun switchItemSelection(groupIndex: Int, path: String) = with(state){
         val item = duplicatesList[groupIndex].find { it.path == path }
@@ -84,9 +87,18 @@ class DuplicatesUseCase(
 
             if (group?.isEmpty() == true) selected.remove(groupIndex)
         }
+        uniteWay = selectUniteWay()
 
         update()
     }
+
+    private fun MutableStateHolder.selectUniteWay() : UniteWay {
+        return when (selected.isEmpty()) {
+            true -> UniteWay.All
+            false -> UniteWay.Selected
+        }
+    }
+
 
     fun isItemSelected(groupIndex: Int, path: String) : Boolean{
         return state.selected[groupIndex]?.contains(ImageInfo(path)) ?: false
@@ -97,22 +109,25 @@ class DuplicatesUseCase(
         state.update()
     }
 
-    fun uniteSelected(){
+    fun unite(){
         navigate(Destination.UniteProgress)
         async {
-            duplicateRemover.invoke(state.selected.map { it.value })
-            navigate(Destination.Inter)
+            state.apply {
+                uniteWay = selectUniteWay()
+                duplicateRemover.invoke(getImagesForUniting())
+                navigate(Destination.Inter)
+            }
         }
     }
 
-    fun uniteAll(){
-        navigate(Destination.UniteProgress)
-
-        async {
-            duplicateRemover.invoke(state.duplicatesList)
-            navigate(Destination.Inter)
+    private fun MutableStateHolder.getImagesForUniting(): List<Collection<ImageInfo>> {
+        val forUniting = when (uniteWay) {
+            UniteWay.Selected -> selected.map { it.value }
+            UniteWay.All -> state.duplicatesList
         }
+        return forUniting
     }
+
 
     private fun async(action: suspend () -> Unit){
         coroutineScope.launch(coroutineContext) { action() }

@@ -13,6 +13,8 @@ data class MutableStateHolder(
     override var destination: Destination = Destination.List
 ) : State {
 
+    internal var uniteWay: UniteWay = UniteWay.Selected
+
     private lateinit var coroutineScope: CoroutineScope
 
     constructor(coroutineScope: CoroutineScope) : this(){

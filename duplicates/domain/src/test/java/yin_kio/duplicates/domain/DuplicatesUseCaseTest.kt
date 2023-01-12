@@ -18,6 +18,7 @@ import yin_kio.duplicates.domain.gateways.Permissions
 import yin_kio.duplicates.domain.models.Destination
 import yin_kio.duplicates.domain.models.ImageInfo
 import yin_kio.duplicates.domain.models.MutableStateHolder
+import yin_kio.duplicates.domain.models.UniteWay
 import yin_kio.duplicates.domain.use_cases.DuplicatesUseCase
 
 
@@ -33,7 +34,7 @@ class DuplicatesUseCaseTest {
     private lateinit var duplicateRemover: DuplicateRemover
 
     @BeforeEach
-    fun setup() = runTest{
+    fun setup() = runTest(dispatcher){
         files = mockk()
         permissions = mockk()
         duplicateRemover = mockk()
@@ -45,7 +46,7 @@ class DuplicatesUseCaseTest {
     }
 
     @Test
-    fun `init with has permission`() = runTest{
+    fun `init with has permission`() = runTest(dispatcher){
         val state = MutableStateHolder(this)
         createDuplicatesUseCase(stateHolder = state)
         state.apply {
@@ -60,7 +61,7 @@ class DuplicatesUseCaseTest {
     }
 
     @Test
-    fun `init with has not permission`() = runTest {
+    fun `init with has not permission`() = runTest(dispatcher) {
         every { permissions.hasStoragePermissions } returns false
 
         createDuplicatesUseCase()
@@ -70,7 +71,7 @@ class DuplicatesUseCaseTest {
     }
 
     @Test
-    fun updateFiles() = runTest{
+    fun updateFiles() = runTest(dispatcher){
         state.apply {
             val oldDuplicates = duplicatesList
 
@@ -89,15 +90,17 @@ class DuplicatesUseCaseTest {
 
     @Test
     fun switchGroupSelection() = runTest{
-        useCase.selectGroup(0)
+        useCase.switchGroupSelection(0)
 
         state.apply {
             assertTrue(selected.isNotEmpty())
             assertTrue(selected[0]!!.containsAll(duplicatesList[0]))
+            assertEquals(UniteWay.Selected, uniteWay)
 
-            useCase.selectGroup(0)
+            useCase.switchGroupSelection(0)
 
             assertTrue(selected.isEmpty())
+            assertEquals(UniteWay.All, uniteWay)
         }
     }
 
@@ -107,6 +110,7 @@ class DuplicatesUseCaseTest {
         useCase.switchItemSelection(0, SECOND_FILE)
 
         state.apply {
+            assertEquals(UniteWay.Selected, uniteWay)
             assertTrue(selected[0]!!.containsAll(duplicatesList[0]))
 
             useCase.switchItemSelection(0, FIRST_FILE)
@@ -117,6 +121,8 @@ class DuplicatesUseCaseTest {
             useCase.switchItemSelection(0, SECOND_FILE)
 
             assertNull(selected[0])
+            assertTrue(selected.isEmpty())
+            assertEquals(UniteWay.All, uniteWay)
         }
     }
 
@@ -138,43 +144,46 @@ class DuplicatesUseCaseTest {
     }
 
 
-    @Test
-    fun uniteSelected() = runTest{
-        val useCase = createDuplicatesUseCase()
-        waitCoroutines()
 
-        useCase.selectGroup(0)
+    @Test
+    fun `unite if has Selected`() = runTest(dispatcher){
+        useCase.switchGroupSelection(0)
 
         val selectedCollection = state.selected.map { it.value }
         coEvery { duplicateRemover.invoke(selectedCollection) } returns Unit
 
-        useCase.uniteSelected()
+        useCase.unite()
 
-        assertEquals(Destination.UniteProgress, state.destination)
-        waitCoroutines()
-        assertEquals(Destination.Inter, state.destination)
+        assertUniteNavigation()
 
         coVerify { duplicateRemover.invoke(selectedCollection) }
     }
 
+
+
     @Test
-    fun uniteAll() = runTest {
-
-        val useCase = createDuplicatesUseCase()
-        waitCoroutines()
-
+    fun `unite if has not selected`() = runTest(dispatcher) {
         coEvery { duplicateRemover.invoke(state.duplicatesList) } returns Unit
 
-        useCase.uniteAll()
+        useCase.unite()
 
-        assertEquals(Destination.UniteProgress, state.destination)
-        waitCoroutines()
-        assertEquals(Destination.Inter, state.destination)
+        assertUniteNavigation()
 
         coVerify { duplicateRemover.invoke(state.duplicatesList) }
     }
 
-    private suspend fun TestScope.createDuplicatesUseCase(stateHolder: MutableStateHolder = state): DuplicatesUseCase {
+    @Test
+    fun closeInter(){
+        assertTrue(false)
+    }
+
+    private fun TestScope.assertUniteNavigation() {
+        assertEquals(Destination.UniteProgress, state.destination)
+        waitCoroutines()
+        assertEquals(Destination.Inter, state.destination)
+    }
+
+    private suspend fun createDuplicatesUseCase(stateHolder: MutableStateHolder = state): DuplicatesUseCase {
         coEvery { files.getImages() } returns listOf(ImageInfo(FIRST_FILE), ImageInfo(SECOND_FILE)).also { delay(50) }
 
         return DuplicatesUseCase(
@@ -183,7 +192,7 @@ class DuplicatesUseCaseTest {
             imagesComparator = imagesComparator(),
             permissions = permissions,
             coroutineScope = coroutineScope,
-            coroutineContext = coroutineContext,
+            coroutineContext = dispatcher,
             duplicateRemover = duplicateRemover
         )
     }

@@ -6,4 +6,8 @@
     <string name="day">День</string>
     <string name="week">Неделя</string>
     <string name="app_screen_time">Экранное время</string>
+    <string name="change_all">Выбрать все</string>
+    <string name="stop_app">Принудительная остановка</string>
+    <string name="delete">Удалить</string>
+
 </resources>

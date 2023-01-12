@@ -38,6 +38,11 @@
         <item name="fontWeight">600</item>
     </style>
 
+    <style name="Text.Subtitle_1.2.1">
+        <item name="android:textSize">12sp</item>
+        <item name="fontWeight">700</item>
+    </style>
+
     <style name="Text.Body_1">
         <item name="fontWeight">600</item>
         <item name="android:textSize">14sp</item>

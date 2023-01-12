@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -71,9 +72,7 @@ class FirstScreenTimeFragment :
 
     private fun initClickListeners() {
         binding.selectedMode.setOnClickListener {
-            if (viewModel.screenState.value.selectionMode) return@setOnClickListener
-            viewModel.selectedMode()
-            it.isSelected = viewModel.screenState.value.selectionMode
+            selectedMode(it)
         }
         binding.reverseStatistics.setOnClickListener {
             viewModel.reverseList()
@@ -97,6 +96,13 @@ class FirstScreenTimeFragment :
             if (viewModel.screenState.value.choiceWeek) return@setOnClickListener
             choiceWeek()
         }
+    }
+
+    private fun selectedMode(it: View) {
+        viewModel.selectedMode()
+        it.isSelected = viewModel.screenState.value.selectionMode
+        binding.groupCheckbox.isVisible = viewModel.screenState.value.selectionMode
+        binding.groupChoiceDate.isVisible = !viewModel.screenState.value.selectionMode
     }
 
     private fun choiceLeftArrow() {
@@ -141,6 +147,9 @@ class FirstScreenTimeFragment :
         calendar.add(Calendar.WEEK_OF_YEAR, 0)
         secondCalendar.add(Calendar.WEEK_OF_YEAR, +1)
         updateScreenTime(Calendar.WEEK_OF_YEAR, beginTime, endTime)
+        if (viewModel.screenState.value.selectionMode) {
+            selectedMode(binding.selectedMode)
+        }
     }
 
     private fun choiceDay() {
@@ -154,6 +163,9 @@ class FirstScreenTimeFragment :
         calendar = Calendar.getInstance()
         secondCalendar = Calendar.getInstance()
         updateScreenTime(Calendar.DATE, beginTime, endTime)
+        if (viewModel.screenState.value.selectionMode) {
+            selectedMode(binding.selectedMode)
+        }
     }
 
     private fun updateScreenTime(dataType: Int, beginTime: Int, endTime: Int) {

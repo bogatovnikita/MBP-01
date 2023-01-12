@@ -28,11 +28,11 @@ class ScreenTimeAdapter(private val listener: Listener) :
             iconIv.setImageDrawable(item.icon)
             titleTv.text = item.name
             descriptionTv.text = item.time
-//            if (item.isSelectedMode) {
-//                iconRightArrow.visibility = View.GONE
-//                checkbox.visibility = View.VISIBLE
-//                checkbox.isChecked = item.isChecked
-//            }
+            if (item.isSelectedMode) {
+                iconRightArrow.visibility = View.GONE
+                checkbox.visibility = View.VISIBLE
+                checkbox.isChecked = item.isChecked
+            }
         }
     }
 
@@ -45,14 +45,12 @@ class ScreenTimeAdapter(private val listener: Listener) :
         override fun areItemsTheSame(
             oldItem: AppScreenTimeListItems,
             newItem: AppScreenTimeListItems
-        ) =
-            oldItem.name == newItem.name
+        ) = oldItem.name == newItem.name
 
         override fun areContentsTheSame(
             oldItem: AppScreenTimeListItems,
             newItem: AppScreenTimeListItems
-        ) =
-            oldItem == newItem
+        ) = oldItem == newItem
     }
 
     interface Listener {

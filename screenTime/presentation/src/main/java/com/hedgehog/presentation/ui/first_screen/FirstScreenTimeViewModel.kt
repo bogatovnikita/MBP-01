@@ -89,7 +89,11 @@ class FirstScreenTimeViewModel @Inject constructor(
     ): FirstScreenTimeState {
         return FirstScreenTimeState(
             appScreenTimeListItems = appScreenTimeList.map { app ->
-                AppScreenTimeListItems(app, multiChoiceState.isChecked(app))
+                AppScreenTimeListItems(
+                    app,
+                    multiChoiceState.isChecked(app),
+                    _screenState.value.selectionMode
+                )
             },
             totalCount = appScreenTimeList.size,
             totalCheckedCount = multiChoiceState.totalCheckedCount
@@ -105,7 +109,6 @@ class FirstScreenTimeViewModel @Inject constructor(
             it.copy(
                 choiceDay = true,
                 choiceWeek = false,
-                selectionMode = false,
                 reverseListAppScreenTime = false
             )
         }
@@ -116,7 +119,6 @@ class FirstScreenTimeViewModel @Inject constructor(
             it.copy(
                 choiceDay = false,
                 choiceWeek = true,
-                selectionMode = false,
                 reverseListAppScreenTime = false
             )
         }
@@ -137,5 +139,6 @@ class FirstScreenTimeViewModel @Inject constructor(
                 selectionMode = !it.selectionMode
             )
         }
+//        initChoiceHandler()
     }
 }

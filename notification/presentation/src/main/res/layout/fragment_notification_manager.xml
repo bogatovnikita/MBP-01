@@ -25,7 +25,7 @@
                 <ImageView
                     android:id="@+id/btn_go_back"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_15sdp"
                     android:background="@drawable/ic_arrow_back"
                     app:layout_constraintBottom_toBottomOf="@+id/tv_title"
@@ -56,9 +56,9 @@
                     android:background="@drawable/bg_button_full_green"
                     android:fontFamily="@font/golos_text_demibold"
                     android:text="@string/notification_manager_settings"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/_9sdp"
                     android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_9ssp"
                     app:layout_constraintEnd_toStartOf="@id/btn_missed_notifications"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tv_title" />
@@ -74,9 +74,9 @@
                     android:background="@drawable/bg_button_green_stroke"
                     android:fontFamily="@font/golos_text_demibold"
                     android:text="@string/notification_manager_missed_notifications"
-                    android:textColor="@color/green"
-                    android:textSize="@dimen/_8sdp"
                     android:textAllCaps="false"
+                    android:textColor="@color/green"
+                    android:textSize="@dimen/_9ssp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/btn_settings"
                     app:layout_constraintTop_toBottomOf="@id/tv_title" />
@@ -175,6 +175,64 @@
                     app:layout_constraintStart_toEndOf="@+id/im_watch"
                     app:layout_constraintTop_toTopOf="@+id/im_watch" />
 
+                <TextView
+                    android:id="@+id/tv_time_disturb"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_6sdp"
+                    android:fontFamily="@font/golos_text_bold"
+                    android:text="23:00-8:00"
+                    android:textColor="@color/dark_blue"
+                    android:textSize="@dimen/_11ssp"
+                    app:layout_constraintStart_toEndOf="@+id/im_watch"
+                    app:layout_constraintTop_toTopOf="@+id/im_watch" />
+
+                <TextView
+                    android:id="@+id/tv_day_of_week"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_6sdp"
+                    android:fontFamily="@font/golos_text_regular"
+                    android:text="Еженедельно (Пн, Вт, Ср, Чт, Пт, Сб, Вс)"
+                    android:textColor="@color/gray"
+                    android:textSize="@dimen/_9ssp"
+                    app:layout_constraintBottom_toBottomOf="@id/im_watch"
+                    app:layout_constraintStart_toEndOf="@+id/im_watch" />
+
+                <TextView
+                    android:id="@+id/tv_mode_disturb_on"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/_5sdp"
+                    android:fontFamily="@font/golos_text_regular"
+                    android:text="Вкл."
+                    android:textColor="@color/green"
+                    android:textSize="@dimen/_9ssp"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="@id/btn_open_timetable"
+                    app:layout_constraintEnd_toStartOf="@id/btn_open_timetable"
+                    app:layout_constraintTop_toTopOf="@+id/btn_open_timetable" />
+
+                <TextView
+                    android:id="@+id/tv_mode_disturb_off"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/_5sdp"
+                    android:fontFamily="@font/golos_text_regular"
+                    android:text="Выкл."
+                    android:textColor="@color/red"
+                    android:textSize="@dimen/_9ssp"
+                    app:layout_constraintBottom_toBottomOf="@id/btn_open_timetable"
+                    app:layout_constraintEnd_toStartOf="@id/btn_open_timetable"
+                    app:layout_constraintTop_toTopOf="@+id/btn_open_timetable" />
+
+                <androidx.constraintlayout.widget.Group
+                    android:id="@+id/group_disturb_on"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:constraint_referenced_ids="tv_time_disturb, tv_day_of_week, tv_mode_disturb_off, tv_mode_disturb_on" />
+
                 <ImageView
                     android:id="@+id/btn_open_timetable"
                     android:layout_width="wrap_content"
@@ -221,9 +279,27 @@
                     android:background="@drawable/bg_button_blue_stroke"
                     android:fontFamily="@font/golos_text_bold"
                     android:text="@string/notification_manager_clear_notofications"
+                    android:textAllCaps="false"
                     android:textColor="@color/dark_blue"
                     android:textSize="@dimen/_13sdp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_description_clear_notifications" />
+
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_notifications_cleared"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_42sdp"
+                    android:layout_marginHorizontal="@dimen/_27sdp"
+                    android:layout_marginTop="@dimen/_12sdp"
+                    android:background="@drawable/bg_button_blue_stroke"
+                    android:fontFamily="@font/golos_text_bold"
+                    android:text="@string/notification_manager_notifications_cleared"
                     android:textAllCaps="false"
+                    android:textColor="@color/gray"
+                    android:textSize="@dimen/_13sdp"
+                    android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_description_clear_notifications" />

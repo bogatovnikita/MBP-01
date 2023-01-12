@@ -17,4 +17,12 @@
     <style name="customSwitch">
         <item name="colorControlActivated"> @color/green</item>
     </style>
+
+    <style name="WideDialogStyle" parent="Base.Theme.AppCompat.Dialog">
+        <item name="android:windowMinWidthMajor">90%</item>
+    </style>
+
+    <style name="NormalDialogStyle" parent="Base.Theme.AppCompat.Dialog">
+        <item name="android:windowMinWidthMajor">70%</item>
+    </style>
 </resources>

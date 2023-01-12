@@ -40,7 +40,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_6sdp"
         android:fontFamily="@font/golos_text_regular"
-        android:text="Пропущенно уведомлений: 5"
+        android:text="@string/notification_maneger_count_notifications"
         android:textColor="@color/gray"
         android:textSize="@dimen/_8ssp"
         app:layout_constraintBottom_toBottomOf="@id/iv_icon_app"

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.dialogs.DialogNotificationPermissionFragment">
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_8sdp"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:fontFamily="@font/golos_text_bold"
+        android:gravity="center_horizontal"
+        android:text="Нам требуется разрешение"
+        android:textColor="@color/green"
+        android:textSize="@dimen/_10ssp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_body"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_29sdp"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:fontFamily="@font/golos_text_regular"
+        android:text="Нам нужен доступ к просмотру\nваших уведомлений, чтобы вы могли\nвыбирать от каких приложений вы\nне хотите получать уведомления"
+        android:textColor="@color/dark_blue"
+        android:textSize="@dimen/_10ssp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_title" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_settings"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_39sdp"
+        android:layout_marginStart="@dimen/_12sdp"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:layout_marginEnd="@dimen/_3sdp"
+        android:background="@drawable/bg_button_green_stroke"
+        android:fontFamily="@font/golos_text_bold"
+        android:text="Закрыть"
+        android:textAllCaps="false"
+        android:textColor="@color/dark_blue"
+        android:textSize="@dimen/_10ssp"
+        app:layout_constraintEnd_toStartOf="@id/btn_missed_notifications"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_body" />
+
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_missed_notifications"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_39sdp"
+        android:layout_marginStart="@dimen/_3sdp"
+        android:layout_marginEnd="@dimen/_12sdp"
+        android:background="@drawable/bg_button_full_green"
+        android:fontFamily="@font/golos_text_bold"
+        android:text="Разрешить"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_10ssp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/btn_settings"
+        app:layout_constraintTop_toTopOf="@+id/btn_settings" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

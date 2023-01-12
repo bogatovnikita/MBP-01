@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import yin_kio.duplicates.domain.gateways.Files
+import yin_kio.duplicates.domain.gateways.ImagesComparator
 import yin_kio.duplicates.domain.models.Destination
 import yin_kio.duplicates.domain.models.ImageInfo
 import yin_kio.duplicates.domain.models.MutableStateHolder
@@ -165,16 +166,21 @@ class DuplicatesUseCaseTest {
 
 
     private suspend fun TestScope.duplicatesUseCase(): DuplicatesUseCase {
-        val imagesComparator: (ImageInfo, ImageInfo) -> Boolean = { a, b -> true }
         coEvery { files.getImages() } returns listOf(ImageInfo(FIRST_FILE), ImageInfo(SECOND_FILE)).also { delay(50) }
 
         return DuplicatesUseCase(
             state = state,
             files = files,
-            imagesComparator = imagesComparator,
+            imagesComparator = imagesComparator(),
             coroutineScope = coroutineScope,
             coroutineContext = coroutineContext
         )
+    }
+
+    private fun imagesComparator() = object : ImagesComparator {
+        override fun invoke(p1: ImageInfo, p2: ImageInfo): Boolean {
+            return true
+        }
     }
 
     private fun TestScope.wait(){

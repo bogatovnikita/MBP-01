@@ -4,6 +4,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import yin_kio.duplicates.domain.gateways.Files
+import yin_kio.duplicates.domain.gateways.ImagesComparator
 import yin_kio.duplicates.domain.models.Destination
 import yin_kio.duplicates.domain.models.ImageInfo
 import yin_kio.duplicates.domain.models.MutableStateHolder
@@ -12,7 +13,7 @@ import kotlin.coroutines.CoroutineContext
 class DuplicatesUseCase(
     private val state: MutableStateHolder,
     private val files: Files,
-    private val imagesComparator: (ImageInfo, ImageInfo) -> Boolean,
+    private val imagesComparator: ImagesComparator,
     private val coroutineScope: CoroutineScope,
     private val coroutineContext: CoroutineContext
 ) {

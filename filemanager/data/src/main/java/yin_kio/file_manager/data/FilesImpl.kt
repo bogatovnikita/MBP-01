@@ -5,10 +5,11 @@ import yin_kio.file_manager.domain.gateways.Files
 import yin_kio.file_manager.domain.models.FileGroup
 import yin_kio.file_manager.domain.models.FileInfo
 import yin_kio.file_manager.domain.models.FileRequest
+import yin_kio.file_utils.FileUtils
 import java.io.File
 
 internal class FilesImpl(
-    private val fileManager: FileManager,
+    private val fileManager: FileUtils,
     private val folders: Folders
 ) : Files {
 

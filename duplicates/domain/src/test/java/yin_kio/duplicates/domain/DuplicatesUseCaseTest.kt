@@ -136,8 +136,7 @@ class DuplicatesUseCaseTest {
 
     @Test
     fun uniteSelected() = runTest{
-        val folderForUnited = "gallery"
-        mockFilesCalls(folderForUnited)
+        mockFilesCalls()
 
         val useCase = createDuplicatesUseCase()
         waitCoroutines()
@@ -150,15 +149,36 @@ class DuplicatesUseCaseTest {
         waitCoroutines()
         assertEquals(Destination.Inter, state.destination)
 
-        coVerify { files.copy(FIRST_FILE, folderForUnited) }
+        coVerify { files.copy(FIRST_FILE, GALLERY_FOLDER) }
         coVerify { files.delete(FIRST_FILE) }
         coVerify { files.delete(SECOND_FILE) }
     }
 
-    private fun mockFilesCalls(destination: String) {
-        every { files.folderForUnited() } returns destination
+    @Test
+    fun uniteAll() = runTest {
 
-        coEvery { files.copy(FIRST_FILE, destination) } returns Unit
+        mockFilesCalls()
+
+        val useCase = createDuplicatesUseCase()
+        waitCoroutines()
+
+        useCase.uniteAll()
+
+        assertEquals(Destination.UniteProgress, state.destination)
+        waitCoroutines()
+        assertEquals(Destination.Inter, state.destination)
+
+
+        coVerify { files.copy(FIRST_FILE, GALLERY_FOLDER) }
+        coVerify { files.delete(FIRST_FILE) }
+        coVerify { files.delete(SECOND_FILE) }
+    }
+
+    private fun mockFilesCalls() {
+        every { files.folderForUnited() } returns GALLERY_FOLDER
+
+        coEvery { files.copy(FIRST_FILE, GALLERY_FOLDER) } returns Unit
+        coEvery { files.copy(SECOND_FILE, GALLERY_FOLDER) } returns Unit
         coEvery { files.delete(FIRST_FILE) } returns Unit
         coEvery { files.delete(SECOND_FILE) } returns Unit
     }
@@ -189,6 +209,7 @@ class DuplicatesUseCaseTest {
     companion object{
         private const val FIRST_FILE = "a"
         private const val SECOND_FILE = "b"
+        private const val GALLERY_FOLDER = "gallery"
     }
 
 }

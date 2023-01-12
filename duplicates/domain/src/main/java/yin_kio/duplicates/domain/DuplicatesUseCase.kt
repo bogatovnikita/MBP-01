@@ -100,14 +100,30 @@ class DuplicatesUseCase(
         navigate(Destination.UniteProgress)
         async {
             state.selected.forEach {
-                val first = it.value.first()
-                files.copy(first.path, files.folderForUnited())
-
-                it.value.forEach {
-                    files.delete(it.path)
-                }
+                copyFirstAndDeleteRest(it.value)
             }
             navigate(Destination.Inter)
+        }
+    }
+
+    fun uniteAll(){
+        navigate(Destination.UniteProgress)
+
+        async {
+            state.duplicatesList.forEach {
+                copyFirstAndDeleteRest(it)
+            }
+
+            navigate(Destination.Inter)
+        }
+    }
+
+    private suspend fun copyFirstAndDeleteRest(list: Collection<ImageInfo>) {
+        val first = list.first()
+        files.copy(first.path, files.folderForUnited())
+
+        list.forEach {
+            files.delete(it.path)
         }
     }
 

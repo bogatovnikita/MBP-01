@@ -56,7 +56,7 @@ class DuplicatesUseCase(
     private suspend fun getDuplicates() = files.getImages().findDuplicates(imagesComparator)
 
 
-    fun switchGroupSelection(index: Int) = with(state){
+    fun selectGroup(index: Int) = with(state){
         if (selected[index] == null) {
             val set = mutableSetOf<ImageInfo>()
             set.addAll(duplicatesList[index])
@@ -91,19 +91,23 @@ class DuplicatesUseCase(
     }
 
     fun navigate(destination: Destination){
+        println("navigate $destination")
         state.destination = destination
         state.update()
     }
 
-    fun unite() = async {
-        state.selected.forEach {
-            val first = it.value.first()
-            files.copy(first.path, files.folderForUnited())
+    fun uniteSelected(){
+        navigate(Destination.UniteProgress)
+        async {
+            state.selected.forEach {
+                val first = it.value.first()
+                files.copy(first.path, files.folderForUnited())
 
-            it.value.forEach {
-                files.delete(it.path)
+                it.value.forEach {
+                    files.delete(it.path)
+                }
             }
-
+            navigate(Destination.Inter)
         }
     }
 

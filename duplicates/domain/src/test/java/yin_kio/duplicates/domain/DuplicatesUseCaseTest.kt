@@ -7,10 +7,7 @@ import io.mockk.mockk
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.TestScope
-import kotlinx.coroutines.test.advanceUntilIdle
-import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.*
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -26,28 +23,32 @@ import yin_kio.duplicates.domain.models.MutableStateHolder
 class DuplicatesUseCaseTest {
 
     private lateinit var state: MutableStateHolder
-    private val coroutineScope = CoroutineScope(StandardTestDispatcher())
+    private val dispatcher = StandardTestDispatcher()
+    private val coroutineScope = CoroutineScope(dispatcher)
     private lateinit var files: Files
     private lateinit var permissions: Permissions
+    private lateinit var useCase: DuplicatesUseCase
 
     @BeforeEach
-    fun setup(){
+    fun setup() = runTest{
         files = mockk()
         permissions = mockk()
         state = MutableStateHolder(coroutineScope)
 
         every { permissions.hasStoragePermissions } returns true
+        useCase = createDuplicatesUseCase()
+        waitCoroutines()
     }
 
     @Test
     fun `init with has permission`() = runTest{
-
-        duplicatesUseCase()
+        val state = MutableStateHolder(this)
+        createDuplicatesUseCase(stateHolder = state)
         state.apply {
             assertTrue(duplicatesList.isEmpty())
             assertTrue(isInProgress)
             assertEquals(Destination.List, state.destination)
-            wait()
+            waitCoroutines()
             assertFalse(isInProgress)
             assertTrue(duplicatesList.isNotEmpty())
             assertEquals(Destination.List, state.destination)
@@ -58,8 +59,8 @@ class DuplicatesUseCaseTest {
     fun `init with has not permission`() = runTest {
         every { permissions.hasStoragePermissions } returns false
 
-        duplicatesUseCase()
-        wait()
+        createDuplicatesUseCase()
+        waitCoroutines()
 
         assertEquals(Destination.Permission, state.destination)
     }
@@ -69,13 +70,13 @@ class DuplicatesUseCaseTest {
         state.apply {
             val oldDuplicates = duplicatesList
 
-            val useCase = duplicatesUseCase()
-            wait()
+            val useCase = createDuplicatesUseCase()
+            waitCoroutines()
 
             useCase.updateFiles()
             delay(1)
             assertTrue(isInProgress)
-            wait()
+            waitCoroutines()
             assertFalse(isInProgress)
             assertFalse(duplicatesList === oldDuplicates)
             assertEquals(Destination.List, state.destination)
@@ -84,16 +85,13 @@ class DuplicatesUseCaseTest {
 
     @Test
     fun switchGroupSelection() = runTest{
-        val useCase = duplicatesUseCase()
-        wait()
-
-        useCase.switchGroupSelection(0)
+        useCase.selectGroup(0)
 
         state.apply {
             assertTrue(selected.isNotEmpty())
             assertTrue(selected[0]!!.containsAll(duplicatesList[0]))
 
-            useCase.switchGroupSelection(0)
+            useCase.selectGroup(0)
 
             assertTrue(selected.isEmpty())
         }
@@ -101,9 +99,6 @@ class DuplicatesUseCaseTest {
 
     @Test
     fun switchItemSelection() = runTest {
-        val useCase = duplicatesUseCase()
-        wait()
-
         useCase.switchItemSelection(0, FIRST_FILE)
         useCase.switchItemSelection(0, SECOND_FILE)
 
@@ -123,9 +118,6 @@ class DuplicatesUseCaseTest {
 
     @Test
     fun isItemSelected() = runTest{
-        val useCase = duplicatesUseCase()
-        wait()
-
         useCase.switchItemSelection(0, FIRST_FILE)
         assertTrue(useCase.isItemSelected(0 , FIRST_FILE))
 
@@ -135,58 +127,47 @@ class DuplicatesUseCaseTest {
 
     @Test
     fun navigate() = runTest{
-        val useCase = duplicatesUseCase()
-
         Destination.values().forEach {
             useCase.navigate(it)
             assertEquals(it, state.destination)
         }
-
     }
 
 
     @Test
-    fun unite() = runTest{
-        val destination = "gallery"
+    fun uniteSelected() = runTest{
+        val folderForUnited = "gallery"
+        mockFilesCalls(folderForUnited)
 
-        val useCase = duplicatesUseCase()
-        wait()
+        val useCase = createDuplicatesUseCase()
+        waitCoroutines()
 
-        useCase.switchGroupSelection(0)
+        useCase.selectGroup(0)
+
+        useCase.uniteSelected()
+
+        assertEquals(Destination.UniteProgress, state.destination)
+        waitCoroutines()
+        assertEquals(Destination.Inter, state.destination)
+
+        coVerify { files.copy(FIRST_FILE, folderForUnited) }
+        coVerify { files.delete(FIRST_FILE) }
+        coVerify { files.delete(SECOND_FILE) }
+    }
+
+    private fun mockFilesCalls(destination: String) {
         every { files.folderForUnited() } returns destination
 
-        mockAndVerify(
-            returned = Unit,
-            mocked = arrayOf(
-                { files.copy(FIRST_FILE, destination) },
-                { files.delete(FIRST_FILE) },
-                { files.delete(SECOND_FILE) }
-            ),
-            action = {
-                useCase.unite()
-                wait()
-            }
-        )
+        coEvery { files.copy(FIRST_FILE, destination) } returns Unit
+        coEvery { files.delete(FIRST_FILE) } returns Unit
+        coEvery { files.delete(SECOND_FILE) } returns Unit
     }
 
-    private fun <T> mockAndVerify(
-        mocked: Array<suspend () -> T>,
-        action: () -> T,
-        returned: T
-    ){
-        mocked.forEach { coEvery { it() } returns returned }
-
-        action()
-
-        mocked.forEach { coVerify { it() } }
-    }
-
-
-    private suspend fun TestScope.duplicatesUseCase(): DuplicatesUseCase {
+    private suspend fun TestScope.createDuplicatesUseCase(stateHolder: MutableStateHolder = state): DuplicatesUseCase {
         coEvery { files.getImages() } returns listOf(ImageInfo(FIRST_FILE), ImageInfo(SECOND_FILE)).also { delay(50) }
 
         return DuplicatesUseCase(
-            state = state,
+            state = stateHolder,
             files = files,
             imagesComparator = imagesComparator(),
             permissions = permissions,
@@ -201,7 +182,7 @@ class DuplicatesUseCaseTest {
         }
     }
 
-    private fun TestScope.wait(){
+    private fun TestScope.waitCoroutines(){
         advanceUntilIdle()
     }
 

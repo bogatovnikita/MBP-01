@@ -133,6 +133,13 @@ class DuplicatesUseCase(
         }
     }
 
+    fun continueUniting(){
+        state.destination = Destination.List
+    }
+
+    fun completeUniting(){
+        state.destination = Destination.DoneAll
+    }
 
     private fun async(action: suspend () -> Unit){
         coroutineScope.launch(coroutineContext) { action() }

@@ -167,6 +167,12 @@ class DuplicatesUseCaseTest {
         coVerify { duplicateRemover.invoke(state.duplicatesList) }
     }
 
+    private fun TestScope.assertUniteNavigation() {
+        assertEquals(Destination.UniteProgress, state.destination)
+        waitCoroutines()
+        assertEquals(Destination.Inter, state.destination)
+    }
+
     @Test
     fun `closeInter with group selection`() = runTest{
         useCase.switchGroupSelection(0)
@@ -193,11 +199,19 @@ class DuplicatesUseCaseTest {
         assertEquals(Destination.DoneAll, state.destination)
     }
 
-    private fun TestScope.assertUniteNavigation() {
-        assertEquals(Destination.UniteProgress, state.destination)
-        waitCoroutines()
-        assertEquals(Destination.Inter, state.destination)
+    @Test
+    fun continueUniting(){
+        useCase.continueUniting()
+        assertEquals(Destination.List, state.destination)
     }
+
+    @Test
+    fun completeUniting() {
+        useCase.completeUniting()
+        assertEquals(Destination.DoneAll, state.destination)
+    }
+
+
 
     private suspend fun createDuplicatesUseCase(stateHolder: MutableStateHolder = state): DuplicatesUseCase {
         coEvery { files.getImages() } returns listOf(ImageInfo(FIRST_FILE), ImageInfo(SECOND_FILE)).also { delay(50) }

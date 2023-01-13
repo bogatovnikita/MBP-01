@@ -11,14 +11,13 @@ import kotlinx.coroutines.test.*
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import yin_kio.duplicates.domain.use_cases.DuplicateRemover
 import yin_kio.duplicates.domain.gateways.Files
 import yin_kio.duplicates.domain.gateways.ImagesComparator
 import yin_kio.duplicates.domain.gateways.Permissions
 import yin_kio.duplicates.domain.models.Destination
 import yin_kio.duplicates.domain.models.ImageInfo
 import yin_kio.duplicates.domain.models.MutableStateHolder
-import yin_kio.duplicates.domain.models.UniteWay
+import yin_kio.duplicates.domain.use_cases.DuplicateRemover
 import yin_kio.duplicates.domain.use_cases.DuplicatesUseCase
 
 
@@ -95,12 +94,10 @@ class DuplicatesUseCaseTest {
         state.apply {
             assertTrue(selected.isNotEmpty())
             assertTrue(selected[0]!!.containsAll(duplicatesList[0]))
-            assertEquals(UniteWay.Selected, uniteWay)
 
             useCase.switchGroupSelection(0)
 
             assertTrue(selected.isEmpty())
-            assertEquals(UniteWay.All, uniteWay)
         }
     }
 
@@ -110,7 +107,6 @@ class DuplicatesUseCaseTest {
         useCase.switchItemSelection(0, SECOND_FILE)
 
         state.apply {
-            assertEquals(UniteWay.Selected, uniteWay)
             assertTrue(selected[0]!!.containsAll(duplicatesList[0]))
 
             useCase.switchItemSelection(0, FIRST_FILE)
@@ -122,7 +118,6 @@ class DuplicatesUseCaseTest {
 
             assertNull(selected[0])
             assertTrue(selected.isEmpty())
-            assertEquals(UniteWay.All, uniteWay)
         }
     }
 
@@ -173,8 +168,29 @@ class DuplicatesUseCaseTest {
     }
 
     @Test
-    fun closeInter(){
-        assertTrue(false)
+    fun `closeInter with group selection`() = runTest{
+        useCase.switchGroupSelection(0)
+        useCase.unite()
+        waitCoroutines()
+        useCase.closeInter()
+        assertEquals(Destination.DoneSelected, state.destination)
+    }
+
+    @Test
+    fun `closeInter with item selection`() = runTest{
+        useCase.switchItemSelection(0, FIRST_FILE)
+        useCase.unite()
+        waitCoroutines()
+        useCase.closeInter()
+        assertEquals(Destination.DoneSelected, state.destination)
+    }
+
+    @Test
+    fun `closeInter without selection`() = runTest(dispatcher){
+        useCase.unite()
+        waitCoroutines()
+        useCase.closeInter()
+        assertEquals(Destination.DoneAll, state.destination)
     }
 
     private fun TestScope.assertUniteNavigation() {

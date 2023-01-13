@@ -5,6 +5,6 @@ enum class Destination {
     List,
     UniteProgress,
     Inter,
-    AskContinue,
-    Done
+    DoneSelected,
+    DoneAll
 }

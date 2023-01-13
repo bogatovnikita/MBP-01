@@ -68,8 +68,6 @@ class DuplicatesUseCase(
             selected.remove(index)
         }
 
-        uniteWay = selectUniteWay()
-
         update()
     }
 
@@ -87,7 +85,6 @@ class DuplicatesUseCase(
 
             if (group?.isEmpty() == true) selected.remove(groupIndex)
         }
-        uniteWay = selectUniteWay()
 
         update()
     }
@@ -126,6 +123,14 @@ class DuplicatesUseCase(
             UniteWay.All -> state.duplicatesList
         }
         return forUniting
+    }
+
+
+    fun closeInter(){
+        state.destination = when(state.uniteWay){
+            UniteWay.Selected -> Destination.DoneSelected
+            UniteWay.All -> Destination.DoneAll
+        }
     }
 
 

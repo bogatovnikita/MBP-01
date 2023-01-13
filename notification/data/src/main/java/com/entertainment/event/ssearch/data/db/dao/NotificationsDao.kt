@@ -1,24 +1,25 @@
 package com.entertainment.event.ssearch.data.db.dao
 
 import androidx.room.*
-import com.entertainment.event.ssearch.data.db.entity.NotificationEntity
+import com.entertainment.event.ssearch.data.db.entity.Notification
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface NotificationsDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun write(notification: NotificationEntity)
+    suspend fun insert(notification: Notification)
 
-    @Query("SELECT * FROM NotificationEntity")
-    fun readAll() : List<NotificationEntity>
+    @Query("SELECT * FROM notification_table")
+    suspend fun readAll() : Flow<List<Notification>>
 
-    @Query("DELETE FROM NotificationEntity WHERE packageName = :packageName AND body = :body")
-    fun delete(packageName: String, body: String)
+    @Query("DELETE FROM notification_table WHERE notificationId = :notificationId")
+    suspend fun delete(notificationId: Int)
 
-    @Query("SELECT COUNT(*) FROM NotificationEntity WHERE packageName = :packageName")
-    fun notificationsCount(packageName: String) : Int
+    @Query("DELETE FROM notification_table")
+    suspend fun deleteAll()
 
     @Update
-    fun update(notificationEntity: NotificationEntity)
+    suspend fun update(notification: Notification)
 
 }

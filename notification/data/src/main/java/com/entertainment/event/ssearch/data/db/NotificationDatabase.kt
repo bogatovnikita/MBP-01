@@ -1,45 +1,26 @@
 package com.entertainment.event.ssearch.data.db
 
-import android.content.Context
 import androidx.room.Database
-import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.entertainment.event.ssearch.data.db.dao.AppNotificationsSwitchedDao
+import com.entertainment.event.ssearch.data.db.dao.AppDao
+import com.entertainment.event.ssearch.data.db.dao.AppWithNotificationsDao
 import com.entertainment.event.ssearch.data.db.dao.NotificationsDao
-import com.entertainment.event.ssearch.data.db.entity.AppNotificationsSwitchedEntity
-import com.entertainment.event.ssearch.data.db.entity.NotificationEntity
+import com.entertainment.event.ssearch.data.db.entity.App
+import com.entertainment.event.ssearch.data.db.entity.Notification
 
 
-private const val DB_NOTIFICATION_NAME = "notification_database"
+const val DB_NOTIFICATION_NAME = "notification_database"
 
 @Database(entities = [
-    NotificationEntity::class,
-    AppNotificationsSwitchedEntity::class,
+    Notification::class,
+    App::class,
  ], version = 1)
 abstract class NotificationDatabase : RoomDatabase() {
 
     abstract fun notificationsDao(): NotificationsDao
 
-    abstract fun appNotificationSwitchedDao(): AppNotificationsSwitchedDao
+    abstract fun appDao(): AppDao
 
-    companion object {
-
-        private var notificationDatabase: NotificationDatabase? = null
-
-        fun create(context: Context): NotificationDatabase {
-
-            return if (notificationDatabase == null) {
-                notificationDatabase = Room.databaseBuilder(
-                    context,
-                    NotificationDatabase::class.java,
-                    DB_NOTIFICATION_NAME
-                ).build()
-                notificationDatabase!!
-            } else {
-                notificationDatabase!!
-            }
-
-        }
-    }
+    abstract fun appWithNotificationsDao(): AppWithNotificationsDao
 
 }

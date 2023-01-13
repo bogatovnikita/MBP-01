@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.hedgehog.presentation.R
 import com.hedgehog.presentation.base.BaseFragment
 import com.hedgehog.presentation.databinding.FragmentFirstScreenTimeBinding
-import com.hedgehog.presentation.models.AppScreenTimeListItems
+import com.hedgehog.presentation.models.AppScreenTime
 import com.hedgehog.presentation.models.CalendarScreenTime
 import com.hedgehog.presentation.ui.adapters.ScreenTimeAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -43,14 +43,26 @@ class FirstScreenTimeFragment :
     private fun initRecyclerView() {
         adapter = ScreenTimeAdapter(
             object : ScreenTimeAdapter.Listener {
-                override fun onChooseNote(item: AppScreenTimeListItems) {
+                override fun onChooseNote(item: AppScreenTime) {
+                    if (viewModel.screenState.value.selectionMode) return
                     Toast.makeText(requireContext(), item.name, Toast.LENGTH_SHORT).show()
                 }
 
-                override fun onToggle(item: AppScreenTimeListItems) {
-                    viewModel.toggleSelection(item)
+                override fun onToggle(item: AppScreenTime) {
+                    if (!item.isItSystemApp) {
+                        viewModel.toggleCheckBox(item)
+                    } else {
+                        Toast.makeText(
+                            requireContext(),
+                            R.string.delete_system_app,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                    binding.checkbox.isChecked =
+                        (viewModel.screenState.value.listDataScreenTime.size - viewModel.screenState.value.systemCheckedCount) == viewModel.screenState.value.totalCheckedCount
                 }
-            })
+            }, viewModel.screenState.value.selectionMode
+        )
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.adapter = adapter
     }
@@ -65,19 +77,29 @@ class FirstScreenTimeFragment :
 
     private fun renderState(state: FirstScreenTimeState) {
         if (!state.isLoading) return
-        adapter.submitList(state.appScreenTimeListItems)
+        adapter.submitList(state.listDataScreenTime)
         initDate()
         binding.reverseStatistics.isSelected = viewModel.screenState.value.reverseListAppScreenTime
     }
 
     private fun initClickListeners() {
+        binding.checkbox.setOnClickListener {
+            if (viewModel.screenState.value.totalCheckedCount == viewModel.screenState.value.listDataScreenTime.size - viewModel.screenState.value.systemCheckedCount) {
+                viewModel.cleanToggleCheckBox()
+            } else {
+                viewModel.selectAll()
+            }
+        }
+        binding.deleteApp.setOnClickListener { }
         binding.selectedMode.setOnClickListener {
             selectedMode(it)
         }
+
         binding.reverseStatistics.setOnClickListener {
             viewModel.reverseList()
             it.isSelected = viewModel.screenState.value.reverseListAppScreenTime
         }
+
         binding.backgroundArrowLeft.setOnClickListener {
             choiceLeftArrow()
         }
@@ -99,10 +121,13 @@ class FirstScreenTimeFragment :
     }
 
     private fun selectedMode(it: View) {
+        viewModel.cleanToggleCheckBox()
         viewModel.selectedMode()
         it.isSelected = viewModel.screenState.value.selectionMode
         binding.groupCheckbox.isVisible = viewModel.screenState.value.selectionMode
         binding.groupChoiceDate.isVisible = !viewModel.screenState.value.selectionMode
+        binding.checkbox.isChecked = false
+        initRecyclerView()
     }
 
     private fun choiceLeftArrow() {

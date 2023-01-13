@@ -9,5 +9,6 @@
     <string name="change_all">Выбрать все</string>
     <string name="stop_app">Принудительная остановка</string>
     <string name="delete">Удалить</string>
+    <string name="delete_system_app">Это приложение нельзя удалить, оно обеспечивает нормальную работу вашего телефона</string>
 
 </resources>

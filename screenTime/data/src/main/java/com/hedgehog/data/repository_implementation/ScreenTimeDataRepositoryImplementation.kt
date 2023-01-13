@@ -72,6 +72,7 @@ class ScreenTimeDataRepositoryImplementation @Inject constructor(@ApplicationCon
     }
 
     private fun appScreenTime(it: UsageStats) = AppScreenTime(
+        packageName = it.packageName,
         name = getAppLabel(it).toString(),
         time = mapTimeToString(it.totalTimeInForeground),
         icon = getAppIcon(it),
@@ -99,11 +100,9 @@ class ScreenTimeDataRepositoryImplementation @Inject constructor(@ApplicationCon
 
     private fun checkIsSystemApp(it: UsageStats) = try {
         context.packageManager.getApplicationInfo(
-            it.packageName,
-            0
+            it.packageName, 0
         ).flags and ApplicationInfo.FLAG_SYSTEM != 0 || context.packageManager.getApplicationInfo(
-            it.packageName,
-            0
+            it.packageName, 0
         ).flags and ApplicationInfo.FLAG_UPDATED_SYSTEM_APP != 0
     } catch (e: Exception) {
         true

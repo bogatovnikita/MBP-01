@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fitsSystemWindows="true"
-        android:background="@color/white">
+        android:background="@color/white"
+        android:fitsSystemWindows="true">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
@@ -26,7 +25,7 @@
                 <ImageView
                     android:id="@+id/btn_go_back"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_15sdp"
                     android:background="@drawable/ic_arrow_back"
                     app:layout_constraintBottom_toBottomOf="@+id/tv_title"
@@ -37,16 +36,273 @@
                     android:id="@+id/tv_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Менеджер уведомлений"
-                    android:textSize="@dimen/_19ssp"
-                    android:textColor="@color/dark_blue"
                     android:layout_marginTop="@dimen/_24sdp"
                     android:fontFamily="@font/golos_text_bold"
+                    android:text="@string/notification_manager_title"
+                    android:textColor="@color/dark_blue"
+                    android:textSize="@dimen/_19ssp"
                     android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/btn_go_back"
                     app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_settings"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_27sdp"
+                    android:layout_marginStart="@dimen/_12sdp"
+                    android:layout_marginTop="@dimen/_20sdp"
+                    android:layout_marginEnd="@dimen/_3sdp"
+                    android:background="@drawable/bg_button_full_green"
+                    android:fontFamily="@font/golos_text_demibold"
+                    android:text="@string/notification_manager_settings"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_9ssp"
+                    app:layout_constraintEnd_toStartOf="@id/btn_missed_notifications"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_title" />
+
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_missed_notifications"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_27sdp"
+                    android:layout_marginStart="@dimen/_3sdp"
+                    android:layout_marginTop="@dimen/_20sdp"
+                    android:layout_marginEnd="@dimen/_12sdp"
+                    android:background="@drawable/bg_button_green_stroke"
+                    android:fontFamily="@font/golos_text_demibold"
+                    android:text="@string/notification_manager_missed_notifications"
+                    android:textAllCaps="false"
+                    android:textColor="@color/green"
+                    android:textSize="@dimen/_9ssp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/btn_settings"
+                    app:layout_constraintTop_toBottomOf="@id/tv_title" />
+
+                <TextView
+                    android:id="@+id/tv_do_not_disturb"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_12sdp"
+                    android:layout_marginTop="@dimen/_13sdp"
+                    android:fontFamily="@font/golos_text_bold"
+                    android:text="@string/notification_manager_do_not_disturb"
+                    android:textColor="@color/green"
+                    android:textSize="@dimen/_16ssp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/btn_settings" />
+
+                <TextView
+                    android:id="@+id/tv_description_disturb"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_12sdp"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:fontFamily="@font/golos_text_regular"
+                    android:text="@string/notification_manager_description_distrub"
+                    android:textColor="@color/gray"
+                    android:textSize="@dimen/_10ssp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_do_not_disturb" />
+
+                <ImageView
+                    android:id="@+id/im_moon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_19sdp"
+                    android:layout_marginTop="@dimen/_11sdp"
+                    android:background="@drawable/ic_moon"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_description_disturb" />
+
+                <TextView
+                    android:id="@+id/tv_dont_disturb"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_6sdp"
+                    android:fontFamily="@font/golos_text_bold"
+                    android:text="@string/notification_manager_do_not_disturb"
+                    android:textColor="@color/dark_blue"
+                    android:textSize="@dimen/_11ssp"
+                    app:layout_constraintBottom_toBottomOf="@+id/im_moon"
+                    app:layout_constraintStart_toEndOf="@+id/im_moon"
+                    app:layout_constraintTop_toTopOf="@+id/im_moon"
+                    app:layout_constraintVertical_bias="1.0" />
+
+                <Switch
+                    android:id="@+id/switch_do_not_disturb"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/_21sdp"
+                    android:thumb="@drawable/thumb_selector"
+                    android:track="@drawable/track_selector"
+                    app:layout_constraintBottom_toBottomOf="@+id/im_moon"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/im_moon" />
+
+                <View
+                    android:id="@+id/separation_line"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/_7sdp"
+                    android:background="@color/gray"
+                    app:layout_constraintEnd_toEndOf="@id/switch_do_not_disturb"
+                    app:layout_constraintStart_toStartOf="@+id/im_moon"
+                    app:layout_constraintTop_toBottomOf="@id/im_moon" />
+
+                <ImageView
+                    android:id="@+id/im_watch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_19sdp"
+                    android:layout_marginTop="@dimen/_4sdp"
+                    android:background="@drawable/ic_watch"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/separation_line" />
+
+                <TextView
+                    android:id="@+id/tv_add_timetable"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_6sdp"
+                    android:fontFamily="@font/golos_text_bold"
+                    android:text="@string/notification_manager_add_timetable"
+                    android:textColor="@color/dark_blue"
+                    android:textSize="@dimen/_11ssp"
+                    app:layout_constraintBottom_toBottomOf="@+id/im_watch"
+                    app:layout_constraintStart_toEndOf="@+id/im_watch"
+                    app:layout_constraintTop_toTopOf="@+id/im_watch" />
+
+                <TextView
+                    android:id="@+id/tv_time_disturb"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_6sdp"
+                    android:fontFamily="@font/golos_text_bold"
+                    android:text="23:00-8:00"
+                    android:textColor="@color/dark_blue"
+                    android:textSize="@dimen/_11ssp"
+                    app:layout_constraintStart_toEndOf="@+id/im_watch"
+                    app:layout_constraintTop_toTopOf="@+id/im_watch" />
+
+                <TextView
+                    android:id="@+id/tv_day_of_week"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_6sdp"
+                    android:fontFamily="@font/golos_text_regular"
+                    android:text="Еженедельно (Пн, Вт, Ср, Чт, Пт, Сб, Вс)"
+                    android:textColor="@color/gray"
+                    android:textSize="@dimen/_9ssp"
+                    app:layout_constraintBottom_toBottomOf="@id/im_watch"
+                    app:layout_constraintStart_toEndOf="@+id/im_watch" />
+
+                <TextView
+                    android:id="@+id/tv_mode_disturb_on"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/_5sdp"
+                    android:fontFamily="@font/golos_text_regular"
+                    android:text="Вкл."
+                    android:textColor="@color/green"
+                    android:textSize="@dimen/_9ssp"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="@id/btn_open_timetable"
+                    app:layout_constraintEnd_toStartOf="@id/btn_open_timetable"
+                    app:layout_constraintTop_toTopOf="@+id/btn_open_timetable" />
+
+                <TextView
+                    android:id="@+id/tv_mode_disturb_off"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/_5sdp"
+                    android:fontFamily="@font/golos_text_regular"
+                    android:text="Выкл."
+                    android:textColor="@color/red"
+                    android:textSize="@dimen/_9ssp"
+                    app:layout_constraintBottom_toBottomOf="@id/btn_open_timetable"
+                    app:layout_constraintEnd_toStartOf="@id/btn_open_timetable"
+                    app:layout_constraintTop_toTopOf="@+id/btn_open_timetable" />
+
+                <androidx.constraintlayout.widget.Group
+                    android:id="@+id/group_disturb_on"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:constraint_referenced_ids="tv_time_disturb, tv_day_of_week, tv_mode_disturb_off, tv_mode_disturb_on" />
+
+                <ImageView
+                    android:id="@+id/btn_open_timetable"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ic_open_timetable"
+                    app:layout_constraintBottom_toBottomOf="@+id/im_watch"
+                    app:layout_constraintEnd_toEndOf="@+id/switch_do_not_disturb"
+                    app:layout_constraintStart_toStartOf="@+id/switch_do_not_disturb"
+                    app:layout_constraintTop_toTopOf="@+id/im_watch" />
+
+                <TextView
+                    android:id="@+id/tv_clear_notifications"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_12sdp"
+                    android:layout_marginTop="@dimen/_16sdp"
+                    android:fontFamily="@font/golos_text_bold"
+                    android:text="@string/notification_manager_clear_notification"
+                    android:textColor="@color/green"
+                    android:textSize="@dimen/_16ssp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/im_watch" />
+
+                <TextView
+                    android:id="@+id/tv_description_clear_notifications"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_12sdp"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:fontFamily="@font/golos_text_regular"
+                    android:text="@string/notification_manager_desc_clear_notifications"
+                    android:textColor="@color/gray"
+                    android:textSize="@dimen/_10ssp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_clear_notifications" />
+
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_clear_notifications"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_42sdp"
+                    android:layout_marginHorizontal="@dimen/_27sdp"
+                    android:layout_marginTop="@dimen/_12sdp"
+                    android:background="@drawable/bg_button_blue_stroke"
+                    android:fontFamily="@font/golos_text_bold"
+                    android:text="@string/notification_manager_clear_notofications"
+                    android:textAllCaps="false"
+                    android:textColor="@color/dark_blue"
+                    android:textSize="@dimen/_13sdp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_description_clear_notifications" />
+
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_notifications_cleared"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_42sdp"
+                    android:layout_marginHorizontal="@dimen/_27sdp"
+                    android:layout_marginTop="@dimen/_12sdp"
+                    android:background="@drawable/bg_button_blue_stroke"
+                    android:fontFamily="@font/golos_text_bold"
+                    android:text="@string/notification_manager_notifications_cleared"
+                    android:textAllCaps="false"
+                    android:textColor="@color/gray"
+                    android:textSize="@dimen/_13sdp"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_description_clear_notifications" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -61,24 +317,67 @@
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
         <TextView
-            android:id="@+id/text_view_list_sha"
+            android:id="@+id/tv_application_limitations"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="17sp"
-            android:text="sdfa"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            android:layout_marginStart="14dp"
-            android:layout_marginTop="12dp"/>
+            android:layout_marginStart="@dimen/_12sdp"
+            android:layout_marginTop="@dimen/_16sdp"
+            android:fontFamily="@font/golos_text_bold"
+            android:text="@string/notification_manager_applications_limitations"
+            android:textColor="@color/green"
+            android:textSize="@dimen/_16ssp" />
+
+        <TextView
+            android:id="@+id/tv_description_application_limitations"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_12sdp"
+            android:layout_marginTop="@dimen/_3sdp"
+            android:fontFamily="@font/golos_text_regular"
+            android:text="@string/notification_manager_desc_app_limitations"
+            android:textColor="@color/gray"
+            android:textSize="@dimen/_10ssp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_clear_notifications" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_limit_all_application"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="@dimen/_6sdp"
+                android:layout_marginEnd="@dimen/_7sdp"
+                android:fontFamily="@font/golos_text_regular"
+                android:text="@string/notification_manager_limit_all_apps"
+                android:textColor="@color/dark_blue"
+                android:textSize="@dimen/_11ssp" />
+
+            <Switch
+                android:id="@+id/switch_limit_all_application"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginEnd="@dimen/_21sdp"
+                android:checked="false"
+                android:thumb="@drawable/thumb_selector"
+                android:track="@drawable/track_selector" />
+
+        </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_view_sha"
-            android:layout_marginTop="8dp"
+            android:id="@+id/recycler_view_notification"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/_6sdp"
+            tools:itemCount="10"
+            tools:listitem="@layout/item_app" />
 
     </LinearLayout>
-
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

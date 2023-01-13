@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.missed_notifications.MissedNotificationsFragment">
+
+
+    <ImageView
+        android:id="@+id/btn_go_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_15sdp"
+        android:background="@drawable/ic_arrow_back"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tv_title" />
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_24sdp"
+        android:fontFamily="@font/golos_text_bold"
+        android:text="@string/notification_manager_title"
+        android:textColor="@color/dark_blue"
+        android:textSize="@dimen/_19ssp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/btn_go_back"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_settings"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_27sdp"
+        android:layout_marginStart="@dimen/_12sdp"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:layout_marginEnd="@dimen/_3sdp"
+        android:background="@drawable/bg_button_green_stroke"
+        android:fontFamily="@font/golos_text_demibold"
+        android:text="@string/notification_manager_settings"
+        android:textAllCaps="false"
+        android:textColor="@color/green"
+        android:textSize="@dimen/_9ssp"
+        app:layout_constraintEnd_toStartOf="@id/btn_missed_notifications"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_title" />
+
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_missed_notifications"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_27sdp"
+        android:layout_marginStart="@dimen/_3sdp"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:layout_marginEnd="@dimen/_12sdp"
+        android:background="@drawable/bg_button_full_green"
+        android:fontFamily="@font/golos_text_demibold"
+        android:text="@string/notification_manager_missed_notifications"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_9ssp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/btn_settings"
+        app:layout_constraintTop_toBottomOf="@id/tv_title" />
+
+    <ImageView
+        android:id="@+id/iv_empty_notifications"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_empty_notifications"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.4" />
+
+    <TextView
+        android:id="@+id/tv_empty_notifications"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_20sdp"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:fontFamily="@font/golos_text_regular"
+        android:gravity="center_horizontal"
+        android:text="Здесь будут появляться уведомления\nот приложений, которые вы ограничили\nв настройках\n\nПока уведомлений нет"
+        android:textColor="@color/gray"
+        android:textSize="@dimen/_10ssp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/iv_empty_notifications" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group_empty_notifications"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="iv_empty_notifications, tv_empty_notifications" />
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/btn_clean_notifications"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_6sdp"
+        android:background="@drawable/bg_button_clean_grey"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingVertical="@dimen/_5sdp"
+        app:layout_constraintEnd_toEndOf="@+id/btn_missed_notifications"
+        app:layout_constraintTop_toBottomOf="@+id/btn_missed_notifications">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/_9sdp"
+            android:fontFamily="@font/golos_text_regular"
+            android:text="@string/notification_manager_clear_all"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_9ssp" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/_5sdp"
+            android:background="@drawable/ic_white_cross" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/_3sdp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_clean_notifications"
+        tools:listitem="@layout/item_notification" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

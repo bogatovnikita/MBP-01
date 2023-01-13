@@ -1,5 +1,18 @@
 <resources>
     <string name="app_name">presentation</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="notification_manager_title">Менеджер уведомлений</string>
+    <string name="notification_manager_settings">Настройки</string>
+    <string name="notification_manager_missed_notifications">Пропущенные\nуведомления</string>
+    <string name="notification_manager_do_not_disturb">Не беспокоить</string>
+    <string name="notification_manager_description_distrub">Вы можете включить режим “не беспокоить” или\nнастроить его автоматическое включение</string>
+    <string name="notification_manager_add_timetable">Добавить расписание</string>
+    <string name="notification_manager_clear_notification">Очистить шторку</string>
+    <string name="notification_manager_desc_clear_notifications">Единоразово удалите все уведомления из шторки</string>
+    <string name="notification_manager_clear_notofications">Удалить все уведомления</string>
+    <string name="notification_manager_applications_limitations">Ограничения приложений</string>
+    <string name="notification_manager_desc_app_limitations">Выберете приложения, от которых не хотите получать\nуведомления в шторку и они не будут вас беспокоить,\nпросмотреть их можно во вкладке “Пропущенные уведмления</string>
+    <string name="notification_manager_limit_all_apps">Ограничить все</string>
+    <string name="notification_maneger_count_notifications">Пропущенно уведомлений: %s</string>
+    <string name="notification_manager_notifications_cleared">Уведомления удалены</string>
+    <string name="notification_manager_clear_all">Очистить все</string>
 </resources>

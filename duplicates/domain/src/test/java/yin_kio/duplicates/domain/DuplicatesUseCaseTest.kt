@@ -18,7 +18,7 @@ import yin_kio.duplicates.domain.models.Destination
 import yin_kio.duplicates.domain.models.ImageInfo
 import yin_kio.duplicates.domain.models.MutableStateHolder
 import yin_kio.duplicates.domain.use_cases.DuplicateRemover
-import yin_kio.duplicates.domain.use_cases.DuplicatesUseCase
+import yin_kio.duplicates.domain.use_cases.DuplicatesUseCaseImpl
 
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -29,7 +29,7 @@ class DuplicatesUseCaseTest {
     private val coroutineScope = CoroutineScope(dispatcher)
     private lateinit var files: Files
     private lateinit var permissions: Permissions
-    private lateinit var useCase: DuplicatesUseCase
+    private lateinit var useCase: DuplicatesUseCaseImpl
     private lateinit var duplicateRemover: DuplicateRemover
 
     @BeforeEach
@@ -37,7 +37,7 @@ class DuplicatesUseCaseTest {
         files = mockk()
         permissions = mockk()
         duplicateRemover = mockk()
-        state = MutableStateHolder(coroutineScope)
+        state = MutableStateHolder(coroutineScope, dispatcher)
 
         every { permissions.hasStoragePermissions } returns true
         useCase = createDuplicatesUseCase()
@@ -46,7 +46,7 @@ class DuplicatesUseCaseTest {
 
     @Test
     fun `init with has permission`() = runTest(dispatcher){
-        val state = MutableStateHolder(this)
+        val state = MutableStateHolder(this, coroutineContext)
         createDuplicatesUseCase(stateHolder = state)
         state.apply {
             assertTrue(duplicatesList.isEmpty())
@@ -111,8 +111,8 @@ class DuplicatesUseCaseTest {
 
             useCase.switchItemSelection(0, FIRST_FILE)
 
-            assertFalse(selected[0]!!.contains(ImageInfo(FIRST_FILE)))
-            assertTrue(selected[0]!!.contains(ImageInfo(SECOND_FILE)))
+            assertFalse(isItemSelected(0, FIRST_FILE))
+            assertTrue(isItemSelected(0, SECOND_FILE))
 
             useCase.switchItemSelection(0, SECOND_FILE)
 
@@ -121,14 +121,7 @@ class DuplicatesUseCaseTest {
         }
     }
 
-    @Test
-    fun isItemSelected() = runTest{
-        useCase.switchItemSelection(0, FIRST_FILE)
-        assertTrue(useCase.isItemSelected(0 , FIRST_FILE))
 
-        useCase.switchItemSelection(0, FIRST_FILE)
-        assertFalse(useCase.isItemSelected(0 , FIRST_FILE))
-    }
 
     @Test
     fun navigate() = runTest{
@@ -213,10 +206,10 @@ class DuplicatesUseCaseTest {
 
 
 
-    private suspend fun createDuplicatesUseCase(stateHolder: MutableStateHolder = state): DuplicatesUseCase {
+    private suspend fun createDuplicatesUseCase(stateHolder: MutableStateHolder = state): DuplicatesUseCaseImpl {
         coEvery { files.getImages() } returns listOf(ImageInfo(FIRST_FILE), ImageInfo(SECOND_FILE)).also { delay(50) }
 
-        return DuplicatesUseCase(
+        return DuplicatesUseCaseImpl(
             state = stateHolder,
             files = files,
             imagesComparator = imagesComparator(),

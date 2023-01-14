@@ -13,7 +13,7 @@ import yin_kio.duplicates.domain.models.MutableStateHolder
 import yin_kio.duplicates.domain.models.UniteWay
 import kotlin.coroutines.CoroutineContext
 
-class DuplicatesUseCase(
+internal class DuplicatesUseCaseImpl(
     private val state: MutableStateHolder,
     private val files: Files,
     private val imagesComparator: ImagesComparator,
@@ -21,14 +21,14 @@ class DuplicatesUseCase(
     private val coroutineScope: CoroutineScope,
     private val coroutineContext: CoroutineContext,
     private val duplicateRemover: DuplicateRemover
-) {
+) : DuplicateUseCase{
 
 
     init {
         updateFiles()
     }
 
-    fun updateFiles() = async {
+    override fun updateFiles() = async {
         updateFilesSynchronously()
     }
 
@@ -37,11 +37,11 @@ class DuplicatesUseCase(
 
 
         isInProgress = true
-        update()
         delay(1)
+        update()
 
-        isInProgress = false
         duplicatesList = getDuplicates()
+        isInProgress = false
 
         update()
     }
@@ -59,7 +59,7 @@ class DuplicatesUseCase(
     private suspend fun getDuplicates() = files.getImages().findDuplicates(imagesComparator)
 
 
-    fun switchGroupSelection(index: Int) = with(state){
+    override fun switchGroupSelection(index: Int) = with(state){
         if (selected[index] == null) {
             val set = mutableSetOf<ImageInfo>()
             set.addAll(duplicatesList[index])
@@ -72,7 +72,7 @@ class DuplicatesUseCase(
     }
 
 
-    fun switchItemSelection(groupIndex: Int, path: String) = with(state){
+    override fun switchItemSelection(groupIndex: Int, path: String) = with(state){
         val item = duplicatesList[groupIndex].find { it.path == path }
 
         item?.also {
@@ -96,17 +96,12 @@ class DuplicatesUseCase(
         }
     }
 
-
-    fun isItemSelected(groupIndex: Int, path: String) : Boolean{
-        return state.selected[groupIndex]?.contains(ImageInfo(path)) ?: false
-    }
-
-    fun navigate(destination: Destination){
+    override fun navigate(destination: Destination){
         state.destination = destination
         state.update()
     }
 
-    fun unite(){
+    override fun unite(){
         navigate(Destination.UniteProgress)
         async {
             state.apply {
@@ -126,18 +121,18 @@ class DuplicatesUseCase(
     }
 
 
-    fun closeInter(){
+    override fun closeInter(){
         state.destination = when(state.uniteWay){
             UniteWay.Selected -> Destination.DoneSelected
             UniteWay.All -> Destination.DoneAll
         }
     }
 
-    fun continueUniting(){
+    override fun continueUniting(){
         state.destination = Destination.List
     }
 
-    fun completeUniting(){
+    override fun completeUniting(){
         state.destination = Destination.DoneAll
     }
 

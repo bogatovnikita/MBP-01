@@ -22,7 +22,7 @@ fun List<com.entertainment.event.ssearch.data.db.entity.Notification>.mapToNotif
 fun List<AppWithNotifications>.mapToAppDomain() = this.map { appWithNotifications ->
     AppDomain(
         packageName = appWithNotifications.app.packageName,
-        list = appWithNotifications.notifications.mapToNotificationDomain(),
+        listNotifications = appWithNotifications.notifications.mapToNotificationDomain(),
         isSwitched = appWithNotifications.app.isSwitched
     )
 }

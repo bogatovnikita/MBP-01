@@ -5,6 +5,7 @@ import android.service.notification.StatusBarNotification
 import com.entertainment.event.ssearch.data.db.entity.App
 import com.entertainment.event.ssearch.data.db.entity.AppWithNotifications
 import com.entertainment.event.ssearch.domain.models.AppDomain
+import com.entertainment.event.ssearch.domain.models.AppWithNotificationsDomain
 import com.entertainment.event.ssearch.domain.models.NotificationDomain
 
 
@@ -20,7 +21,7 @@ fun List<com.entertainment.event.ssearch.data.db.entity.Notification>.mapToNotif
     }
 
 fun List<AppWithNotifications>.mapToAppDomain() = this.map { appWithNotifications ->
-    AppDomain(
+    AppWithNotificationsDomain(
         packageName = appWithNotifications.app.packageName,
         listNotifications = appWithNotifications.notifications.mapToNotificationDomain(),
         isSwitched = appWithNotifications.app.isSwitched
@@ -36,6 +37,11 @@ fun StatusBarNotification.mapToNotification() =
     )
 
 fun AppDomain.mapToApp() = App(
-        packageName = packageName,
-        isSwitched = isSwitched
-    )
+    packageName = packageName,
+    isSwitched = isSwitched
+)
+
+fun App.mapToAppDomain() = AppDomain(
+    packageName = packageName,
+    isSwitched = isSwitched
+)

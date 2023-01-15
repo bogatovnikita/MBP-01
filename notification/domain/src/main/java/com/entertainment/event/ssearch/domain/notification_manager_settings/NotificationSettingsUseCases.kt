@@ -1,11 +1,15 @@
 package com.entertainment.event.ssearch.domain.notification_manager_settings
 
 import com.entertainment.event.ssearch.domain.mappers.mapToAppDomain
-import com.entertainment.event.ssearch.domain.models.AppDomain
+import com.entertainment.event.ssearch.domain.mappers.mapToAppWithEmptyNotifications
+import com.entertainment.event.ssearch.domain.models.AppWithNotificationsDomain
 import com.entertainment.event.ssearch.domain.providers.AppsProvider
 import com.entertainment.event.ssearch.domain.repositories.AppRepository
 import com.entertainment.event.ssearch.domain.repositories.AppWithNotificationsRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.count
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class NotificationSettingsUseCases @Inject constructor(
@@ -20,17 +24,15 @@ class NotificationSettingsUseCases @Inject constructor(
 
     fun getInfoAboutNotDisturbMode() {}
 
-    suspend fun updateApp(app: AppDomain) {
+    suspend fun updateApp(app: AppWithNotificationsDomain) {
         appRepo.setSwitched(app.packageName, app.isSwitched)
     }
 
-    suspend fun getAppsInfo(hasPermission: Boolean): Flow<List<AppDomain>> {
+    suspend fun getAppsInfo(hasPermission: Boolean): Flow<List<AppWithNotificationsDomain>> {
         return if (hasPermission) {
             appWithNotificationRepo.readAppsWithNotifications()
         } else {
-            val listApps = appsProvide.getSystemPackages() + appsProvide.getInstalledPackages()
-            appRepo.insertAll( listApps.mapToAppDomain())
-            appWithNotificationRepo.readAppsWithNotifications()
+            getOnlyApps()
         }
     }
 
@@ -44,6 +46,16 @@ class NotificationSettingsUseCases @Inject constructor(
                     }
                 }
             }
+        }
+    }
+
+    private suspend fun getOnlyApps(): Flow<List<AppWithNotificationsDomain>> {
+        return if (appRepo.readAll().count() == 0) {
+            val listApps = appsProvide.getSystemPackages() + appsProvide.getInstalledPackages()
+            appRepo.insertAll( listApps.mapToAppDomain())
+            appWithNotificationRepo.readAppsWithNotifications()
+        } else {
+            appRepo.readAll().map { apps -> apps.mapToAppWithEmptyNotifications() }
         }
     }
 

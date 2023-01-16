@@ -9,14 +9,14 @@ import yin_kio.file_utils.FileUtils
 import java.io.File
 
 internal class FilesImpl(
-    private val fileManager: FileUtils,
+    private val fileUtils: FileUtils,
     private val folders: Folders
 ) : Files {
 
     private val groups = FileGroups()
 
     override suspend fun getFiles(fileRequest: FileRequest): List<FileInfo> {
-        val allFiles = fileManager.getAllFiles(folders.root)
+        val allFiles = fileUtils.getAllFiles(folders.root)
 
         return when(fileRequest){
             FileRequest.AllFiles -> allFiles
@@ -60,6 +60,6 @@ internal class FilesImpl(
 
     override suspend fun delete(paths: List<String>) {
         val files = paths.map { File(it) }
-        fileManager.deleteFiles(files)
+        fileUtils.deleteFiles(files)
     }
 }

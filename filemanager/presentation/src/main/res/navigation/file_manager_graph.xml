@@ -23,7 +23,7 @@
     </fragment>
     <fragment
         android:id="@+id/permissionFragment"
-        android:name="yin_kio.file_manager.presentation.views.PermissionFragment"
+        android:name="yin_kio.file_manager.presentation.views.FileManagerPermissionFragment"
         android:label="PermissionFragment" />
     <dialog
         android:id="@+id/askDeleteDialog"

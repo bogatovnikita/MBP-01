@@ -38,10 +38,5 @@
     <string name="cancel">Отмена</string>
     <string name="file_search_progress">Идёт поиск файлов...</string>
     <string name="dialog_done_button">Супер!</string>
-    <string name="give_permission">Дать разрешение</string>
-    <string name="allow_access_to_manage_all_files">Дать доступ ко всем файлам</string>
-    <string name="need_permission">Нам нужно разрешение</string>
-    <string name="need_permission_description">Для пользования менеджером файлов вам нужно выдать разрешение к хранилищу, чтобы вы могли просматривать и удалять файлы из нашего приложения</string>
-
     <string name="description_divider"> • </string>
 </resources>

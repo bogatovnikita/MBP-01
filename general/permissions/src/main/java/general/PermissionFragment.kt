@@ -1,21 +1,19 @@
-package yin_kio.file_manager.presentation.views
+package general
 
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.example.permissions.R
+import com.example.permissions.databinding.FragmentPermissionBinding
 import com.example.permissions.requestStoragePermissions
 import com.example.permissions.runtimePermissionsLauncher
-import yin_kio.file_manager.presentation.Intention
-import yin_kio.file_manager.presentation.R
-import yin_kio.file_manager.presentation.databinding.FragmentPermissionBinding
-import yin_kio.file_manager.presentation.parentViewModel
 
-class PermissionFragment(
-) : Fragment(R.layout.fragment_permission) {
+abstract class PermissionFragment<VM> : Fragment(R.layout.fragment_permission) {
 
     private val binding: FragmentPermissionBinding by viewBinding()
-    private val viewModel by lazy { parentViewModel() }
+    private val viewModel: VM by lazy { provideViewModel() }
+
 
     private val permissionsLauncher by runtimePermissionsLauncher {}
 
@@ -29,9 +27,9 @@ class PermissionFragment(
 
     override fun onResume() {
         super.onResume()
-        viewModel.obtainIntention(Intention.UpdateFiles)
+        actionOnResume(viewModel)
     }
-
-
+    protected abstract fun provideViewModel() : VM
+    protected abstract fun actionOnResume(viewModel: VM)
 
 }

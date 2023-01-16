@@ -15,12 +15,12 @@ class AppRecyclerViewAdapter(
 ) : ListAdapter<AppItem, AppRecyclerViewAdapter.AppViewHolder>(AppItemDiffUtilCallback()) {
 
     class AppViewHolder(
-        private val bindind: ItemAppBinding,
+        private val binding: ItemAppBinding,
         private val listener: OnItemAppClickListener,
-    ) : RecyclerView.ViewHolder(bindind.root) {
+    ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(app: AppItem) {
-            with(bindind) {
+            with(binding) {
                 ivIconApp.setImageDrawable(app.icon)
                 tvAppName.text = app.name
                 switchDoNotDisturb.isChecked = app.isSwitched

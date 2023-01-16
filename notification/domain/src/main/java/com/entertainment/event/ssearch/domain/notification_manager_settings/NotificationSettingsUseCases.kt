@@ -20,7 +20,8 @@ class NotificationSettingsUseCases @Inject constructor(
 
     fun removeAllNotification() {}
 
-    fun switchModeNotDisturb() {}
+    suspend fun switchModeDisturb(packageName: String, isSwitched: Boolean) =
+        appRepo.setSwitched(packageName, isSwitched)
 
     fun getInfoAboutNotDisturbMode() {}
 
@@ -52,7 +53,7 @@ class NotificationSettingsUseCases @Inject constructor(
     private suspend fun getOnlyApps(): Flow<List<AppWithNotificationsDomain>> {
         return if (appRepo.readAll().count() == 0) {
             val listApps = appsProvide.getSystemPackages() + appsProvide.getInstalledPackages()
-            appRepo.insertAll( listApps.mapToAppDomain())
+            appRepo.insertAll(listApps.mapToAppDomain())
             appWithNotificationRepo.readAppsWithNotifications()
         } else {
             appRepo.readAll().map { apps -> apps.mapToAppWithEmptyNotifications() }

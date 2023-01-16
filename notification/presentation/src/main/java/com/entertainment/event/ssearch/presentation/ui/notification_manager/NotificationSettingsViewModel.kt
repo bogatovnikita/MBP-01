@@ -5,17 +5,19 @@ import com.entertainment.event.ssearch.domain.notification_manager_settings.Noti
 import com.entertainment.event.ssearch.presentation.ui.base.BaseViewModel
 import com.entertainment.event.ssearch.presentation.ui.mappers.AppMapper
 import com.entertainment.event.ssearch.presentation.ui.models.NotificationSettingsState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.lang.Exception
 import javax.inject.Inject
 
+@HiltViewModel
 class NotificationSettingsViewModel @Inject constructor(
     private val useCases: NotificationSettingsUseCases,
     private val appMapper: AppMapper,
 ) : BaseViewModel<NotificationSettingsState>(NotificationSettingsState()) {
 
-    private fun getAppWithNotifications(hasPermission: Boolean) {
+    fun getAppWithNotifications(hasPermission: Boolean) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 useCases.getAppsInfo(hasPermission).collect { listApps ->
@@ -35,6 +37,12 @@ class NotificationSettingsViewModel @Inject constructor(
             } catch (e: Exception) {
                 e.printStackTrace()
             }
+        }
+    }
+
+    fun switchModeDisturb(packageName: String, isSwitched: Boolean) {
+        viewModelScope.launch(Dispatchers.Default) {
+            useCases.switchModeDisturb(packageName, isSwitched)
         }
     }
 

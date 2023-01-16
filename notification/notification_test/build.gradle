@@ -44,6 +44,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
 
     implementation project(':notification:presentation')
+    implementation project(':notification:data')
 
     //Navigation
     implementation "androidx.navigation:navigation-fragment-ktx:2.5.3"

@@ -3,6 +3,7 @@ package com.entertainment.event.ssearch.presentation.ui.notification_manager
 import androidx.lifecycle.viewModelScope
 import com.entertainment.event.ssearch.domain.notification_manager_settings.NotificationSettingsUseCases
 import com.entertainment.event.ssearch.presentation.ui.base.BaseViewModel
+import com.entertainment.event.ssearch.presentation.ui.mappers.AppMapper
 import com.entertainment.event.ssearch.presentation.ui.models.NotificationSettingsState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -10,7 +11,8 @@ import java.lang.Exception
 import javax.inject.Inject
 
 class NotificationSettingsViewModel @Inject constructor(
-    private val useCases: NotificationSettingsUseCases
+    private val useCases: NotificationSettingsUseCases,
+    private val appMapper: AppMapper,
 ) : BaseViewModel<NotificationSettingsState>(NotificationSettingsState()) {
 
     private fun getAppWithNotifications(hasPermission: Boolean) {
@@ -19,7 +21,7 @@ class NotificationSettingsViewModel @Inject constructor(
                 useCases.getAppsInfo(hasPermission).collect { listApps ->
                     updateState {
                         it.copy(
-                            apps = listApps
+                            apps = appMapper.mapToAppItemList(listApps)
                         )
                     }
                 }

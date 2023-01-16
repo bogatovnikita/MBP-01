@@ -30,9 +30,7 @@ class FirstScreenTimeViewModel @Inject constructor(
                     }
                     is CaseResult.Failure -> {
                         updateState {
-                            it.copy(
-                                isErrorLoading = true
-                            )
+                            it.copy(isErrorLoading = true)
                         }
                     }
                 }
@@ -41,28 +39,130 @@ class FirstScreenTimeViewModel @Inject constructor(
     }
 
     private fun onSuccess(result: CaseResult.Success<List<com.hedgehog.domain.models.AppScreenTime>>) {
+        if (_screenState.value.reverseListAppScreenTime) {
+            updateState {
+                it.copy(
+                    listDataScreenTime = result.response.map { usageState ->
+                        AppScreenTime(
+                            packageName = usageState.packageName,
+                            name = usageState.name,
+                            time = usageState.time,
+                            icon = usageState.icon,
+                            isItSystemApp = usageState.isItSystemApp
+                        )
+                    }.reversed(), isLoading = true
+                )
+            }
+        } else {
+            updateState {
+                it.copy(
+                    listDataScreenTime = result.response.map { usageState ->
+                        AppScreenTime(
+                            packageName = usageState.packageName,
+                            name = usageState.name,
+                            time = usageState.time,
+                            icon = usageState.icon,
+                            isItSystemApp = usageState.isItSystemApp
+                        )
+                    }, isLoading = true
+                )
+            }
+        }
+        val size = _screenState.value.listDataScreenTime.filter { it.isItSystemApp }.size
         updateState {
             it.copy(
-                listDataScreenTime = result.response.map { usageState ->
-                    AppScreenTime(
-                        name = usageState.name,
-                        time = usageState.time,
-                        icon = usageState.icon
-                    )
-                }, isLoading = true
+                systemCheckedCount = size
             )
         }
     }
 
     fun choiceDay() {
         updateState {
-            it.copy(choiceDay = true, choiceWeek = false)
+            it.copy(
+                choiceDay = true,
+                choiceWeek = false
+            )
         }
     }
 
     fun choiceWeek() {
         updateState {
-            it.copy(choiceDay = false, choiceWeek = true)
+            it.copy(
+                choiceDay = false,
+                choiceWeek = true
+            )
+        }
+    }
+
+    fun reverseList() {
+        updateState {
+            it.copy(
+                listDataScreenTime = it.listDataScreenTime.reversed(),
+                reverseListAppScreenTime = !it.reverseListAppScreenTime
+            )
+        }
+    }
+
+    fun selectedMode() {
+        updateState {
+            it.copy(
+                selectionMode = !it.selectionMode
+            )
+        }
+    }
+
+    fun toggleCheckBox(item: AppScreenTime) {
+        var temp = _screenState.value.totalCheckedCount
+        _screenState.value.listDataScreenTime.forEach {
+            if (it.packageName == item.packageName) {
+                if (it.isChecked) {
+                    temp -= 1
+                } else {
+                    temp += 1
+                }
+                it.isChecked = !it.isChecked
+            }
+        }
+        updateState {
+            it.copy(
+                listDataScreenTime = _screenState.value.listDataScreenTime,
+                totalCheckedCount = temp
+            )
+        }
+    }
+
+    fun cleanToggleCheckBox() {
+        updateState {
+            it.copy(
+                listDataScreenTime = _screenState.value.listDataScreenTime.map { item ->
+                    AppScreenTime(
+                        packageName = item.packageName,
+                        name = item.name,
+                        time = item.time,
+                        icon = item.icon,
+                        isItSystemApp = item.isItSystemApp,
+                        isChecked = false
+                    )
+                }, totalCheckedCount = 0
+            )
+        }
+    }
+
+    fun selectAll() {
+        updateState {
+            it.copy(
+                listDataScreenTime = _screenState.value.listDataScreenTime.map { item ->
+                    AppScreenTime(
+                        packageName = item.packageName,
+                        name = item.name,
+                        time = item.time,
+                        icon = item.icon,
+                        isItSystemApp = item.isItSystemApp,
+                        isChecked = !item.isItSystemApp
+                    )
+                },
+                totalCheckedCount = _screenState.value.listDataScreenTime.size - _screenState.value.systemCheckedCount
+            )
         }
     }
 }

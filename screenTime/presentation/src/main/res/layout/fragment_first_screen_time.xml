@@ -5,6 +5,57 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ImageView
+        android:id="@+id/back_arrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_16sdp"
+        android:src="@drawable/ic_back_arrow"
+        app:layout_constraintBottom_toTopOf="@id/guideline_bottom_bar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/head_title"
+        style="@style/Text.Header_2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_8sdp"
+        android:text="@string/app_screen_time"
+        android:textColor="@color/dark_blue"
+        app:layout_constraintBottom_toTopOf="@id/guideline_bottom_bar"
+        app:layout_constraintEnd_toStartOf="@id/reverse_statistics"
+        app:layout_constraintStart_toEndOf="@id/back_arrow"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/reverse_statistics"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_4sdp"
+        android:src="@drawable/reverse_button_app_screen"
+        app:layout_constraintBottom_toTopOf="@id/guideline_bottom_bar"
+        app:layout_constraintEnd_toStartOf="@id/selected_mode"
+        app:layout_constraintStart_toEndOf="@id/head_title"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/selected_mode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/_4sdp"
+        android:src="@drawable/selected_button_app_screen"
+        app:layout_constraintBottom_toTopOf="@id/guideline_bottom_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_bottom_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.1" />
+
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/day_button"
         android:layout_width="0dp"
@@ -14,12 +65,12 @@
         android:background="@drawable/background_not_transparent_button"
         android:text="@string/day"
         android:textAllCaps="false"
-        android:textAppearance="@style/Text.Subtitle_1.2"
+        android:textAppearance="@style/Text.Subtitle_1.2.1"
         android:textColor="@color/white"
         app:layout_constraintEnd_toStartOf="@id/week_button"
         app:layout_constraintHeight_percent="0.05"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/guideline_bottom_bar" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/week_button"
@@ -35,7 +86,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_percent="0.05"
         app:layout_constraintStart_toEndOf="@id/day_button"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/guideline_bottom_bar" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group_choice_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        app:constraint_referenced_ids="arrow_left,background_arrow_left,date_tv,arrow_right,background_arrow_right" />
 
     <ImageView
         android:id="@+id/arrow_left"
@@ -89,14 +147,88 @@
         app:layout_constraintStart_toStartOf="@id/arrow_right"
         app:layout_constraintTop_toTopOf="@id/arrow_right" />
 
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="change_all,checkbox,stop_app,delete_app" />
+
+    <TextView
+        android:id="@+id/change_all"
+        style="@style/Text.Subtitle_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/_8sdp"
+        android:text="@string/change_all"
+        android:textColor="@color/dark_blue"
+        app:layout_constraintBottom_toBottomOf="@id/checkbox"
+        app:layout_constraintEnd_toStartOf="@id/checkbox"
+        app:layout_constraintTop_toTopOf="@id/checkbox" />
+
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/_12sdp"
+        android:checked="false"
+        app:useMaterialThemeColors="false"
+        android:button="@drawable/check_box_selector"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@id/guideline_recycler_view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/week_button" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_recycler_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.21" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginHorizontal="@dimen/_12sdp"
         android:layout_marginTop="@dimen/_8sdp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/date_tv"
+        android:layout_marginBottom="@dimen/_16sdp"
+        app:layout_constraintBottom_toTopOf="@id/stop_app"
+        app:layout_constraintTop_toBottomOf="@id/guideline_recycler_view"
         tools:listitem="@layout/item_screen_time" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/stop_app"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/_16sdp"
+        android:layout_marginEnd="@dimen/_4sdp"
+        android:layout_marginBottom="@dimen/_8sdp"
+        android:background="@drawable/background_not_transparent_button"
+        android:text="@string/stop_app"
+        android:textAllCaps="false"
+        android:textAppearance="@style/Text.Subtitle_1.2"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/delete_app"
+        app:layout_constraintHeight_percent="0.07"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/delete_app"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/_4sdp"
+        android:layout_marginEnd="@dimen/_16sdp"
+        android:layout_marginBottom="@dimen/_8sdp"
+        android:background="@drawable/background_not_transparent_button_blue"
+        android:text="@string/delete"
+        android:textAllCaps="false"
+        android:textAppearance="@style/Text.Subtitle_1.2"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.07"
+        app:layout_constraintStart_toEndOf="@id/stop_app" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

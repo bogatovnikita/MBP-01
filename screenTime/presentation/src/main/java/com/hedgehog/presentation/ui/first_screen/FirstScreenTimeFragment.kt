@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -43,9 +44,25 @@ class FirstScreenTimeFragment :
         adapter = ScreenTimeAdapter(
             object : ScreenTimeAdapter.Listener {
                 override fun onChooseNote(item: AppScreenTime) {
+                    if (viewModel.screenState.value.selectionMode) return
                     Toast.makeText(requireContext(), item.name, Toast.LENGTH_SHORT).show()
                 }
-            })
+
+                override fun onToggle(item: AppScreenTime) {
+                    if (!item.isItSystemApp) {
+                        viewModel.toggleCheckBox(item)
+                    } else {
+                        Toast.makeText(
+                            requireContext(),
+                            R.string.delete_system_app,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                    binding.checkbox.isChecked =
+                        (viewModel.screenState.value.listDataScreenTime.size - viewModel.screenState.value.systemCheckedCount) == viewModel.screenState.value.totalCheckedCount
+                }
+            }, viewModel.screenState.value.selectionMode
+        )
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.adapter = adapter
     }
@@ -62,9 +79,27 @@ class FirstScreenTimeFragment :
         if (!state.isLoading) return
         adapter.submitList(state.listDataScreenTime)
         initDate()
+        binding.reverseStatistics.isSelected = viewModel.screenState.value.reverseListAppScreenTime
     }
 
     private fun initClickListeners() {
+        binding.checkbox.setOnClickListener {
+            if (viewModel.screenState.value.totalCheckedCount == viewModel.screenState.value.listDataScreenTime.size - viewModel.screenState.value.systemCheckedCount) {
+                viewModel.cleanToggleCheckBox()
+            } else {
+                viewModel.selectAll()
+            }
+        }
+        binding.deleteApp.setOnClickListener { }
+        binding.selectedMode.setOnClickListener {
+            selectedMode(it)
+        }
+
+        binding.reverseStatistics.setOnClickListener {
+            viewModel.reverseList()
+            it.isSelected = viewModel.screenState.value.reverseListAppScreenTime
+        }
+
         binding.backgroundArrowLeft.setOnClickListener {
             choiceLeftArrow()
         }
@@ -83,6 +118,16 @@ class FirstScreenTimeFragment :
             if (viewModel.screenState.value.choiceWeek) return@setOnClickListener
             choiceWeek()
         }
+    }
+
+    private fun selectedMode(it: View) {
+        viewModel.cleanToggleCheckBox()
+        viewModel.selectedMode()
+        it.isSelected = viewModel.screenState.value.selectionMode
+        binding.groupCheckbox.isVisible = viewModel.screenState.value.selectionMode
+        binding.groupChoiceDate.isVisible = !viewModel.screenState.value.selectionMode
+        binding.checkbox.isChecked = false
+        initRecyclerView()
     }
 
     private fun choiceLeftArrow() {
@@ -127,6 +172,9 @@ class FirstScreenTimeFragment :
         calendar.add(Calendar.WEEK_OF_YEAR, 0)
         secondCalendar.add(Calendar.WEEK_OF_YEAR, +1)
         updateScreenTime(Calendar.WEEK_OF_YEAR, beginTime, endTime)
+        if (viewModel.screenState.value.selectionMode) {
+            selectedMode(binding.selectedMode)
+        }
     }
 
     private fun choiceDay() {
@@ -140,6 +188,9 @@ class FirstScreenTimeFragment :
         calendar = Calendar.getInstance()
         secondCalendar = Calendar.getInstance()
         updateScreenTime(Calendar.DATE, beginTime, endTime)
+        if (viewModel.screenState.value.selectionMode) {
+            selectedMode(binding.selectedMode)
+        }
     }
 
     private fun updateScreenTime(dataType: Int, beginTime: Int, endTime: Int) {
@@ -151,7 +202,7 @@ class FirstScreenTimeFragment :
             val formatter = SimpleDateFormat("EEEE, dd.MM.yyyy")
             binding.dateTv.text = formatter.format(calendar.time)
         } else {
-            var formatter = SimpleDateFormat("EE, dd.MM")
+            val formatter = SimpleDateFormat("EE, dd.MM")
             binding.dateTv.text =
                 "${formatter.format(calendar.time)} - ${formatter.format(secondCalendar.time)}"
         }

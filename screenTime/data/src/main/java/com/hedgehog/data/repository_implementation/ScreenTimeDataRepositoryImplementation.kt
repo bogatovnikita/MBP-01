@@ -3,6 +3,7 @@ package com.hedgehog.data.repository_implementation
 import android.app.usage.UsageStats
 import android.app.usage.UsageStatsManager
 import android.content.Context
+import android.content.pm.ApplicationInfo
 import com.hedgehog.data.R
 import com.hedgehog.domain.models.AppScreenTime
 import com.hedgehog.domain.models.CalendarScreenTime
@@ -33,7 +34,7 @@ class ScreenTimeDataRepositoryImplementation @Inject constructor(@ApplicationCon
                     beginTime.timeInMillis, endTime.timeInMillis
                 ).values.toMutableList()
                 appScreenList = statsList.filter {
-                    it.totalTimeInForeground > minute
+                    it.totalTimeInForeground > minute && context.isPackageExist(it.packageName)
                 }.sortedByDescending {
                     it.totalTimeInForeground
                 }.map {
@@ -71,9 +72,11 @@ class ScreenTimeDataRepositoryImplementation @Inject constructor(@ApplicationCon
     }
 
     private fun appScreenTime(it: UsageStats) = AppScreenTime(
+        packageName = it.packageName,
         name = getAppLabel(it).toString(),
         time = mapTimeToString(it.totalTimeInForeground),
-        icon = getAppIcon(it)
+        icon = getAppIcon(it),
+        isItSystemApp = checkIsSystemApp(it)
     )
 
     private fun mapTimeToString(time: Long): String {
@@ -94,4 +97,19 @@ class ScreenTimeDataRepositoryImplementation @Inject constructor(@ApplicationCon
     } catch (e: Exception) {
         null
     }
+
+    private fun checkIsSystemApp(it: UsageStats) = try {
+        context.packageManager.getApplicationInfo(
+            it.packageName, 0
+        ).flags and ApplicationInfo.FLAG_SYSTEM != 0 || context.packageManager.getApplicationInfo(
+            it.packageName, 0
+        ).flags and ApplicationInfo.FLAG_UPDATED_SYSTEM_APP != 0
+    } catch (e: Exception) {
+        true
+    }
+}
+
+fun Context.isPackageExist(target: String): Boolean {
+    return packageManager.getInstalledApplications(0)
+        .find { info -> info.packageName == target } != null
 }

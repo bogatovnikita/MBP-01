@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/notification_graph"
+    app:startDestination="@id/notificationManagerFragment">
+
+    <fragment
+        android:id="@+id/notificationManagerFragment"
+        android:name="com.entertainment.event.ssearch.presentation.ui.notification_manager.NotificationSettingsFragment"
+        android:label="NotificationManagerFragment" >
+        <action
+            android:id="@+id/action_notificationManagerFragment_to_missedNotificationsFragment"
+            app:destination="@id/missedNotificationsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/missedNotificationsFragment"
+        android:name="com.entertainment.event.ssearch.presentation.ui.missed_notifications.MissedNotificationsFragment"
+        android:label="fragment_missed_notifications"
+        tools:layout="@layout/fragment_missed_notifications" />
+</navigation>

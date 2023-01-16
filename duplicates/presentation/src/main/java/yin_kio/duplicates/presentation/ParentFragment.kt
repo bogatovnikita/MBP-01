@@ -2,6 +2,7 @@ package yin_kio.duplicates.presentation
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
@@ -13,7 +14,7 @@ class ParentFragment(
     viewModelCreator: ViewModel.(Context) -> DuplicatesViewModel
 ) : Fragment(R.layout.fragment_parent) {
 
-    private val viewModel by lifecycleAware(creator = {viewModelCreator(requireContext())})
+    internal val viewModel by lifecycleAware(creator = {viewModelCreator(requireContext())})
 
     private lateinit var navigation: Navigation
 
@@ -22,6 +23,7 @@ class ParentFragment(
         navigation = Navigation(navController)
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.uiState.collect{
+                Log.d("!!!", "${it.destination}")
                 navigation.navigate(it.destination)
             }
         }

@@ -14,12 +14,14 @@ class Navigation(
     fun navigate(destination: Destination){
         if (currentDestination != destination){
             if (destination == Destination.List) navigateUp()
+            navController.navigate(destination.adapt())
+            currentDestination = destination
         }
     }
 
     private fun Destination.adapt() : Int{
         return when(this){
-            Destination.Permission -> TODO()
+            Destination.Permission -> R.id.action_duplicatesFragment_to_duplicatesPermissionFragment
             Destination.List -> R.id.duplicatesFragment
             Destination.UniteProgress -> TODO()
             Destination.Inter -> TODO()

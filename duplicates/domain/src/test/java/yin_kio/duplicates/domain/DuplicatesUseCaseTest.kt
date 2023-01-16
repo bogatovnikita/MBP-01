@@ -70,7 +70,24 @@ class DuplicatesUseCaseTest {
     }
 
     @Test
-    fun updateFiles() = runTest(dispatcher){
+    fun `updateFiles with permission`() = runTest(dispatcher){
+        every { permissions.hasStoragePermissions } returns false
+
+        val useCase = createDuplicatesUseCase()
+        waitCoroutines()
+
+        assertEquals(Destination.Permission, state.destination)
+
+        every { permissions.hasStoragePermissions } returns true
+
+        useCase.updateFiles()
+        waitCoroutines()
+
+        assertEquals(Destination.List, state.destination)
+    }
+
+    @Test
+    fun `updateFiles without permission`() = runTest(dispatcher){
         state.apply {
             val oldDuplicates = duplicatesList
 

@@ -52,6 +52,8 @@ internal class DuplicatesUseCaseImpl(
             navigate(Destination.Permission)
             return true
         }
+
+        navigate(Destination.List)
         return false
     }
 

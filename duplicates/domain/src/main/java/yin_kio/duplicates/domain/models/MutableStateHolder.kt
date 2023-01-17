@@ -35,7 +35,7 @@ internal data class MutableStateHolder(
     }
 
     override fun isGroupSelected(groupIndex: Int): Boolean {
-        return selected[groupIndex] != null
+        return (selected[groupIndex]?.size ?: 0) == duplicatesList[groupIndex].size
     }
 
     fun update(){

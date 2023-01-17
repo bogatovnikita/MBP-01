@@ -42,16 +42,21 @@ class StateHolderTest {
 
     @Test
     fun isItemSelected() {
-        stateHolder.selected[0] = mutableSetOf(ImageInfo(FILE_PATH))
-        assertTrue(stateHolder.isItemSelected(0 , FILE_PATH))
+        stateHolder.selected[0] = mutableSetOf(ImageInfo(FILE_PATH_1))
+        assertTrue(stateHolder.isItemSelected(0 , FILE_PATH_1))
 
         stateHolder.selected.remove(0)
-        assertFalse(stateHolder.isItemSelected(0 , FILE_PATH))
+        assertFalse(stateHolder.isItemSelected(0 , FILE_PATH_1))
     }
 
     @Test
     fun isGroupSelected() {
-        stateHolder.selected[0] = mutableSetOf(ImageInfo(FILE_PATH))
+        stateHolder.duplicatesList = listOf(listOf(ImageInfo(FILE_PATH_1), ImageInfo(FILE_PATH_2)))
+
+        stateHolder.selected[0] = mutableSetOf(ImageInfo(FILE_PATH_1))
+        assertFalse(stateHolder.isGroupSelected(0))
+
+        stateHolder.selected[0] = mutableSetOf(ImageInfo(FILE_PATH_1), ImageInfo(FILE_PATH_2))
         assertTrue(stateHolder.isGroupSelected(0))
 
         stateHolder.selected.remove(0)
@@ -59,7 +64,8 @@ class StateHolderTest {
     }
 
     companion object{
-        private const val FILE_PATH = "a"
+        private const val FILE_PATH_1 = "a"
+        private const val FILE_PATH_2 = "b"
     }
 
 }

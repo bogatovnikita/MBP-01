@@ -17,6 +17,7 @@ class DuplicatesFragment : Fragment(R.layout.fragment_duplicates) {
         onImageClick = { groupIndex, item ->
             viewModel.switchItemSelection(groupIndex, item)
         },
+        onGroupSelectClick = {viewModel.switchGroupSelection(it)},
         coroutineScope = viewLifecycleOwner.lifecycleScope,
         stateFlow = viewModel.uiState
     ) }

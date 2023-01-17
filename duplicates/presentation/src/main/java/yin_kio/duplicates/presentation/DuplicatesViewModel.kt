@@ -21,11 +21,18 @@ class DuplicatesViewModel(
     init {
         coroutineScope.launch(coroutineDispatcher) {
             state.stateFlow.collect{
-                _uiState.value = UIState(destination = it.destination)
+                _uiState.value = UIState(
+                    destination = it.destination,
+                    duplicatesList = it.duplicatesList,
+                    isInProgress = it.isInProgress
+                )
             }
         }
     }
 
+    fun isGroupSelected(position: Int) : Boolean{
+        return state.isGroupSelected(position)
+    }
 
 
 }

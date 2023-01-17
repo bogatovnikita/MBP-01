@@ -5,11 +5,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
-import com.bumptech.glide.Glide
-import com.example.recycler_adapter.recyclerAdapter
 import yin_kio.duplicates.domain.models.ImageInfo
 import yin_kio.duplicates.presentation.databinding.ListItemGroupBinding
-import yin_kio.duplicates.presentation.databinding.ListItemImageBinding
 
 class DiplicatesAadapter : ListAdapter<List<ImageInfo>, DuplicatesViewHolder>(difCallback()) {
 
@@ -46,15 +43,7 @@ class DuplicatesViewHolder private constructor (
 
 
     private val adapter by lazy {
-        recyclerAdapter<ImageInfo, ListItemImageBinding>(
-            onBind = {item, holder ->
-
-                Glide.with(binding.root.context)
-                    .load(item.path)
-                    .into(image)
-
-            }
-        )
+        ImageInfoAdapter()
     }
 
     init {

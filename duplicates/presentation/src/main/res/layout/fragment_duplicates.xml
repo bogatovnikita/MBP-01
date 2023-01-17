@@ -62,7 +62,9 @@
             tools:listitem="@layout/list_item_group"
             android:orientation="vertical"
             tools:itemCount="8"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:paddingBottom="100dp"
+            android:clipToPadding="false"/>
 
         <FrameLayout
             android:layout_width="match_parent"

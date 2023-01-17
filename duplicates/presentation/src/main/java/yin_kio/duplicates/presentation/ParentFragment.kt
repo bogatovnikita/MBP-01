@@ -23,7 +23,6 @@ class ParentFragment(
         navigation = Navigation(navController)
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.uiState.collect{
-                Log.d("!!!", "${it.destination}")
                 navigation.navigate(it.destination)
             }
         }

@@ -1,7 +1,9 @@
 package yin_kio.duplicates.presentation
 
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import yin_kio.duplicates.domain.models.StateHolder
@@ -15,17 +17,17 @@ class DuplicatesViewModel(
     coroutineDispatcher: CoroutineContext
 ) : DuplicateUseCase by useCase{
 
-    private val _uiState = MutableStateFlow(UIState())
-    val uiState = _uiState.asStateFlow()
+    private val _uiState = MutableSharedFlow<UIState>()
+    val uiState = _uiState.asSharedFlow()
 
     init {
         coroutineScope.launch(coroutineDispatcher) {
             state.stateFlow.collect{
-                _uiState.value = UIState(
+                _uiState.emit(UIState(
                     destination = it.destination,
                     duplicatesList = it.duplicatesList,
                     isInProgress = it.isInProgress
-                )
+                ))
             }
         }
     }

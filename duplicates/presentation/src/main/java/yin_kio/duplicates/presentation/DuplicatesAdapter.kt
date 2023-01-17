@@ -8,10 +8,12 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import yin_kio.duplicates.domain.models.ImageInfo
 import yin_kio.duplicates.presentation.databinding.ListItemGroupBinding
 
-class DiplicatesAadapter : ListAdapter<List<ImageInfo>, DuplicatesViewHolder>(difCallback()) {
+class DuplicatesAdapter(
+    private val onImageClick: (groupIndex: Int, path: String) -> Unit
+) : ListAdapter<List<ImageInfo>, DuplicatesViewHolder>(difCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DuplicatesViewHolder {
-        return DuplicatesViewHolder.from(parent)
+        return DuplicatesViewHolder.from(parent, onImageClick)
     }
 
     override fun onBindViewHolder(holder: DuplicatesViewHolder, position: Int) {
@@ -38,12 +40,13 @@ private fun difCallback() = object : DiffUtil.ItemCallback<List<ImageInfo>>(){
 
 
 class DuplicatesViewHolder private constructor (
-    private val binding: ListItemGroupBinding
+    private val binding: ListItemGroupBinding,
+    private val onImageClick: (groupIndex: Int, path: String) -> Unit
 ) : ViewHolder(binding.root){
 
 
     private val adapter by lazy {
-        ImageInfoAdapter()
+        ImageInfoAdapter{ path -> onImageClick(absoluteAdapterPosition, path)}
     }
 
     init {
@@ -55,9 +58,9 @@ class DuplicatesViewHolder private constructor (
     }
 
     companion object{
-        fun from(parent: ViewGroup) : DuplicatesViewHolder{
+        fun from(parent: ViewGroup, onImageClick: (groupIndex: Int, path: String) -> Unit) : DuplicatesViewHolder{
             val binding = ListItemGroupBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-            return DuplicatesViewHolder(binding)
+            return DuplicatesViewHolder(binding, onImageClick)
         }
     }
 

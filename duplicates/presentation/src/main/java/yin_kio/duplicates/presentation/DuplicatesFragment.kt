@@ -13,7 +13,11 @@ class DuplicatesFragment : Fragment(R.layout.fragment_duplicates) {
     private val binding: FragmentDuplicatesBinding by viewBinding()
     private val viewModel by lazy { parentViewModel() }
 
-    private val adapter by lazy { DiplicatesAadapter() }
+    private val adapter by lazy { DuplicatesAdapter(
+        onImageClick = { groupIndex, item ->
+            viewModel.switchItemSelection(groupIndex, item)
+        }
+    ) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.recycler.adapter = adapter

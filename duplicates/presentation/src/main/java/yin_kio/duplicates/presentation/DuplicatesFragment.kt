@@ -1,7 +1,9 @@
 package yin_kio.duplicates.presentation
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -34,8 +36,8 @@ class DuplicatesFragment : Fragment(R.layout.fragment_duplicates) {
     }
 
     private fun showProgress(it: UIState) {
-        binding.progressPanel.isVisible = it.isInProgress
-        binding.listPanel.isVisible = !it.isInProgress
+        binding.progressPanel.isInvisible = !it.isInProgress
+        binding.listPanel.isInvisible = it.isInProgress
     }
 
 }

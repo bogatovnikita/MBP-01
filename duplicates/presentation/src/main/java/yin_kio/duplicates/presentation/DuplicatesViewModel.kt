@@ -2,9 +2,7 @@ package yin_kio.duplicates.presentation
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import yin_kio.duplicates.domain.models.StateHolder
 import yin_kio.duplicates.domain.use_cases.DuplicateUseCase
@@ -26,7 +24,8 @@ class DuplicatesViewModel(
                 _uiState.emit(UIState(
                     destination = it.destination,
                     duplicatesList = it.duplicatesList,
-                    isInProgress = it.isInProgress
+                    isInProgress = it.isInProgress,
+                    selected = it.selected
                 ))
             }
         }

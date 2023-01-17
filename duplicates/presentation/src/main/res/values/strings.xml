@@ -2,8 +2,8 @@
 <resources>
     <string name="title">Удаление дубликатов</string>
     <string name="unite_all_duplicates">Объединить все дубликаты</string>
-    <string name="select_all">Выбрать всё</string>
-    <string name="progress_message">Еще пару секунд\nИдет сканирование ваших фото и поиск дубликатов...</string>
+    <string name="select">Выбрать</string>
+    <string name="progress_message">Еще пару секунд\nИдет сканирование ваших фото и поиск дубликатов...</string>
     <string name="progress_title">Объединяем дубликаты</string>
     <string name="progress_description">Еще пару секунд...</string>
     <string name="dialog_ask_continue_title">Дубликаты объединены</string>

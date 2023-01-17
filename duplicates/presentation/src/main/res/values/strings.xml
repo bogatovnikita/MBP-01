@@ -2,6 +2,7 @@
 <resources>
     <string name="title">Удаление дубликатов</string>
     <string name="unite_all_duplicates">Объединить все дубликаты</string>
+    <string name="unite_selected_duplicates">Объединить выбранные</string>
     <string name="select">Выбрать</string>
     <string name="progress_message">Еще пару секунд\nИдет сканирование ваших фото и поиск дубликатов...</string>
     <string name="progress_title">Объединяем дубликаты</string>

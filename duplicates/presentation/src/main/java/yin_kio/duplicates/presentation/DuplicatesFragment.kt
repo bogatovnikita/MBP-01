@@ -30,9 +30,16 @@ class DuplicatesFragment : Fragment(R.layout.fragment_duplicates) {
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.uiState.collect{
                 showProgress(it)
+                showButton(it)
+
                 adapter.submitList(it.duplicatesList)
             }
         }
+    }
+
+    private fun showButton(it: UIState) {
+        binding.unite.setBackgroundResource(it.buttonState.bgResId)
+        binding.unite.text = getString(it.buttonState.titleResId)
     }
 
     private fun showProgress(it: UIState) {

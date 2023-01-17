@@ -58,6 +58,7 @@
                 android:layout_gravity="bottom">
 
                 <TextView
+                    android:id="@+id/unite"
                     style="@style/MainButton"
                     android:text="@string/unite_all_duplicates" />
 

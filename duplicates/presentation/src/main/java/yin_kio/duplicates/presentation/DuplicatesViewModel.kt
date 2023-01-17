@@ -25,11 +25,21 @@ class DuplicatesViewModel(
                     destination = it.destination,
                     duplicatesList = it.duplicatesList,
                     isInProgress = it.isInProgress,
-                    selected = it.selected
+                    selected = it.selected,
+                    buttonState = ButtonState(
+                        bgResId = bgResId(it),
+                        titleResId = titleResId(it)
+                    )
                 ))
             }
         }
     }
+
+    private fun titleResId(it: StateHolder) =
+        if (it.selected.isEmpty()) R.string.unite_all_duplicates else R.string.unite_selected_duplicates
+
+    private fun bgResId(it: StateHolder) =
+        if (it.selected.isEmpty()) general.R.drawable.bg_main_button_enabled else R.drawable.bg_unite_selected
 
     fun isGroupSelected(position: Int) : Boolean{
         return state.isGroupSelected(position)

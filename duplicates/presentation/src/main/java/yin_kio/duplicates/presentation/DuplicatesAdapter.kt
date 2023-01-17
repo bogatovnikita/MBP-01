@@ -15,12 +15,16 @@ class DuplicatesAdapter(
     private val onGroupSelectClick: (groupIndex: Int) -> Unit,
     private val onImageClick: (groupIndex: Int, path: String) -> Unit,
     private val coroutineScope: CoroutineScope,
-    private val stateFlow: Flow<UIState>
+    private val stateFlow: Flow<UIState>,
+    private val isGroupSelected: (groupIndex: Int) -> Boolean,
+    private val isItemSelected: (groupIndex: Int, path: String) -> Boolean
 ) : ListAdapter<List<ImageInfo>, DuplicatesViewHolder>(difCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DuplicatesViewHolder {
         return DuplicatesViewHolder.from(parent, onImageClick,
-            coroutineScope, stateFlow
+            coroutineScope, stateFlow,
+            isGroupSelected,
+            isItemSelected
         )
     }
 
@@ -51,14 +55,17 @@ class DuplicatesViewHolder private constructor (
     private val binding: ListItemGroupBinding,
     private val onImageClick: (groupIndex: Int, path: String) -> Unit,
     private val coroutineScope: CoroutineScope,
-    private val stateFlow: Flow<UIState>
+    private val stateFlow: Flow<UIState>,
+    private val isGroupSelected: (groupIndex: Int) -> Boolean,
+    private val isItemSelected: (groupIndex: Int, path: String) -> Boolean
 ) : ViewHolder(binding.root){
 
 
     private val adapter by lazy {
         ImageInfoAdapter(
             onItemClick = {onImageClick(absoluteAdapterPosition, it)},
-            coroutineScope, stateFlow
+            coroutineScope, stateFlow,
+            isItemSelected
         )
     }
 
@@ -67,9 +74,7 @@ class DuplicatesViewHolder private constructor (
 
         coroutineScope.launch {
             stateFlow.collect{
-                val duplicatesSize = it.duplicatesList[absoluteAdapterPosition].size
-                val selectedSize = it.selected[absoluteAdapterPosition]?.size?: 0
-                binding.checkbox.isChecked = duplicatesSize == selectedSize
+                binding.checkbox.isChecked = isGroupSelected(absoluteAdapterPosition)
             }
         }
     }
@@ -84,10 +89,14 @@ class DuplicatesViewHolder private constructor (
     companion object{
         fun from(parent: ViewGroup, onImageClick: (groupIndex: Int, path: String) -> Unit,
                  coroutineScope: CoroutineScope,
-                 stateFlow: Flow<UIState>
+                 stateFlow: Flow<UIState>,
+                 isGroupSelected: (groupIndex: Int) -> Boolean,
+                 isItemSelected: (groupIndex: Int, path: String) -> Boolean
         ) : DuplicatesViewHolder{
             val binding = ListItemGroupBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-            return DuplicatesViewHolder(binding, onImageClick, coroutineScope, stateFlow)
+            return DuplicatesViewHolder(binding, onImageClick, coroutineScope, stateFlow, isGroupSelected,
+                isItemSelected
+            )
         }
     }
 

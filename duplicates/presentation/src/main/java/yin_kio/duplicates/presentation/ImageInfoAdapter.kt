@@ -16,13 +16,14 @@ import yin_kio.duplicates.presentation.databinding.ListItemImageBinding
 class ImageInfoAdapter(
     private val onItemClick: (path: String) -> Unit,
     private val coroutineScope: CoroutineScope,
-    private val stateFlow: Flow<UIState>
+    private val stateFlow: Flow<UIState>,
+    private val isItemsSelected: (groupIndex: Int, path: String) -> Boolean
 ) : ListAdapter<ImageInfo, ImageInfoViewHolder>(diffCallback()) {
 
     var groupPosition: Int = 0
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageInfoViewHolder {
-        return ImageInfoViewHolder.from(parent, onItemClick, coroutineScope, stateFlow, groupPosition)
+        return ImageInfoViewHolder.from(parent, onItemClick, coroutineScope, stateFlow, groupPosition, isItemsSelected)
     }
 
     override fun onBindViewHolder(holder: ImageInfoViewHolder, position: Int) {
@@ -46,7 +47,8 @@ class ImageInfoViewHolder private constructor(
     private val onItemClick: (path: String) -> Unit,
     private val coroutineScope: CoroutineScope,
     private val stateFlow: Flow<UIState>,
-    private val groupPosition: Int
+    private val groupPosition: Int,
+    private val isItemSelected: (groupIndex: Int, path: String) -> Boolean
 ) : RecyclerView.ViewHolder(binding.root){
 
 
@@ -60,16 +62,8 @@ class ImageInfoViewHolder private constructor(
 
     private fun observeItemSelection() {
         coroutineScope.launch {
-            stateFlow.collect { state ->
-                binding.checkbox.isChecked = state.isImageSelected()
-            }
+            stateFlow.collect { path?.let { binding.checkbox.isChecked = isItemSelected(groupPosition, it) } }
         }
-    }
-
-    private fun UIState.isImageSelected(
-    ): Boolean {
-        if (path == null) return false
-        return selected[groupPosition]?.contains(ImageInfo(path!!)) ?: false
     }
 
     private fun clickOnItem() {
@@ -91,10 +85,11 @@ class ImageInfoViewHolder private constructor(
         fun from(parent: ViewGroup, onItemClick: (path: String) -> Unit,
                  coroutineScope: CoroutineScope,
                  stateFlow: Flow<UIState>,
-                 groupPosition: Int
+                 groupPosition: Int,
+                 isItemSelected: (groupIndex: Int, path: String) -> Boolean
         ) : ImageInfoViewHolder{
             val binding = ListItemImageBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-            return ImageInfoViewHolder(binding, onItemClick, coroutineScope, stateFlow, groupPosition)
+            return ImageInfoViewHolder(binding, onItemClick, coroutineScope, stateFlow, groupPosition, isItemSelected)
         }
     }
 }

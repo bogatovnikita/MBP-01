@@ -1,6 +1,5 @@
 package yin_kio.duplicates.presentation
 
-import android.util.Log
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -22,7 +21,6 @@ class DuplicatesViewModel(
     init {
         coroutineScope.launch(coroutineDispatcher) {
             state.stateFlow.collect{
-                Log.d("!!!", "${it.isInProgress}")
                 _uiState.emit(UIState(
                     destination = it.destination,
                     duplicatesList = it.duplicatesList,
@@ -37,5 +35,8 @@ class DuplicatesViewModel(
         return state.isGroupSelected(position)
     }
 
+    fun isItemSelected(index: Int, path: String) : Boolean{
+        return state.isItemSelected(index, path)
+    }
 
 }

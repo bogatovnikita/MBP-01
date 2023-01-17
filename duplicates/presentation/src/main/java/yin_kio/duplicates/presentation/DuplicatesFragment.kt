@@ -1,10 +1,8 @@
 package yin_kio.duplicates.presentation
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.core.view.isInvisible
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -21,7 +19,9 @@ class DuplicatesFragment : Fragment(R.layout.fragment_duplicates) {
         },
         onGroupSelectClick = {viewModel.switchGroupSelection(it)},
         coroutineScope = viewLifecycleOwner.lifecycleScope,
-        stateFlow = viewModel.uiState
+        stateFlow = viewModel.uiState,
+        isGroupSelected = { viewModel.isGroupSelected(it) },
+        isItemSelected = { groupIndex, path -> viewModel.isItemSelected(groupIndex, path) }
     ) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

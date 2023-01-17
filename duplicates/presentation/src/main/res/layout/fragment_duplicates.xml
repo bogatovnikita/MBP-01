@@ -47,7 +47,8 @@
                 tools:itemCount="8"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 android:paddingBottom="100dp"
-                android:clipToPadding="false"/>
+                android:clipToPadding="false"
+                android:paddingHorizontal="12dp"/>
 
             <FrameLayout
                 android:layout_width="match_parent"

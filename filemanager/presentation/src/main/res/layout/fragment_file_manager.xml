@@ -13,12 +13,8 @@
         android:gravity="center">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/ic_back"
-            android:paddingStart="20dp"
-            android:paddingEnd="16dp"
-            android:paddingVertical="16dp"/>
+            android:id="@+id/back"
+            style="@style/BackButton"/>
 
         <TextView
             android:layout_width="match_parent"

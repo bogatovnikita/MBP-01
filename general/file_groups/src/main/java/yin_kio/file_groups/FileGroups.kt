@@ -1,6 +1,6 @@
-package yin_kio.file_manager.domain.entities
+package yin_kio.file_groups
 
-class FileExtensionGroups {
+class FileGroups {
     val video = mapOf(
         "WEBM" to true,
         "MKV" to true,

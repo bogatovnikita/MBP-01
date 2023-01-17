@@ -1,17 +1,15 @@
-package yin_kio.file_manager.data
+package yin_kio.file_utils
 
 import java.io.File
-import java.io.FileInputStream
-import java.io.FileOutputStream
-import java.io.IOException
-import java.nio.channels.FileChannel
 
-internal interface FileManager {
+interface FileUtils {
 
     suspend fun getAllFiles(folder: File) : List<File>
     suspend fun copyFiles(files: List<File>, destination: File)
     suspend fun moveFiles(files: List<File>, destination: File)
     suspend fun deleteFiles(files: List<File>) : Long
+    suspend fun deleteFile(path: String) : Long
+    fun copyFile(file: File, destination: File)
 
 }
 

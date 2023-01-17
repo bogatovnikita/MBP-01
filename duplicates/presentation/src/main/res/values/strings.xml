@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title">Удаление дубликатов</string>
+    <string name="unite_all_duplicates">Объединить все дубликаты</string>
+    <string name="select_all">Выбрать всё</string>
+    <string name="progress_message">Еще пару секунд\nИдет сканирование ваших фото и поиск дубликатов...</string>
+    <string name="progress_title">Объединяем дубликаты</string>
+    <string name="progress_description">Еще пару секунд...</string>
+    <string name="dialog_ask_continue_title">Дубликаты объединены</string>
+
+    <string name="dialog_ask_continue_description">Но у вас есть еще несколько дублирующихся фото</string>
+    <string name="dialog_ask_continue_continue">Продолжить объединять дубликаты</string>
+    <string name="dialog_ask_continue_cancel">Перейти к оптимизации телефона</string>
+
+    <string name="dialog_all_duplicates_done_title">Все дубликаты объединены</string>
+
+</resources>

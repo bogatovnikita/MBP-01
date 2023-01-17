@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="DialogDoneIcon">
+        <item name="android:layout_marginTop">24dp</item>
+        <item name="android:layout_width">120dp</item>
+        <item name="android:layout_height">75dp</item>
+        <item name="srcCompat">@drawable/ic_dialog_done</item>
+    </style>
+
+    <style name="DialogDoneTitle">
+        <item name="android:textAppearance">@style/Text.Header_4</item>
+        <item name="android:textColor">@color/green</item>
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:layout_marginEnd">16dp</item>
+        <item name="android:layout_marginBottom">8dp</item>
+        <item name="android:layout_width">172dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+</resources>

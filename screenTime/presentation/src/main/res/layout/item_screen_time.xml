@@ -31,10 +31,12 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/_6sdp"
+        android:ellipsize="end"
         android:fontFamily="@font/golos_text_regular"
+        android:maxLines="1"
         android:textColor="@color/black"
         app:layout_constraintBottom_toTopOf="@id/description_tv"
-        app:layout_constraintEnd_toStartOf="@id/icon_right_arrow"
+        app:layout_constraintEnd_toStartOf="@id/guideline"
         app:layout_constraintStart_toEndOf="@id/background_icon"
         app:layout_constraintTop_toTopOf="@id/background_icon"
         tools:text="Google Chrom" />
@@ -46,7 +48,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/_6sdp"
         app:layout_constraintBottom_toBottomOf="@id/background_icon"
-        app:layout_constraintEnd_toStartOf="@id/icon_right_arrow"
+        app:layout_constraintEnd_toStartOf="@id/guideline"
         app:layout_constraintStart_toEndOf="@id/background_icon"
         app:layout_constraintTop_toBottomOf="@id/title_tv"
         tools:text="1 ч 27 мин" />
@@ -59,6 +61,25 @@
         app:layout_constraintBottom_toBottomOf="@id/background_icon"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/background_icon" />
+
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:button="@drawable/check_box_selector"
+        android:checked="false"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/background_icon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/background_icon"
+        app:useMaterialThemeColors="false" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.9" />
 
     <View
         android:id="@+id/separator_line"

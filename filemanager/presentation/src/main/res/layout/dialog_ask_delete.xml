@@ -68,7 +68,7 @@
 
         <TextView
             android:id="@+id/delete"
-            style="@style/AskDeleteButton.Ok"
+            style="@style/MiddleButton.Green"
             android:layout_width="0dp"
             android:layout_marginEnd="16dp"
             android:text="@string/delete"

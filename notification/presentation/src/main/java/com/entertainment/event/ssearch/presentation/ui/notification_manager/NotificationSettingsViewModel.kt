@@ -13,20 +13,20 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NotificationSettingsViewModel @Inject constructor(
-    private val useCases: NotificationSettingsUseCases,
+//    private val useCases: NotificationSettingsUseCases,
     private val appMapper: AppMapper,
 ) : BaseViewModel<NotificationSettingsState>(NotificationSettingsState()) {
 
     fun getAppWithNotifications(hasPermission: Boolean) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                useCases.getAppsInfo(hasPermission).collect { listApps ->
-                    updateState {
-                        it.copy(
-                            apps = appMapper.mapToAppItemList(listApps)
-                        )
-                    }
-                }
+//                useCases.getAppsInfo(hasPermission).collect { listApps ->
+//                    updateState {
+//                        it.copy(
+//                            apps = appMapper.mapToAppItemList(listApps)
+//                        )
+//                    }
+//                }
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -42,7 +42,7 @@ class NotificationSettingsViewModel @Inject constructor(
 
     fun switchModeDisturb(packageName: String, isSwitched: Boolean) {
         viewModelScope.launch(Dispatchers.Default) {
-            useCases.switchModeDisturb(packageName, isSwitched)
+//            useCases.switchModeDisturb(packageName, isSwitched)
         }
     }
 
@@ -50,7 +50,7 @@ class NotificationSettingsViewModel @Inject constructor(
         if (!hasPermission) return
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                useCases.updateApps()
+//                useCases.updateApps()
             } catch (e: Exception) {
                 e.printStackTrace()
             }

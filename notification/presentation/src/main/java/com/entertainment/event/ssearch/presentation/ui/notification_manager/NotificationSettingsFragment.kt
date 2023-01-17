@@ -24,17 +24,19 @@ class NotificationSettingsFragment : Fragment(R.layout.fragment_notification_set
     private val binding: FragmentNotificationSettingsBinding by viewBinding()
     private val viewModel: NotificationSettingsViewModel by viewModels()
 
-    lateinit var adapter: AppRecyclerViewAdapter
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel.getAppWithNotifications(hasPermissionService())
-    }
+    private val adapter: AppRecyclerViewAdapter = AppRecyclerViewAdapter(
+        object : AppRecyclerViewAdapter.OnItemAppClickListener {
+            override fun switchModeDisturb(packageName: String, isSwitched: Boolean) {
+                viewModel.switchModeDisturb(packageName, isSwitched)
+            }
+        }
+    )
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initAdapter()
         initStateObserver()
+        viewModel.getAppWithNotifications(hasPermissionService())
 //        startActivity(Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"))
     }
 
@@ -54,13 +56,6 @@ class NotificationSettingsFragment : Fragment(R.layout.fragment_notification_set
     }
 
     private fun initAdapter() {
-        val adapter = AppRecyclerViewAdapter(
-            object : AppRecyclerViewAdapter.OnItemAppClickListener {
-                override fun switchModeDisturb(packageName: String, isSwitched: Boolean) {
-                    viewModel.switchModeDisturb(packageName, isSwitched)
-                }
-            }
-        )
         binding.recyclerViewNotification.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.recyclerViewNotification.adapter = adapter

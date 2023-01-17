@@ -20,6 +20,13 @@ fun List<com.entertainment.event.ssearch.data.db.entity.Notification>.mapToNotif
         )
     }
 
+fun NotificationDomain.mapToNotificationDb() = com.entertainment.event.ssearch.data.db.entity.Notification(
+    appPackageName = appPackageName,
+    time = time,
+    title = title,
+    body = body
+)
+
 fun List<AppWithNotifications>.mapToAppDomain() = this.map { appWithNotifications ->
     AppWithNotificationsDomain(
         packageName = appWithNotifications.app.packageName,
@@ -29,7 +36,8 @@ fun List<AppWithNotifications>.mapToAppDomain() = this.map { appWithNotification
 }
 
 fun StatusBarNotification.mapToNotification() =
-    com.entertainment.event.ssearch.data.db.entity.Notification(
+    NotificationDomain(
+        notificationId = 0,
         appPackageName = packageName,
         time = postTime,
         title = notification.extras[Notification.EXTRA_TITLE].toString(),

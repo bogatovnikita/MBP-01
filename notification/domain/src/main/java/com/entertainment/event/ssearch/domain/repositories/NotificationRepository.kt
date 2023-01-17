@@ -11,4 +11,6 @@ interface NotificationRepository {
 
     suspend fun deleteAll()
 
+    suspend fun insert(notification: NotificationDomain)
+
 }

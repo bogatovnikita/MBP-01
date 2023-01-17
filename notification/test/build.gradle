@@ -9,8 +9,8 @@ android {
     compileSdk 32
 
     defaultConfig {
-        applicationId "com.hedgehog.mbp_01"
-        minSdk 22
+        applicationId "com.entertainment.event.ssearch.notification_test"
+        minSdk 21
         targetSdk 32
         versionCode 1
         versionName "1.0"
@@ -31,6 +31,9 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    buildFeatures {
+        viewBinding true
+    }
 }
 
 dependencies {
@@ -40,16 +43,20 @@ dependencies {
     implementation 'com.google.android.material:material:1.7.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.4'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
     //Hilt
-    api "com.google.dagger:hilt-android:2.44"
-    kapt "com.google.dagger:hilt-compiler:2.44"
+    api "com.google.dagger:hilt-android:2.44.2"
+    kapt "com.google.dagger:hilt-compiler:2.44.2"
 
     //Navigation
     implementation "androidx.navigation:navigation-fragment-ktx:2.5.3"
     implementation "androidx.navigation:navigation-ui-ktx:2.5.3"
 
     implementation project(':notification:presentation')
+    implementation project(':notification:data')
+
+    //ViewBindingDelegate
+    implementation 'com.github.kirich1409:viewbindingpropertydelegate:1.5.6'
 }

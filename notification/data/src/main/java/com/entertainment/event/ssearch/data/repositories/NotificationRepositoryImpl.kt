@@ -18,4 +18,6 @@ class NotificationRepositoryImpl @Inject constructor(
 
     override suspend fun deleteAll() = db.deleteAll()
 
+    override suspend fun insert(notification: NotificationDomain) = db.insert(notification.mapToNotificationDb())
+
 }

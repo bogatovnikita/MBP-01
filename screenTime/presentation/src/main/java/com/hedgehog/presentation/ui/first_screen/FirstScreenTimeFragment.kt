@@ -80,6 +80,22 @@ class FirstScreenTimeFragment :
         adapter.submitList(state.listDataScreenTime)
         initDate()
         binding.reverseStatistics.isSelected = viewModel.screenState.value.reverseListAppScreenTime
+        if (state.listIsEmpty) {
+            initDate()
+            binding.reverseStatistics.isClickable = false
+            binding.selectedMode.isClickable = false
+            binding.reverseStatistics.setImageResource(R.drawable.ic_button_high_to_low_statics_not_statics)
+            binding.selectedMode.setImageResource(R.drawable.ic_button_selected_not_static)
+            binding.groupNotStatistics.visibility = View.VISIBLE
+            binding.recyclerView.visibility = View.GONE
+        } else {
+            binding.reverseStatistics.setImageResource(R.drawable.reverse_button_app_screen)
+            binding.selectedMode.setImageResource(R.drawable.selected_button_app_screen)
+            binding.reverseStatistics.isClickable = true
+            binding.selectedMode.isClickable = true
+            binding.groupNotStatistics.visibility = View.GONE
+            binding.recyclerView.visibility = View.VISIBLE
+        }
     }
 
     private fun initClickListeners() {

@@ -50,7 +50,7 @@ class FirstScreenTimeViewModel @Inject constructor(
                             icon = usageState.icon,
                             isItSystemApp = usageState.isItSystemApp
                         )
-                    }.reversed(), isLoading = true
+                    }.reversed(), isLoading = true, listIsEmpty = false
                 )
             }
         } else {
@@ -64,7 +64,14 @@ class FirstScreenTimeViewModel @Inject constructor(
                             icon = usageState.icon,
                             isItSystemApp = usageState.isItSystemApp
                         )
-                    }, isLoading = true
+                    }, isLoading = true, listIsEmpty = false
+                )
+            }
+        }
+        if (_screenState.value.listDataScreenTime.isEmpty()) {
+            updateState {
+                it.copy(
+                    listIsEmpty = true
                 )
             }
         }

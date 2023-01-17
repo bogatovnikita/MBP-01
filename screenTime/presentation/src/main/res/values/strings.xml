@@ -10,5 +10,6 @@
     <string name="stop_app">Принудительная остановка</string>
     <string name="delete">Удалить</string>
     <string name="delete_system_app">Это приложение нельзя удалить, оно обеспечивает нормальную работу вашего телефона</string>
+    <string name="text_not_statistics">Вы не пользовались ни одним приложением в выбранный период\n\nВыберете другие даты для просмотра статистики экранного времени</string>
 
 </resources>

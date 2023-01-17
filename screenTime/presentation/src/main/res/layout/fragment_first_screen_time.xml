@@ -171,13 +171,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/_12sdp"
-        android:checked="false"
-        app:useMaterialThemeColors="false"
         android:button="@drawable/check_box_selector"
+        android:checked="false"
         android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@id/guideline_recycler_view"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/week_button" />
+        app:layout_constraintTop_toBottomOf="@id/week_button"
+        app:useMaterialThemeColors="false" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_recycler_view"
@@ -196,6 +196,36 @@
         app:layout_constraintBottom_toTopOf="@id/stop_app"
         app:layout_constraintTop_toBottomOf="@id/guideline_recycler_view"
         tools:listitem="@layout/item_screen_time" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group_not_statistics"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="icon_not_statistics,text_not_statistics" />
+
+    <ImageView
+        android:id="@+id/icon_not_statistics"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_icon_not_statics"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/text_not_statistics"
+        style="@style/Text.Body_1.2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_8sdp"
+        android:layout_marginTop="@dimen/_12sdp"
+        android:gravity="center"
+        android:text="@string/text_not_statistics"
+        android:textColor="@color/gray"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/icon_not_statistics" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/stop_app"

@@ -39,6 +39,11 @@ class ScreenTimeAdapter(private val listener: Listener, private val isSelectedMo
                         holder.binding.root.context,
                         R.drawable.ic_check_box_system_app
                     )
+                } else {
+                    checkbox.buttonDrawable = ContextCompat.getDrawable(
+                        holder.binding.root.context,
+                        R.drawable.check_box_selector
+                    )
                 }
             }
             checkbox.isChecked = item.isChecked

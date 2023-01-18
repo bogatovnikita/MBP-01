@@ -19,7 +19,7 @@ class ScreenTimeDataRepositoryImplementation @Inject constructor(@ApplicationCon
     ScreenTimeDataRepository {
 
     private lateinit var stats: UsageStatsManager
-    private val minute = 60000
+    private val second = 1000
     private var appScreenList: MutableList<AppScreenTime> = mutableListOf()
     private lateinit var beginTime: Calendar
     private lateinit var endTime: Calendar
@@ -34,7 +34,9 @@ class ScreenTimeDataRepositoryImplementation @Inject constructor(@ApplicationCon
                     beginTime.timeInMillis, endTime.timeInMillis
                 ).values.toMutableList()
                 appScreenList = statsList.filter {
-                    it.totalTimeInForeground > minute && context.isPackageExist(it.packageName)
+                    it.totalTimeInForeground > second && context.isPackageExist(it.packageName) && context.isCheckAppPackage(
+                        it.packageName
+                    )
                 }.sortedByDescending {
                     it.totalTimeInForeground
                 }.map {
@@ -82,7 +84,12 @@ class ScreenTimeDataRepositoryImplementation @Inject constructor(@ApplicationCon
     private fun mapTimeToString(time: Long): String {
         val hour = (time / (1000 * 60 * 60))
         val minutes = ((time / (1000 * 60)) % 60)
-        return context.getString(R.string.D_hour_D_minutes, hour, minutes)
+        val second = time / 1000
+        return if (hour == 0L && minutes == 0L) {
+            context.getString(R.string.D_second, second)
+        } else {
+            context.getString(R.string.D_hour_D_minutes, hour, minutes)
+        }
     }
 
     private fun getAppLabel(it: UsageStats) = try {
@@ -112,4 +119,8 @@ class ScreenTimeDataRepositoryImplementation @Inject constructor(@ApplicationCon
 fun Context.isPackageExist(target: String): Boolean {
     return packageManager.getInstalledApplications(0)
         .find { info -> info.packageName == target } != null
+}
+
+fun Context.isCheckAppPackage(target: String): Boolean {
+    return target != this.packageName
 }

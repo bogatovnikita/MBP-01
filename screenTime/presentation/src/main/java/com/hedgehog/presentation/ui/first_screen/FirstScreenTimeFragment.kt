@@ -1,6 +1,15 @@
 package com.hedgehog.presentation.ui.first_screen
 
+import android.Manifest
+import android.app.ActivityManager
+import android.app.AppOpsManager
+import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
+import android.os.Process
+import android.provider.Settings
 import android.view.View
 import android.widget.Toast
 import androidx.core.content.ContextCompat
@@ -20,6 +29,7 @@ import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.*
 
+
 @AndroidEntryPoint
 class FirstScreenTimeFragment :
     BaseFragment<FragmentFirstScreenTimeBinding>(FragmentFirstScreenTimeBinding::inflate) {
@@ -30,11 +40,19 @@ class FirstScreenTimeFragment :
     private var endTime = -1
     private var calendar = Calendar.getInstance()
     private var secondCalendar = Calendar.getInstance()
+    private lateinit var activityManager: ActivityManager
+
+    override fun onStart() {
+        super.onStart()
+        if (checkPermission()) {
+            updateScreenTime(Calendar.DATE, beginTime, endTime)
+        } else {
+            startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS))
+        }
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        updateScreenTime(Calendar.DATE, beginTime, endTime)
-//        startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS))
         initRecyclerView()
         initObserver()
         initClickListeners()
@@ -106,7 +124,30 @@ class FirstScreenTimeFragment :
                 viewModel.selectAll()
             }
         }
-        binding.deleteApp.setOnClickListener { }
+        binding.stopApp.setOnClickListener {
+            activityManager =
+                requireContext().getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+            viewModel.screenState.value.listDataScreenTime.forEach {
+                if (it.isChecked) {
+                    activityManager.killBackgroundProcesses(it.packageName)
+                }
+            }
+            binding.selectedMode.performClick()
+            Toast.makeText(
+                requireContext(),
+                R.string.kill_background_process_text,
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+        binding.deleteApp.setOnClickListener {
+            viewModel.screenState.value.listDataScreenTime.filter {
+                !it.isItSystemApp && it.isChecked
+            }.forEach { appScreenTime ->
+                val intent = Intent(Intent.ACTION_DELETE)
+                intent.data = Uri.parse("package:" + appScreenTime.packageName)
+                startActivity(intent)
+            }
+        }
         binding.selectedMode.setOnClickListener {
             selectedMode(it)
         }
@@ -222,5 +263,22 @@ class FirstScreenTimeFragment :
             binding.dateTv.text =
                 "${formatter.format(calendar.time)} - ${formatter.format(secondCalendar.time)}"
         }
+    }
+
+    private fun checkPermission(): Boolean {
+        var granted = false
+        val appOps = requireContext()
+            .getSystemService(Context.APP_OPS_SERVICE) as AppOpsManager
+        val mode = appOps.checkOpNoThrow(
+            AppOpsManager.OPSTR_GET_USAGE_STATS,
+            Process.myUid(), requireContext().packageName
+        )
+
+        granted = if (mode == AppOpsManager.MODE_DEFAULT) {
+            requireContext().checkCallingOrSelfPermission(Manifest.permission.PACKAGE_USAGE_STATS) == PackageManager.PERMISSION_GRANTED
+        } else {
+            mode == AppOpsManager.MODE_ALLOWED
+        }
+        return granted
     }
 }

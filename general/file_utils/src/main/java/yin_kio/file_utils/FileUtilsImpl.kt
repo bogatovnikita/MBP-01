@@ -47,9 +47,9 @@ class FileUtilsImpl : FileUtils {
         var inputChannel: FileChannel? = null
         var outputChannel: FileChannel? = null
 
+
         try {
-            outputChannel =
-                FileOutputStream(destination.absolutePath + "/${file.name}").channel
+            outputChannel = FileOutputStream(copiedFile(destination, file)).channel
             inputChannel = FileInputStream(file).channel
 
             outputChannel.transferFrom(inputChannel, 0, inputChannel.size())
@@ -57,6 +57,16 @@ class FileUtilsImpl : FileUtils {
             inputChannel?.close()
             outputChannel?.close()
         }
+    }
+
+    private fun copiedFile(destination: File, file: File): File {
+        var copiedFile = File(destination.absolutePath + "/${file.name}")
+        var index = 1
+        while (copiedFile.exists()) {
+            copiedFile = File(destination.absolutePath + "/${file.name} ($index)")
+            index++
+        }
+        return copiedFile
     }
 
     override suspend fun deleteFiles(files: List<File>) : Long {

@@ -11,6 +11,7 @@ import com.hedgehog.domain.repository.ScreenTimeDataRepository
 import com.hedgehog.domain.wrapper.CaseResult
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.flow
 import java.util.*
 import javax.inject.Inject
@@ -26,28 +27,30 @@ class ScreenTimeDataRepositoryImplementation @Inject constructor(@ApplicationCon
 
     override fun getScreenTimeData(calendarScreenTime: CalendarScreenTime): Flow<CaseResult<List<AppScreenTime>, String>> =
         flow {
-            try {
-                initBeginEndTime(calendarScreenTime)
-                appScreenList.clear()
-                stats = context.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
-                val statsList = stats.queryAndAggregateUsageStats(
-                    beginTime.timeInMillis, endTime.timeInMillis
-                ).values.toMutableList()
-                appScreenList = statsList.filter {
-                    it.totalTimeInForeground > second && context.isPackageExist(it.packageName) && context.isCheckAppPackage(
-                        it.packageName
-                    )
-                }.sortedByDescending {
-                    it.totalTimeInForeground
-                }.map {
-                    appScreenTime(it)
-                }.toMutableList()
-                statsList.clear()
-                emit(CaseResult.Success(appScreenList))
-            } catch (e: Exception) {
-                CaseResult.Failure(e.toString())
-            }
+            getScreenTimeList(calendarScreenTime)
         }
+
+    private suspend fun FlowCollector<CaseResult<List<AppScreenTime>, String>>.getScreenTimeList(
+        calendarScreenTime: CalendarScreenTime
+    ) {
+        initBeginEndTime(calendarScreenTime)
+        appScreenList.clear()
+        stats = context.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
+        val statsList = stats.queryAndAggregateUsageStats(
+            beginTime.timeInMillis, endTime.timeInMillis
+        ).values.toMutableList()
+        appScreenList = statsList.filter {
+            it.totalTimeInForeground > second && context.isPackageExist(it.packageName) && context.isCheckAppPackage(
+                it.packageName
+            )
+        }.sortedByDescending {
+            it.totalTimeInForeground
+        }.map {
+            mapToAppScreenTime(it)
+        }.toMutableList()
+        statsList.clear()
+        emit(CaseResult.Success(appScreenList))
+    }
 
     private fun initBeginEndTime(calendarScreenTime: CalendarScreenTime) {
         beginTime = Calendar.getInstance()
@@ -73,7 +76,7 @@ class ScreenTimeDataRepositoryImplementation @Inject constructor(@ApplicationCon
         }
     }
 
-    private fun appScreenTime(it: UsageStats) = AppScreenTime(
+    private fun mapToAppScreenTime(it: UsageStats) = AppScreenTime(
         packageName = it.packageName,
         name = getAppLabel(it).toString(),
         time = mapTimeToString(it.totalTimeInForeground),

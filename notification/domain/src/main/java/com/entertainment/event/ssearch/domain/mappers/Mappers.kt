@@ -1,26 +1,29 @@
 package com.entertainment.event.ssearch.domain.mappers
 
+import android.content.Context
 import android.content.pm.PackageInfo
-import com.entertainment.event.ssearch.domain.models.AppDomain
-import com.entertainment.event.ssearch.domain.models.AppWithNotificationsDomain
+import android.net.Uri
+import com.entertainment.event.ssearch.domain.models.App
+import com.entertainment.event.ssearch.domain.models.AppWithNotifications
 
-fun List<PackageInfo>.mapToAppDomain() = this.map { packageInfo ->
-    packageInfo.mapToAppDomain()
+fun List<PackageInfo>.mapToApp(context: Context) = this.map { packageInfo ->
+    packageInfo.mapToApp(context)
 }
 
-fun PackageInfo.mapToAppDomain() =
-    AppDomain(
+fun PackageInfo.mapToApp(context: Context) =
+    App(
         packageName = packageName,
+        icon = Uri.parse("android.resource://" + packageName + "/" + applicationInfo.icon).toString(),
+        name = context.packageManager.getApplicationLabel(context.packageManager.getApplicationInfo(packageName, 0)).toString(),
         isSwitched = false
     )
 
-fun List<AppDomain>.mapToAppWithEmptyNotifications() = this.map { app ->
+fun List<App>.mapToAppWithEmptyNotifications() = this.map { app ->
     app.mapToAppWithEmptyNotifications()
 }
 
-fun AppDomain.mapToAppWithEmptyNotifications() =
-    AppWithNotificationsDomain(
-        packageName = packageName,
-        isSwitched = false,
+fun App.mapToAppWithEmptyNotifications() =
+    AppWithNotifications(
+        app = this,
         listNotifications = emptyList()
     )

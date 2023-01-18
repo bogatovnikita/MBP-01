@@ -1,17 +1,17 @@
 package com.entertainment.event.ssearch.data.repositories
 
-import android.app.Notification
 import android.service.notification.StatusBarNotification
-import com.entertainment.event.ssearch.data.db.entity.App
-import com.entertainment.event.ssearch.data.db.entity.AppWithNotifications
-import com.entertainment.event.ssearch.domain.models.AppDomain
-import com.entertainment.event.ssearch.domain.models.AppWithNotificationsDomain
-import com.entertainment.event.ssearch.domain.models.NotificationDomain
+import com.entertainment.event.ssearch.data.db.entity.AppDb
+import com.entertainment.event.ssearch.data.db.entity.AppWithNotificationsDb
+import com.entertainment.event.ssearch.data.db.entity.NotificationDb
+import com.entertainment.event.ssearch.domain.models.App
+import com.entertainment.event.ssearch.domain.models.AppWithNotifications
+import com.entertainment.event.ssearch.domain.models.Notification
 
 
-fun List<com.entertainment.event.ssearch.data.db.entity.Notification>.mapToNotificationDomain() =
+fun List<NotificationDb>.mapToNotification() =
     this.map { notification ->
-        NotificationDomain(
+        Notification(
             notificationId = notification.notificationId,
             appPackageName = notification.appPackageName,
             time = notification.time,
@@ -20,28 +20,39 @@ fun List<com.entertainment.event.ssearch.data.db.entity.Notification>.mapToNotif
         )
     }
 
-fun List<AppWithNotifications>.mapToAppDomain() = this.map { appWithNotifications ->
-    AppWithNotificationsDomain(
-        packageName = appWithNotifications.app.packageName,
-        listNotifications = appWithNotifications.notifications.mapToNotificationDomain(),
-        isSwitched = appWithNotifications.app.isSwitched
+fun Notification.mapToNotification() = NotificationDb(
+    appPackageName = appPackageName,
+    time = time,
+    title = title,
+    body = body
+)
+
+fun List<AppWithNotificationsDb>.mapToAppAppWithNotifications() = this.map { appWithNotifications ->
+    AppWithNotifications(
+        app = appWithNotifications.appDb.mapToApp(),
+        listNotifications = appWithNotifications.notificationDbs.mapToNotification(),
     )
 }
 
 fun StatusBarNotification.mapToNotification() =
-    com.entertainment.event.ssearch.data.db.entity.Notification(
+    Notification(
+        notificationId = 0,
         appPackageName = packageName,
         time = postTime,
-        title = notification.extras[Notification.EXTRA_TITLE].toString(),
-        body = notification.extras[Notification.EXTRA_TEXT].toString()
+        title = notification.extras[android.app.Notification.EXTRA_TITLE].toString(),
+        body = notification.extras[android.app.Notification.EXTRA_TEXT].toString()
     )
 
-fun AppDomain.mapToApp() = App(
+fun App.mapToAppDb() = AppDb(
     packageName = packageName,
+    icon = icon,
+    name = name,
     isSwitched = isSwitched
 )
 
-fun App.mapToAppDomain() = AppDomain(
+fun AppDb.mapToApp() = App(
     packageName = packageName,
+    icon = icon,
+    name = name,
     isSwitched = isSwitched
 )

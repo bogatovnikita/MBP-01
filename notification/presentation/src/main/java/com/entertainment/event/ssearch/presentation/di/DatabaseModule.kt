@@ -1,8 +1,6 @@
 package com.entertainment.event.ssearch.presentation.di
 
-import android.content.Context
-import androidx.room.Room
-import com.entertainment.event.ssearch.data.db.DB_NOTIFICATION_NAME
+import android.app.Application
 import com.entertainment.event.ssearch.data.db.NotificationDatabase
 import com.entertainment.event.ssearch.data.db.dao.AppDao
 import com.entertainment.event.ssearch.data.db.dao.AppWithNotificationsDao
@@ -10,7 +8,6 @@ import com.entertainment.event.ssearch.data.db.dao.NotificationsDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 
 @Module
@@ -18,12 +15,8 @@ import dagger.hilt.components.SingletonComponent
 class DatabaseModule {
 
     @Provides
-    fun provideNotificationDatabase(@ApplicationContext context: Context): NotificationDatabase =
-        Room.databaseBuilder(
-            context,
-            NotificationDatabase::class.java,
-            DB_NOTIFICATION_NAME
-        ).build()
+    fun provideNotificationDatabase(context: Application): NotificationDatabase =
+        NotificationDatabase.create(context)
 
     @Provides
     fun provideNotificationsDao(db: NotificationDatabase): NotificationsDao = db.notificationsDao()

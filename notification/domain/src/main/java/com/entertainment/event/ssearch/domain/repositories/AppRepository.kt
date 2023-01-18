@@ -1,18 +1,18 @@
 package com.entertainment.event.ssearch.domain.repositories
 
-import com.entertainment.event.ssearch.domain.models.AppDomain
+import com.entertainment.event.ssearch.domain.models.App
 import kotlinx.coroutines.flow.Flow
 
 interface AppRepository {
 
-    suspend fun insertApp(app: AppDomain)
+    suspend fun insertApp(app: App)
 
-    suspend fun insertAll(apps: List<AppDomain>)
+    suspend fun insertAll(apps: List<App>)
 
-    suspend fun readAll(): Flow<List<AppDomain>>
+    suspend fun readAll(): Flow<List<App>>
 
     suspend fun setSwitched(packageName: String, switched: Boolean)
 
-    suspend fun updateAll(apps: List<AppDomain>)
+    suspend fun updateAll(apps: List<App>)
 
 }

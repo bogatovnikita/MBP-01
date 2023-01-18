@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/notification_test_graph"
+    app:startDestination="@id/firstFragment">
+
+    <include app:graph="@navigation/notification_graph" />
+    <fragment
+        android:id="@+id/firstFragment"
+        android:name="com.entertainment.event.ssearch.test.FirstFragment"
+        android:label="fragment_first"
+        tools:layout="@layout/fragment_first" >
+        <action
+            android:id="@+id/action_firstFragment_to_notification_graph"
+            app:destination="@id/notification_graph" />
+    </fragment>
+
+</navigation>

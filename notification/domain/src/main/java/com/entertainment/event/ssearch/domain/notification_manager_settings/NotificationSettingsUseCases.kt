@@ -1,21 +1,19 @@
 package com.entertainment.event.ssearch.domain.notification_manager_settings
 
-import com.entertainment.event.ssearch.domain.mappers.mapToAppDomain
-import com.entertainment.event.ssearch.domain.mappers.mapToAppWithEmptyNotifications
-import com.entertainment.event.ssearch.domain.models.AppWithNotificationsDomain
+import android.app.Application
+import com.entertainment.event.ssearch.domain.mappers.mapToApp
+import com.entertainment.event.ssearch.domain.models.AppWithNotifications
 import com.entertainment.event.ssearch.domain.providers.AppsProvider
 import com.entertainment.event.ssearch.domain.repositories.AppRepository
 import com.entertainment.event.ssearch.domain.repositories.AppWithNotificationsRepository
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.count
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class NotificationSettingsUseCases @Inject constructor(
     private val appRepo: AppRepository,
     private val appsProvide: AppsProvider,
     private val appWithNotificationRepo: AppWithNotificationsRepository,
+    private val context: Application
 ) {
 
     fun removeAllNotification() {}
@@ -25,11 +23,11 @@ class NotificationSettingsUseCases @Inject constructor(
 
     fun getInfoAboutNotDisturbMode() {}
 
-    suspend fun updateApp(app: AppWithNotificationsDomain) {
-        appRepo.setSwitched(app.packageName, app.isSwitched)
+    suspend fun updateApp(app: AppWithNotifications) {
+        appRepo.setSwitched(app.app.packageName, app.app.isSwitched)
     }
 
-    suspend fun getAppsInfo(hasPermission: Boolean): Flow<List<AppWithNotificationsDomain>> {
+    suspend fun getAppsInfo(hasPermission: Boolean): Flow<List<AppWithNotifications>> {
         return if (hasPermission) {
             appWithNotificationRepo.readAppsWithNotifications()
         } else {
@@ -42,22 +40,18 @@ class NotificationSettingsUseCases @Inject constructor(
         appWithNotificationRepo.readAppsWithNotifications().collect { savedApps ->
             savedApps.forEach { savedApp ->
                 listApps.forEach { newApp ->
-                    if (savedApp.packageName != newApp.packageName) {
-                        appRepo.insertApp(newApp.mapToAppDomain())
+                    if (savedApp.app.packageName != newApp.packageName) {
+                        appRepo.insertApp(newApp.mapToApp(context))
                     }
                 }
             }
         }
     }
 
-    private suspend fun getOnlyApps(): Flow<List<AppWithNotificationsDomain>> {
-        return if (appRepo.readAll().count() == 0) {
-            val listApps = appsProvide.getSystemPackages() + appsProvide.getInstalledPackages()
-            appRepo.insertAll(listApps.mapToAppDomain())
-            appWithNotificationRepo.readAppsWithNotifications()
-        } else {
-            appRepo.readAll().map { apps -> apps.mapToAppWithEmptyNotifications() }
-        }
+    private suspend fun getOnlyApps(): Flow<List<AppWithNotifications>> {
+        val listApps = appsProvide.getSystemPackages() + appsProvide.getInstalledPackages()
+        appRepo.insertAll(listApps.mapToApp(context))
+        return appWithNotificationRepo.readAppsWithNotifications()
     }
 
 }

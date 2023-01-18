@@ -13,12 +13,9 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ServiceLifecycleDispatcher
 import androidx.lifecycle.coroutineScope
-import com.entertainment.event.ssearch.data.db.dao.NotificationsDao
 import com.entertainment.event.ssearch.data.repositories.NotificationRepositoryImpl
 import com.entertainment.event.ssearch.data.repositories.mapToNotification
-import com.entertainment.event.ssearch.domain.repositories.NotificationRepository
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class NotificationService: NotificationListenerService(), LifecycleOwner {

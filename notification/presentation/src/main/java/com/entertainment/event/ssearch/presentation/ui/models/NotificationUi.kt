@@ -1,8 +1,7 @@
 package com.entertainment.event.ssearch.presentation.ui.models
 
-data class NotificationItem(
-    val name: String,
-    val icon: Int,
+data class NotificationUi(
+    val packageName: String,
     val body: String,
     val time: Long,
 )

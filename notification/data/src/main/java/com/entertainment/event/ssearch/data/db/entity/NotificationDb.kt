@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "notification_table")
-data class Notification(
+data class NotificationDb(
     @PrimaryKey(autoGenerate = true)
     val notificationId: Int = 0,
     val appPackageName: String,

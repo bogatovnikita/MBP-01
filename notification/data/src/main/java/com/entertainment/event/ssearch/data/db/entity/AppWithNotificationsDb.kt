@@ -3,12 +3,12 @@ package com.entertainment.event.ssearch.data.db.entity
 import androidx.room.Embedded
 import androidx.room.Relation
 
-data class AppWithNotifications(
+data class AppWithNotificationsDb(
     @Embedded
-    val app: App,
+    val appDb: AppDb,
     @Relation(
         parentColumn = "packageName",
         entityColumn = "appPackageName"
     )
-    val notifications: List<Notification>
+    val notificationDbs: List<NotificationDb>
 )

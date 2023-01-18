@@ -1,7 +1,8 @@
 package com.entertainment.event.ssearch.domain.models
 
-data class AppWithNotificationsDomain(
+data class App(
     val packageName: String,
-    val listNotifications: List<NotificationDomain>,
+    val icon: String,
+    val name: String,
     val isSwitched: Boolean,
 )

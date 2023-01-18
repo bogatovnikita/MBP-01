@@ -36,7 +36,7 @@ class NotificationSettingsFragment : Fragment(R.layout.fragment_notification_set
         super.onViewCreated(view, savedInstanceState)
         initAdapter()
         initStateObserver()
-        viewModel.getAppWithNotifications(hasPermissionService())
+        viewModel.getAppWithNotifications(true)
 //        startActivity(Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"))
     }
 

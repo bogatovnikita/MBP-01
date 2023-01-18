@@ -4,8 +4,10 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "app_table")
-data class App(
+data class AppDb(
     @PrimaryKey (autoGenerate = false)
     val packageName: String,
+    val icon: String,
+    val name: String,
     val isSwitched: Boolean
 )

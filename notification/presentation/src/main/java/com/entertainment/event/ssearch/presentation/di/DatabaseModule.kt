@@ -1,8 +1,6 @@
 package com.entertainment.event.ssearch.presentation.di
 
 import android.app.Application
-import androidx.room.Room
-import com.entertainment.event.ssearch.data.db.DB_NOTIFICATION_NAME
 import com.entertainment.event.ssearch.data.db.NotificationDatabase
 import com.entertainment.event.ssearch.data.db.dao.AppDao
 import com.entertainment.event.ssearch.data.db.dao.AppWithNotificationsDao
@@ -18,11 +16,7 @@ class DatabaseModule {
 
     @Provides
     fun provideNotificationDatabase(context: Application): NotificationDatabase =
-        Room.databaseBuilder(
-            context,
-            NotificationDatabase::class.java,
-            DB_NOTIFICATION_NAME
-        ).build()
+        NotificationDatabase.create(context)
 
     @Provides
     fun provideNotificationsDao(db: NotificationDatabase): NotificationsDao = db.notificationsDao()

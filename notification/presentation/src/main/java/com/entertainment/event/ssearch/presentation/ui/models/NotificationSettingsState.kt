@@ -4,5 +4,5 @@ data class NotificationSettingsState(
     val modeNotDisturb: Boolean = false,
     val tableTimeSate: TableTimeSate = TableTimeSate(),
     val isAllNotificationCleared: Boolean = false,
-    val apps: List<AppItem> = emptyList(),
+    val apps: List<AppUi> = emptyList(),
 )

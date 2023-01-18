@@ -1,7 +1,7 @@
 package com.entertainment.event.ssearch.data.repositories
 
 import com.entertainment.event.ssearch.data.db.dao.NotificationsDao
-import com.entertainment.event.ssearch.domain.models.NotificationDomain
+import com.entertainment.event.ssearch.domain.models.Notification
 import com.entertainment.event.ssearch.domain.repositories.NotificationRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -11,13 +11,13 @@ class NotificationRepositoryImpl @Inject constructor(
     private val db: NotificationsDao,
 ): NotificationRepository {
 
-    override suspend fun readAll(): Flow<List<NotificationDomain>> =
-        db.readAll().map { notifications -> notifications.mapToNotificationDomain() }
+    override suspend fun readAll(): Flow<List<Notification>> =
+        db.readAll().map { notifications -> notifications.mapToNotification() }
 
     override suspend fun delete(notificationId: Int) = db.delete(notificationId)
 
     override suspend fun deleteAll() = db.deleteAll()
 
-    override suspend fun insert(notification: NotificationDomain) = db.insert(notification.mapToNotificationDb())
+    override suspend fun insert(notification: Notification) = db.insert(notification.mapToNotification())
 
 }

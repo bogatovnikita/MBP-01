@@ -1,6 +1,6 @@
 package com.entertainment.event.ssearch.domain.models
 
-data class NotificationDomain(
+data class Notification(
     val notificationId: Int,
     val appPackageName: String,
     val time: Long,

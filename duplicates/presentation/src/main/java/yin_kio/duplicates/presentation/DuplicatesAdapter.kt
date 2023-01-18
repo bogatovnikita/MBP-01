@@ -6,31 +6,25 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import yin_kio.duplicates.domain.models.DuplicatesList
-import yin_kio.duplicates.domain.models.ImageInfo
 import yin_kio.duplicates.presentation.databinding.ListItemGroupBinding
 
 class DuplicatesAdapter(
-    private val onGroupSelectClick: (groupIndex: Int) -> Unit,
-    private val onImageClick: (groupIndex: Int, path: String) -> Unit,
     private val coroutineScope: CoroutineScope,
-    private val stateFlow: Flow<UIState>,
-    private val isGroupSelected: (groupIndex: Int) -> Boolean,
-    private val isItemSelected: (groupIndex: Int, path: String) -> Boolean
+    private val createGroupViewModel: () -> GroupViewModel
 ) : ListAdapter<DuplicatesList, DuplicatesViewHolder>(difCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DuplicatesViewHolder {
-        return DuplicatesViewHolder.from(parent, onImageClick,
-            coroutineScope, stateFlow,
-            isGroupSelected,
-            isItemSelected
+        return DuplicatesViewHolder.from(
+            parent = parent,
+            coroutineScope = coroutineScope,
+            viewModel = createGroupViewModel(),
         )
     }
 
     override fun onBindViewHolder(holder: DuplicatesViewHolder, position: Int) {
-        holder.bind(getItem(position), onGroupSelectClick)
+        holder.bind(getItem(position))
     }
 }
 
@@ -54,19 +48,15 @@ private fun difCallback() = object : DiffUtil.ItemCallback<DuplicatesList>(){
 
 class DuplicatesViewHolder private constructor (
     private val binding: ListItemGroupBinding,
-    private val onImageClick: (groupIndex: Int, path: String) -> Unit,
     private val coroutineScope: CoroutineScope,
-    private val stateFlow: Flow<UIState>,
-    private val isGroupSelected: (groupIndex: Int) -> Boolean,
-    private val isItemSelected: (groupIndex: Int, path: String) -> Boolean
+    private val viewModel: GroupViewModel
 ) : ViewHolder(binding.root){
 
 
     private val adapter by lazy {
         ImageInfoAdapter(
-            onItemClick = {onImageClick(absoluteAdapterPosition, it)},
-            coroutineScope, stateFlow,
-            isItemSelected
+            coroutineScope = coroutineScope,
+            createItemViewModel = { viewModel.createItemViewModel() }
         )
     }
 
@@ -74,29 +64,30 @@ class DuplicatesViewHolder private constructor (
         binding.recycler.adapter = adapter
 
         coroutineScope.launch {
-            stateFlow.collect{
-                binding.checkbox.isChecked = isGroupSelected(absoluteAdapterPosition)
+            viewModel.state.collect{
+                binding.checkbox.isChecked = it
             }
         }
     }
 
-    fun bind(item: DuplicatesList, onGroupSelectClick: (groupIndex: Int) -> Unit){
-        adapter.groupPosition = absoluteAdapterPosition
+    fun bind(item: DuplicatesList){
+        viewModel.updateState(item.id)
+        adapter.groupPosition = item.id
         adapter.submitList(item.data)
-        binding.select.setOnClickListener { onGroupSelectClick(absoluteAdapterPosition) }
-        binding.checkbox.setOnClickListener { onGroupSelectClick(absoluteAdapterPosition) }
+        binding.select.setOnClickListener { viewModel.switchSelection(item.id) }
+        binding.checkbox.setOnClickListener { viewModel.switchSelection(item.id) }
     }
 
     companion object{
-        fun from(parent: ViewGroup, onImageClick: (groupIndex: Int, path: String) -> Unit,
+        fun from(parent: ViewGroup,
                  coroutineScope: CoroutineScope,
-                 stateFlow: Flow<UIState>,
-                 isGroupSelected: (groupIndex: Int) -> Boolean,
-                 isItemSelected: (groupIndex: Int, path: String) -> Boolean
+                 viewModel: GroupViewModel
         ) : DuplicatesViewHolder{
             val binding = ListItemGroupBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-            return DuplicatesViewHolder(binding, onImageClick, coroutineScope, stateFlow, isGroupSelected,
-                isItemSelected
+            return DuplicatesViewHolder(
+                binding = binding,
+                coroutineScope = coroutineScope,
+                viewModel = viewModel,
             )
         }
     }

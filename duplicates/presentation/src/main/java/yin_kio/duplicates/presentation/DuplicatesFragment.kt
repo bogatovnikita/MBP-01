@@ -14,14 +14,8 @@ class DuplicatesFragment : Fragment(R.layout.fragment_duplicates) {
     private val viewModel by lazy { parentViewModel() }
 
     private val adapter by lazy { DuplicatesAdapter(
-        onImageClick = { groupIndex, item ->
-            viewModel.switchItemSelection(groupIndex, item)
-        },
-        onGroupSelectClick = {viewModel.switchGroupSelection(it)},
         coroutineScope = viewLifecycleOwner.lifecycleScope,
-        stateFlow = viewModel.uiState,
-        isGroupSelected = { viewModel.isGroupSelected(it) },
-        isItemSelected = { groupIndex, path -> viewModel.isItemSelected(groupIndex, path) }
+        createGroupViewModel = {viewModel.createGroupViewModel()},
     ) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

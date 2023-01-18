@@ -8,22 +8,24 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import yin_kio.duplicates.domain.models.ImageInfo
 import yin_kio.duplicates.presentation.databinding.ListItemImageBinding
 
 class ImageInfoAdapter(
-    private val onItemClick: (path: String) -> Unit,
     private val coroutineScope: CoroutineScope,
-    private val stateFlow: Flow<UIState>,
-    private val isItemsSelected: (groupIndex: Int, path: String) -> Boolean
+    private val createItemViewModel: () -> ItemViewModel,
 ) : ListAdapter<ImageInfo, ImageInfoViewHolder>(diffCallback()) {
 
-    var groupPosition: Int = 0
+    var groupPosition = -1
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageInfoViewHolder {
-        return ImageInfoViewHolder.from(parent, onItemClick, coroutineScope, stateFlow, groupPosition, isItemsSelected)
+        return ImageInfoViewHolder.from(
+            parent = parent,
+            coroutineScope = coroutineScope,
+            groupPosition = { groupPosition },
+            viewModel = createItemViewModel(),
+        )
     }
 
     override fun onBindViewHolder(holder: ImageInfoViewHolder, position: Int) {
@@ -44,34 +46,27 @@ private fun diffCallback()  = object : DiffUtil.ItemCallback<ImageInfo>(){
 
 class ImageInfoViewHolder private constructor(
     private val binding: ListItemImageBinding,
-    private val onItemClick: (path: String) -> Unit,
     private val coroutineScope: CoroutineScope,
-    private val stateFlow: Flow<UIState>,
-    private val groupPosition: Int,
-    private val isItemSelected: (groupIndex: Int, path: String) -> Boolean
+    private val groupPosition: () -> Int,
+    private val viewModel: ItemViewModel
 ) : RecyclerView.ViewHolder(binding.root){
 
 
-    private var path: String? = null
 
     init {
-        observeItemSelection()
-        binding.checkbox.setOnClickListener { clickOnItem() }
-        binding.root.setOnClickListener { clickOnItem() }
-    }
-
-    private fun observeItemSelection() {
         coroutineScope.launch {
-            stateFlow.collect { path?.let { binding.checkbox.isChecked = isItemSelected(groupPosition, it) } }
+            viewModel.state.collect { binding.checkbox.isChecked = it }
         }
     }
 
-    private fun clickOnItem() {
-        path?.let { onItemClick(it) }
-    }
+
 
     fun bind(item: ImageInfo){
-        path = item.path
+        viewModel.updateState(groupPosition(), item.path)
+
+        binding.checkbox.setOnClickListener { viewModel.switchSelection(groupPosition(), item.path) }
+        binding.root.setOnClickListener { viewModel.switchSelection(groupPosition(), item.path) }
+
         loadImage(item)
     }
 
@@ -82,14 +77,18 @@ class ImageInfoViewHolder private constructor(
     }
 
     companion object{
-        fun from(parent: ViewGroup, onItemClick: (path: String) -> Unit,
+        fun from(parent: ViewGroup,
                  coroutineScope: CoroutineScope,
-                 stateFlow: Flow<UIState>,
-                 groupPosition: Int,
-                 isItemSelected: (groupIndex: Int, path: String) -> Boolean
+                 groupPosition: () -> Int,
+                 viewModel: ItemViewModel
         ) : ImageInfoViewHolder{
             val binding = ListItemImageBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-            return ImageInfoViewHolder(binding, onItemClick, coroutineScope, stateFlow, groupPosition, isItemSelected)
+            return ImageInfoViewHolder(
+                binding = binding,
+                coroutineScope = coroutineScope,
+                groupPosition = groupPosition,
+                viewModel = viewModel,
+            )
         }
     }
 }

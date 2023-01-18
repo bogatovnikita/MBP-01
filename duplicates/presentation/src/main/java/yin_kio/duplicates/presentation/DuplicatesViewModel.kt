@@ -11,12 +11,25 @@ import kotlin.coroutines.CoroutineContext
 class DuplicatesViewModel(
     useCase: DuplicateUseCase,
     private val state: StateHolder,
-    coroutineScope: CoroutineScope,
+    private val coroutineScope: CoroutineScope,
     coroutineDispatcher: CoroutineContext
 ) : DuplicateUseCase by useCase{
 
     private val _uiState = MutableSharedFlow<UIState>()
     val uiState = _uiState.asSharedFlow()
+
+    private val groupViewModels = mutableListOf<GroupViewModel>()
+
+    fun createGroupViewModel() : GroupViewModel{
+        val groupViewModel = GroupViewModel(
+            stateHolder = state,
+            switchGroupSelection = { switchGroupSelection(it) },
+            switchItemSelection = ::switchItemSelection,
+            coroutineScope = coroutineScope
+        )
+        groupViewModels.add(groupViewModel)
+        return groupViewModel
+    }
 
     init {
         coroutineScope.launch(coroutineDispatcher) {
@@ -41,12 +54,5 @@ class DuplicatesViewModel(
     private fun bgResId(it: StateHolder) =
         if (it.selected.isEmpty()) general.R.drawable.bg_main_button_enabled else R.drawable.bg_unite_selected
 
-    fun isGroupSelected(position: Int) : Boolean{
-        return state.isGroupSelected(position)
-    }
-
-    fun isItemSelected(index: Int, path: String) : Boolean{
-        return state.isItemSelected(index, path)
-    }
 
 }

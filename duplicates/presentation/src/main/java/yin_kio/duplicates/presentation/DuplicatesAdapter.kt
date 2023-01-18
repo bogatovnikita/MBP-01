@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import yin_kio.duplicates.domain.models.DuplicatesList
 import yin_kio.duplicates.domain.models.ImageInfo
 import yin_kio.duplicates.presentation.databinding.ListItemGroupBinding
 
@@ -18,7 +19,7 @@ class DuplicatesAdapter(
     private val stateFlow: Flow<UIState>,
     private val isGroupSelected: (groupIndex: Int) -> Boolean,
     private val isItemSelected: (groupIndex: Int, path: String) -> Boolean
-) : ListAdapter<List<ImageInfo>, DuplicatesViewHolder>(difCallback()) {
+) : ListAdapter<DuplicatesList, DuplicatesViewHolder>(difCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DuplicatesViewHolder {
         return DuplicatesViewHolder.from(parent, onImageClick,
@@ -35,14 +36,14 @@ class DuplicatesAdapter(
 
 
 
-private fun difCallback() = object : DiffUtil.ItemCallback<List<ImageInfo>>(){
-        override fun areItemsTheSame(oldItem: List<ImageInfo>, newItem: List<ImageInfo>): Boolean {
+private fun difCallback() = object : DiffUtil.ItemCallback<DuplicatesList>(){
+        override fun areItemsTheSame(oldItem: DuplicatesList, newItem: DuplicatesList): Boolean {
             return oldItem == newItem
         }
 
         override fun areContentsTheSame(
-            oldItem: List<ImageInfo>,
-            newItem: List<ImageInfo>
+            oldItem: DuplicatesList,
+            newItem: DuplicatesList
         ): Boolean {
             return oldItem == newItem
         }
@@ -79,9 +80,9 @@ class DuplicatesViewHolder private constructor (
         }
     }
 
-    fun bind(item: List<ImageInfo>, onGroupSelectClick: (groupIndex: Int) -> Unit){
+    fun bind(item: DuplicatesList, onGroupSelectClick: (groupIndex: Int) -> Unit){
         adapter.groupPosition = absoluteAdapterPosition
-        adapter.submitList(item)
+        adapter.submitList(item.data)
         binding.select.setOnClickListener { onGroupSelectClick(absoluteAdapterPosition) }
         binding.checkbox.setOnClickListener { onGroupSelectClick(absoluteAdapterPosition) }
     }

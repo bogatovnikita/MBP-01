@@ -32,7 +32,7 @@ class DuplicatesFragment : Fragment(R.layout.fragment_duplicates) {
                 showProgress(it)
                 showButton(it)
 
-                adapter.submitList(it.duplicatesList)
+                adapter.submitList(it.duplicatesLists)
             }
         }
     }

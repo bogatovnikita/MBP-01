@@ -23,7 +23,7 @@ class DuplicatesViewModel(
             state.stateFlow.collect{
                 _uiState.emit(UIState(
                     destination = it.destination,
-                    duplicatesList = it.duplicatesList,
+                    duplicatesLists = it.duplicatesLists,
                     isInProgress = it.isInProgress,
                     selected = it.selected,
                     buttonState = ButtonState(

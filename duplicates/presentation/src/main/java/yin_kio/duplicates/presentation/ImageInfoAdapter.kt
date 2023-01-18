@@ -55,7 +55,7 @@ class ImageInfoViewHolder private constructor(
 
     init {
         coroutineScope.launch {
-            viewModel.state.collect { binding.checkbox.isChecked = it }
+            viewModel.state.collect { binding.checkbox.isChecked = it.isSelected }
         }
     }
 

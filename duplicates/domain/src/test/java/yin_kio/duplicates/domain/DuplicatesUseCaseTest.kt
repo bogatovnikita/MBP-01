@@ -49,12 +49,12 @@ class DuplicatesUseCaseTest {
         val state = MutableStateHolder(this, coroutineContext)
         createDuplicatesUseCase(stateHolder = state)
         state.apply {
-            assertTrue(duplicatesList.isEmpty())
+            assertTrue(duplicatesLists.isEmpty())
             assertTrue(isInProgress)
             assertEquals(Destination.List, state.destination)
             waitCoroutines()
             assertFalse(isInProgress)
-            assertTrue(duplicatesList.isNotEmpty())
+            assertTrue(duplicatesLists.isNotEmpty())
             assertEquals(Destination.List, state.destination)
         }
     }
@@ -89,7 +89,7 @@ class DuplicatesUseCaseTest {
     @Test
     fun `updateFiles without permission`() = runTest(dispatcher){
         state.apply {
-            val oldDuplicates = duplicatesList
+            val oldDuplicates = duplicatesLists
 
             val useCase = createDuplicatesUseCase()
             waitCoroutines()
@@ -99,7 +99,7 @@ class DuplicatesUseCaseTest {
             assertTrue(isInProgress)
             waitCoroutines()
             assertFalse(isInProgress)
-            assertFalse(duplicatesList === oldDuplicates)
+            assertFalse(duplicatesLists === oldDuplicates)
             assertEquals(Destination.List, state.destination)
         }
     }
@@ -110,7 +110,7 @@ class DuplicatesUseCaseTest {
 
         state.apply {
             assertTrue(selected.isNotEmpty())
-            assertTrue(selected[0]!!.containsAll(duplicatesList[0]))
+            assertTrue(selected[0]!!.containsAll(duplicatesLists[0].data))
 
             useCase.switchGroupSelection(0)
 
@@ -124,7 +124,7 @@ class DuplicatesUseCaseTest {
         useCase.switchItemSelection(0, SECOND_FILE)
 
         state.apply {
-            assertTrue(selected[0]!!.containsAll(duplicatesList[0]))
+            assertTrue(selected[0]!!.containsAll(duplicatesLists[0].data))
 
             useCase.switchItemSelection(0, FIRST_FILE)
 
@@ -167,13 +167,13 @@ class DuplicatesUseCaseTest {
 
     @Test
     fun `unite if has not selected`() = runTest(dispatcher) {
-        coEvery { duplicateRemover.invoke(state.duplicatesList) } returns Unit
+        coEvery { duplicateRemover.invoke(state.duplicatesLists.map { it.data }) } returns Unit
 
         useCase.unite()
 
         assertUniteNavigation()
 
-        coVerify { duplicateRemover.invoke(state.duplicatesList) }
+        coVerify { duplicateRemover.invoke(state.duplicatesLists.map { it.data }) }
     }
 
     @Test

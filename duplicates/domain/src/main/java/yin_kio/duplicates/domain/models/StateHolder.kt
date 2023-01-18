@@ -4,7 +4,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface StateHolder {
     val isInProgress: Boolean
-    val duplicatesList: List<List<ImageInfo>>
+    val duplicatesLists: List<DuplicatesList>
     val selected: Map<Int, Set<ImageInfo>>
     val destination: Destination
 
@@ -14,3 +14,8 @@ interface StateHolder {
 
     val stateFlow: Flow<StateHolder>
 }
+
+data class DuplicatesList(
+    val id: Int,
+    val data: List<ImageInfo>
+)

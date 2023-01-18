@@ -7,10 +7,8 @@ import yin_kio.duplicates.domain.findDuplicates
 import yin_kio.duplicates.domain.gateways.Files
 import yin_kio.duplicates.domain.gateways.ImagesComparator
 import yin_kio.duplicates.domain.gateways.Permissions
-import yin_kio.duplicates.domain.models.Destination
-import yin_kio.duplicates.domain.models.ImageInfo
+import yin_kio.duplicates.domain.models.*
 import yin_kio.duplicates.domain.models.MutableStateHolder
-import yin_kio.duplicates.domain.models.UniteWay
 import kotlin.coroutines.CoroutineContext
 
 internal class DuplicatesUseCaseImpl(
@@ -40,7 +38,7 @@ internal class DuplicatesUseCaseImpl(
         delay(1)
         update()
 
-        duplicatesList = getDuplicates()
+        duplicatesLists = getDuplicates().mapIndexed { index, imageInfos -> DuplicatesList(index, imageInfos)  }
         isInProgress = false
 
         update()
@@ -64,7 +62,7 @@ internal class DuplicatesUseCaseImpl(
     override fun switchGroupSelection(index: Int) = with(state){
         if (selected[index] == null) {
             val set = mutableSetOf<ImageInfo>()
-            set.addAll(duplicatesList[index])
+            set.addAll(duplicatesLists[index].data)
             selected[index] = set
         } else {
             selected.remove(index)
@@ -75,7 +73,7 @@ internal class DuplicatesUseCaseImpl(
 
 
     override fun switchItemSelection(groupIndex: Int, path: String) = with(state){
-        val item = duplicatesList[groupIndex].find { it.path == path }
+        val item = duplicatesLists[groupIndex].data.find { it.path == path }
 
         item?.also {
             val group = selected[groupIndex]
@@ -118,7 +116,7 @@ internal class DuplicatesUseCaseImpl(
     private fun MutableStateHolder.getImagesForUniting(): List<Collection<ImageInfo>> {
         val forUniting = when (uniteWay) {
             UniteWay.Selected -> selected.map { it.value }.filter { it.size > 1 }
-            UniteWay.All -> state.duplicatesList
+            UniteWay.All -> state.duplicatesLists.map { it.data }
         }
         return forUniting
     }

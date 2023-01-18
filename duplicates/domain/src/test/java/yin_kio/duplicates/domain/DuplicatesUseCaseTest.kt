@@ -151,7 +151,7 @@ class DuplicatesUseCaseTest {
 
 
     @Test
-    fun `unite if has Selected`() = runTest(dispatcher){
+    fun `unite if has group Selected`() = runTest(dispatcher){
         useCase.switchGroupSelection(0)
 
         val selectedCollection = state.selected.map { it.value }
@@ -165,7 +165,6 @@ class DuplicatesUseCaseTest {
     }
 
 
-
     @Test
     fun `unite if has not selected`() = runTest(dispatcher) {
         coEvery { duplicateRemover.invoke(state.duplicatesList) } returns Unit
@@ -175,6 +174,20 @@ class DuplicatesUseCaseTest {
         assertUniteNavigation()
 
         coVerify { duplicateRemover.invoke(state.duplicatesList) }
+    }
+
+    @Test
+    fun `unite if has item selected`() = runTest(dispatcher){
+        useCase.switchItemSelection(0, FIRST_FILE)
+
+        val selectedCollection = state.selected.map { it.value }
+        coEvery { duplicateRemover.invoke(selectedCollection) } returns Unit
+
+        useCase.unite()
+
+        assertUniteNavigation()
+
+        coVerify(inverse = true) { duplicateRemover.invoke(selectedCollection) }
     }
 
     private fun TestScope.assertUniteNavigation() {

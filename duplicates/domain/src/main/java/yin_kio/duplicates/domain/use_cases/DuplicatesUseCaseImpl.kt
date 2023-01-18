@@ -108,7 +108,8 @@ internal class DuplicatesUseCaseImpl(
         async {
             state.apply {
                 uniteWay = selectUniteWay()
-                duplicateRemover.invoke(getImagesForUniting())
+                val imagesForUniting = getImagesForUniting()
+                if (imagesForUniting.isNotEmpty()) duplicateRemover.invoke(imagesForUniting)
                 navigate(Destination.Inter)
             }
         }
@@ -116,7 +117,7 @@ internal class DuplicatesUseCaseImpl(
 
     private fun MutableStateHolder.getImagesForUniting(): List<Collection<ImageInfo>> {
         val forUniting = when (uniteWay) {
-            UniteWay.Selected -> selected.map { it.value }
+            UniteWay.Selected -> selected.map { it.value }.filter { it.size > 1 }
             UniteWay.All -> state.duplicatesList
         }
         return forUniting

@@ -1,13 +1,12 @@
 package yin_kio.duplicates.presentation
 
 import android.app.Activity
-import android.util.Log
 import androidx.navigation.NavController
 import com.example.ads.showInter
 import yin_kio.duplicates.domain.models.Destination
 
 class Navigation(
-    private val navController: NavController,
+    private val childNavController: NavController,
     private val activity: Activity,
     private val onCloseInter: () -> Unit
 ) {
@@ -31,7 +30,7 @@ class Navigation(
                     onClosed = onCloseInter
                 )
             } else {
-                navController.navigate(id)
+                childNavController.navigate(id)
             }
 
             currentDestination = destination
@@ -50,7 +49,7 @@ class Navigation(
     }
 
     private fun navigateUp(){
-        navController.navigateUp()
+        childNavController.navigateUp()
     }
 
     companion object{

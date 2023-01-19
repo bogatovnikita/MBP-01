@@ -7,7 +7,7 @@ interface NotificationRepository {
 
     suspend fun readAll(): Flow<List<Notification>>
 
-    suspend fun delete(notificationId: Int)
+    suspend fun delete(time: Long)
 
     suspend fun deleteAll()
 

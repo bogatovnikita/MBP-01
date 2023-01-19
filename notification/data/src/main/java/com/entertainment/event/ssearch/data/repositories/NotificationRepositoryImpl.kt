@@ -14,7 +14,7 @@ class NotificationRepositoryImpl @Inject constructor(
     override suspend fun readAll(): Flow<List<Notification>> =
         db.readAll().map { notifications -> notifications.mapToNotification() }
 
-    override suspend fun delete(notificationId: Int) = db.delete(notificationId)
+    override suspend fun delete(time: Long) = db.delete(time)
 
     override suspend fun deleteAll() = db.deleteAll()
 

@@ -14,10 +14,12 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ServiceLifecycleDispatcher
 import androidx.lifecycle.coroutineScope
+import com.entertainment.event.ssearch.data.repositories.AppRepositoryImpl
 import com.entertainment.event.ssearch.data.repositories.NotificationRepositoryImpl
 import com.entertainment.event.ssearch.data.repositories.mapToNotification
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import java.lang.Exception
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -25,6 +27,9 @@ class NotificationService: NotificationListenerService(), LifecycleOwner {
 
     @Inject
     lateinit var notifications: NotificationRepositoryImpl
+
+    @Inject
+    lateinit var apps: AppRepositoryImpl
 
     private val dispatcher = ServiceLifecycleDispatcher(this)
 
@@ -54,18 +59,26 @@ class NotificationService: NotificationListenerService(), LifecycleOwner {
 
     override fun onNotificationPosted(sbn: StatusBarNotification?, rankingMap: RankingMap?) {
         super.onNotificationPosted(sbn, rankingMap)
-        dispatcher.lifecycle.coroutineScope.launch {
-            activeNotifications.forEach { notification ->
-                notifications.insert(notification.mapToNotification())
-            }
-        }
+        saveNotification()
     }
 
     override fun onListenerConnected() {
         super.onListenerConnected()
+        saveNotification()
+    }
+
+    private fun saveNotification() {
         dispatcher.lifecycle.coroutineScope.launch {
             activeNotifications.forEach { notification ->
-                notifications.insert(notification.mapToNotification())
+                val isSwitched = try {
+                    apps.readApp(notification.packageName).isSwitched
+                } catch (e: Exception) {
+                    false
+                }
+                if (isSwitched) {
+                    notifications.insert(notification.mapToNotification())
+                    cancelNotification(notification.key)
+                }
             }
         }
     }

@@ -17,6 +17,8 @@ class AppRepositoryImpl @Inject constructor(
 
     override suspend fun readAll(): Flow<List<App>> = db.readAll().map { appDb -> appDb.map { it.mapToApp() } }
 
+    override suspend fun readApp(packageName: String): App = db.readApp(packageName).mapToApp()
+
     override suspend fun setSwitched(packageName: String, switched: Boolean) = db.setSwitched(packageName, switched)
 
     override suspend fun updateAll(apps: List<App>) = db.updateAll(apps.map { app -> app.mapToAppDb() })

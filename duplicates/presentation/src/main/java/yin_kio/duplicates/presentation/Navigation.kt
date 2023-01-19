@@ -19,7 +19,7 @@ class Navigation(
         if (currentDestination != destination){
             val navigateUpDestinations = arrayOf(
                 Destination.List,
-                Destination.DoneSelected
+                Destination.AskContinue
             )
 
             if (navigateUpDestinations.contains(destination)) navigateUp()
@@ -43,8 +43,9 @@ class Navigation(
             Destination.List -> R.id.duplicatesFragment
             Destination.UniteProgress -> R.id.action_duplicatesFragment_to_progressDialog
             Destination.Inter -> INTER_ID
-            Destination.DoneSelected -> R.id.action_duplicatesFragment_to_askContinueDialog
-            Destination.DoneAll -> TODO()
+            Destination.AskContinue -> R.id.action_duplicatesFragment_to_askContinueDialog
+            Destination.Advices -> TODO()
+            Destination.AdvicesWithDialog -> TODO()
         }
     }
 

@@ -35,7 +35,6 @@ internal class DuplicatesUseCaseImpl(
     private suspend fun updateFilesSynchronously() = with(state) {
         if (hasNotPermission()) return@with
 
-
         isInProgress = true
         delay(1)
         update()
@@ -138,6 +137,7 @@ internal class DuplicatesUseCaseImpl(
 
     override fun continueUniting(){
         state.destination = Destination.List
+        updateFiles()
         state.update()
     }
 

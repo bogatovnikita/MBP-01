@@ -62,6 +62,11 @@ class StateHolderTest {
 
         stateHolder.selected.remove(0)
         assertFalse(stateHolder.isGroupSelected(0))
+
+        assertFalse(stateHolder.isGroupSelected(1))
+
+        stateHolder.duplicatesLists = emptyList()
+        assertFalse(stateHolder.isGroupSelected(0))
     }
 
     companion object{

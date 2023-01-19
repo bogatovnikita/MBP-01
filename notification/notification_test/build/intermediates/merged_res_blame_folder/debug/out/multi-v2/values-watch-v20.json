@@ -1,0 +1,20 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.entertainment.event.ssearch.notification_test-mergeDebugResources-27:/values-watch-v20/values-watch-v20.xml",
+            "map": [
+                {
+                    "source": "/Users/bogatovnikita/.gradle/caches/transforms-3/d1cb5e5a8e70116c3e2e44250b2983fc/transformed/appcompat-1.5.1/res/values-watch-v20/values-watch-v20.xml",
+                    "from": {
+                        "startLines": "2,5,8",
+                        "startColumns": "4,4,4",
+                        "startOffsets": "55,214,385",
+                        "endLines": "4,7,10",
+                        "endColumns": "12,12,12",
+                        "endOffsets": "209,380,553"
+                    }
+                }
+            ]
+        }
+    ]
+}

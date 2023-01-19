@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/screen_time_graph"
+    app:startDestination="@id/firstScreenTimeFragment">
+
+    <fragment
+        android:id="@+id/firstScreenTimeFragment"
+        android:name="com.hedgehog.presentation.ui.first_screen.FirstScreenTimeFragment"
+        android:label="FirstScreenTimeFragment"
+        tools:layout="@layout/fragment_first_screen_time">
+        <action
+            android:id="@+id/action_firstScreenTimeFragment_to_secondScreenTimeFragment"
+            app:destination="@id/secondScreenTimeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/secondScreenTimeFragment"
+        android:name="com.hedgehog.presentation.ui.second_screen.SecondScreenTimeFragment"
+        android:label="SecondScreenTimeFragment"
+        tools:layout="@layout/fragment_second_screen_time" />
+</navigation>

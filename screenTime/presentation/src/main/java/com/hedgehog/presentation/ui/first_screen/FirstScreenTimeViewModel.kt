@@ -17,8 +17,8 @@ class FirstScreenTimeViewModel @Inject constructor(
 ) : BaseViewModel<FirstScreenTimeState>(FirstScreenTimeState()) {
     var beginTime = 0
     var endTime = -1
-    var calendar = Calendar.getInstance()
-    var secondCalendar = Calendar.getInstance()
+    var calendar: Calendar = Calendar.getInstance()
+    var secondCalendar: Calendar = Calendar.getInstance()
 
     fun getListTimeScreenData(calendarScreenTime: CalendarScreenTime) {
         viewModelScope.launch {

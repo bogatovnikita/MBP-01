@@ -166,29 +166,59 @@ class FirstScreenTimeFragment :
     }
 
     private fun clickDeleteAppButton() {
-        viewModel.screenState.value.listDataScreenTime.filter {
-            !it.isItSystemApp && it.isChecked
-        }.forEach { appScreenTime ->
-            val intent = Intent(Intent.ACTION_DELETE)
-            intent.data = Uri.parse("package:" + appScreenTime.packageName)
-            startActivity(intent)
+        val checkList = viewModel.screenState.value.listDataScreenTime.filter { it.isChecked }
+        if (checkList.isNotEmpty()) {
+            viewModel.screenState.value.listDataScreenTime.filter {
+                !it.isItSystemApp && it.isChecked
+            }.forEach { appScreenTime ->
+                val intent = Intent(Intent.ACTION_DELETE)
+                intent.data = Uri.parse("package:" + appScreenTime.packageName)
+                startActivityForResult(intent, 10)
+            }
+        } else {
+            Toast.makeText(
+                requireContext(),
+                R.string.select_the_app_to_delete,
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 10) {
+            if (viewModel.screenState.value.choiceDay) {
+                updateScreenTime(Calendar.DATE, viewModel.beginTime, viewModel.endTime)
+            } else {
+                updateScreenTime(Calendar.WEEK_OF_YEAR, viewModel.beginTime, viewModel.endTime)
+            }
         }
     }
 
     private fun clickStopAllButton() {
-        activityManager =
-            requireContext().getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
-        viewModel.screenState.value.listDataScreenTime.forEach {
-            if (it.isChecked) {
-                activityManager.killBackgroundProcesses(it.packageName)
+        val checkList = viewModel.screenState.value.listDataScreenTime.filter { it.isChecked }
+        if (checkList.isNotEmpty()) {
+            activityManager =
+                requireContext().getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+            viewModel.screenState.value.listDataScreenTime.forEach {
+                if (it.isChecked) {
+                    activityManager.killBackgroundProcesses(it.packageName)
+                }
             }
+            binding.selectedMode.performClick()
+            Toast.makeText(
+                requireContext(),
+                R.string.kill_background_process_text,
+                Toast.LENGTH_SHORT
+            ).show()
+        } else {
+            Toast.makeText(
+                requireContext(),
+                R.string.select_the_app_to_stop,
+                Toast.LENGTH_SHORT
+            ).show()
         }
-        binding.selectedMode.performClick()
-        Toast.makeText(
-            requireContext(),
-            R.string.kill_background_process_text,
-            Toast.LENGTH_SHORT
-        ).show()
     }
 
     private fun clickCheckbox() {

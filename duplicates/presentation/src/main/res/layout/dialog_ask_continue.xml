@@ -27,11 +27,15 @@
         android:layout_marginBottom="8dp"/>
 
 
-    <TextView android:text="@string/dialog_ask_continue_continue"
+    <TextView
+        android:id="@+id/continue_unite"
+        android:text="@string/dialog_ask_continue_continue"
         style="@style/MiddleButton.Black"
         android:layout_marginBottom="8dp"/>
 
-    <TextView android:text="@string/dialog_ask_continue_cancel"
+    <TextView
+        android:id="@+id/complete"
+        android:text="@string/dialog_ask_continue_cancel"
         style="@style/MiddleButton.Green"
         android:layout_marginBottom="24dp"/>
 

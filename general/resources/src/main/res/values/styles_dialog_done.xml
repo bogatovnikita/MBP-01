@@ -19,4 +19,8 @@
         <item name="android:gravity">center</item>
     </style>
 
+    <style name="MyDialog" parent="@android:style/Theme.Dialog">\
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
 </resources>

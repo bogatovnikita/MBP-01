@@ -17,9 +17,14 @@ class Navigation(
 
 
     fun navigate(destination: Destination){
-        Log.d("!!!", "$destination")
         if (currentDestination != destination){
-            if (destination == Destination.List) navigateUp()
+            val navigateUpDestinations = arrayOf(
+                Destination.List,
+                Destination.DoneSelected
+            )
+
+            if (navigateUpDestinations.contains(destination)) navigateUp()
+
             val id = destination.adapt()
             if (id == INTER_ID) {
                 activity.showInter(
@@ -39,7 +44,7 @@ class Navigation(
             Destination.List -> R.id.duplicatesFragment
             Destination.UniteProgress -> R.id.action_duplicatesFragment_to_progressDialog
             Destination.Inter -> INTER_ID
-            Destination.DoneSelected -> TODO()
+            Destination.DoneSelected -> R.id.action_duplicatesFragment_to_askContinueDialog
             Destination.DoneAll -> TODO()
         }
     }

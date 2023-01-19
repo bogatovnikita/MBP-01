@@ -21,7 +21,7 @@ class AskDeleteDialog : DialogFragment(R.layout.dialog_ask_delete) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(STYLE_NO_TITLE, R.style.MyDialog)
+        setStyle(STYLE_NO_TITLE, general.R.style.MyDialog)
     }
 
 

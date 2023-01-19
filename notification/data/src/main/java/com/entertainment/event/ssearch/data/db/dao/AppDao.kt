@@ -1,25 +1,25 @@
 package com.entertainment.event.ssearch.data.db.dao
 
 import androidx.room.*
-import com.entertainment.event.ssearch.data.db.entity.App
+import com.entertainment.event.ssearch.data.db.entity.AppDb
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface AppDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertApp(app: App)
+    suspend fun insertApp(appDb: AppDb)
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertAll(apps: List<App>)
+    suspend fun insertAll(appDbs: List<AppDb>)
 
     @Query("SELECT * FROM app_table")
-    suspend fun readAll() : Flow<List<App>>
+    fun readAll() : Flow<List<AppDb>>
 
     @Query("UPDATE app_table SET isSwitched = :switched WHERE packageName = :packageName")
     suspend fun setSwitched(packageName: String, switched: Boolean)
 
     @Update
-    suspend fun updateAll(apps: List<App>)
+    suspend fun updateAll(appDbs: List<AppDb>)
 
 }

@@ -13,16 +13,15 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ServiceLifecycleDispatcher
 import androidx.lifecycle.coroutineScope
-import com.entertainment.event.ssearch.data.db.dao.NotificationsDao
+import com.entertainment.event.ssearch.data.repositories.NotificationRepositoryImpl
 import com.entertainment.event.ssearch.data.repositories.mapToNotification
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class NotificationService: NotificationListenerService(), LifecycleOwner {
 
-    @Inject
-    lateinit var notificationsDao: NotificationsDao
+//    @Inject
+//    lateinit var notifications: NotificationRepositoryImpl
 
     private val dispatcher = ServiceLifecycleDispatcher(this)
 
@@ -54,7 +53,7 @@ class NotificationService: NotificationListenerService(), LifecycleOwner {
         super.onListenerConnected()
         dispatcher.lifecycle.coroutineScope.launchWhenStarted {
             activeNotifications.forEach { notification ->
-                notificationsDao.insert(notification.mapToNotification())
+//                notifications.insert(notification.mapToNotification())
             }
         }
     }

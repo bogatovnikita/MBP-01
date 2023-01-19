@@ -8,11 +8,11 @@ import android.os.Bundle
 import androidx.fragment.app.DialogFragment
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.entertainment.event.ssearch.presentation.R
-import com.entertainment.event.ssearch.presentation.databinding.FragmentNotificationManagerBinding
+import com.entertainment.event.ssearch.presentation.databinding.FragmentDialogNotificationPermissionBinding
 
 class DialogNotificationPermissionFragment : DialogFragment(R.layout.fragment_dialog_notification_permission) {
 
-    private val binding: FragmentNotificationManagerBinding by viewBinding()
+    private val binding: FragmentDialogNotificationPermissionBinding by viewBinding()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 

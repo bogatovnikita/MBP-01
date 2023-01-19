@@ -1,10 +1,6 @@
 package yin_kio.file_utils
 
-import java.io.File
-import java.io.FileInputStream
-import java.io.FileOutputStream
-import java.io.IOException
-import java.nio.channels.FileChannel
+import java.io.*
 
 class FileUtilsImpl : FileUtils {
 
@@ -44,26 +40,32 @@ class FileUtilsImpl : FileUtils {
     override fun copyFile(file: File, destination: File) {
         if (destination.isFile) throw IOException("Destination is not folder: ${destination.absolutePath}")
 
-        var inputChannel: FileChannel? = null
-        var outputChannel: FileChannel? = null
-
-
+        var inputStream: InputStream? = null
+        var outputStream: OutputStream? = null
         try {
-            outputChannel = FileOutputStream(copiedFile(destination, file)).channel
-            inputChannel = FileInputStream(file).channel
-
-            outputChannel.transferFrom(inputChannel, 0, inputChannel.size())
+            inputStream = FileInputStream(file)
+            outputStream = FileOutputStream(copiedFile(destination, file))
+            val buffer = ByteArray(1024)
+            var length: Int
+            while (inputStream.read(buffer).also { length = it } > 0) {
+                outputStream.write(buffer, 0, length)
+            }
         } finally {
-            inputChannel?.close()
-            outputChannel?.close()
+            inputStream?.close()
+            outputStream?.close()
         }
     }
 
     private fun copiedFile(destination: File, file: File): File {
         var copiedFile = File(destination.absolutePath + "/${file.name}")
+        if (!copiedFile.exists()) return copiedFile
+
         var index = 1
         while (copiedFile.exists()) {
-            copiedFile = File(destination.absolutePath + "/${file.name} ($index)")
+            val tail = file.name.replaceBeforeLast(".", "($index)")
+            val head = file.name.substringBeforeLast('.') + " "
+            val fileName = head + tail
+            copiedFile = File(destination.absolutePath + "/${fileName}")
             index++
         }
         return copiedFile

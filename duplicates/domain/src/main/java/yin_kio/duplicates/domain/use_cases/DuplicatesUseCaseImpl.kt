@@ -133,14 +133,17 @@ internal class DuplicatesUseCaseImpl(
             UniteWay.Selected -> Destination.DoneSelected
             UniteWay.All -> Destination.DoneAll
         }
+        state.update()
     }
 
     override fun continueUniting(){
         state.destination = Destination.List
+        state.update()
     }
 
     override fun completeUniting(){
         state.destination = Destination.DoneAll
+        state.update()
     }
 
     private fun async(action: suspend () -> Unit){

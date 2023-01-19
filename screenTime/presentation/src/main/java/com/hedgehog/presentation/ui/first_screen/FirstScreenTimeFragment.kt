@@ -68,18 +68,14 @@ class FirstScreenTimeFragment :
             object : ScreenTimeAdapter.Listener {
                 override fun onChooseNote(item: AppScreenTime) {
                     if (viewModel.screenState.value.selectionMode) return
-                    Toast.makeText(requireContext(), item.name, Toast.LENGTH_SHORT).show()
+                    showToast(item.name.toInt())
                 }
 
                 override fun onToggle(item: AppScreenTime) {
                     if (!item.isItSystemApp) {
                         viewModel.toggleCheckBox(item)
                     } else {
-                        Toast.makeText(
-                            requireContext(),
-                            R.string.delete_system_app,
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        showToast(R.string.delete_system_app)
                     }
                     binding.checkbox.isChecked =
                         (viewModel.screenState.value.listDataScreenTime.size - viewModel.screenState.value.systemCheckedCount) == viewModel.screenState.value.totalCheckedCount
@@ -97,14 +93,21 @@ class FirstScreenTimeFragment :
     }
 
     private fun renderState(state: FirstScreenTimeState) {
-        if (!state.isLoading) return
-        adapter.submitList(state.listDataScreenTime)
         initDate()
-        binding.reverseStatistics.isSelected = viewModel.screenState.value.reverseListAppScreenTime
-        if (state.listIsEmpty) {
-            stateListIsEmpty()
+        if (state.isLoading) {
+            binding.loader.visibility = View.GONE
+            binding.recyclerView.visibility = View.VISIBLE
+            adapter.submitList(state.listDataScreenTime)
+            binding.reverseStatistics.isSelected =
+                viewModel.screenState.value.reverseListAppScreenTime
+            if (state.listIsEmpty) {
+                stateListIsEmpty()
+            } else {
+                stateListIsNotEmpty()
+            }
         } else {
-            stateListIsNotEmpty()
+            binding.loader.visibility = View.VISIBLE
+            binding.recyclerView.visibility = View.GONE
         }
     }
 
@@ -176,11 +179,7 @@ class FirstScreenTimeFragment :
                 startActivityForResult(intent, 10)
             }
         } else {
-            Toast.makeText(
-                requireContext(),
-                R.string.select_the_app_to_delete,
-                Toast.LENGTH_SHORT
-            ).show()
+            showToast(R.string.select_the_app_to_delete)
         }
     }
 
@@ -207,17 +206,9 @@ class FirstScreenTimeFragment :
                 }
             }
             binding.selectedMode.performClick()
-            Toast.makeText(
-                requireContext(),
-                R.string.kill_background_process_text,
-                Toast.LENGTH_SHORT
-            ).show()
+            showToast(R.string.kill_background_process_text)
         } else {
-            Toast.makeText(
-                requireContext(),
-                R.string.select_the_app_to_stop,
-                Toast.LENGTH_SHORT
-            ).show()
+            showToast(R.string.select_the_app_to_stop)
         }
     }
 
@@ -240,6 +231,8 @@ class FirstScreenTimeFragment :
     }
 
     private fun choiceLeftArrow() {
+        if (viewModel.screenState.value.choiceDay && viewModel.beginTime == LIMIT_STATICS_FOR_DAY) return
+        if (viewModel.screenState.value.choiceWeek && viewModel.beginTime == LIMIT_STATICS_FOR_WEEK) return
         viewModel.beginTime += 1
         viewModel.endTime += 1
         if (viewModel.screenState.value.choiceDay) {
@@ -331,5 +324,18 @@ class FirstScreenTimeFragment :
         } else {
             mode == AppOpsManager.MODE_ALLOWED
         }
+    }
+
+    private fun showToast(text: Int) {
+        Toast.makeText(
+            requireContext(),
+            text,
+            Toast.LENGTH_SHORT
+        ).show()
+    }
+
+    companion object {
+        const val LIMIT_STATICS_FOR_DAY = 30
+        const val LIMIT_STATICS_FOR_WEEK = 3
     }
 }

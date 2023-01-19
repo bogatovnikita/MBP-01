@@ -8,6 +8,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.IBinder
 import android.service.notification.NotificationListenerService
+import android.service.notification.StatusBarNotification
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
@@ -16,6 +17,7 @@ import androidx.lifecycle.coroutineScope
 import com.entertainment.event.ssearch.data.repositories.NotificationRepositoryImpl
 import com.entertainment.event.ssearch.data.repositories.mapToNotification
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -50,9 +52,18 @@ class NotificationService: NotificationListenerService(), LifecycleOwner {
         super.onDestroy()
     }
 
+    override fun onNotificationPosted(sbn: StatusBarNotification?, rankingMap: RankingMap?) {
+        super.onNotificationPosted(sbn, rankingMap)
+        dispatcher.lifecycle.coroutineScope.launch {
+            activeNotifications.forEach { notification ->
+                notifications.insert(notification.mapToNotification())
+            }
+        }
+    }
+
     override fun onListenerConnected() {
         super.onListenerConnected()
-        dispatcher.lifecycle.coroutineScope.launchWhenStarted {
+        dispatcher.lifecycle.coroutineScope.launch {
             activeNotifications.forEach { notification ->
                 notifications.insert(notification.mapToNotification())
             }
@@ -62,7 +73,7 @@ class NotificationService: NotificationListenerService(), LifecycleOwner {
     private fun createNotificationChannel() {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val name = getString(general.R.string.app_name)
-            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val importance = NotificationManager.IMPORTANCE_MIN
             val channel =
                 NotificationChannel(PERSIST_NOTIFICATION_CHANNEL_ID, name, importance)
             val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager

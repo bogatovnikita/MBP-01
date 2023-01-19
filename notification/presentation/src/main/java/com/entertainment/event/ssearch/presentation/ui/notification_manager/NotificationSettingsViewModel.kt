@@ -18,13 +18,15 @@ class NotificationSettingsViewModel @Inject constructor(
 
     fun getAppWithNotifications(hasPermission: Boolean) {
         viewModelScope.launch(Dispatchers.IO) {
-                useCases.getAppsInfo(hasPermission).collect { listApps ->
-                    updateState {
-                        it.copy(
-                            apps = listApps.mapToAppUiList()
-                        )
-                    }
+            useCases.getAppsInfo(hasPermission).collect { listApps ->
+                updateState {
+                    it.copy(
+                        apps = listApps.mapToAppUiList()
+                            .sortedWith(compareBy({ it.isSwitched }, { it.lastNotificationTime }))
+                            .reversed()
+                    )
                 }
+            }
         }
         viewModelScope.launch(Dispatchers.IO) {
             try {

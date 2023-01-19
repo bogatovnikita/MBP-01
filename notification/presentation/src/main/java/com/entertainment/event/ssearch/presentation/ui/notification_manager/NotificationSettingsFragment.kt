@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.coroutineScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.entertainment.event.ssearch.data.background.NotificationService
@@ -66,6 +67,10 @@ class NotificationSettingsFragment : Fragment(R.layout.fragment_notification_set
         binding.recyclerViewNotification.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.recyclerViewNotification.adapter = adapter
+        val itemAnimator = binding.recyclerViewNotification.itemAnimator
+        if (itemAnimator is DefaultItemAnimator) {
+            itemAnimator.supportsChangeAnimations = false
+        }
     }
 
     fun startNotificationService() {

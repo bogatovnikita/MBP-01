@@ -7,5 +7,10 @@ data class FirstScreenTimeState(
     val isLoading: Boolean = false,
     val isErrorLoading: Boolean = false,
     val choiceDay: Boolean = true,
-    val choiceWeek: Boolean = false
+    val choiceWeek: Boolean = false,
+    val selectionMode: Boolean = false,
+    var totalCheckedCount: Int = 0,
+    var systemCheckedCount: Int = 0,
+    val reverseListAppScreenTime: Boolean = false,
+    val listIsEmpty: Boolean = false
 )

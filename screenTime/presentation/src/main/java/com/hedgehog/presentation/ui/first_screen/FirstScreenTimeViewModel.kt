@@ -8,12 +8,17 @@ import com.hedgehog.presentation.models.AppScreenTime
 import com.hedgehog.presentation.models.CalendarScreenTime
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
 class FirstScreenTimeViewModel @Inject constructor(
     private val getScreenTimeDataUseCase: GetScreenTimeDataUseCase
 ) : BaseViewModel<FirstScreenTimeState>(FirstScreenTimeState()) {
+    var beginTime = 0
+    var endTime = -1
+    var calendar = Calendar.getInstance()
+    var secondCalendar = Calendar.getInstance()
 
     fun getListTimeScreenData(calendarScreenTime: CalendarScreenTime) {
         viewModelScope.launch {
@@ -25,14 +30,10 @@ class FirstScreenTimeViewModel @Inject constructor(
                 )
             ).collect { result ->
                 when (result) {
-                    is CaseResult.Success -> {
-                        onSuccess(result)
-                    }
+                    is CaseResult.Success -> onSuccess(result)
                     is CaseResult.Failure -> {
                         updateState {
-                            it.copy(
-                                isErrorLoading = true
-                            )
+                            it.copy(isErrorLoading = true)
                         }
                     }
                 }
@@ -41,28 +42,124 @@ class FirstScreenTimeViewModel @Inject constructor(
     }
 
     private fun onSuccess(result: CaseResult.Success<List<com.hedgehog.domain.models.AppScreenTime>>) {
-        updateState {
-            it.copy(
-                listDataScreenTime = result.response.map { usageState ->
-                    AppScreenTime(
-                        name = usageState.name,
-                        time = usageState.time,
-                        icon = usageState.icon
-                    )
-                }, isLoading = true
+        if (_screenState.value.reverseListAppScreenTime) {
+            updateState {
+                it.copy(
+                    listDataScreenTime = mapToAppScreenTime(result).reversed(),
+                    isLoading = true, listIsEmpty = false
+                )
+            }
+        } else {
+            updateState {
+                it.copy(
+                    listDataScreenTime = mapToAppScreenTime(result),
+                    isLoading = true, listIsEmpty = false
+                )
+            }
+        }
+        if (_screenState.value.listDataScreenTime.isEmpty()) {
+            updateState { it.copy(listIsEmpty = true) }
+        }
+        val size = _screenState.value.listDataScreenTime.filter { it.isItSystemApp }.size
+        updateState { it.copy(systemCheckedCount = size) }
+    }
+
+    private fun mapToAppScreenTime(result: CaseResult.Success<List<com.hedgehog.domain.models.AppScreenTime>>) =
+        result.response.map { usageState ->
+            AppScreenTime(
+                packageName = usageState.packageName,
+                name = usageState.name,
+                time = usageState.time,
+                icon = usageState.icon,
+                isItSystemApp = usageState.isItSystemApp
             )
         }
-    }
 
     fun choiceDay() {
         updateState {
-            it.copy(choiceDay = true, choiceWeek = false)
+            it.copy(
+                choiceDay = true,
+                choiceWeek = false
+            )
         }
     }
 
     fun choiceWeek() {
         updateState {
-            it.copy(choiceDay = false, choiceWeek = true)
+            it.copy(
+                choiceDay = false,
+                choiceWeek = true
+            )
         }
+    }
+
+    fun reverseList() {
+        updateState {
+            it.copy(
+                listDataScreenTime = it.listDataScreenTime.reversed(),
+                reverseListAppScreenTime = !it.reverseListAppScreenTime
+            )
+        }
+    }
+
+    fun selectedMode() = updateState { it.copy(selectionMode = !it.selectionMode) }
+
+
+    fun toggleCheckBox(item: AppScreenTime) {
+        var temp = _screenState.value.totalCheckedCount
+        _screenState.value.listDataScreenTime.forEach {
+            if (it.packageName == item.packageName) {
+                it.isChecked = !it.isChecked
+                if (it.isChecked) {
+                    temp -= 1
+                } else {
+                    temp += 1
+                }
+            }
+        }
+        updateState {
+            it.copy(
+                listDataScreenTime = _screenState.value.listDataScreenTime,
+                totalCheckedCount = temp
+            )
+        }
+    }
+
+    fun cleanToggleCheckBox() =
+        updateState {
+            it.copy(
+                listDataScreenTime = mapToCleanToggleCheckBox(), totalCheckedCount = 0
+            )
+        }
+
+    private fun mapToCleanToggleCheckBox() = _screenState.value.listDataScreenTime.map { item ->
+        AppScreenTime(
+            packageName = item.packageName,
+            name = item.name,
+            time = item.time,
+            icon = item.icon,
+            isItSystemApp = item.isItSystemApp,
+            isChecked = false
+        )
+    }
+
+    fun selectAll() {
+        updateState {
+            it.copy(
+                listDataScreenTime = mapToSelectAll(),
+                totalCheckedCount = _screenState.value.listDataScreenTime.size - _screenState.value.systemCheckedCount
+            )
+        }
+    }
+
+    private fun mapToSelectAll() = _screenState.value.listDataScreenTime.map { item ->
+        AppScreenTime(
+            packageName = item.packageName,
+            name = item.name,
+            time = item.time,
+            icon = item.icon,
+            isItSystemApp = item.isItSystemApp,
+            isChecked = !item.isItSystemApp
+        )
     }
 }

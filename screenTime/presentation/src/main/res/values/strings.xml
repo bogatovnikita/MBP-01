@@ -5,4 +5,11 @@
     <string name="D_hour">%d hour</string>
     <string name="day">День</string>
     <string name="week">Неделя</string>
+    <string name="app_screen_time">Экранное время</string>
+    <string name="change_all">Выбрать все</string>
+    <string name="stop_app">Принудительная остановка</string>
+    <string name="delete">Удалить</string>
+    <string name="delete_system_app">Это приложение нельзя удалить, оно обеспечивает нормальную работу вашего телефона</string>
+    <string name="text_not_statistics">Вы не пользовались ни одним приложением в выбранный период\n\nВыберете другие даты для просмотра статистики экранного времени</string>
+    <string name="kill_background_process_text">Принудительная остановка выполнена</string>
 </resources>

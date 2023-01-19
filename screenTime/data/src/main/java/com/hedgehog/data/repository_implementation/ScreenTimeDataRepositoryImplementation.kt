@@ -3,6 +3,7 @@ package com.hedgehog.data.repository_implementation
 import android.app.usage.UsageStats
 import android.app.usage.UsageStatsManager
 import android.content.Context
+import android.content.pm.ApplicationInfo
 import com.hedgehog.data.R
 import com.hedgehog.domain.models.AppScreenTime
 import com.hedgehog.domain.models.CalendarScreenTime
@@ -10,6 +11,7 @@ import com.hedgehog.domain.repository.ScreenTimeDataRepository
 import com.hedgehog.domain.wrapper.CaseResult
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.flow
 import java.util.*
 import javax.inject.Inject
@@ -18,33 +20,37 @@ class ScreenTimeDataRepositoryImplementation @Inject constructor(@ApplicationCon
     ScreenTimeDataRepository {
 
     private lateinit var stats: UsageStatsManager
-    private val minute = 60000
+    private val second = 1000
     private var appScreenList: MutableList<AppScreenTime> = mutableListOf()
     private lateinit var beginTime: Calendar
     private lateinit var endTime: Calendar
 
     override fun getScreenTimeData(calendarScreenTime: CalendarScreenTime): Flow<CaseResult<List<AppScreenTime>, String>> =
         flow {
-            try {
-                initBeginEndTime(calendarScreenTime)
-                appScreenList.clear()
-                stats = context.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
-                val statsList = stats.queryAndAggregateUsageStats(
-                    beginTime.timeInMillis, endTime.timeInMillis
-                ).values.toMutableList()
-                appScreenList = statsList.filter {
-                    it.totalTimeInForeground > minute
-                }.sortedByDescending {
-                    it.totalTimeInForeground
-                }.map {
-                    appScreenTime(it)
-                }.toMutableList()
-                statsList.clear()
-                emit(CaseResult.Success(appScreenList))
-            } catch (e: Exception) {
-                CaseResult.Failure(e.toString())
-            }
+            getScreenTimeList(calendarScreenTime)
         }
+
+    private suspend fun FlowCollector<CaseResult<List<AppScreenTime>, String>>.getScreenTimeList(
+        calendarScreenTime: CalendarScreenTime
+    ) {
+        initBeginEndTime(calendarScreenTime)
+        appScreenList.clear()
+        stats = context.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
+        val statsList = stats.queryAndAggregateUsageStats(
+            beginTime.timeInMillis, endTime.timeInMillis
+        ).values.toMutableList()
+        appScreenList = statsList.filter {
+            it.totalTimeInForeground > second && context.isPackageExist(it.packageName) && context.isCheckAppPackage(
+                it.packageName
+            )
+        }.sortedByDescending {
+            it.totalTimeInForeground
+        }.map {
+            mapToAppScreenTime(it)
+        }.toMutableList()
+        statsList.clear()
+        emit(CaseResult.Success(appScreenList))
+    }
 
     private fun initBeginEndTime(calendarScreenTime: CalendarScreenTime) {
         beginTime = Calendar.getInstance()
@@ -70,16 +76,23 @@ class ScreenTimeDataRepositoryImplementation @Inject constructor(@ApplicationCon
         }
     }
 
-    private fun appScreenTime(it: UsageStats) = AppScreenTime(
+    private fun mapToAppScreenTime(it: UsageStats) = AppScreenTime(
+        packageName = it.packageName,
         name = getAppLabel(it).toString(),
         time = mapTimeToString(it.totalTimeInForeground),
-        icon = getAppIcon(it)
+        icon = getAppIcon(it),
+        isItSystemApp = checkIsSystemApp(it)
     )
 
     private fun mapTimeToString(time: Long): String {
         val hour = (time / (1000 * 60 * 60))
         val minutes = ((time / (1000 * 60)) % 60)
-        return context.getString(R.string.D_hour_D_minutes, hour, minutes)
+        val second = time / 1000
+        return if (hour == 0L && minutes == 0L) {
+            context.getString(R.string.D_second, second)
+        } else {
+            context.getString(R.string.D_hour_D_minutes, hour, minutes)
+        }
     }
 
     private fun getAppLabel(it: UsageStats) = try {
@@ -94,4 +107,23 @@ class ScreenTimeDataRepositoryImplementation @Inject constructor(@ApplicationCon
     } catch (e: Exception) {
         null
     }
+
+    private fun checkIsSystemApp(it: UsageStats) = try {
+        context.packageManager.getApplicationInfo(
+            it.packageName, 0
+        ).flags and ApplicationInfo.FLAG_SYSTEM != 0 || context.packageManager.getApplicationInfo(
+            it.packageName, 0
+        ).flags and ApplicationInfo.FLAG_UPDATED_SYSTEM_APP != 0
+    } catch (e: Exception) {
+        true
+    }
+}
+
+fun Context.isPackageExist(target: String): Boolean {
+    return packageManager.getInstalledApplications(0)
+        .find { info -> info.packageName == target } != null
+}
+
+fun Context.isCheckAppPackage(target: String): Boolean {
+    return target != this.packageName
 }

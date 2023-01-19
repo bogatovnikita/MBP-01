@@ -108,6 +108,7 @@ internal class DuplicatesUseCaseImpl(
                 uniteWay = selectUniteWay()
                 val imagesForUniting = getImagesForUniting()
                 if (imagesForUniting.isNotEmpty()) duplicateRemover.invoke(imagesForUniting)
+                delay(8000)
                 navigate(Destination.Inter)
             }
         }

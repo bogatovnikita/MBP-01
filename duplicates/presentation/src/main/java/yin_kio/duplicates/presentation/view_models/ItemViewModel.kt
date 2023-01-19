@@ -1,6 +1,7 @@
-package yin_kio.duplicates.presentation
+package yin_kio.duplicates.presentation.view_models
 
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import yin_kio.duplicates.domain.models.StateHolder
@@ -9,15 +10,16 @@ import yin_kio.duplicates.presentation.models.Image
 class ItemViewModel(
     private val switchItemSelection: (groupIndex: Int, path: String) -> Unit,
     private val stateHolder: StateHolder,
-    private val coroutineScope: CoroutineScope,
+    coroutineScope: CoroutineScope,
 ) {
 
 
 
     val state = MutableStateFlow(Image())
 
+
     init {
-        coroutineScope.launch {
+        coroutineScope.launch(Dispatchers.Default) {
             stateHolder.stateFlow.collect{
                 val isSelected = it.isItemSelected(state.value.groupId, state.value.path)
                 state.value = state.value.copy(isSelected = isSelected)

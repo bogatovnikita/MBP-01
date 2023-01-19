@@ -5,8 +5,8 @@ import androidx.fragment.app.FragmentFactory
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import yin_kio.duplicates.domain.DuplicatesDomainFactory
-import yin_kio.duplicates.presentation.DuplicatesViewModel
-import yin_kio.duplicates.presentation.ParentFragment
+import yin_kio.duplicates.presentation.view_models.DuplicatesViewModel
+import yin_kio.duplicates.presentation.fragments.ParentFragment
 import yin_kio.file_utils.FileUtilsImpl
 import yin_kio_duplicates.data.AndroidImagesComparator
 import yin_kio_duplicates.data.FilesImpl

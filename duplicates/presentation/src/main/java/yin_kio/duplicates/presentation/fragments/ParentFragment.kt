@@ -1,14 +1,16 @@
-package yin_kio.duplicates.presentation
+package yin_kio.duplicates.presentation.fragments
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import jamycake.lifecycle_aware.lifecycleAware
+import yin_kio.duplicates.presentation.Navigation
+import yin_kio.duplicates.presentation.R
+import yin_kio.duplicates.presentation.view_models.DuplicatesViewModel
 
 class ParentFragment(
     viewModelCreator: ViewModel.(Context) -> DuplicatesViewModel

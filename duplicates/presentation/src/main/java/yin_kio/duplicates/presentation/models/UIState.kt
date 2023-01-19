@@ -1,4 +1,4 @@
-package yin_kio.duplicates.presentation
+package yin_kio.duplicates.presentation.models
 
 import yin_kio.duplicates.domain.models.Destination
 import yin_kio.duplicates.domain.models.DuplicatesList
@@ -12,7 +12,3 @@ data class UIState (
     val buttonState: ButtonState = ButtonState()
 )
 
-data class ButtonState(
-    val bgResId: Int = general.R.drawable.bg_main_button_enabled,
-    val titleResId: Int = R.string.unite_all_duplicates
-)

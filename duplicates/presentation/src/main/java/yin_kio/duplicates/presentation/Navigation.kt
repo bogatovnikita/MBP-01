@@ -30,12 +30,8 @@ class Navigation(
         }
     }
 
-    fun navigateUp(){
+    private fun navigateUp(){
         navController.navigateUp()
-    }
-
-    private fun destinationIs(id: Int) : Boolean{
-        return  navController.currentDestination?.id == id
     }
 
 }

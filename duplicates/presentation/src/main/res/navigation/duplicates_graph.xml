@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/duplicatesFragment"
-        android:name="yin_kio.duplicates.presentation.DuplicatesFragment"
+        android:name="yin_kio.duplicates.presentation.fragments.DuplicatesFragment"
         android:label="DuplicatesFragment" >
         <action
             android:id="@+id/action_duplicatesFragment_to_duplicatesPermissionFragment"
@@ -14,6 +14,6 @@
     </fragment>
     <fragment
         android:id="@+id/duplicatesPermissionFragment"
-        android:name="yin_kio.duplicates.presentation.DuplicatesPermissionFragment"
+        android:name="yin_kio.duplicates.presentation.fragments.DuplicatesPermissionFragment"
         android:label="DuplicatesPermissionFragment" />
 </navigation>

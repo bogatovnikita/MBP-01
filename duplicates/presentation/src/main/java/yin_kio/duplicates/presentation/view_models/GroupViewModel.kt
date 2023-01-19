@@ -1,6 +1,7 @@
-package yin_kio.duplicates.presentation
+package yin_kio.duplicates.presentation.view_models
 
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import yin_kio.duplicates.domain.models.StateHolder
@@ -18,7 +19,7 @@ class GroupViewModel(
     private var groupPosition = -1
 
     init {
-        coroutineScope.launch{
+        coroutineScope.launch(Dispatchers.Default){
             stateHolder.stateFlow.collect{
                 state.emit(it.isGroupSelected(groupPosition))
             }
@@ -35,7 +36,8 @@ class GroupViewModel(
         state.value = stateHolder.isGroupSelected(position)
     }
 
-    fun createItemViewModel() : ItemViewModel{
+
+    fun createItemViewModel() : ItemViewModel {
         val itemViewModel = ItemViewModel(
             switchItemSelection = switchItemSelection,
             stateHolder = stateHolder,

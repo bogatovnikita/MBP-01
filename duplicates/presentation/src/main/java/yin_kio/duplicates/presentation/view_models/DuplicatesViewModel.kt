@@ -1,4 +1,4 @@
-package yin_kio.duplicates.presentation
+package yin_kio.duplicates.presentation.view_models
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -6,6 +6,9 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import yin_kio.duplicates.domain.models.StateHolder
 import yin_kio.duplicates.domain.use_cases.DuplicateUseCase
+import yin_kio.duplicates.presentation.models.ButtonState
+import yin_kio.duplicates.presentation.R
+import yin_kio.duplicates.presentation.models.UIState
 import kotlin.coroutines.CoroutineContext
 
 class DuplicatesViewModel(
@@ -20,7 +23,7 @@ class DuplicatesViewModel(
 
     private val groupViewModels = mutableListOf<GroupViewModel>()
 
-    fun createGroupViewModel() : GroupViewModel{
+    fun createGroupViewModel() : GroupViewModel {
         val groupViewModel = GroupViewModel(
             stateHolder = state,
             switchGroupSelection = { switchGroupSelection(it) },
@@ -34,7 +37,8 @@ class DuplicatesViewModel(
     init {
         coroutineScope.launch(coroutineDispatcher) {
             state.stateFlow.collect{
-                _uiState.emit(UIState(
+                _uiState.emit(
+                    UIState(
                     destination = it.destination,
                     duplicatesLists = it.duplicatesLists,
                     isInProgress = it.isInProgress,
@@ -43,7 +47,8 @@ class DuplicatesViewModel(
                         bgResId = bgResId(it),
                         titleResId = titleResId(it)
                     )
-                ))
+                )
+                )
             }
         }
     }

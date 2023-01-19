@@ -1,56 +1,19 @@
-package yin_kio.duplicates.presentation
+package yin_kio.duplicates.presentation.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import yin_kio.duplicates.domain.models.DuplicatesList
 import yin_kio.duplicates.presentation.databinding.ListItemGroupBinding
-
-class DuplicatesAdapter(
-    private val coroutineScope: CoroutineScope,
-    private val createGroupViewModel: () -> GroupViewModel
-) : ListAdapter<DuplicatesList, DuplicatesViewHolder>(difCallback()) {
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DuplicatesViewHolder {
-        return DuplicatesViewHolder.from(
-            parent = parent,
-            coroutineScope = coroutineScope,
-            viewModel = createGroupViewModel(),
-        )
-    }
-
-    override fun onBindViewHolder(holder: DuplicatesViewHolder, position: Int) {
-        holder.bind(getItem(position))
-    }
-}
-
-
-
-private fun difCallback() = object : DiffUtil.ItemCallback<DuplicatesList>(){
-        override fun areItemsTheSame(oldItem: DuplicatesList, newItem: DuplicatesList): Boolean {
-            return oldItem == newItem
-        }
-
-        override fun areContentsTheSame(
-            oldItem: DuplicatesList,
-            newItem: DuplicatesList
-        ): Boolean {
-            return oldItem == newItem
-        }
-}
-
-
-
+import yin_kio.duplicates.presentation.view_models.GroupViewModel
 
 class DuplicatesViewHolder private constructor (
     private val binding: ListItemGroupBinding,
     private val coroutineScope: CoroutineScope,
     private val viewModel: GroupViewModel
-) : ViewHolder(binding.root){
+) : RecyclerView.ViewHolder(binding.root){
 
 
     private val adapter by lazy {
@@ -78,11 +41,12 @@ class DuplicatesViewHolder private constructor (
         binding.checkbox.setOnClickListener { viewModel.switchSelection(item.id) }
     }
 
+
     companion object{
         fun from(parent: ViewGroup,
                  coroutineScope: CoroutineScope,
                  viewModel: GroupViewModel
-        ) : DuplicatesViewHolder{
+        ) : DuplicatesViewHolder {
             val binding = ListItemGroupBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             return DuplicatesViewHolder(
                 binding = binding,

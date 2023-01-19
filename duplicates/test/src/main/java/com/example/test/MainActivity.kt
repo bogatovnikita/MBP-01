@@ -2,7 +2,7 @@ package com.example.test
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import yin_kio.duplicates.presentation.ParentFragment
+import yin_kio.duplicates.presentation.fragments.ParentFragment
 import yin_kio_duplicates.di.DuplicatesFragmentFactory
 
 class MainActivity : AppCompatActivity() {

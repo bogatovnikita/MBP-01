@@ -1,48 +1,14 @@
-package yin_kio.duplicates.presentation
-
+package yin_kio.duplicates.presentation.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import yin_kio.duplicates.domain.models.ImageInfo
 import yin_kio.duplicates.presentation.databinding.ListItemImageBinding
-
-class ImageInfoAdapter(
-    private val coroutineScope: CoroutineScope,
-    private val createItemViewModel: () -> ItemViewModel,
-) : ListAdapter<ImageInfo, ImageInfoViewHolder>(diffCallback()) {
-
-    var groupPosition = -1
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageInfoViewHolder {
-        return ImageInfoViewHolder.from(
-            parent = parent,
-            coroutineScope = coroutineScope,
-            groupPosition = { groupPosition },
-            viewModel = createItemViewModel(),
-        )
-    }
-
-    override fun onBindViewHolder(holder: ImageInfoViewHolder, position: Int) {
-        holder.bind(getItem(position))
-    }
-}
-
-
-private fun diffCallback()  = object : DiffUtil.ItemCallback<ImageInfo>(){
-    override fun areItemsTheSame(oldItem: ImageInfo, newItem: ImageInfo): Boolean {
-        return oldItem.path == newItem.path
-    }
-
-    override fun areContentsTheSame(oldItem: ImageInfo, newItem: ImageInfo): Boolean {
-        return oldItem == newItem
-    }
-}
+import yin_kio.duplicates.presentation.view_models.ItemViewModel
 
 class ImageInfoViewHolder private constructor(
     private val binding: ListItemImageBinding,
@@ -55,10 +21,18 @@ class ImageInfoViewHolder private constructor(
 
     init {
         coroutineScope.launch {
-            viewModel.state.collect { binding.checkbox.isChecked = it.isSelected }
+            viewModel.state.collect {
+                binding.checkbox.isChecked = it.isSelected
+                loadImage(it.path)
+            }
         }
     }
 
+    private fun loadImage(path: String) {
+        Glide.with(binding.root.context)
+            .load(path)
+            .into(binding.image)
+    }
 
 
     fun bind(item: ImageInfo){
@@ -66,22 +40,16 @@ class ImageInfoViewHolder private constructor(
 
         binding.checkbox.setOnClickListener { viewModel.switchSelection(groupPosition(), item.path) }
         binding.root.setOnClickListener { viewModel.switchSelection(groupPosition(), item.path) }
-
-        loadImage(item)
     }
 
-    private fun loadImage(item: ImageInfo) {
-        Glide.with(binding.root.context)
-            .load(item.path)
-            .into(binding.image)
-    }
+
 
     companion object{
         fun from(parent: ViewGroup,
                  coroutineScope: CoroutineScope,
                  groupPosition: () -> Int,
                  viewModel: ItemViewModel
-        ) : ImageInfoViewHolder{
+        ) : ImageInfoViewHolder {
             val binding = ListItemImageBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             return ImageInfoViewHolder(
                 binding = binding,

@@ -2,6 +2,7 @@ package yin_kio.duplicates.domain
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import yin_kio.duplicates.domain.gateways.Ads
 import yin_kio.duplicates.domain.gateways.Files
 import yin_kio.duplicates.domain.gateways.ImagesComparator
 import yin_kio.duplicates.domain.gateways.Permissions
@@ -17,7 +18,8 @@ object DuplicatesDomainFactory {
         coroutineScope: CoroutineScope,
         files: Files,
         imagesComparator: ImagesComparator,
-        permissions: Permissions
+        permissions: Permissions,
+        ads: Ads
     ) : Pair<DuplicateUseCase, StateHolder>{
 
         val stateHolder = MutableStateHolder(
@@ -32,7 +34,8 @@ object DuplicatesDomainFactory {
             permissions = permissions,
             coroutineScope = coroutineScope,
             coroutineContext = Dispatchers.IO,
-            duplicateRemover = DuplicateRemoverImpl(files)
+            duplicateRemover = DuplicateRemoverImpl(files),
+            ads = ads
         )
         return Pair(useCase, stateHolder)
     }

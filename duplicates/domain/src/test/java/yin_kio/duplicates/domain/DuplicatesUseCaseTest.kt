@@ -11,6 +11,7 @@ import kotlinx.coroutines.test.*
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import yin_kio.duplicates.domain.gateways.Ads
 import yin_kio.duplicates.domain.gateways.Files
 import yin_kio.duplicates.domain.gateways.ImagesComparator
 import yin_kio.duplicates.domain.gateways.Permissions
@@ -31,6 +32,7 @@ class DuplicatesUseCaseTest {
     private lateinit var permissions: Permissions
     private lateinit var useCase: DuplicatesUseCaseImpl
     private lateinit var duplicateRemover: DuplicateRemover
+    private val ads: Ads = mockk()
 
     @BeforeEach
     fun setup() = runTest(dispatcher){
@@ -39,6 +41,7 @@ class DuplicatesUseCaseTest {
         duplicateRemover = mockk()
         state = MutableStateHolder(coroutineScope, dispatcher)
 
+        coEvery { ads.preloadAd() } returns Unit
         every { permissions.hasStoragePermissions } returns true
         useCase = createDuplicatesUseCase()
         waitCoroutines()
@@ -161,6 +164,8 @@ class DuplicatesUseCaseTest {
 
         assertUniteNavigation()
 
+
+        coVerify { ads.preloadAd() }
         coVerify { duplicateRemover.invoke(selectedCollection) }
     }
 
@@ -173,6 +178,8 @@ class DuplicatesUseCaseTest {
 
         assertUniteNavigation()
 
+
+        coVerify { ads.preloadAd() }
         coVerify { duplicateRemover.invoke(state.duplicatesLists.map { it.data }) }
     }
 
@@ -187,6 +194,7 @@ class DuplicatesUseCaseTest {
 
         assertUniteNavigation()
 
+        coVerify { ads.preloadAd() }
         coVerify(inverse = true) { duplicateRemover.invoke(selectedCollection) }
     }
 
@@ -246,7 +254,8 @@ class DuplicatesUseCaseTest {
             permissions = permissions,
             coroutineScope = coroutineScope,
             coroutineContext = dispatcher,
-            duplicateRemover = duplicateRemover
+            duplicateRemover = duplicateRemover,
+            ads = ads
         )
     }
 

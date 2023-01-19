@@ -4,6 +4,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import yin_kio.duplicates.domain.findDuplicates
+import yin_kio.duplicates.domain.gateways.Ads
 import yin_kio.duplicates.domain.gateways.Files
 import yin_kio.duplicates.domain.gateways.ImagesComparator
 import yin_kio.duplicates.domain.gateways.Permissions
@@ -18,7 +19,8 @@ internal class DuplicatesUseCaseImpl(
     private val permissions: Permissions,
     private val coroutineScope: CoroutineScope,
     private val coroutineContext: CoroutineContext,
-    private val duplicateRemover: DuplicateRemover
+    private val duplicateRemover: DuplicateRemover,
+    private val ads: Ads
 ) : DuplicateUseCase{
 
 
@@ -105,10 +107,13 @@ internal class DuplicatesUseCaseImpl(
         navigate(Destination.UniteProgress)
         async {
             state.apply {
+                ads.preloadAd()
+
                 uniteWay = selectUniteWay()
                 val imagesForUniting = getImagesForUniting()
                 if (imagesForUniting.isNotEmpty()) duplicateRemover.invoke(imagesForUniting)
                 delay(8000)
+
                 navigate(Destination.Inter)
             }
         }

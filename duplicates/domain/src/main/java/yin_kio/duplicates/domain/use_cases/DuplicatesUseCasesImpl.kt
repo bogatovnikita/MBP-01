@@ -101,8 +101,8 @@ internal class DuplicatesUseCasesImpl(
 
     override fun closeInter(){
         state.destination = when(state.uniteWay){
-            UniteWay.Selected -> Destination.DoneSelected
-            UniteWay.All -> Destination.DoneAll
+            UniteWay.Selected -> Destination.AskContinue
+            UniteWay.All -> Destination.AdvicesWithDialog
         }
         state.update()
     }
@@ -114,7 +114,7 @@ internal class DuplicatesUseCasesImpl(
     }
 
     override fun completeUniting(){
-        state.destination = Destination.DoneAll
+        state.destination = Destination.Advices
         state.update()
     }
 

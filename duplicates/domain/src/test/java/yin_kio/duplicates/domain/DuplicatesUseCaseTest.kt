@@ -158,27 +158,17 @@ class DuplicatesUseCaseTest {
 
 
     @Test
-    fun `closeInter with group selection`() = runTest{
-        useCase.switchGroupSelection(0)
-        useCase.unite()
-        waitCoroutines()
-        useCase.closeInter()
-        assertEquals(Destination.DoneSelected, state.destination)
-    }
-
-    @Test
     fun `closeInter with item selection`() = runTest{
         state.uniteWay = UniteWay.Selected
         useCase.closeInter()
-        assertEquals(Destination.DoneSelected, state.destination)
-    }
+        assertEquals(Destination.AskContinue, state.destination)
 
-    @Test
-    fun `closeInter without selection`() = runTest(dispatcher){
         state.uniteWay = UniteWay.All
         useCase.closeInter()
-        assertEquals(Destination.DoneAll, state.destination)
+        assertEquals(Destination.AdvicesWithDialog, state.destination)
     }
+
+
 
     @Test
     fun continueUniting(){
@@ -189,7 +179,7 @@ class DuplicatesUseCaseTest {
     @Test
     fun completeUniting() {
         useCase.completeUniting()
-        assertEquals(Destination.DoneAll, state.destination)
+        assertEquals(Destination.Advices, state.destination)
     }
 
     @Test

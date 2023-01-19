@@ -25,8 +25,14 @@ class DuplicatesFragment : Fragment(R.layout.fragment_duplicates) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.recycler.adapter = adapter
 
+        binding.unite.setOnClickListener { viewModel.unite() }
+
+        setupObserver()
+    }
+
+    private fun setupObserver() {
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            viewModel.uiState.collect{
+            viewModel.uiState.collect {
                 showProgress(it)
                 showButton(it)
 

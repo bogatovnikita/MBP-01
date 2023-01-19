@@ -14,7 +14,13 @@ class Navigation(
     fun navigate(destination: Destination){
         if (currentDestination != destination){
             if (destination == Destination.List) navigateUp()
-            navController.navigate(destination.adapt())
+            val id = destination.adapt()
+            if (id == INTER_ID) {
+                // TODO showInter
+            } else {
+                navController.navigate(id)
+            }
+
             currentDestination = destination
         }
     }
@@ -23,8 +29,8 @@ class Navigation(
         return when(this){
             Destination.Permission -> R.id.action_duplicatesFragment_to_duplicatesPermissionFragment
             Destination.List -> R.id.duplicatesFragment
-            Destination.UniteProgress -> TODO()
-            Destination.Inter -> TODO()
+            Destination.UniteProgress -> R.id.action_duplicatesFragment_to_progressDialog
+            Destination.Inter -> INTER_ID
             Destination.DoneSelected -> TODO()
             Destination.DoneAll -> TODO()
         }
@@ -32,6 +38,10 @@ class Navigation(
 
     private fun navigateUp(){
         navController.navigateUp()
+    }
+
+    companion object{
+        private const val INTER_ID = -1
     }
 
 }

@@ -11,9 +11,16 @@
         <action
             android:id="@+id/action_duplicatesFragment_to_duplicatesPermissionFragment"
             app:destination="@id/duplicatesPermissionFragment" />
+        <action
+            android:id="@+id/action_duplicatesFragment_to_progressDialog"
+            app:destination="@id/progressDialog" />
     </fragment>
     <fragment
         android:id="@+id/duplicatesPermissionFragment"
         android:name="yin_kio.duplicates.presentation.fragments.DuplicatesPermissionFragment"
         android:label="DuplicatesPermissionFragment" />
+    <dialog
+        android:id="@+id/progressDialog"
+        android:name="yin_kio.duplicates.presentation.fragments.UniteProgressDialog"
+        android:label="ProgressDialog" />
 </navigation>

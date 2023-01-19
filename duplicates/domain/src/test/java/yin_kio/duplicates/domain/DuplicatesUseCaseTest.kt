@@ -18,8 +18,10 @@ import yin_kio.duplicates.domain.gateways.Permissions
 import yin_kio.duplicates.domain.models.Destination
 import yin_kio.duplicates.domain.models.ImageInfo
 import yin_kio.duplicates.domain.models.MutableStateHolder
+import yin_kio.duplicates.domain.models.UniteWay
 import yin_kio.duplicates.domain.use_cases.DuplicateRemover
-import yin_kio.duplicates.domain.use_cases.DuplicatesUseCaseImpl
+import yin_kio.duplicates.domain.use_cases.DuplicatesUseCasesImpl
+import yin_kio.duplicates.domain.use_cases.UniteUseCase
 
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -30,8 +32,9 @@ class DuplicatesUseCaseTest {
     private val coroutineScope = CoroutineScope(dispatcher)
     private lateinit var files: Files
     private lateinit var permissions: Permissions
-    private lateinit var useCase: DuplicatesUseCaseImpl
+    private lateinit var useCase: DuplicatesUseCasesImpl
     private lateinit var duplicateRemover: DuplicateRemover
+    private val uniteUseCase: UniteUseCase = mockk()
     private val ads: Ads = mockk()
 
     @BeforeEach
@@ -42,6 +45,7 @@ class DuplicatesUseCaseTest {
         state = MutableStateHolder(coroutineScope, dispatcher)
 
         coEvery { ads.preloadAd() } returns Unit
+        coEvery { uniteUseCase.unite() } returns Unit
         every { permissions.hasStoragePermissions } returns true
         useCase = createDuplicatesUseCase()
         waitCoroutines()
@@ -154,57 +158,6 @@ class DuplicatesUseCaseTest {
 
 
     @Test
-    fun `unite if has group Selected`() = runTest(dispatcher){
-        useCase.switchGroupSelection(0)
-
-        val selectedCollection = state.selected.map { it.value }
-        coEvery { duplicateRemover.invoke(selectedCollection) } returns Unit
-
-        useCase.unite()
-
-        assertUniteNavigation()
-
-
-        coVerify { ads.preloadAd() }
-        coVerify { duplicateRemover.invoke(selectedCollection) }
-    }
-
-
-    @Test
-    fun `unite if has not selected`() = runTest(dispatcher) {
-        coEvery { duplicateRemover.invoke(state.duplicatesLists.map { it.data }) } returns Unit
-
-        useCase.unite()
-
-        assertUniteNavigation()
-
-
-        coVerify { ads.preloadAd() }
-        coVerify { duplicateRemover.invoke(state.duplicatesLists.map { it.data }) }
-    }
-
-    @Test
-    fun `unite if has item selected`() = runTest(dispatcher){
-        useCase.switchItemSelection(0, FIRST_FILE)
-
-        val selectedCollection = state.selected.map { it.value }
-        coEvery { duplicateRemover.invoke(selectedCollection) } returns Unit
-
-        useCase.unite()
-
-        assertUniteNavigation()
-
-        coVerify { ads.preloadAd() }
-        coVerify(inverse = true) { duplicateRemover.invoke(selectedCollection) }
-    }
-
-    private fun TestScope.assertUniteNavigation() {
-        assertEquals(Destination.UniteProgress, state.destination)
-        waitCoroutines()
-        assertEquals(Destination.Inter, state.destination)
-    }
-
-    @Test
     fun `closeInter with group selection`() = runTest{
         useCase.switchGroupSelection(0)
         useCase.unite()
@@ -215,17 +168,14 @@ class DuplicatesUseCaseTest {
 
     @Test
     fun `closeInter with item selection`() = runTest{
-        useCase.switchItemSelection(0, FIRST_FILE)
-        useCase.unite()
-        waitCoroutines()
+        state.uniteWay = UniteWay.Selected
         useCase.closeInter()
         assertEquals(Destination.DoneSelected, state.destination)
     }
 
     @Test
     fun `closeInter without selection`() = runTest(dispatcher){
-        useCase.unite()
-        waitCoroutines()
+        state.uniteWay = UniteWay.All
         useCase.closeInter()
         assertEquals(Destination.DoneAll, state.destination)
     }
@@ -242,20 +192,24 @@ class DuplicatesUseCaseTest {
         assertEquals(Destination.DoneAll, state.destination)
     }
 
+    @Test
+    fun unite() = runTest{
+        useCase.unite()
+        coVerify { uniteUseCase.unite() }
+    }
 
 
-    private suspend fun createDuplicatesUseCase(stateHolder: MutableStateHolder = state): DuplicatesUseCaseImpl {
+    private suspend fun createDuplicatesUseCase(stateHolder: MutableStateHolder = state): DuplicatesUseCasesImpl {
         coEvery { files.getImages() } returns listOf(ImageInfo(FIRST_FILE), ImageInfo(SECOND_FILE)).also { delay(50) }
 
-        return DuplicatesUseCaseImpl(
+        return DuplicatesUseCasesImpl(
             state = stateHolder,
             files = files,
             imagesComparator = imagesComparator(),
             permissions = permissions,
             coroutineScope = coroutineScope,
             coroutineContext = dispatcher,
-            duplicateRemover = duplicateRemover,
-            ads = ads
+            uniteUseCase = uniteUseCase
         )
     }
 

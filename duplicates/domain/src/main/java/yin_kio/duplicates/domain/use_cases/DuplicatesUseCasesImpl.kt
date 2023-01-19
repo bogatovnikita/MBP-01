@@ -4,24 +4,21 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import yin_kio.duplicates.domain.findDuplicates
-import yin_kio.duplicates.domain.gateways.Ads
 import yin_kio.duplicates.domain.gateways.Files
 import yin_kio.duplicates.domain.gateways.ImagesComparator
 import yin_kio.duplicates.domain.gateways.Permissions
 import yin_kio.duplicates.domain.models.*
-import yin_kio.duplicates.domain.models.MutableStateHolder
 import kotlin.coroutines.CoroutineContext
 
-internal class DuplicatesUseCaseImpl(
+internal class DuplicatesUseCasesImpl(
     private val state: MutableStateHolder,
     private val files: Files,
     private val imagesComparator: ImagesComparator,
     private val permissions: Permissions,
     private val coroutineScope: CoroutineScope,
     private val coroutineContext: CoroutineContext,
-    private val duplicateRemover: DuplicateRemover,
-    private val ads: Ads
-) : DuplicateUseCase{
+    private val uniteUseCase: UniteUseCase
+) : DuplicateUseCases{
 
 
     init {
@@ -90,41 +87,16 @@ internal class DuplicatesUseCaseImpl(
         update()
     }
 
-    private fun MutableStateHolder.selectUniteWay() : UniteWay {
-        return when (selected.isEmpty()) {
-            true -> UniteWay.All
-            false -> UniteWay.Selected
-        }
-    }
-
     override fun navigate(destination: Destination){
         state.destination = destination
         state.update()
     }
 
     override fun unite(){
-        navigate(Destination.UniteProgress)
-        async {
-            state.apply {
-                ads.preloadAd()
-
-                uniteWay = selectUniteWay()
-                val imagesForUniting = getImagesForUniting()
-                if (imagesForUniting.isNotEmpty()) duplicateRemover.invoke(imagesForUniting)
-                delay(8000)
-
-                navigate(Destination.Inter)
-            }
-        }
+        uniteUseCase.unite()
     }
 
-    private fun MutableStateHolder.getImagesForUniting(): List<Collection<ImageInfo>> {
-        val forUniting = when (uniteWay) {
-            UniteWay.Selected -> selected.map { it.value }.filter { it.size > 1 }
-            UniteWay.All -> state.duplicatesLists.map { it.data }
-        }
-        return forUniting
-    }
+
 
 
     override fun closeInter(){

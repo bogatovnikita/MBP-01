@@ -2,7 +2,7 @@ package yin_kio.duplicates.domain.use_cases
 
 import yin_kio.duplicates.domain.models.Destination
 
-interface DuplicateUseCase {
+interface DuplicateUseCases {
     fun updateFiles()
     fun switchGroupSelection(index: Int)
     fun switchItemSelection(groupIndex: Int, path: String)

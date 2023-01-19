@@ -10,6 +10,7 @@ import yin_kio.duplicates.presentation.fragments.ParentFragment
 import yin_kio.file_utils.FileUtilsImpl
 import yin_kio_duplicates.data.AndroidImagesComparator
 import yin_kio_duplicates.data.FilesImpl
+import yin_kio_duplicates.data.OlejaAds
 import yin_kio_duplicates.data.PermissionsImpl
 
 class DuplicatesFragmentFactory : FragmentFactory() {
@@ -24,7 +25,8 @@ class DuplicatesFragmentFactory : FragmentFactory() {
                             coroutineScope = viewModelScope,
                             files = FilesImpl(FileUtilsImpl()),
                             imagesComparator = AndroidImagesComparator(),
-                            permissions = PermissionsImpl(it)
+                            permissions = PermissionsImpl(it),
+                            ads = OlejaAds(it)
                         )
 
                         DuplicatesViewModel(

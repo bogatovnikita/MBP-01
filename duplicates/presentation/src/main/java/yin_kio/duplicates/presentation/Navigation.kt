@@ -1,10 +1,15 @@
 package yin_kio.duplicates.presentation
 
+import android.app.Activity
+import android.util.Log
 import androidx.navigation.NavController
+import com.example.ads.showInter
 import yin_kio.duplicates.domain.models.Destination
 
 class Navigation(
-    private val navController: NavController
+    private val navController: NavController,
+    private val activity: Activity,
+    private val onCloseInter: () -> Unit
 ) {
 
     private var currentDestination = Destination.List
@@ -12,11 +17,14 @@ class Navigation(
 
 
     fun navigate(destination: Destination){
+        Log.d("!!!", "$destination")
         if (currentDestination != destination){
             if (destination == Destination.List) navigateUp()
             val id = destination.adapt()
             if (id == INTER_ID) {
-                // TODO showInter
+                activity.showInter(
+                    onClosed = onCloseInter
+                )
             } else {
                 navController.navigate(id)
             }

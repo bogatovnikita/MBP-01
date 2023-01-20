@@ -30,7 +30,7 @@ class NotificationSettingsFragment : Fragment(R.layout.fragment_notification_set
     private val adapter: AppRecyclerViewAdapter = AppRecyclerViewAdapter(
         object : AppRecyclerViewAdapter.OnItemAppClickListener {
             override fun switchModeDisturb(packageName: String, isSwitched: Boolean) {
-                viewModel.switchModeDisturb(packageName, isSwitched)
+                viewModel.switchAppModeDisturb(packageName, isSwitched)
             }
         }
     )
@@ -59,6 +59,7 @@ class NotificationSettingsFragment : Fragment(R.layout.fragment_notification_set
     private fun renderState(state: NotificationSettingsState) {
         with(state) {
             adapter.submitList(apps)
+            binding.switchModeDisturb.isChecked = modeNotDisturb
         }
 
     }
@@ -102,11 +103,13 @@ class NotificationSettingsFragment : Fragment(R.layout.fragment_notification_set
     private fun initListeners() {
         binding.btnClearNotifications.setOnClickListener(this)
         binding.btnOpenTimetable.setOnClickListener(this)
+        binding.switchModeDisturb.setOnClickListener(this)
     }
 
     override fun onClick(view: View) {
         when (view.id) {
             R.id.btn_clear_notifications, R.id.btn_open_timetable -> openPermissionDialog()
+            R.id.switch_mode_disturb-> viewModel.switchGeneralDisturbMode(binding.switchModeDisturb.isChecked)
         }
     }
 

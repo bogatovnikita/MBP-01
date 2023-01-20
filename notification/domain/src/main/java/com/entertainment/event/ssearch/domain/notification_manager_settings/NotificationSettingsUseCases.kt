@@ -4,6 +4,7 @@ import android.app.Application
 import com.entertainment.event.ssearch.domain.mappers.mapToApp
 import com.entertainment.event.ssearch.domain.models.AppWithNotifications
 import com.entertainment.event.ssearch.domain.providers.AppsProvider
+import com.entertainment.event.ssearch.domain.providers.SettingsProvider
 import com.entertainment.event.ssearch.domain.repositories.AppRepository
 import com.entertainment.event.ssearch.domain.repositories.AppWithNotificationsRepository
 import kotlinx.coroutines.flow.Flow
@@ -12,6 +13,7 @@ import javax.inject.Inject
 class NotificationSettingsUseCases @Inject constructor(
     private val appRepo: AppRepository,
     private val appsProvide: AppsProvider,
+    private val settings: SettingsProvider,
     private val appWithNotificationRepo: AppWithNotificationsRepository,
     private val context: Application
 ) {
@@ -21,7 +23,9 @@ class NotificationSettingsUseCases @Inject constructor(
     suspend fun switchModeDisturb(packageName: String, isSwitched: Boolean) =
         appRepo.setSwitched(packageName, isSwitched)
 
-    fun getInfoAboutNotDisturbMode() {}
+    suspend fun getDisturbMode(): Boolean = settings.isDisturbModeSwitched()
+
+    suspend fun setDisturbMode(isSwitched: Boolean) = settings.switchOffDisturbMode(isSwitched)
 
     suspend fun updateApp(app: AppWithNotifications) {
         appRepo.setSwitched(app.app.packageName, app.app.isSwitched)

@@ -16,6 +16,10 @@ class NotificationSettingsViewModel @Inject constructor(
     private val useCases: NotificationSettingsUseCases,
 ) : BaseViewModel<NotificationSettingsState>(NotificationSettingsState()) {
 
+    init {
+        updateDisturbMode()
+    }
+
     fun getAppWithNotifications(hasPermission: Boolean) {
         viewModelScope.launch(Dispatchers.IO) {
             useCases.getAppsInfo(hasPermission).collect { listApps ->
@@ -37,9 +41,25 @@ class NotificationSettingsViewModel @Inject constructor(
         }
     }
 
-    fun switchModeDisturb(packageName: String, isSwitched: Boolean) {
+    fun switchGeneralDisturbMode(isSwitched: Boolean) {
+        viewModelScope.launch(Dispatchers.Default) {
+            useCases.setDisturbMode(isSwitched)
+        }
+    }
+
+    fun switchAppModeDisturb(packageName: String, isSwitched: Boolean) {
         viewModelScope.launch(Dispatchers.Default) {
             useCases.switchModeDisturb(packageName, isSwitched)
+        }
+    }
+
+    private fun updateDisturbMode() {
+        viewModelScope.launch(Dispatchers.Default) {
+            updateState {
+                it.copy(
+                    modeNotDisturb = useCases.getDisturbMode()
+                )
+            }
         }
     }
 

@@ -14,6 +14,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ServiceLifecycleDispatcher
 import androidx.lifecycle.coroutineScope
+import com.entertainment.event.ssearch.data.providers.SettingsProviderImpl
 import com.entertainment.event.ssearch.data.repositories.AppRepositoryImpl
 import com.entertainment.event.ssearch.data.repositories.NotificationRepositoryImpl
 import com.entertainment.event.ssearch.data.repositories.mapToNotification
@@ -30,6 +31,9 @@ class NotificationService: NotificationListenerService(), LifecycleOwner {
 
     @Inject
     lateinit var apps: AppRepositoryImpl
+
+    @Inject
+    lateinit var settings: SettingsProviderImpl
 
     private val dispatcher = ServiceLifecycleDispatcher(this)
 
@@ -75,7 +79,7 @@ class NotificationService: NotificationListenerService(), LifecycleOwner {
                 } catch (e: Exception) {
                     false
                 }
-                if (isSwitched) {
+                if (isSwitched || settings.isDisturbModeSwitched()) {
                     notifications.insert(notification.mapToNotification())
                     cancelNotification(notification.key)
                 }

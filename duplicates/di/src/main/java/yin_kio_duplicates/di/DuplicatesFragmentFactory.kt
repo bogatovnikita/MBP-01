@@ -1,5 +1,6 @@
 package yin_kio_duplicates.di
 
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentFactory
 import androidx.lifecycle.viewModelScope
@@ -44,7 +45,10 @@ class DuplicatesFragmentFactory : FragmentFactory() {
                         Navigation(
                             childNavController = childNavController,
                             activity = requireActivity(),
-                            onCloseInter = { it.closeInter() }
+                            onCloseInter = { it.closeInter() },
+                            onNotImplemented = {
+                                Toast.makeText(requireContext(), "Not implemented yet", Toast.LENGTH_SHORT).show()
+                            }
                         )
                     }
                 )

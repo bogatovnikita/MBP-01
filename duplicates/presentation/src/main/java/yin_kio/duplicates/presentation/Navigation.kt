@@ -8,7 +8,8 @@ import yin_kio.duplicates.domain.models.Destination
 class Navigation(
     private val childNavController: NavController,
     private val activity: Activity,
-    private val onCloseInter: () -> Unit
+    private val onCloseInter: () -> Unit,
+    private val onNotImplemented: () -> Unit
 ) {
 
     private var currentDestination = Destination.List
@@ -26,9 +27,9 @@ class Navigation(
 
             val id = destination.adapt()
             if (id == INTER_ID) {
-                activity.showInter(
-                    onClosed = onCloseInter
-                )
+                activity.showInter(onClosed = onCloseInter)
+            } else if (id == NOT_IMPLEMENTED){
+                onNotImplemented()
             } else {
                 childNavController.navigate(id)
             }
@@ -44,8 +45,8 @@ class Navigation(
             Destination.UniteProgress -> R.id.action_duplicatesFragment_to_progressDialog
             Destination.Inter -> INTER_ID
             Destination.AskContinue -> R.id.action_duplicatesFragment_to_askContinueDialog
-            Destination.Advices -> TODO()
-            Destination.AdvicesWithDialog -> TODO()
+            Destination.Advices -> NOT_IMPLEMENTED
+            Destination.AdvicesWithDialog -> NOT_IMPLEMENTED
         }
     }
 
@@ -55,6 +56,7 @@ class Navigation(
 
     companion object{
         private const val INTER_ID = -1
+        private const val NOT_IMPLEMENTED = -2
     }
 
 }

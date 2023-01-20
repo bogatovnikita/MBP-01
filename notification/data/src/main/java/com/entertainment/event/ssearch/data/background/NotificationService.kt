@@ -5,6 +5,7 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Build
 import android.os.IBinder
 import android.service.notification.NotificationListenerService
@@ -14,6 +15,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ServiceLifecycleDispatcher
 import androidx.lifecycle.coroutineScope
+import com.entertainment.event.ssearch.data.background.NotificationCleanBroadcastReceiver.Companion.START_OBSERVE
 import com.entertainment.event.ssearch.data.providers.SettingsProviderImpl
 import com.entertainment.event.ssearch.data.repositories.AppRepositoryImpl
 import com.entertainment.event.ssearch.data.repositories.NotificationRepositoryImpl
@@ -24,7 +26,7 @@ import java.lang.Exception
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class NotificationService: NotificationListenerService(), LifecycleOwner {
+class NotificationService : NotificationListenerService(), LifecycleOwner {
 
     @Inject
     lateinit var notifications: NotificationRepositoryImpl
@@ -37,8 +39,14 @@ class NotificationService: NotificationListenerService(), LifecycleOwner {
 
     private val dispatcher = ServiceLifecycleDispatcher(this)
 
+    private val reciver by lazy { NotificationCleanBroadcastReceiver() }
+
     override fun onCreate() {
         dispatcher.onServicePreSuperOnCreate()
+        registerReceiver(
+            reciver,
+            IntentFilter(NotificationCleanBroadcastReceiver.ACTION_CLEAR_NOTIFICATIONS)
+        )
         super.onCreate()
     }
 
@@ -49,9 +57,21 @@ class NotificationService: NotificationListenerService(), LifecycleOwner {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         dispatcher.onServicePreSuperOnStart()
+        serviceStart()
         createNotificationChannel()
         startForeground(BASE_CHANNEL_ID, createPersistNotification())
+        observeClearEvent()
         return START_STICKY
+    }
+
+    private fun observeClearEvent() {
+        dispatcher.lifecycle.coroutineScope.launch {
+            reciver.clearAll.collect {
+                if (it != START_OBSERVE) {
+                    cancelAllNotifications()
+                }
+            }
+        }
     }
 
     override fun getLifecycle(): Lifecycle = dispatcher.lifecycle
@@ -88,12 +108,13 @@ class NotificationService: NotificationListenerService(), LifecycleOwner {
     }
 
     private fun createNotificationChannel() {
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val name = getString(general.R.string.app_name)
             val importance = NotificationManager.IMPORTANCE_MIN
             val channel =
                 NotificationChannel(PERSIST_NOTIFICATION_CHANNEL_ID, name, importance)
-            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            val notificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(channel)
         }
     }
@@ -103,9 +124,27 @@ class NotificationService: NotificationListenerService(), LifecycleOwner {
             .setContentTitle(getString(general.R.string.app_name))
             .build()
 
-    companion object{
+    override fun stopService(name: Intent?): Boolean {
+        unregisterReceiver(reciver)
+        serviceStop()
+        return super.stopService(name)
+    }
+
+    companion object {
         const val BASE_CHANNEL_ID = 1
         const val PERSIST_NOTIFICATION_CHANNEL_ID = "PERSIST_NOTIFICATION_CHANNEL_ID"
+
+        private var isServiceRunning = false
+
+        fun serviceStop() {
+            isServiceRunning = false
+        }
+
+        fun serviceStart() {
+            isServiceRunning = true
+        }
+
+        fun isServiceRunning() = isServiceRunning
     }
 
 }

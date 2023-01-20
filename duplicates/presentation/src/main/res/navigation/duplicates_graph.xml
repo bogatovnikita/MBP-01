@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/duplicatesFragment"
-        android:name="yin_kio.duplicates.presentation.fragments.DuplicatesFragment"
+        android:name="yin_kio.duplicates.presentation.views.DuplicatesFragment"
         android:label="DuplicatesFragment" >
         <action
             android:id="@+id/action_duplicatesFragment_to_duplicatesPermissionFragment"
@@ -20,14 +20,14 @@
     </fragment>
     <fragment
         android:id="@+id/duplicatesPermissionFragment"
-        android:name="yin_kio.duplicates.presentation.fragments.DuplicatesPermissionFragment"
+        android:name="yin_kio.duplicates.presentation.views.DuplicatesPermissionFragment"
         android:label="DuplicatesPermissionFragment" />
     <dialog
         android:id="@+id/progressDialog"
-        android:name="yin_kio.duplicates.presentation.fragments.UniteProgressDialog"
+        android:name="yin_kio.duplicates.presentation.views.UniteProgressDialog"
         android:label="ProgressDialog" />
     <dialog
         android:id="@+id/askContinueDialog"
-        android:name="yin_kio.duplicates.presentation.fragments.AskContinueDialog"
+        android:name="yin_kio.duplicates.presentation.views.AskContinueDialog"
         android:label="AskContinueDialog" />
 </navigation>

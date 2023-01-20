@@ -1,4 +1,4 @@
-package yin_kio.duplicates.presentation.fragments
+package yin_kio.duplicates.presentation.views
 
 import android.app.Activity
 import android.os.Bundle

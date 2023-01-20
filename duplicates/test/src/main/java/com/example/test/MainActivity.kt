@@ -3,7 +3,7 @@ package com.example.test
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.ads.initAds
-import yin_kio.duplicates.presentation.fragments.ParentFragment
+import yin_kio.duplicates.presentation.views.ParentFragment
 import yin_kio_duplicates.di.DuplicatesFragmentFactory
 
 class MainActivity : AppCompatActivity() {

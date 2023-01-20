@@ -10,7 +10,7 @@ import yin_kio.duplicates.domain.DuplicatesDomainFactory
 import yin_kio.duplicates.presentation.Navigation
 import yin_kio.duplicates.presentation.R
 import yin_kio.duplicates.presentation.view_models.DuplicatesViewModel
-import yin_kio.duplicates.presentation.fragments.ParentFragment
+import yin_kio.duplicates.presentation.views.ParentFragment
 import yin_kio.file_utils.FileUtilsImpl
 import yin_kio_duplicates.data.AndroidImagesComparator
 import yin_kio_duplicates.data.FilesImpl

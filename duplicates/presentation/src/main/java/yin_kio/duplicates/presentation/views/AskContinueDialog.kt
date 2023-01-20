@@ -1,5 +1,6 @@
-package yin_kio.duplicates.presentation.fragments
+package yin_kio.duplicates.presentation.views
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.DialogFragment
@@ -23,6 +24,10 @@ class AskContinueDialog : DialogFragment(R.layout.dialog_ask_continue) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.continueUnite.setOnClickListener { viewModel.continueUniting() }
         binding.complete.setOnClickListener { viewModel.completeUniting() }
+    }
+
+    override fun onCancel(dialog: DialogInterface) {
+        viewModel.updateFiles()
     }
 
 }

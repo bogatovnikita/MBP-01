@@ -1,4 +1,4 @@
-package yin_kio.duplicates.presentation.fragments
+package yin_kio.duplicates.presentation.views
 
 import general.PermissionFragment
 import yin_kio.duplicates.presentation.view_models.DuplicatesViewModel

@@ -60,6 +60,7 @@ class NotificationSettingsFragment : Fragment(R.layout.fragment_notification_set
         with(state) {
             adapter.submitList(apps)
             binding.switchModeDisturb.isChecked = modeNotDisturb
+            binding.switchLimitAllApplication.isChecked = isAllAppsLimited
         }
 
     }
@@ -104,12 +105,14 @@ class NotificationSettingsFragment : Fragment(R.layout.fragment_notification_set
         binding.btnClearNotifications.setOnClickListener(this)
         binding.btnOpenTimetable.setOnClickListener(this)
         binding.switchModeDisturb.setOnClickListener(this)
+        binding.switchLimitAllApplication.setOnClickListener(this)
     }
 
     override fun onClick(view: View) {
         when (view.id) {
             R.id.btn_clear_notifications, R.id.btn_open_timetable -> openPermissionDialog()
             R.id.switch_mode_disturb-> viewModel.switchGeneralDisturbMode(binding.switchModeDisturb.isChecked)
+            R.id.switch_limit_all_application-> viewModel.setToAllAppsModeDisturb(binding.switchLimitAllApplication.isChecked)
         }
     }
 

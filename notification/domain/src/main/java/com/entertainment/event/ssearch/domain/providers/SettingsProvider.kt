@@ -6,4 +6,8 @@ interface SettingsProvider {
 
     suspend fun isDisturbModeSwitched(): Boolean
 
+    suspend fun switchLimitAllApps(isSwitched: Boolean)
+
+    suspend fun isAllAppsLimited(): Boolean
+
 }

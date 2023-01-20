@@ -16,9 +16,15 @@ class SettingsProviderImpl @Inject constructor(
 
     override suspend fun isDisturbModeSwitched(): Boolean = prefs.getBoolean(DISTURB_MODE, false)
 
+    override suspend fun switchLimitAllApps(isSwitched: Boolean) =
+        prefs.edit().putBoolean(LIMIT_ALL_APP, isSwitched).apply()
+
+    override suspend fun isAllAppsLimited(): Boolean = prefs.getBoolean(LIMIT_ALL_APP, false)
+
     companion object {
         const val NOTIFICATION_SETTINGS = "NOTIFICATION_SETTINGS"
         const val DISTURB_MODE = "DISTURB_MODE"
+        const val LIMIT_ALL_APP = "LIMIT_ALL_APP"
     }
 
 }

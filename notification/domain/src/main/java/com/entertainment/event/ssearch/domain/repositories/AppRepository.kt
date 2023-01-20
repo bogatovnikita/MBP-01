@@ -11,6 +11,8 @@ interface AppRepository {
 
     suspend fun readAll(): Flow<List<App>>
 
+    suspend fun getApps(): List<App>
+
     suspend fun readApp(packageName: String): App
 
     suspend fun setSwitched(packageName: String, switched: Boolean)

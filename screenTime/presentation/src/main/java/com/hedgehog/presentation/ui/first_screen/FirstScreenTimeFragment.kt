@@ -68,18 +68,14 @@ class FirstScreenTimeFragment :
             object : ScreenTimeAdapter.Listener {
                 override fun onChooseNote(item: AppScreenTime) {
                     if (viewModel.screenState.value.selectionMode) return
-                    Toast.makeText(requireContext(), item.name, Toast.LENGTH_SHORT).show()
+                    showToast(item.name.toInt())
                 }
 
                 override fun onToggle(item: AppScreenTime) {
                     if (!item.isItSystemApp) {
                         viewModel.toggleCheckBox(item)
                     } else {
-                        Toast.makeText(
-                            requireContext(),
-                            R.string.delete_system_app,
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        showToast(R.string.delete_system_app)
                     }
                     binding.checkbox.isChecked =
                         (viewModel.screenState.value.listDataScreenTime.size - viewModel.screenState.value.systemCheckedCount) == viewModel.screenState.value.totalCheckedCount
@@ -97,14 +93,21 @@ class FirstScreenTimeFragment :
     }
 
     private fun renderState(state: FirstScreenTimeState) {
-        if (!state.isLoading) return
-        adapter.submitList(state.listDataScreenTime)
         initDate()
-        binding.reverseStatistics.isSelected = viewModel.screenState.value.reverseListAppScreenTime
-        if (state.listIsEmpty) {
-            stateListIsEmpty()
+        if (state.isLoading) {
+            binding.loader.visibility = View.GONE
+            binding.recyclerView.visibility = View.VISIBLE
+            adapter.submitList(state.listDataScreenTime)
+            binding.reverseStatistics.isSelected =
+                viewModel.screenState.value.reverseListAppScreenTime
+            if (state.listIsEmpty) {
+                stateListIsEmpty()
+            } else {
+                stateListIsNotEmpty()
+            }
         } else {
-            stateListIsNotEmpty()
+            binding.loader.visibility = View.VISIBLE
+            binding.recyclerView.visibility = View.GONE
         }
     }
 
@@ -166,29 +169,47 @@ class FirstScreenTimeFragment :
     }
 
     private fun clickDeleteAppButton() {
-        viewModel.screenState.value.listDataScreenTime.filter {
-            !it.isItSystemApp && it.isChecked
-        }.forEach { appScreenTime ->
-            val intent = Intent(Intent.ACTION_DELETE)
-            intent.data = Uri.parse("package:" + appScreenTime.packageName)
-            startActivity(intent)
+        val checkList = viewModel.screenState.value.listDataScreenTime.filter { it.isChecked }
+        if (checkList.isNotEmpty()) {
+            viewModel.screenState.value.listDataScreenTime.filter {
+                !it.isItSystemApp && it.isChecked
+            }.forEach { appScreenTime ->
+                val intent = Intent(Intent.ACTION_DELETE)
+                intent.data = Uri.parse("package:" + appScreenTime.packageName)
+                startActivityForResult(intent, 10)
+            }
+        } else {
+            showToast(R.string.select_the_app_to_delete)
+        }
+    }
+
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 10) {
+            if (viewModel.screenState.value.choiceDay) {
+                updateScreenTime(Calendar.DATE, viewModel.beginTime, viewModel.endTime)
+            } else {
+                updateScreenTime(Calendar.WEEK_OF_YEAR, viewModel.beginTime, viewModel.endTime)
+            }
         }
     }
 
     private fun clickStopAllButton() {
-        activityManager =
-            requireContext().getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
-        viewModel.screenState.value.listDataScreenTime.forEach {
-            if (it.isChecked) {
-                activityManager.killBackgroundProcesses(it.packageName)
+        val checkList = viewModel.screenState.value.listDataScreenTime.filter { it.isChecked }
+        if (checkList.isNotEmpty()) {
+            activityManager =
+                requireContext().getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+            viewModel.screenState.value.listDataScreenTime.forEach {
+                if (it.isChecked) {
+                    activityManager.killBackgroundProcesses(it.packageName)
+                }
             }
+            binding.selectedMode.performClick()
+            showToast(R.string.kill_background_process_text)
+        } else {
+            showToast(R.string.select_the_app_to_stop)
         }
-        binding.selectedMode.performClick()
-        Toast.makeText(
-            requireContext(),
-            R.string.kill_background_process_text,
-            Toast.LENGTH_SHORT
-        ).show()
     }
 
     private fun clickCheckbox() {
@@ -210,6 +231,8 @@ class FirstScreenTimeFragment :
     }
 
     private fun choiceLeftArrow() {
+        if (viewModel.screenState.value.choiceDay && viewModel.beginTime == LIMIT_STATICS_FOR_DAY) return
+        if (viewModel.screenState.value.choiceWeek && viewModel.beginTime == LIMIT_STATICS_FOR_WEEK) return
         viewModel.beginTime += 1
         viewModel.endTime += 1
         if (viewModel.screenState.value.choiceDay) {
@@ -301,5 +324,18 @@ class FirstScreenTimeFragment :
         } else {
             mode == AppOpsManager.MODE_ALLOWED
         }
+    }
+
+    private fun showToast(text: Int) {
+        Toast.makeText(
+            requireContext(),
+            text,
+            Toast.LENGTH_SHORT
+        ).show()
+    }
+
+    companion object {
+        const val LIMIT_STATICS_FOR_DAY = 30
+        const val LIMIT_STATICS_FOR_WEEK = 3
     }
 }

@@ -7,6 +7,8 @@ android {
     namespace 'com.example.test'
     compileSdk 32
 
+    archivesBaseName = "MB-P-01 duplicates.test"
+
     defaultConfig {
         applicationId "com.example.test"
         minSdk 21

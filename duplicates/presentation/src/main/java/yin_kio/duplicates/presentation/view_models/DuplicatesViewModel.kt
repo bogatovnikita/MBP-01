@@ -6,8 +6,8 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import yin_kio.duplicates.domain.models.StateHolder
 import yin_kio.duplicates.domain.use_cases.DuplicateUseCases
-import yin_kio.duplicates.presentation.models.ButtonState
 import yin_kio.duplicates.presentation.R
+import yin_kio.duplicates.presentation.models.ButtonState
 import yin_kio.duplicates.presentation.models.UIState
 import kotlin.coroutines.CoroutineContext
 
@@ -18,7 +18,9 @@ class DuplicatesViewModel(
     coroutineDispatcher: CoroutineContext
 ) : DuplicateUseCases by useCase{
 
-    private val _uiState = MutableSharedFlow<UIState>()
+    private val _uiState = MutableSharedFlow<UIState>(
+        replay = 1
+    )
     val uiState = _uiState.asSharedFlow()
 
     private val groupViewModels = mutableListOf<GroupViewModel>()

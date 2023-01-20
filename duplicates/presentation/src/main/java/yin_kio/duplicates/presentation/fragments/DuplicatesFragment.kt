@@ -1,7 +1,6 @@
 package yin_kio.duplicates.presentation.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.core.view.isInvisible
 import androidx.fragment.app.Fragment
@@ -48,7 +47,6 @@ class DuplicatesFragment : Fragment(R.layout.fragment_duplicates) {
     }
 
     private fun showProgress(it: UIState) {
-        Log.d("!!!", "${it.isInProgress}")
         binding.progressPanel.isInvisible = !it.isInProgress
         binding.listPanel.isInvisible = it.isInProgress
     }

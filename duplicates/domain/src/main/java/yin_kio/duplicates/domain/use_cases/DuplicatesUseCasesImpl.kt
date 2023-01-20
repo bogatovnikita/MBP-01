@@ -34,6 +34,7 @@ internal class DuplicatesUseCasesImpl(
 
         isInProgress = true
         delay(1)
+        duplicatesLists = emptyList()
         update()
 
         duplicatesLists = getDuplicates().mapIndexed { index, imageInfos -> DuplicatesList(index, imageInfos)  }

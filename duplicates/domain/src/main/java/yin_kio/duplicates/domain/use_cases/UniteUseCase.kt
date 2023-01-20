@@ -1,6 +1,6 @@
 package yin_kio.duplicates.domain.use_cases
 
-interface UniteUseCase {
+internal interface UniteUseCase {
 
     fun unite()
 

@@ -16,15 +16,21 @@ class NotificationSettingsViewModel @Inject constructor(
     private val useCases: NotificationSettingsUseCases,
 ) : BaseViewModel<NotificationSettingsState>(NotificationSettingsState()) {
 
+    init {
+        updateDisturbSettings()
+    }
+
     fun getAppWithNotifications(hasPermission: Boolean) {
         viewModelScope.launch(Dispatchers.IO) {
-                useCases.getAppsInfo(hasPermission).collect { listApps ->
-                    updateState {
-                        it.copy(
-                            apps = listApps.mapToAppUiList()
-                        )
-                    }
+            useCases.getAppsInfo(hasPermission).collect { listApps ->
+                updateState {
+                    it.copy(
+                        apps = listApps.mapToAppUiList()
+                            .sortedWith(compareBy({ it.isSwitched }, { it.lastNotificationTime }))
+                            .reversed()
+                    )
                 }
+            }
         }
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -35,9 +41,42 @@ class NotificationSettingsViewModel @Inject constructor(
         }
     }
 
-    fun switchModeDisturb(packageName: String, isSwitched: Boolean) {
+    fun switchGeneralDisturbMode(isSwitched: Boolean) {
         viewModelScope.launch(Dispatchers.Default) {
-            useCases.switchModeDisturb(packageName, isSwitched)
+            updateState {
+                it.copy(
+                    modeNotDisturb = isSwitched
+                )
+            }
+            useCases.setGeneralDisturbMode(isSwitched)
+        }
+    }
+
+    fun switchAppModeDisturb(packageName: String, isSwitched: Boolean) {
+        viewModelScope.launch(Dispatchers.Default) {
+            useCases.switchAppModeDisturb(packageName, isSwitched)
+        }
+    }
+
+    fun setToAllAppsModeDisturb(isSwitched: Boolean) {
+        viewModelScope.launch(Dispatchers.IO) {
+            updateState {
+                it.copy(
+                    isAllAppsLimited = isSwitched
+                )
+            }
+            useCases.switchModeDisturbForAllApps(isSwitched)
+        }
+    }
+
+    private fun updateDisturbSettings() {
+        viewModelScope.launch(Dispatchers.Default) {
+            updateState {
+                it.copy(
+                    modeNotDisturb = useCases.getDisturbMode(),
+                    isAllAppsLimited = useCases.isAllAppsLimited()
+                )
+            }
         }
     }
 

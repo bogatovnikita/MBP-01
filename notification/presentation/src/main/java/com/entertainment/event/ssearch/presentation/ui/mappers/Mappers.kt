@@ -13,5 +13,6 @@ private fun AppWithNotifications.mapToAppUi() = AppUi(
     icon =  app.icon,
     name =  app.name,
     countNotifications = listNotifications.size,
+    lastNotificationTime = listNotifications.maxByOrNull { it.time }?.time ?: 0L,
     isSwitched =  app.isSwitched,
 )

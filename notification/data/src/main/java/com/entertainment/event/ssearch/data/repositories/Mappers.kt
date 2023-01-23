@@ -12,7 +12,6 @@ import com.entertainment.event.ssearch.domain.models.Notification
 fun List<NotificationDb>.mapToNotification() =
     this.map { notification ->
         Notification(
-            notificationId = notification.notificationId,
             appPackageName = notification.appPackageName,
             time = notification.time,
             title = notification.title,
@@ -36,7 +35,6 @@ fun List<AppWithNotificationsDb>.mapToAppAppWithNotifications() = this.map { app
 
 fun StatusBarNotification.mapToNotification() =
     Notification(
-        notificationId = 0,
         appPackageName = packageName,
         time = postTime,
         title = notification.extras[android.app.Notification.EXTRA_TITLE].toString(),

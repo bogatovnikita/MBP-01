@@ -1,10 +1,12 @@
 package com.entertainment.event.ssearch.presentation.di
 
 import com.entertainment.event.ssearch.data.providers.AppsProviderImpl
+import com.entertainment.event.ssearch.data.providers.SettingsProviderImpl
 import com.entertainment.event.ssearch.data.repositories.AppRepositoryImpl
 import com.entertainment.event.ssearch.data.repositories.AppWithNotificationsRepoImpl
 import com.entertainment.event.ssearch.data.repositories.NotificationRepositoryImpl
 import com.entertainment.event.ssearch.domain.providers.AppsProvider
+import com.entertainment.event.ssearch.domain.providers.SettingsProvider
 import com.entertainment.event.ssearch.domain.repositories.AppRepository
 import com.entertainment.event.ssearch.domain.repositories.AppWithNotificationsRepository
 import com.entertainment.event.ssearch.domain.repositories.NotificationRepository
@@ -18,15 +20,18 @@ import dagger.hilt.components.SingletonComponent
 interface BindModule {
 
     @Binds
-    fun bindAppRepositoryToAppRepositoryImpl(appRepositoryImpl: AppRepositoryImpl): AppRepository
+    fun bindAppRepositoryToAppRepositoryImpl(appsDb: AppRepositoryImpl): AppRepository
 
     @Binds
-    fun bindAppWithNotificationsRepoToAppWithNotificationsRepoImpl(appWithNotificationsRepoImpl: AppWithNotificationsRepoImpl): AppWithNotificationsRepository
+    fun bindAppWithNotificationsRepoToAppWithNotificationsRepoImpl(appWithNotifications: AppWithNotificationsRepoImpl): AppWithNotificationsRepository
 
     @Binds
-    fun bindNotificationRepositoryToNotificationRepositoryImpl(notificationRepositoryImpl: NotificationRepositoryImpl): NotificationRepository
+    fun bindNotificationRepositoryToNotificationRepositoryImpl(notifications: NotificationRepositoryImpl): NotificationRepository
 
     @Binds
-    fun bindAppsProviderToAppsProviderImpl(appsProviderImpl: AppsProviderImpl): AppsProvider
+    fun bindAppsProviderToAppsProviderImpl(apps: AppsProviderImpl): AppsProvider
+
+    @Binds
+    fun bindSettingsProviderToSettingsProviderImpl(settings: SettingsProviderImpl): SettingsProvider
 
 }

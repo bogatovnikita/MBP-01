@@ -5,5 +5,6 @@ data class AppUi(
     val icon: String,
     val name: String,
     val countNotifications: Int,
+    val lastNotificationTime: Long,
     val isSwitched: Boolean,
 )

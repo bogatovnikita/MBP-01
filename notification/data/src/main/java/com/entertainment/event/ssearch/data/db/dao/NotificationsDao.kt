@@ -13,8 +13,8 @@ interface NotificationsDao {
     @Query("SELECT * FROM notification_table")
     fun readAll() : Flow<List<NotificationDb>>
 
-    @Query("DELETE FROM notification_table WHERE notificationId = :notificationId")
-    suspend fun delete(notificationId: Int)
+    @Query("DELETE FROM notification_table WHERE time = :time")
+    suspend fun delete(time: Long)
 
     @Query("DELETE FROM notification_table")
     suspend fun deleteAll()

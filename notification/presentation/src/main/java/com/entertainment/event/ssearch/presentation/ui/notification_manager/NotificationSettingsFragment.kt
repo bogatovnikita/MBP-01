@@ -1,6 +1,8 @@
 package com.entertainment.event.ssearch.presentation.ui.notification_manager
 
+import android.app.ActivityManager
 import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -9,8 +11,11 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.coroutineScope
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.entertainment.event.ssearch.data.background.NotificationCleanBroadcastReceiver.Companion.ACTION_CLEAR_NOTIFICATIONS
 import com.entertainment.event.ssearch.data.background.NotificationService
 import com.entertainment.event.ssearch.presentation.R
 import com.entertainment.event.ssearch.presentation.databinding.FragmentNotificationSettingsBinding
@@ -18,8 +23,10 @@ import com.entertainment.event.ssearch.presentation.ui.adapters.AppRecyclerViewA
 import com.entertainment.event.ssearch.presentation.ui.models.NotificationSettingsState
 import dagger.hilt.android.AndroidEntryPoint
 
+
 @AndroidEntryPoint
-class NotificationSettingsFragment : Fragment(R.layout.fragment_notification_settings) {
+class NotificationSettingsFragment : Fragment(R.layout.fragment_notification_settings),
+    View.OnClickListener {
 
     private val binding: FragmentNotificationSettingsBinding by viewBinding()
     private val viewModel: NotificationSettingsViewModel by viewModels()
@@ -27,7 +34,7 @@ class NotificationSettingsFragment : Fragment(R.layout.fragment_notification_set
     private val adapter: AppRecyclerViewAdapter = AppRecyclerViewAdapter(
         object : AppRecyclerViewAdapter.OnItemAppClickListener {
             override fun switchModeDisturb(packageName: String, isSwitched: Boolean) {
-                viewModel.switchModeDisturb(packageName, isSwitched)
+                viewModel.switchAppModeDisturb(packageName, isSwitched)
             }
         }
     )
@@ -36,8 +43,13 @@ class NotificationSettingsFragment : Fragment(R.layout.fragment_notification_set
         super.onViewCreated(view, savedInstanceState)
         initAdapter()
         initStateObserver()
-        viewModel.getAppWithNotifications(true)
-//        startActivity(Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"))
+        initListeners()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        startNotificationService()
+        viewModel.getAppWithNotifications(hasPermissionService())
     }
 
     private fun initStateObserver() {
@@ -51,6 +63,8 @@ class NotificationSettingsFragment : Fragment(R.layout.fragment_notification_set
     private fun renderState(state: NotificationSettingsState) {
         with(state) {
             adapter.submitList(apps)
+            binding.switchModeDisturb.isChecked = modeNotDisturb
+            binding.switchLimitAllApplication.isChecked = isAllAppsLimited
         }
 
     }
@@ -59,9 +73,15 @@ class NotificationSettingsFragment : Fragment(R.layout.fragment_notification_set
         binding.recyclerViewNotification.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.recyclerViewNotification.adapter = adapter
+        val itemAnimator = binding.recyclerViewNotification.itemAnimator
+        if (itemAnimator is DefaultItemAnimator) {
+            itemAnimator.supportsChangeAnimations = false
+        }
     }
 
     fun startNotificationService() {
+        if (!hasPermissionService()) return
+        if (NotificationService.isServiceRunning()) return
         val intent = Intent(requireContext(), NotificationService::class.java)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             requireContext().startForegroundService(intent)
@@ -70,10 +90,47 @@ class NotificationSettingsFragment : Fragment(R.layout.fragment_notification_set
         }
     }
 
-    fun hasPermissionService() : Boolean {
-        val string = Settings.Secure.getString(requireContext().contentResolver, "enabled_notification_listeners") ?: ""
+    fun hasPermissionService(): Boolean {
+        val string = Settings.Secure.getString(
+            requireContext().contentResolver,
+            "enabled_notification_listeners"
+        ) ?: ""
         val listenersClassNames = string.split(":")
-        val listenerName = ComponentName(requireContext(), NotificationService::class.java).flattenToString()
+        val listenerName =
+            ComponentName(requireContext(), NotificationService::class.java).flattenToString()
         return listenersClassNames.contains(listenerName)
     }
+
+    private fun openPermissionDialog() {
+        if (!hasPermissionService())
+            findNavController().navigate(R.id.action_to_dialogNotificationPermissionFragment)
+    }
+
+    private fun cleanAllNotification() {
+        if (hasPermissionService())
+            requireContext().sendBroadcast(Intent(ACTION_CLEAR_NOTIFICATIONS))
+    }
+
+    fun isMyServiceRunning(serviceClass: Class<*>): Boolean {
+        val manager = requireContext().getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+        return manager.getRunningServices(Integer.MAX_VALUE)
+            .any { it.service.className == serviceClass.name }
+    }
+
+    private fun initListeners() {
+        binding.btnClearNotifications.setOnClickListener(this)
+        binding.btnOpenTimetable.setOnClickListener(this)
+        binding.switchModeDisturb.setOnClickListener(this)
+        binding.switchLimitAllApplication.setOnClickListener(this)
+    }
+
+    override fun onClick(view: View) {
+        when (view.id) {
+            R.id.btn_clear_notifications -> cleanAllNotification()
+            R.id.btn_clear_notifications, R.id.btn_open_timetable -> openPermissionDialog()
+            R.id.switch_mode_disturb -> viewModel.switchGeneralDisturbMode(binding.switchModeDisturb.isChecked)
+            R.id.switch_limit_all_application -> viewModel.setToAllAppsModeDisturb(binding.switchLimitAllApplication.isChecked)
+        }
+    }
+
 }

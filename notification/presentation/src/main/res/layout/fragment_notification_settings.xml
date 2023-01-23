@@ -59,13 +59,13 @@
                     android:textAllCaps="false"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_9ssp"
-                    app:layout_constraintEnd_toStartOf="@id/btn_missed_notifications"
+                    app:layout_constraintEnd_toStartOf="@id/btn_allow_notifications"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tv_title" />
 
 
                 <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btn_missed_notifications"
+                    android:id="@+id/btn_allow_notifications"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/_27sdp"
                     android:layout_marginStart="@dimen/_3sdp"
@@ -132,7 +132,7 @@
                     app:layout_constraintVertical_bias="1.0" />
 
                 <Switch
-                    android:id="@+id/switch_do_not_disturb"
+                    android:id="@+id/switch_mode_disturb"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/_21sdp"
@@ -148,7 +148,7 @@
                     android:layout_height="1dp"
                     android:layout_marginTop="@dimen/_7sdp"
                     android:background="@color/gray"
-                    app:layout_constraintEnd_toEndOf="@id/switch_do_not_disturb"
+                    app:layout_constraintEnd_toEndOf="@id/switch_mode_disturb"
                     app:layout_constraintStart_toStartOf="@+id/im_moon"
                     app:layout_constraintTop_toBottomOf="@id/im_moon" />
 
@@ -239,8 +239,8 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/ic_open_timetable"
                     app:layout_constraintBottom_toBottomOf="@+id/im_watch"
-                    app:layout_constraintEnd_toEndOf="@+id/switch_do_not_disturb"
-                    app:layout_constraintStart_toStartOf="@+id/switch_do_not_disturb"
+                    app:layout_constraintEnd_toEndOf="@+id/switch_mode_disturb"
+                    app:layout_constraintStart_toStartOf="@+id/switch_mode_disturb"
                     app:layout_constraintTop_toTopOf="@+id/im_watch" />
 
                 <TextView

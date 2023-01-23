@@ -29,6 +29,7 @@ class AppRecyclerViewAdapter(
                 if (app.countNotifications == 0) {
                     tvCountNotifications.visibility = View.GONE
                 } else {
+                    tvCountNotifications.visibility = View.VISIBLE
                     tvCountNotifications.text = getString(app.countNotifications)
                 }
                 switchDoNotDisturb.setOnClickListener {
@@ -40,10 +41,9 @@ class AppRecyclerViewAdapter(
         private fun setIcon(uri: String) {
             Glide.with(binding.ivIconApp)
                 .load(Uri.parse(uri))
-                .placeholder(R.drawable.ic_watch)
-                .error(R.drawable.ic_moon)
+                .placeholder(R.drawable.ic_default_app)
+                .error(R.drawable.ic_default_app)
                 .into(binding.ivIconApp)
-
         }
 
         private fun getString(count: Int) = binding.root.context.getString(

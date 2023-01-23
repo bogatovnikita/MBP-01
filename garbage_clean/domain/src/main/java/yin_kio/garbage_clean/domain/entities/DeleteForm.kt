@@ -1,4 +1,4 @@
-package yin_kio.garbage_clean.domain
+package yin_kio.garbage_clean.domain.entities
 
 class DeleteForm : MutableSet<FormItem> by mutableSetOf(){
 

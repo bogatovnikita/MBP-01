@@ -2,9 +2,9 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import yin_kio.garbage_clean.domain.DeleteForm
-import yin_kio.garbage_clean.domain.FormItem
-import yin_kio.garbage_clean.domain.GarbageType
+import yin_kio.garbage_clean.domain.entities.DeleteForm
+import yin_kio.garbage_clean.domain.entities.FormItem
+import yin_kio.garbage_clean.domain.entities.GarbageType
 
 class DeleteFormTest {
 

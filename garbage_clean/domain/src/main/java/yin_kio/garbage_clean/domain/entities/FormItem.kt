@@ -1,4 +1,4 @@
-package yin_kio.garbage_clean.domain
+package yin_kio.garbage_clean.domain.entities
 
 data class FormItem(
     val garbageType: GarbageType,
@@ -17,7 +17,6 @@ data class FormItem(
     }
 
     override fun hashCode(): Int {
-        var result = garbageType.hashCode()
-        return result
+        return garbageType.hashCode()
     }
 }

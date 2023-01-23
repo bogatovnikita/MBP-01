@@ -1,8 +1,8 @@
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import yin_kio.garbage_clean.domain.DeleteRequest
-import yin_kio.garbage_clean.domain.GarbageType
+import yin_kio.garbage_clean.domain.entities.DeleteRequest
+import yin_kio.garbage_clean.domain.entities.GarbageType
 
 class DeleteRequestTest {
 

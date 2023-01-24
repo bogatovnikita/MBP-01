@@ -52,7 +52,7 @@ class DeleteFormTest {
         deleteForm.deleteRequest.apply {
             assertTrue(contains(GarbageType.Temp))
             assertTrue(contains(GarbageType.Apk))
-            assertTrue(contains(GarbageType.Dat))
+            assertTrue(contains(GarbageType.RestFiles))
             assertTrue(contains(GarbageType.EmptyFolders))
             assertTrue(contains(GarbageType.Thumbnails))
         }

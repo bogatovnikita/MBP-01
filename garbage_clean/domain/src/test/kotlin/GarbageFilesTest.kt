@@ -25,7 +25,11 @@ class GarbageFilesTest {
         val path = "/path/to/file.apk"
         garbageFiles.addTo(GarbageType.Apk, path)
 
+        val path2 = "/path/to/file2.apk"
+        garbageFiles.addTo(GarbageType.Apk, path2)
+
         assertTrue(garbageFiles[GarbageType.Apk]!!.contains(path))
+        assertTrue(garbageFiles[GarbageType.Apk]!!.contains(path2))
     }
 
 }

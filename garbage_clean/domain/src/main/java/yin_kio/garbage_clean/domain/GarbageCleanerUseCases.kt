@@ -17,8 +17,8 @@ class GarbageCleanerUseCases(
 
     private val interpreter = DeleteRequestInterpreter(garbageFiles)
 
-    fun selectAll() = async {
-        deleteForm.selectAll()
+    fun switchSelectAll() = async {
+        deleteForm.switchSelectAll()
     }
     fun switchSelection(garbageType: GarbageType) = async {
         deleteForm.switchSelection(garbageType)

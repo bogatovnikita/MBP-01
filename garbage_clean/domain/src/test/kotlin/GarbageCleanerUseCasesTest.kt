@@ -72,11 +72,11 @@ class GarbageCleanerUseCasesTest {
         garbageFiles[GarbageType.Temp] = mutableListOf(TEMP)
 
 
-        coEvery { files.delete(listOf("apk", "temp")) } returns Unit
+        coEvery { files.delete(listOf(APK, TEMP)) } returns Unit
 
         useCases.startDeleteIfCan()
 
-        coVerify { files.delete(listOf("apk", "temp")) }
+        coVerify { files.delete(listOf(APK, TEMP)) }
     }
 
     @Test

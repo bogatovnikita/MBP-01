@@ -1,3 +1,5 @@
+package entities
+
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import yin_kio.garbage_clean.domain.entities.GarbageFileGrouper

@@ -5,7 +5,6 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
-import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -47,13 +46,12 @@ class GarbageCleanerUseCasesTest {
 
 
     @Test
-    fun testSelectAll() = runTest{
-        coEvery { deleteForm.selectAll() } returns Unit
+    fun testSwitchSelectAll() = runTest{
+        coEvery { deleteForm.switchSelectAll() } returns Unit
 
-        useCases.selectAll()
-        advanceUntilIdle()
+        useCases.switchSelectAll()
 
-        coVerify { deleteForm.selectAll() }
+        coVerify { deleteForm.switchSelectAll() }
     }
 
     @Test

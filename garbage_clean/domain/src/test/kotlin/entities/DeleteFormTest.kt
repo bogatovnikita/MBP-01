@@ -48,17 +48,12 @@ class DeleteFormTest {
     }
 
     @Test
-    fun testSelectAll(){
+    fun testSwitchSelectAll(){
+        deleteForm.switchSelectAll()
+        assertTrue( deleteForm.deleteRequest.containsAll(GarbageType.values().toList()))
 
-        deleteForm.selectAll()
-
-        deleteForm.deleteRequest.apply {
-            assertTrue(contains(GarbageType.Temp))
-            assertTrue(contains(GarbageType.Apk))
-            assertTrue(contains(GarbageType.RestFiles))
-            assertTrue(contains(GarbageType.EmptyFolders))
-            assertTrue(contains(GarbageType.Thumbnails))
-        }
+        deleteForm.switchSelectAll()
+        assertFalse(deleteForm.deleteRequest.containsAll(GarbageType.values().toList()))
     }
 
 }

@@ -4,22 +4,22 @@ import android.app.Application
 import com.entertainment.event.ssearch.domain.mappers.mapToApp
 import com.entertainment.event.ssearch.domain.models.AppWithNotifications
 import com.entertainment.event.ssearch.domain.providers.AppsProvider
-import com.entertainment.event.ssearch.domain.providers.SettingsProvider
+import com.entertainment.event.ssearch.domain.providers.Settings
 import com.entertainment.event.ssearch.domain.repositories.AppRepository
 import com.entertainment.event.ssearch.domain.repositories.AppWithNotificationsRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class NotificationSettingsUseCases @Inject constructor(
+    private val settings: Settings,
+    private val apps: AppRepository,
     private val context: Application,
-    private val appRepo: AppRepository,
     private val appsProvide: AppsProvider,
-    private val settings: SettingsProvider,
-    private val appWithNotificationRepo: AppWithNotificationsRepository,
+    private val appsWithNotifications: AppWithNotificationsRepository,
 ) {
 
     suspend fun switchAppModeDisturb(packageName: String, isSwitched: Boolean) =
-        appRepo.setSwitched(packageName, isSwitched)
+        apps.setSwitched(packageName, isSwitched)
 
     suspend fun getDisturbMode(): Boolean = settings.isDisturbModeSwitched()
 
@@ -29,36 +29,59 @@ class NotificationSettingsUseCases @Inject constructor(
 
     suspend fun getAppsInfo(hasPermission: Boolean): Flow<List<AppWithNotifications>> {
         return if (hasPermission) {
-            appWithNotificationRepo.readAppsWithNotifications()
+            appsWithNotifications.readAppsWithNotifications()
         } else {
             getOnlyApps()
         }
     }
 
     suspend fun updateApps() {
+        removeDeletedApps()
+        addNewApps()
+    }
+
+    private suspend fun addNewApps() {
         val listApps = appsProvide.getSystemPackages() + appsProvide.getInstalledPackages()
-        appWithNotificationRepo.readAppsWithNotifications().collect { savedApps ->
-            savedApps.forEach { savedApp ->
-                listApps.forEach { newApp ->
-                    if (savedApp.app.packageName != newApp.packageName) {
-                        appRepo.insertApp(newApp.mapToApp(context))
-                    }
-                }
+        listApps.forEach { app ->
+            if (apps.readApp(app.packageName) == null) {
+                apps.insertApp(app.mapToApp(context))
             }
         }
     }
 
+    private suspend fun removeDeletedApps() {
+        val phoneApps = getPhoneApps()
+        val savedApps = apps.getApps()
+        if (savedApps.size > phoneApps.size) {
+            savedApps.forEach { app ->
+                val isContain = phoneApps.find { packageInfo ->
+                    packageInfo.packageName == app.packageName
+                }
+                if (isContain == null) {
+                    apps.deleteApp(app.packageName)
+                }
+            }
+        }
+
+    }
+
     private suspend fun getOnlyApps(): Flow<List<AppWithNotifications>> {
-        val listApps = appsProvide.getSystemPackages() + appsProvide.getInstalledPackages()
-        appRepo.insertAll(listApps.mapToApp(context))
-        return appWithNotificationRepo.readAppsWithNotifications()
+        return if (apps.getApps().isEmpty()) {
+            val phoneApps = getPhoneApps()
+            apps.insertAll(phoneApps.mapToApp(context))
+            appsWithNotifications.readAppsWithNotifications()
+        } else {
+            appsWithNotifications.readAppsWithNotifications()
+        }
     }
 
     suspend fun switchModeDisturbForAllApps(isSwitched: Boolean) {
         settings.switchLimitAllApps(isSwitched)
-        appRepo.getApps().forEach { app ->
-            appRepo.setSwitched(app.packageName, isSwitched)
+        apps.getApps().forEach { app ->
+            apps.setSwitched(app.packageName, isSwitched)
         }
     }
+
+    private suspend fun getPhoneApps() = appsProvide.getSystemPackages() + appsProvide.getInstalledPackages()
 
 }

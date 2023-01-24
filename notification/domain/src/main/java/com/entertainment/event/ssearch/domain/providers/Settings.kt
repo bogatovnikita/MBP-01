@@ -1,6 +1,6 @@
 package com.entertainment.event.ssearch.domain.providers
 
-interface SettingsProvider {
+interface Settings {
 
     suspend fun switchOffDisturbMode(isSwitched: Boolean)
 

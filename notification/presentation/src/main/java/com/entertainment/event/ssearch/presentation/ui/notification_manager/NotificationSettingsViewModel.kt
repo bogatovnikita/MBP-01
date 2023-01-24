@@ -8,7 +8,6 @@ import com.entertainment.event.ssearch.presentation.ui.models.NotificationSettin
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.lang.Exception
 import javax.inject.Inject
 
 @HiltViewModel
@@ -18,6 +17,7 @@ class NotificationSettingsViewModel @Inject constructor(
 
     init {
         updateDisturbSettings()
+        updateApps()
     }
 
     fun getAppWithNotifications(hasPermission: Boolean) {
@@ -30,13 +30,6 @@ class NotificationSettingsViewModel @Inject constructor(
                             .reversed()
                     )
                 }
-            }
-        }
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                updateApps(hasPermission)
-            } catch (e: Exception) {
-                e.printStackTrace()
             }
         }
     }
@@ -80,14 +73,9 @@ class NotificationSettingsViewModel @Inject constructor(
         }
     }
 
-    private fun updateApps(hasPermission: Boolean) {
-        if (!hasPermission) return
+    private fun updateApps() {
         viewModelScope.launch(Dispatchers.IO) {
-            try {
-                useCases.updateApps()
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
+            useCases.updateApps()
         }
     }
 

@@ -1,5 +1,4 @@
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import yin_kio.garbage_clean.domain.entities.DeleteForm
@@ -35,13 +34,15 @@ class DeleteFormTest {
     }
 
     @Test
-    fun testSelect(){
+    fun testSwitchSelection(){
         deleteForm.add(FormItem(GarbageType.Temp, 10))
         deleteForm.add(FormItem(GarbageType.Apk, 10))
 
-        deleteForm.select(GarbageType.Apk)
+        deleteForm.switchSelection(GarbageType.Apk)
+        assertTrue(deleteForm.deleteRequest.contains(GarbageType.Apk))
 
-        assertEquals(1, deleteForm.deleteRequest.size)
+        deleteForm.switchSelection(GarbageType.Apk)
+        assertFalse(deleteForm.deleteRequest.contains(GarbageType.Apk))
     }
 
     @Test

@@ -6,8 +6,12 @@ class DeleteForm : MutableSet<FormItem> by mutableSetOf(){
 
     val deleteRequest = DeleteRequest()
 
-    fun select(garbageType: GarbageType){
-        deleteRequest.add(garbageType)
+    fun switchSelection(garbageType: GarbageType){
+        if (deleteRequest.contains(garbageType)){
+            deleteRequest.remove(garbageType)
+        } else {
+            deleteRequest.add(garbageType)
+        }
     }
 
     fun selectAll(){

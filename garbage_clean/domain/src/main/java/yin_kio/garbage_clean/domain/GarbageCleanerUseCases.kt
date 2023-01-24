@@ -18,8 +18,10 @@ class GarbageCleanerUseCases(
     fun switchSelection(garbageType: GarbageType){
         deleteForm.switchSelection(garbageType)
     }
-    fun startDelete(){
-        files.delete(interpreter.interpret(deleteRequest))
+    fun startDeleteIfCan(){
+        if (deleteRequest.isNotEmpty()) {
+            files.delete(interpreter.interpret(deleteRequest))
+        }
     }
 
 }

@@ -1,4 +1,4 @@
-package com.entertainment.event.ssearch.presentation.ui.models
+package com.entertainment.event.ssearch.presentation.models
 
 data class TableTimeSate(
     val isSwitched: Boolean = false,

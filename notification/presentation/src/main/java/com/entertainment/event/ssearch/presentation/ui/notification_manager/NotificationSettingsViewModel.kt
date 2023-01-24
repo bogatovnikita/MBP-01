@@ -1,10 +1,11 @@
 package com.entertainment.event.ssearch.presentation.ui.notification_manager
 
 import androidx.lifecycle.viewModelScope
-import com.entertainment.event.ssearch.domain.notification_manager_settings.NotificationSettingsUseCases
+import com.entertainment.event.ssearch.domain.use_cases.NotificationSettingsUseCases
 import com.entertainment.event.ssearch.presentation.ui.base.BaseViewModel
-import com.entertainment.event.ssearch.presentation.ui.mappers.mapToAppUiList
-import com.entertainment.event.ssearch.presentation.ui.models.NotificationSettingsState
+import com.entertainment.event.ssearch.presentation.mappers.mapToAppUiList
+import com.entertainment.event.ssearch.presentation.models.NotificationSettingsState
+import com.entertainment.event.ssearch.presentation.models.NotificationStateEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -15,50 +16,105 @@ class NotificationSettingsViewModel @Inject constructor(
     private val useCases: NotificationSettingsUseCases,
 ) : BaseViewModel<NotificationSettingsState>(NotificationSettingsState()) {
 
-    init {
-        updateDisturbSettings()
-        updateApps()
+    fun obtainEvent(event: NotificationStateEvent) {
+        when (event) {
+            is NotificationStateEvent.ClearAllNotification -> clearAllNotificationOrOpenDialog()
+            is NotificationStateEvent.Default -> setEvent(NotificationStateEvent.Default)
+            is NotificationStateEvent.Update -> updateAppsAndService()
+            is NotificationStateEvent.SwitchGeneralDisturbMode -> switchGeneralDisturbMode(event.isSwitch)
+            is NotificationStateEvent.LimitApps -> setToAllAppsModeDisturb(event.isSwitch)
+            is NotificationStateEvent.SwitchAppModeDisturb -> switchAppModeDisturb(
+                event.packageName,
+                event.isSwitch
+            )
+            else -> {}
+        }
     }
 
-    fun getAppWithNotifications(hasPermission: Boolean) {
+    private fun getAppWithNotifications() {
         viewModelScope.launch(Dispatchers.IO) {
-            useCases.getAppsInfo(hasPermission).collect { listApps ->
+            useCases.getAppsInfo().collect { listApps ->
                 updateState {
                     it.copy(
-                        apps = listApps.mapToAppUiList()
-                            .sortedWith(compareBy({ it.isSwitched }, { it.lastNotificationTime }))
-                            .reversed()
+                        apps = listApps.mapToAppUiList(useCases.hasServicePermission()),
+                        event = NotificationStateEvent.Default
                     )
                 }
             }
         }
     }
 
-    fun switchGeneralDisturbMode(isSwitched: Boolean) {
+    private fun clearAllNotificationOrOpenDialog() {
+        val isCleared = useCases.clearAllNotification()
+        if (!isCleared) {
+            setEvent(NotificationStateEvent.OpenPermissionDialog)
+        }
+    }
+
+    private fun setEvent(event: NotificationStateEvent) {
+        updateState {
+            it.copy(
+                event = event
+            )
+        }
+    }
+
+    private fun switchGeneralDisturbMode(isSwitched: Boolean) {
         viewModelScope.launch(Dispatchers.Default) {
-            updateState {
-                it.copy(
-                    modeNotDisturb = isSwitched
-                )
+            if (useCases.hasServicePermission()) {
+                useCases.setGeneralDisturbMode(isSwitched)
+                updateState {
+                    it.copy(
+                        modeNotDisturb = isSwitched,
+                        event = NotificationStateEvent.Default
+                    )
+                }
+            } else {
+                setEvent(NotificationStateEvent.OpenPermissionDialog)
+                updateState {
+                    it.copy(
+                        modeNotDisturb = !isSwitched,
+                    )
+                }
             }
-            useCases.setGeneralDisturbMode(isSwitched)
         }
     }
 
-    fun switchAppModeDisturb(packageName: String, isSwitched: Boolean) {
-        viewModelScope.launch(Dispatchers.Default) {
-            useCases.switchAppModeDisturb(packageName, isSwitched)
+    private fun switchAppModeDisturb(packageName: String, isSwitched: Boolean) {
+        if (useCases.hasServicePermission()) {
+            viewModelScope.launch(Dispatchers.Default) {
+                useCases.switchAppModeDisturb(packageName, isSwitched)
+            }
+        } else {
+            setEvent(NotificationStateEvent.OpenPermissionDialog)
         }
     }
 
-    fun setToAllAppsModeDisturb(isSwitched: Boolean) {
+    private fun updateAppsAndService() {
+        getAppWithNotifications()
+        updateApps()
+        updateDisturbSettings()
+        useCases.startServiceIfNeed()
+    }
+
+    private fun setToAllAppsModeDisturb(isSwitched: Boolean) {
         viewModelScope.launch(Dispatchers.IO) {
-            updateState {
-                it.copy(
-                    isAllAppsLimited = isSwitched
-                )
+            if (useCases.hasServicePermission()) {
+                updateState {
+                    it.copy(
+                        isAllAppsLimited = isSwitched,
+                        event = NotificationStateEvent.Default
+                    )
+                }
+                useCases.switchModeDisturbForAllApps(isSwitched)
+            } else {
+                setEvent(NotificationStateEvent.OpenPermissionDialog)
+                updateState {
+                    it.copy(
+                        isAllAppsLimited = !isSwitched,
+                    )
+                }
             }
-            useCases.switchModeDisturbForAllApps(isSwitched)
         }
     }
 
@@ -67,7 +123,8 @@ class NotificationSettingsViewModel @Inject constructor(
             updateState {
                 it.copy(
                     modeNotDisturb = useCases.getDisturbMode(),
-                    isAllAppsLimited = useCases.isAllAppsLimited()
+                    isAllAppsLimited = useCases.isAllAppsLimited(),
+                    event = NotificationStateEvent.Default
                 )
             }
         }

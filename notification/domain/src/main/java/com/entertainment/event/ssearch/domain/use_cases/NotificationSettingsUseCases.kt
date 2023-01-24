@@ -1,20 +1,25 @@
-package com.entertainment.event.ssearch.domain.notification_manager_settings
+package com.entertainment.event.ssearch.domain.use_cases
 
 import android.app.Application
 import com.entertainment.event.ssearch.domain.mappers.mapToApp
 import com.entertainment.event.ssearch.domain.models.AppWithNotifications
+import com.entertainment.event.ssearch.domain.permission.Permission
 import com.entertainment.event.ssearch.domain.providers.AppsProvider
 import com.entertainment.event.ssearch.domain.providers.Settings
 import com.entertainment.event.ssearch.domain.repositories.AppRepository
 import com.entertainment.event.ssearch.domain.repositories.AppWithNotificationsRepository
+import com.entertainment.event.ssearch.domain.service.ServiceController
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class NotificationSettingsUseCases @Inject constructor(
     private val settings: Settings,
     private val apps: AppRepository,
     private val context: Application,
+    private val permission: Permission,
     private val appsProvide: AppsProvider,
+    private val serviceController: ServiceController,
     private val appsWithNotifications: AppWithNotificationsRepository,
 ) {
 
@@ -23,16 +28,34 @@ class NotificationSettingsUseCases @Inject constructor(
 
     suspend fun getDisturbMode(): Boolean = settings.isDisturbModeSwitched()
 
+    fun hasServicePermission() = permission.hasServicePermission()
+
+    fun clearAllNotification(): Boolean {
+        return if (hasServicePermission()) {
+            serviceController.cleanAllNotification()
+            true
+        } else {
+            false
+        }
+    }
+
     suspend fun isAllAppsLimited(): Boolean = settings.isAllAppsLimited()
 
     suspend fun setGeneralDisturbMode(isSwitched: Boolean) = settings.switchOffDisturbMode(isSwitched)
 
-    suspend fun getAppsInfo(hasPermission: Boolean): Flow<List<AppWithNotifications>> {
-        return if (hasPermission) {
-            appsWithNotifications.readAppsWithNotifications()
+    suspend fun getAppsInfo(): Flow<List<AppWithNotifications>> {
+        return if (permission.hasServicePermission()) {
+            appsWithNotifications.readAppsWithNotifications().map {
+                it.sortedWith(compareBy({ it.app.isSwitched }, { it.listNotifications.maxByOrNull { it.time }?.time ?: 0L }))
+                    .reversed()
+            }
         } else {
             getOnlyApps()
         }
+    }
+
+    fun startServiceIfNeed() {
+        serviceController.startServiceIfNeed()
     }
 
     suspend fun updateApps() {
@@ -77,9 +100,8 @@ class NotificationSettingsUseCases @Inject constructor(
 
     suspend fun switchModeDisturbForAllApps(isSwitched: Boolean) {
         settings.switchLimitAllApps(isSwitched)
-        apps.getApps().forEach { app ->
-            apps.setSwitched(app.packageName, isSwitched)
-        }
+        val updatedApps = apps.getApps().map { app -> app.copy(isSwitched = isSwitched)}
+        apps.updateAll(updatedApps)
     }
 
     private suspend fun getPhoneApps() = appsProvide.getSystemPackages() + appsProvide.getInstalledPackages()

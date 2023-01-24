@@ -4,6 +4,9 @@ class DeleteForm : MutableSet<FormItem> by mutableSetOf(){
 
     val canFree: Long get() = sumOf { it.size }
 
+    private var _isAllSelected = false
+    val isAllSelected get() = _isAllSelected
+
     internal val deleteRequest = DeleteRequest()
 
     fun switchSelection(garbageType: GarbageType){
@@ -15,10 +18,12 @@ class DeleteForm : MutableSet<FormItem> by mutableSetOf(){
     }
 
     fun switchSelectAll(){
-        if (deleteRequest.containsAll(GarbageType.values().toList())){
-            deleteRequest.clear()
-        } else {
+        _isAllSelected = !isAllSelected
+
+        if (_isAllSelected){
             deleteRequest.addAll(GarbageType.values())
+        } else {
+            deleteRequest.clear()
         }
     }
 

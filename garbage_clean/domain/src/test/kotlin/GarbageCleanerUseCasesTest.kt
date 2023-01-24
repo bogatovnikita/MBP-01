@@ -1,6 +1,12 @@
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import yin_kio.garbage_clean.domain.GarbageCleanerUseCases
@@ -10,6 +16,8 @@ import yin_kio.garbage_clean.domain.entities.GarbageFiles
 import yin_kio.garbage_clean.domain.entities.GarbageType
 import yin_kio.garbage_clean.domain.gateways.Files
 
+
+@OptIn(ExperimentalCoroutinesApi::class)
 class GarbageCleanerUseCasesTest {
 
     private val deleteForm: DeleteForm = mockk()
@@ -18,24 +26,38 @@ class GarbageCleanerUseCasesTest {
     private lateinit var garbageFiles: GarbageFiles
     private lateinit var deleteRequest: DeleteRequest
 
+    private val dispatcher = StandardTestDispatcher()
+    private lateinit var coroutineScope: TestScope
+
     @BeforeEach
-    fun setup(){
+    fun setup() = runTest(dispatcher){
+        coroutineScope = this
         garbageFiles = GarbageFiles()
         deleteRequest = DeleteRequest()
-        useCases = GarbageCleanerUseCases(deleteForm, files, garbageFiles, deleteRequest)
+        useCases = GarbageCleanerUseCases(
+            deleteForm = deleteForm,
+            files = files,
+            garbageFiles = garbageFiles,
+            deleteRequest = deleteRequest,
+            coroutineScope = coroutineScope,
+            dispatcher = dispatcher
+        )
     }
 
+
+
     @Test
-    fun testSelectAll(){
+    fun testSelectAll() = runTest{
         coEvery { deleteForm.selectAll() } returns Unit
 
         useCases.selectAll()
+        advanceUntilIdle()
 
         coVerify { deleteForm.selectAll() }
     }
 
     @Test
-    fun testSwitchSelection(){
+    fun testSwitchSelection() = runTest{
         coEvery { deleteForm.switchSelection(GarbageType.Apk) } returns Unit
 
         useCases.switchSelection(GarbageType.Apk)
@@ -44,7 +66,7 @@ class GarbageCleanerUseCasesTest {
     }
 
     @Test
-    fun `testStartDeleteIfCan deleteRequest is not empty`(){
+    fun `testStartDeleteIfCan deleteRequest is not empty`() = runTest{
         deleteRequest.add(GarbageType.Apk)
         deleteRequest.add(GarbageType.Temp)
 
@@ -60,12 +82,16 @@ class GarbageCleanerUseCasesTest {
     }
 
     @Test
-    fun `testStartDeleteIfCan deleteRequest is empty`(){
+    fun `testStartDeleteIfCan deleteRequest is empty`() = runTest{
         coEvery { files.delete(listOf()) } returns Unit
 
         useCases.startDeleteIfCan()
 
         coVerify(inverse = true) { files.delete(listOf()) }
+    }
+
+    private fun runTest(action: suspend TestScope.() -> Unit){
+        coroutineScope.launch { action(this as TestScope) }
     }
 
     companion object{

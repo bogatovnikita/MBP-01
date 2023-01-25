@@ -47,17 +47,18 @@ class GarbageCleanerUseCasesTest {
         coEvery { deleteForm.switchSelectAll() } returns Unit
 
         useCases.switchSelectAll()
-        advanceUntilIdle()
+        wait()
 
         coVerify { deleteForm.switchSelectAll() }
     }
+
 
     @Test
     fun testSwitchSelection() = setupTest{
         coEvery { deleteForm.switchSelection(GarbageType.Apk) } returns Unit
 
         useCases.switchSelection(GarbageType.Apk)
-        advanceUntilIdle()
+        wait()
 
         coVerify { deleteForm.switchSelection(GarbageType.Apk) }
     }
@@ -74,7 +75,7 @@ class GarbageCleanerUseCasesTest {
         coEvery { files.delete(listOf(APK, TEMP)) } returns Unit
 
         useCases.startDeleteIfCan()
-        advanceUntilIdle()
+        wait()
 
         coVerify { files.delete(listOf(APK, TEMP)) }
     }
@@ -88,6 +89,11 @@ class GarbageCleanerUseCasesTest {
         coVerify(inverse = true) { files.delete(listOf()) }
     }
 
+
+
+    private fun TestScope.wait() {
+        advanceUntilIdle()
+    }
 
     companion object{
         private const val APK = "apk"

@@ -18,5 +18,12 @@
         android:id="@+id/secondScreenTimeFragment"
         android:name="com.hedgehog.presentation.ui.second_screen.SecondScreenTimeFragment"
         android:label="SecondScreenTimeFragment"
-        tools:layout="@layout/fragment_second_screen_time" />
+        tools:layout="@layout/fragment_second_screen_time" >
+        <argument
+            android:name="packageName"
+            app:argType="string" />
+        <argument
+            android:name="calendarScreenTime"
+            app:argType="com.hedgehog.presentation.models.CalendarScreenTime" />
+    </fragment>
 </navigation>

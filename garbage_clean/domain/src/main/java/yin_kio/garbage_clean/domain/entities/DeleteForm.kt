@@ -15,6 +15,8 @@ class DeleteForm : MutableSet<FormItem> by mutableSetOf(){
         } else {
             deleteRequest.add(garbageType)
         }
+
+        _isAllSelected = deleteRequest.size == size
     }
 
     fun switchSelectAll(){

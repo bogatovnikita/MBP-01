@@ -15,7 +15,13 @@
         <action
             android:id="@+id/action_to_dialogNotificationPermissionFragment"
             app:destination="@id/dialogNotificationPermissionFragment" />
+        <action
+            android:id="@+id/action_to_dialogClearingFragment"
+            app:destination="@id/dialogClearingFragment" />
     </fragment>
+    <action
+        android:id="@+id/action_to_dialogCompleteClearFragment"
+        app:destination="@id/dialogCompleteClearFragment" />
     <fragment
         android:id="@+id/missedNotificationsFragment"
         android:name="com.entertainment.event.ssearch.presentation.ui.missed_notifications.MissedNotificationsFragment"
@@ -26,4 +32,14 @@
         android:name="com.entertainment.event.ssearch.presentation.ui.dialogs.DialogNotificationPermissionFragment"
         android:label="fragment_dialog_notification_permission"
         tools:layout="@layout/fragment_dialog_notification_permission" />
+    <dialog
+        android:id="@+id/dialogClearingFragment"
+        android:name="com.entertainment.event.ssearch.presentation.ui.dialogs.DialogClearingFragment"
+        android:label="fragment_dialog_clearing"
+        tools:layout="@layout/fragment_dialog_clearing" />
+    <dialog
+        android:id="@+id/dialogCompleteClearFragment"
+        android:name="com.entertainment.event.ssearch.presentation.ui.dialogs.DialogCompleteClearFragment"
+        android:label="fragment_dialog_complete_clear"
+        tools:layout="@layout/fragment_dialog_complete_clear" />
 </navigation>

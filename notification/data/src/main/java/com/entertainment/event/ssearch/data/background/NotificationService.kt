@@ -16,26 +16,25 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ServiceLifecycleDispatcher
 import androidx.lifecycle.coroutineScope
 import com.entertainment.event.ssearch.data.background.NotificationCleanBroadcastReceiver.Companion.START_OBSERVE
-import com.entertainment.event.ssearch.data.providers.SettingsProviderImpl
-import com.entertainment.event.ssearch.data.repositories.AppRepositoryImpl
-import com.entertainment.event.ssearch.data.repositories.NotificationRepositoryImpl
+import com.entertainment.event.ssearch.data.providers.SettingsImpl
+import com.entertainment.event.ssearch.data.repositories.Apps
+import com.entertainment.event.ssearch.data.repositories.Notifications
 import com.entertainment.event.ssearch.data.repositories.mapToNotification
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import java.lang.Exception
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class NotificationService : NotificationListenerService(), LifecycleOwner {
 
     @Inject
-    lateinit var notifications: NotificationRepositoryImpl
+    lateinit var notifications: Notifications
 
     @Inject
-    lateinit var apps: AppRepositoryImpl
+    lateinit var apps: Apps
 
     @Inject
-    lateinit var settings: SettingsProviderImpl
+    lateinit var settings: SettingsImpl
 
     private val dispatcher = ServiceLifecycleDispatcher(this)
 
@@ -94,11 +93,7 @@ class NotificationService : NotificationListenerService(), LifecycleOwner {
     private fun saveNotification() {
         dispatcher.lifecycle.coroutineScope.launch {
             activeNotifications.forEach { notification ->
-                val isSwitched = try {
-                    apps.readApp(notification.packageName).isSwitched
-                } catch (e: Exception) {
-                    false
-                }
+                val isSwitched = apps.readApp(notification.packageName)?.isSwitched ?: false
                 if (isSwitched || settings.isDisturbModeSwitched()) {
                     notifications.insert(notification.mapToNotification())
                     cancelNotification(notification.key)

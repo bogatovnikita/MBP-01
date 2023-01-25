@@ -2,12 +2,12 @@ package com.entertainment.event.ssearch.data.providers
 
 import android.app.Application
 import android.content.Context.MODE_PRIVATE
-import com.entertainment.event.ssearch.domain.providers.SettingsProvider
+import com.entertainment.event.ssearch.domain.providers.Settings
 import javax.inject.Inject
 
-class SettingsProviderImpl @Inject constructor(
+class SettingsImpl @Inject constructor(
     context: Application
-) : SettingsProvider {
+) : Settings {
 
     private val prefs = context.getSharedPreferences(NOTIFICATION_SETTINGS, MODE_PRIVATE)
 

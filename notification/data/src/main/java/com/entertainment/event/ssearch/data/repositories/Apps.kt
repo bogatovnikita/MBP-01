@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class AppRepositoryImpl @Inject constructor(
+class Apps @Inject constructor(
     private val db: AppDao,
 ): AppRepository {
 
@@ -19,7 +19,9 @@ class AppRepositoryImpl @Inject constructor(
 
     override suspend fun getApps(): List<App> = db.getApps().map { it.mapToApp() }
 
-    override suspend fun readApp(packageName: String): App = db.readApp(packageName).mapToApp()
+    override suspend fun deleteApp(packageName: String) = db.deleteApp(packageName)
+
+    override suspend fun readApp(packageName: String): App? = db.readApp(packageName)?.mapToApp()
 
     override suspend fun setSwitched(packageName: String, switched: Boolean) = db.setSwitched(packageName, switched)
 

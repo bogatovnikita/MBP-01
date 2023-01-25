@@ -13,7 +13,9 @@ interface AppRepository {
 
     suspend fun getApps(): List<App>
 
-    suspend fun readApp(packageName: String): App
+    suspend fun deleteApp(packageName: String)
+
+    suspend fun readApp(packageName: String): App?
 
     suspend fun setSwitched(packageName: String, switched: Boolean)
 

@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class NotificationRepositoryImpl @Inject constructor(
+class Notifications @Inject constructor(
     private val db: NotificationsDao,
 ): NotificationRepository {
 

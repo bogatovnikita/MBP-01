@@ -12,6 +12,9 @@ import yin_kio.garbage_clean.domain.entities.DeleteRequest
 import yin_kio.garbage_clean.domain.entities.GarbageFiles
 import yin_kio.garbage_clean.domain.entities.GarbageType
 import yin_kio.garbage_clean.domain.gateways.Files
+import yin_kio.garbage_clean.domain.out.DeleteFormMapper
+import yin_kio.garbage_clean.domain.out.DeleteFormOut
+import yin_kio.garbage_clean.domain.out.OutBoundary
 
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -19,6 +22,8 @@ class GarbageCleanerUseCasesTest {
 
     private val deleteForm: DeleteForm = mockk()
     private val files: Files = mockk()
+    private val outBoundary: OutBoundary = mockk()
+    private val mapper: DeleteFormMapper = mockk()
     private lateinit var useCases: GarbageCleanerUseCases
     private lateinit var garbageFiles: GarbageFiles
     private lateinit var deleteRequest: DeleteRequest
@@ -34,7 +39,9 @@ class GarbageCleanerUseCasesTest {
                 garbageFiles = garbageFiles,
                 deleteRequest = deleteRequest,
                 coroutineScope = this,
-                dispatcher = coroutineContext
+                dispatcher = coroutineContext,
+                outBoundary = outBoundary,
+                mapper = mapper
             )
             testBody()
         }
@@ -43,13 +50,16 @@ class GarbageCleanerUseCasesTest {
 
     @Test
     fun testSwitchSelectAll() = setupTest {
-
+        val deleteFormOut = DeleteFormOut()
+        coEvery { mapper.createDeleteFormOut(deleteForm) } returns deleteFormOut
+        coEvery { outBoundary.outDeleteForm(deleteFormOut) } returns Unit
         coEvery { deleteForm.switchSelectAll() } returns Unit
 
         useCases.switchSelectAll()
         wait()
 
         coVerify { deleteForm.switchSelectAll() }
+        coVerify { outBoundary.outDeleteForm(deleteFormOut) }
     }
 
 

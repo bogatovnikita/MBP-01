@@ -47,9 +47,8 @@ class SecondScreenTimeViewModel @Inject constructor(
                 appInfo = com.hedgehog.presentation.models.AppInfo(
                     nameApp = result.response.nameApp,
                     icon = result.response.icon,
-                    timeEveryHour = result.response.timeEveryHour,
+                    listTime = result.response.listTime,
                     lastLaunch = result.response.lastLaunch,
-                    batteryCharge = result.response.batteryCharge,
                     data = result.response.data
                 ), isErrorLoading = true
             )

@@ -30,23 +30,23 @@ class NotificationSettingsUseCases @Inject constructor(
 
     fun hasServicePermission() = permission.hasServicePermission()
 
-    fun clearAllNotification(): Boolean {
-        return if (hasServicePermission()) {
-            serviceController.cleanAllNotification()
-            true
-        } else {
-            false
-        }
+    fun clearAllNotification() {
+        serviceController.cleanAllNotification()
     }
 
     suspend fun isAllAppsLimited(): Boolean = settings.isAllAppsLimited()
 
-    suspend fun setGeneralDisturbMode(isSwitched: Boolean) = settings.switchOffDisturbMode(isSwitched)
+    suspend fun setGeneralDisturbMode(isSwitched: Boolean) =
+        settings.switchOffDisturbMode(isSwitched)
 
     suspend fun getAppsInfo(): Flow<List<AppWithNotifications>> {
         return if (permission.hasServicePermission()) {
             appsWithNotifications.readAppsWithNotifications().map {
-                it.sortedWith(compareBy({ it.app.isSwitched }, { it.listNotifications.maxByOrNull { it.time }?.time ?: 0L }))
+                it.sortedWith(
+                    compareBy(
+                        { it.app.isSwitched },
+                        { it.listNotifications.maxByOrNull { it.time }?.time ?: 0L })
+                )
                     .reversed()
             }
         } else {
@@ -100,10 +100,11 @@ class NotificationSettingsUseCases @Inject constructor(
 
     suspend fun switchModeDisturbForAllApps(isSwitched: Boolean) {
         settings.switchLimitAllApps(isSwitched)
-        val updatedApps = apps.getApps().map { app -> app.copy(isSwitched = isSwitched)}
+        val updatedApps = apps.getApps().map { app -> app.copy(isSwitched = isSwitched) }
         apps.updateAll(updatedApps)
     }
 
-    private suspend fun getPhoneApps() = appsProvide.getSystemPackages() + appsProvide.getInstalledPackages()
+    private suspend fun getPhoneApps() =
+        appsProvide.getSystemPackages() + appsProvide.getInstalledPackages()
 
 }

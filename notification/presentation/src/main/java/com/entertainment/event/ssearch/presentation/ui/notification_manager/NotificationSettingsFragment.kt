@@ -3,7 +3,7 @@ package com.entertainment.event.ssearch.presentation.ui.notification_manager
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.coroutineScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DefaultItemAnimator
@@ -21,12 +21,17 @@ import dagger.hilt.android.AndroidEntryPoint
 class NotificationSettingsFragment : Fragment(R.layout.fragment_notification_settings) {
 
     private val binding: FragmentNotificationSettingsBinding by viewBinding()
-    private val viewModel: NotificationSettingsViewModel by viewModels()
+    private val viewModel: NotificationSettingsViewModel by activityViewModels()
 
     private val adapter: AppRecyclerViewAdapter = AppRecyclerViewAdapter(
         object : AppRecyclerViewAdapter.OnItemAppClickListener {
             override fun switchModeDisturb(packageName: String, isSwitched: Boolean) {
-                viewModel.obtainEvent(NotificationStateEvent.SwitchAppModeDisturb(packageName, isSwitched))
+                viewModel.obtainEvent(
+                    NotificationStateEvent.SwitchAppModeDisturb(
+                        packageName,
+                        isSwitched
+                    )
+                )
             }
         }
     )
@@ -47,10 +52,8 @@ class NotificationSettingsFragment : Fragment(R.layout.fragment_notification_set
         lifecycle.coroutineScope.launchWhenResumed {
             viewModel.screenState.collect { state ->
                 renderState(state)
-                if (state.event is NotificationStateEvent.OpenPermissionDialog) {
-                    openPermissionDialog()
-                    viewModel.obtainEvent(NotificationStateEvent.Default)
-                }
+                navigate(state.event)
+                showAds(state.event)
             }
         }
     }
@@ -73,8 +76,22 @@ class NotificationSettingsFragment : Fragment(R.layout.fragment_notification_set
         }
     }
 
-    private fun openPermissionDialog() {
-            findNavController().navigate(R.id.action_to_dialogNotificationPermissionFragment)
+    private fun navigate(event: NotificationStateEvent) {
+        val navId = when (event) {
+            is NotificationStateEvent.OpenPermissionDialog -> R.id.action_to_dialogNotificationPermissionFragment
+            is NotificationStateEvent.OpenDialogClearing -> R.id.action_to_dialogClearingFragment
+            is NotificationStateEvent.OpenDialogCompleteClean -> R.id.action_to_dialogCompleteClearFragment
+            else -> NOT_NAVIGATE
+        }
+        if (navId == NOT_NAVIGATE || findNavController().currentDestination?.id == navId) return
+        findNavController().navigate(navId)
+        viewModel.obtainEvent(NotificationStateEvent.Default)
+    }
+
+    private fun showAds(event: NotificationStateEvent) {
+        if (event == NotificationStateEvent.CloseDialogClearing) {
+            viewModel.obtainEvent(NotificationStateEvent.OpenDialogCompleteClean)
+        }
     }
 
     private fun initListeners() {
@@ -92,8 +109,13 @@ class NotificationSettingsFragment : Fragment(R.layout.fragment_notification_set
             viewModel.obtainEvent(NotificationStateEvent.SwitchGeneralDisturbMode(binding.switchModeDisturb.isChecked))
         }
         binding.switchLimitAllApplication.setOnClickListener {
-                viewModel.obtainEvent(NotificationStateEvent.LimitApps(binding.switchLimitAllApplication.isChecked))
+            viewModel.obtainEvent(NotificationStateEvent.LimitApps(binding.switchLimitAllApplication.isChecked))
         }
+        binding.btnGoBack.setOnClickListener { findNavController().popBackStack() }
+    }
+
+    companion object {
+        const val NOT_NAVIGATE = 11111
     }
 
 }

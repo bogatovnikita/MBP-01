@@ -18,6 +18,12 @@ sealed class NotificationStateEvent() {
 
     object ClearAllNotification: NotificationStateEvent()
 
+    object OpenDialogClearing: NotificationStateEvent()
+
+    object CloseDialogClearing: NotificationStateEvent()
+
+    object OpenDialogCompleteClean: NotificationStateEvent()
+
     object Update: NotificationStateEvent()
 
     class SwitchGeneralDisturbMode(val isSwitch: Boolean) : NotificationStateEvent()

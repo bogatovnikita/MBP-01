@@ -18,15 +18,14 @@ class NotificationSettingsViewModel @Inject constructor(
 
     fun obtainEvent(event: NotificationStateEvent) {
         when (event) {
-            is NotificationStateEvent.ClearAllNotification -> clearAllNotificationOrOpenDialog()
+            is NotificationStateEvent.ClearAllNotification -> openDialogClearingOrPermission()
             is NotificationStateEvent.Default -> setEvent(NotificationStateEvent.Default)
             is NotificationStateEvent.Update -> updateAppsAndService()
             is NotificationStateEvent.SwitchGeneralDisturbMode -> switchGeneralDisturbMode(event.isSwitch)
             is NotificationStateEvent.LimitApps -> setToAllAppsModeDisturb(event.isSwitch)
-            is NotificationStateEvent.SwitchAppModeDisturb -> switchAppModeDisturb(
-                event.packageName,
-                event.isSwitch
-            )
+            is NotificationStateEvent.CloseDialogClearing -> clearAllNotification(event)
+            is NotificationStateEvent.OpenDialogCompleteClean -> setEvent(event)
+            is NotificationStateEvent.SwitchAppModeDisturb -> switchAppModeDisturb(event.packageName, event.isSwitch)
             else -> {}
         }
     }
@@ -44,9 +43,15 @@ class NotificationSettingsViewModel @Inject constructor(
         }
     }
 
-    private fun clearAllNotificationOrOpenDialog() {
-        val isCleared = useCases.clearAllNotification()
-        if (!isCleared) {
+    private fun clearAllNotification(event: NotificationStateEvent) {
+        useCases.clearAllNotification()
+        setEvent(event)
+    }
+
+    private fun openDialogClearingOrPermission() {
+        if (useCases.hasServicePermission()) {
+            setEvent(NotificationStateEvent.OpenDialogClearing)
+        } else {
             setEvent(NotificationStateEvent.OpenPermissionDialog)
         }
     }

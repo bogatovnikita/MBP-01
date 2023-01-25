@@ -21,7 +21,7 @@ class AppRepositoryImpl @Inject constructor(
 
     override suspend fun readApp(packageName: String): App = db.readApp(packageName).mapToApp()
 
-    override suspend fun setSwitched(packageName: String, switched: Boolean) = db.setSwitched(packageName, switched)
+    override suspend fun setSwitched(packageName: String, switched: Boolean) = db.setSwitched(packageName, switched) // TODO не понятно, что именно переключено
 
     override suspend fun updateAll(apps: List<App>) = db.updateAll(apps.map { app -> app.mapToAppDb() })
 

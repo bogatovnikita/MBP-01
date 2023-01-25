@@ -1,30 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:layout_height="wrap_content"
     android:background="@drawable/bg_dialog"
+    android:paddingHorizontal="@dimen/_34sdp"
+    android:paddingVertical="@dimen/_9sdp"
     tools:context=".ui.dialogs.DialogClearingFragment">
 
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/animated_garbage"
+        android:layout_width="91dp"
+        android:layout_height="87dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/red_bucket" />
+
     <TextView
-        android:layout_width="match_parent"
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Удаляем уведомления"
-        android:textColor="@color/dark_blue"
-        android:textSize="@dimen/_12sdp"
         android:fontFamily="@font/golos_text_bold"
         android:gravity="center_horizontal"
-        android:layout_marginTop="@dimen/_29sdp"/>
+        android:text="@string/notification_manager_clearing"
+        android:textColor="@color/dark_blue"
+        android:textSize="@dimen/_12sdp" />
 
     <TextView
-        android:layout_width="match_parent"
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Очищаем шторку..."
+        android:gravity="center_horizontal"
+        android:text="@string/notification_manager_clearing_notification"
         android:textColor="@color/gray"
         android:textSize="@dimen/_9sdp"
-        android:layout_marginTop="@dimen/_6sdp"
-        android:gravity="center_horizontal"
-        android:layout_marginBottom="@dimen/_29sdp"/>
+        app:layout_constraintBottom_toBottomOf="@id/animated_garbage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/animated_garbage"
+        app:layout_constraintTop_toBottomOf="@id/textView" />
 
-</LinearLayout>
+    <androidx.constraintlayout.helper.widget.Flow
+        android:id="@+id/flow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:constraint_referenced_ids="textView, textView2"
+        app:flow_verticalGap="@dimen/_5sdp"
+        app:layout_constraintBottom_toBottomOf="@+id/animated_garbage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.4"
+        app:layout_constraintStart_toEndOf="@+id/animated_garbage"
+        app:layout_constraintTop_toTopOf="@+id/animated_garbage" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

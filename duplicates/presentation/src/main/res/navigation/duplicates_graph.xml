@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/duplicates_graph"
+    app:startDestination="@id/duplicatesFragment">
+
+    <fragment
+        android:id="@+id/duplicatesFragment"
+        android:name="yin_kio.duplicates.presentation.views.DuplicatesFragment"
+        android:label="DuplicatesFragment" >
+        <action
+            android:id="@+id/action_duplicatesFragment_to_duplicatesPermissionFragment"
+            app:destination="@id/duplicatesPermissionFragment" />
+        <action
+            android:id="@+id/action_duplicatesFragment_to_progressDialog"
+            app:destination="@id/progressDialog" />
+        <action
+            android:id="@+id/action_duplicatesFragment_to_askContinueDialog"
+            app:destination="@id/askContinueDialog" />
+    </fragment>
+    <fragment
+        android:id="@+id/duplicatesPermissionFragment"
+        android:name="yin_kio.duplicates.presentation.views.DuplicatesPermissionFragment"
+        android:label="DuplicatesPermissionFragment" />
+    <dialog
+        android:id="@+id/progressDialog"
+        android:name="yin_kio.duplicates.presentation.views.UniteProgressDialog"
+        android:label="ProgressDialog" />
+    <dialog
+        android:id="@+id/askContinueDialog"
+        android:name="yin_kio.duplicates.presentation.views.AskContinueDialog"
+        android:label="AskContinueDialog" />
+</navigation>

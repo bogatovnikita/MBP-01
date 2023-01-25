@@ -2,15 +2,15 @@ package com.entertainment.event.ssearch.presentation.ui.adapters
 
 import android.net.Uri
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.entertainment.event.ssearch.presentation.R
 import com.entertainment.event.ssearch.presentation.databinding.ItemAppBinding
-import com.entertainment.event.ssearch.presentation.ui.models.AppUi
+import com.entertainment.event.ssearch.presentation.models.AppUi
 
 class AppRecyclerViewAdapter(
     private val listener: OnItemAppClickListener
@@ -26,27 +26,32 @@ class AppRecyclerViewAdapter(
                 setIcon(app.icon)
                 tvAppName.text = app.name
                 switchDoNotDisturb.isChecked = app.isSwitched
-                if (app.countNotifications == 0) {
-                    tvCountNotifications.visibility = View.GONE
-                } else {
-                    tvCountNotifications.text = getString(app.countNotifications)
+                tvCountNotifications.isVisible = setVisibleNotificationCount(app.countNotifications)
+                if (app.countNotifications != 0) {
+                    tvCountNotifications.text = setCountNotification(app.countNotifications)
                 }
                 switchDoNotDisturb.setOnClickListener {
-                    listener.switchModeDisturb(app.packageName, switchDoNotDisturb.isChecked)
+                    switchDoNotDisturb.isChecked = switchModeOrIgnore(app, switchDoNotDisturb.isChecked)
                 }
             }
+        }
+
+        private fun setVisibleNotificationCount(count: Int): Boolean = count != 0
+
+        private fun switchModeOrIgnore(app: AppUi, isChecked: Boolean): Boolean {
+            listener.switchModeDisturb(app.packageName, isChecked)
+            return if (!app.hasPermission) false else isChecked
         }
 
         private fun setIcon(uri: String) {
             Glide.with(binding.ivIconApp)
                 .load(Uri.parse(uri))
-                .placeholder(R.drawable.ic_watch)
-                .error(R.drawable.ic_moon)
+                .placeholder(R.drawable.ic_default_app)
+                .error(R.drawable.ic_default_app)
                 .into(binding.ivIconApp)
-
         }
 
-        private fun getString(count: Int) = binding.root.context.getString(
+        private fun setCountNotification(count: Int) = binding.root.context.getString(
             R.string.notification_maneger_count_notifications,
             count.toString()
         )

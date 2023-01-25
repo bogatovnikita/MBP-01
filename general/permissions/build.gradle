@@ -27,9 +27,16 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+
+    buildFeatures{
+        viewBinding true
+    }
 }
 
 dependencies {
+
+    implementation 'com.github.kirich1409:viewbindingpropertydelegate:1.5.6'
+    implementation project(':general:resources')
 
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.5.1'

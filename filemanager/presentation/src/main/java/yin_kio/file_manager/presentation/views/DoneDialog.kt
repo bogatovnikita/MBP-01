@@ -19,7 +19,7 @@ class DoneDialog : DialogFragment(R.layout.dialog_done) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(STYLE_NO_TITLE, R.style.MyDialog)
+        setStyle(STYLE_NO_TITLE, general.R.style.MyDialog)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

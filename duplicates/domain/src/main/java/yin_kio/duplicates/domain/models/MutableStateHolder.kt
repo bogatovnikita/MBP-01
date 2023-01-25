@@ -5,30 +5,45 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
+import kotlin.coroutines.CoroutineContext
 
-data class MutableStateHolder(
+internal data class MutableStateHolder(
     override var isInProgress: Boolean = true,
-    override var duplicatesList: List<List<ImageInfo>> = emptyList(),
+    override var duplicatesLists: List<DuplicatesList> = emptyList(),
     override var selected: MutableMap<Int, MutableSet<ImageInfo>> = mutableMapOf(),
     override var destination: Destination = Destination.List
-) : State {
+) : StateHolder {
 
     internal var uniteWay: UniteWay = UniteWay.Selected
 
     private lateinit var coroutineScope: CoroutineScope
+    private lateinit var coroutineContext: CoroutineContext
 
-    constructor(coroutineScope: CoroutineScope) : this(){
+    constructor(coroutineScope: CoroutineScope, coroutineContext: CoroutineContext) : this(){
         this.coroutineScope = coroutineScope
+        this.coroutineContext = coroutineContext
     }
 
-    val state: State get() = this
+    val state: StateHolder get() = this
 
-    private val _stateFlow = MutableSharedFlow<State>()
-    override val stateFlow: SharedFlow<State> = _stateFlow.asSharedFlow()
+    private val _stateFlow = MutableSharedFlow<StateHolder>()
+    override val stateFlow: SharedFlow<StateHolder> = _stateFlow.asSharedFlow()
 
+
+    override fun isItemSelected(groupIndex: Int, path: String): Boolean {
+        return selected[groupIndex]?.contains(ImageInfo(path)) ?: false
+    }
+
+    override fun isGroupSelected(groupIndex: Int): Boolean {
+        if (duplicatesLists.isEmpty()
+            || groupIndex >= duplicatesLists.size
+        ) return false
+
+        return (selected[groupIndex]?.size ?: 0) == duplicatesLists[groupIndex].data.size
+    }
 
     fun update(){
-        coroutineScope.launch { _stateFlow.emit(this@MutableStateHolder.copy()) }
+        coroutineScope.launch(coroutineContext) { _stateFlow.emit(this@MutableStateHolder.copy()) }
     }
 
 

@@ -16,6 +16,15 @@ interface AppDao {
     @Query("SELECT * FROM app_table")
     fun readAll() : Flow<List<AppDb>>
 
+    @Query("SELECT * FROM app_table")
+    fun getApps() : List<AppDb>
+
+    @Query("DELETE FROM app_table WHERE packageName = :packageName")
+    fun deleteApp(packageName: String)
+
+    @Query("SELECT * FROM app_table WHERE packageName = :packageName")
+    suspend fun readApp(packageName : String) : AppDb?
+
     @Query("UPDATE app_table SET isSwitched = :switched WHERE packageName = :packageName")
     suspend fun setSwitched(packageName: String, switched: Boolean)
 

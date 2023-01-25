@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/bg_dialog"
+    tools:context=".ui.dialogs.DialogClearingFragment">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Удаляем уведомления"
+        android:textColor="@color/dark_blue"
+        android:textSize="@dimen/_12sdp"
+        android:fontFamily="@font/golos_text_bold"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="@dimen/_29sdp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Очищаем шторку..."
+        android:textColor="@color/gray"
+        android:textSize="@dimen/_9sdp"
+        android:layout_marginTop="@dimen/_6sdp"
+        android:gravity="center_horizontal"
+        android:layout_marginBottom="@dimen/_29sdp"/>
+
+</LinearLayout>

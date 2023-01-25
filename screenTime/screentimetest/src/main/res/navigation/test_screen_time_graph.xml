@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/test_screen_time_graph"
+    app:startDestination="@id/screenTimeTestFragment">
+    <fragment
+        android:id="@+id/screenTimeTestFragment"
+        android:name="com.hedgehog.screentimetest.ScreenTimeTestFragment"
+        android:label="fragment_screen_time_test"
+        tools:layout="@layout/fragment_screen_time_test" >
+        <action
+            android:id="@+id/action_screenTimeTestFragment_to_screen_time_graph"
+            app:destination="@id/screen_time_graph" />
+    </fragment>
+    <include app:graph="@navigation/screen_time_graph" />
+</navigation>

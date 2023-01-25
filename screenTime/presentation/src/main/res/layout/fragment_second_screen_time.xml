@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/back_arrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_16sdp"
+        android:src="@drawable/ic_back_arrow"
+        app:layout_constraintBottom_toTopOf="@id/guideline_bottom_bar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/head_title"
+        style="@style/Text.Body_1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_8sdp"
+        android:textColor="@color/dark_blue"
+        app:layout_constraintBottom_toTopOf="@id/guideline_bottom_bar"
+        app:layout_constraintEnd_toStartOf="@id/guideline_background_icon"
+        app:layout_constraintStart_toEndOf="@id/back_arrow"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/app_screen_time" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_background_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.8" />
+
+    <ImageView
+        android:id="@+id/background_icon"
+        android:layout_width="@dimen/_44sdp"
+        android:layout_height="@dimen/_44sdp"
+        android:background="@drawable/background_corner"
+        app:layout_constraintBottom_toTopOf="@id/guideline_name_app"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.15"
+        app:layout_constraintStart_toEndOf="@id/guideline_background_icon"
+        app:layout_constraintTop_toTopOf="@id/head_title"
+        app:layout_constraintVertical_bias="0" />
+
+    <ImageView
+        android:id="@+id/icon_iv"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="@dimen/_4sdp"
+        app:layout_constraintBottom_toBottomOf="@id/background_icon"
+        app:layout_constraintEnd_toEndOf="@id/background_icon"
+        app:layout_constraintStart_toStartOf="@id/background_icon"
+        app:layout_constraintTop_toTopOf="@id/background_icon"
+        tools:src="@drawable/ic_chrome" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_bottom_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.08" />
+
+    <TextView
+        android:id="@+id/name_app_tv"
+        style="@style/Text.Header_2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_16sdp"
+        android:textColor="@color/dark_blue"
+        app:layout_constraintEnd_toStartOf="@id/guideline_background_icon"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/guideline_bottom_bar"
+        tools:text="@string/app_screen_time" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_name_app"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.13" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/day_button"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/_16sdp"
+        android:layout_marginEnd="@dimen/_4sdp"
+        android:background="@drawable/background_not_transparent_button"
+        android:text="@string/day"
+        android:textAllCaps="false"
+        android:textAppearance="@style/Text.Subtitle_1.2.1"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toStartOf="@id/week_button"
+        app:layout_constraintHeight_percent="0.05"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/guideline_name_app" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/week_button"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/_4sdp"
+        android:layout_marginEnd="@dimen/_16sdp"
+        android:background="@drawable/background_transparent_button"
+        android:text="@string/week"
+        android:textAllCaps="false"
+        android:textAppearance="@style/Text.Subtitle_1.2"
+        android:textColor="@color/green"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.05"
+        app:layout_constraintStart_toEndOf="@id/day_button"
+        app:layout_constraintTop_toBottomOf="@id/guideline_name_app" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group_choice_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        app:constraint_referenced_ids="arrow_left,background_arrow_left,date_tv,arrow_right,background_arrow_right" />
+
+    <ImageView
+        android:id="@+id/arrow_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_12sdp"
+        android:src="@drawable/ic_left_arrow"
+        app:layout_constraintBottom_toBottomOf="@id/date_tv"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/date_tv" />
+
+    <View
+        android:id="@+id/background_arrow_left"
+        android:layout_width="@dimen/_30sdp"
+        android:layout_height="@dimen/_30sdp"
+        app:layout_constraintBottom_toBottomOf="@id/arrow_left"
+        app:layout_constraintEnd_toEndOf="@id/arrow_left"
+        app:layout_constraintStart_toStartOf="@id/arrow_left"
+        app:layout_constraintTop_toTopOf="@id/arrow_left" />
+
+    <TextView
+        android:id="@+id/date_tv"
+        style="@style/Text.Subtitle_1.2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_4sdp"
+        android:layout_marginTop="@dimen/_12sdp"
+        android:gravity="center"
+        android:textColor="@color/dark_blue"
+        app:layout_constraintEnd_toStartOf="@id/arrow_right"
+        app:layout_constraintStart_toEndOf="@id/arrow_left"
+        app:layout_constraintTop_toBottomOf="@id/day_button"
+        tools:text="Среда, 10.11.2022" />
+
+    <ImageView
+        android:id="@+id/arrow_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/_12sdp"
+        android:src="@drawable/ic_right_arrow"
+        app:layout_constraintBottom_toBottomOf="@id/date_tv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/date_tv" />
+
+    <View
+        android:id="@+id/background_arrow_right"
+        android:layout_width="@dimen/_30sdp"
+        android:layout_height="@dimen/_30sdp"
+        app:layout_constraintBottom_toBottomOf="@id/arrow_right"
+        app:layout_constraintEnd_toEndOf="@id/arrow_right"
+        app:layout_constraintStart_toStartOf="@id/arrow_right"
+        app:layout_constraintTop_toTopOf="@id/arrow_right" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_custom_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.25" />
+
+    <ImageView
+        android:id="@+id/custom_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_test_custom_view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/guideline_custom_view" />
+
+    <TextView
+        android:id="@+id/last_launch_tv"
+        style="@style/Text.Body_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_24sdp"
+        android:layout_marginTop="@dimen/_16sdp"
+        android:text="@string/last_launch"
+        android:textColor="@color/dark_blue"
+        app:layout_constraintEnd_toStartOf="@id/time_last_launch_tv"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/custom_view" />
+
+    <TextView
+        android:id="@+id/time_last_launch_tv"
+        style="@style/Text.Body_2.1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_16sdp"
+        android:layout_marginEnd="@dimen/_24sdp"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/last_launch_tv"
+        app:layout_constraintTop_toBottomOf="@id/custom_view"
+        tools:text="20 мин. назад" />
+
+    <TextView
+        android:id="@+id/total_usage_time_tv"
+        style="@style/Text.Body_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_24sdp"
+        android:layout_marginTop="@dimen/_16sdp"
+        android:text="@string/total_usage_time"
+        android:textColor="@color/dark_blue"
+        app:layout_constraintEnd_toStartOf="@id/time_total_usage_time_tv"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/last_launch_tv" />
+
+    <TextView
+        android:id="@+id/time_total_usage_time_tv"
+        style="@style/Text.Body_2.1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_16sdp"
+        android:layout_marginEnd="@dimen/_24sdp"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/total_usage_time_tv"
+        app:layout_constraintTop_toBottomOf="@id/last_launch_tv"
+        tools:text="20 мин." />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/info_app_button"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginHorizontal="@dimen/_28sdp"
+        android:layout_marginTop="@dimen/_12sdp"
+        android:background="@drawable/background_corner_stroke_for_total_usage"
+        android:text="@string/info_about_app"
+        android:textAllCaps="false"
+        android:textAppearance="@style/Text.Header_4"
+        android:textColor="@color/dark_blue"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.07"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/total_usage_time_tv" />
+
+    <TextView
+        android:id="@+id/res_consumption"
+        style="@style/Text.Header_3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_16sdp"
+        android:layout_marginTop="@dimen/_24sdp"
+        android:text="@string/res_consumption"
+        android:textColor="@color/green"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/info_app_button" />
+
+    <TextView
+        android:id="@+id/battery_charge_tv"
+        style="@style/Text.Body_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_24sdp"
+        android:layout_marginTop="@dimen/_16sdp"
+        android:text="@string/battery_charge"
+        android:textColor="@color/dark_blue"
+        app:layout_constraintEnd_toStartOf="@id/time_battery_charge_tv"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/res_consumption" />
+
+    <TextView
+        android:id="@+id/time_battery_charge_tv"
+        style="@style/Text.Body_2.1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_16sdp"
+        android:layout_marginEnd="@dimen/_24sdp"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/battery_charge_tv"
+        app:layout_constraintTop_toBottomOf="@id/res_consumption"
+        tools:text="30%" />
+
+    <View
+        android:id="@+id/separator_line"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_1sdp"
+        android:layout_marginHorizontal="@dimen/_24sdp"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:background="@color/grey_dark"
+        app:layout_constraintTop_toBottomOf="@id/battery_charge_tv" />
+
+    <TextView
+        android:id="@+id/data_tv"
+        style="@style/Text.Body_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_24sdp"
+        android:layout_marginTop="@dimen/_16sdp"
+        android:text="@string/data_text"
+        android:textColor="@color/dark_blue"
+        app:layout_constraintEnd_toStartOf="@id/time_data_tv"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/battery_charge_tv" />
+
+    <TextView
+        android:id="@+id/time_data_tv"
+        style="@style/Text.Body_2.1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_16sdp"
+        android:layout_marginEnd="@dimen/_24sdp"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/data_tv"
+        app:layout_constraintTop_toBottomOf="@id/battery_charge_tv"
+        tools:text="3.2 Гб" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/stop_app"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/_16sdp"
+        android:layout_marginTop="@dimen/_16sdp"
+        android:layout_marginEnd="@dimen/_4sdp"
+        android:layout_marginBottom="@dimen/_8sdp"
+        android:background="@drawable/background_not_transparent_button"
+        android:padding="@dimen/_4sdp"
+        android:text="@string/stop_app"
+        android:textAllCaps="false"
+        android:textAppearance="@style/Text.Subtitle_1.2"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/delete_app"
+        app:layout_constraintHeight_percent="0.07"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/delete_app"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/_4sdp"
+        android:layout_marginTop="@dimen/_16sdp"
+        android:layout_marginEnd="@dimen/_16sdp"
+        android:layout_marginBottom="@dimen/_8sdp"
+        android:background="@drawable/background_not_transparent_button_blue"
+        android:text="@string/delete"
+        android:textAllCaps="false"
+        android:textAppearance="@style/Text.Subtitle_1.2"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.07"
+        app:layout_constraintStart_toEndOf="@id/stop_app" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -14,5 +14,11 @@
     <string name="kill_background_process_text">Принудительная остановка выполнена</string>
     <string name="select_the_app_to_stop">Выберите приложения для принудительной остановки</string>
     <string name="select_the_app_to_delete">Выберите приложения для удаления</string>
+    <string name="last_launch">Последний запуск</string>
+    <string name="total_usage_time">Общее время использования</string>
+    <string name="info_about_app">Информация о приложении</string>
+    <string name="res_consumption">Расход ресурсов</string>
+    <string name="battery_charge">Заряд батареи</string>
+    <string name="data_text">Данные</string>
 
 </resources>

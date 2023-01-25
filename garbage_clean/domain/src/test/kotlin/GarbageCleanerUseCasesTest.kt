@@ -39,7 +39,6 @@ class GarbageCleanerUseCasesTest {
                 garbageFiles = garbageFiles,
                 deleteRequest = deleteRequest,
                 coroutineScope = this,
-                dispatcher = coroutineContext,
                 outBoundary = outBoundary,
                 mapper = mapper
             )
@@ -78,8 +77,8 @@ class GarbageCleanerUseCasesTest {
         deleteRequest.add(GarbageType.Apk)
         deleteRequest.add(GarbageType.Temp)
 
-        garbageFiles[GarbageType.Apk] = mutableListOf(APK)
-        garbageFiles[GarbageType.Temp] = mutableListOf(TEMP)
+        garbageFiles[GarbageType.Apk] = mutableSetOf(APK)
+        garbageFiles[GarbageType.Temp] = mutableSetOf(TEMP)
 
 
         coEvery { files.delete(listOf(APK, TEMP)) } returns Unit

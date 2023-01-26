@@ -10,6 +10,9 @@ class GarbageFiles : MutableMap<GarbageType, MutableSet<String>> by mutableMapOf
     private val rest = arrayOf(DAT, LOG, LOG_PATH)
     private val thumb = arrayOf(THUMB, THUMB_PATH, THUMBNAILS_PATH)
 
+    private var _deleteForm = DeleteForm()
+    val deleteForm get() = _deleteForm
+
     fun setFiles(files: List<String>){
         clear()
 
@@ -26,6 +29,22 @@ class GarbageFiles : MutableMap<GarbageType, MutableSet<String>> by mutableMapOf
 
             if(file.absolutePath.lowercase().containsMask(thumb)) addTo(GarbageType.Thumbnails, file.absolutePath)
 
+        }
+
+        updateDeleteForm()
+    }
+
+    private fun updateDeleteForm() {
+        _deleteForm = DeleteForm()
+        _deleteForm.addAll(createFromItems())
+    }
+
+    private fun createFromItems() : Collection<FormItem> {
+        return map {
+            FormItem(
+                garbageType = it.key,
+                size = it.value.sumOf { File(it).length() }
+            )
         }
     }
 

@@ -1,7 +1,6 @@
 package entities
 
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNull
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import yin_kio.garbage_clean.domain.entities.GarbageFiles
@@ -51,10 +50,13 @@ class GarbageFilesTest {
 
     @Test
     fun testSetFiles(){
-        val input = apk + temp + rest + thumb + emptyFolders + other
+        val oldDeleteForm = garbageFiles.deleteForm
 
+        val input = apk + temp + rest + thumb + emptyFolders + other
         garbageFiles.setFiles(input)
         assertContainsAll()
+        assertTrue(oldDeleteForm !== garbageFiles.deleteForm)
+        assertTrue(garbageFiles.deleteForm.isNotEmpty())
 
         garbageFiles.setFiles(apk + temp)
         assertContainsApkAndTemp()

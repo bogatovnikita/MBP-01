@@ -2,4 +2,6 @@
 <resources>
     <string name="D_hour_D_minutes">%d hour %d min</string>
     <string name="D_second">%d second</string>
+    <string name="D_hour_D_minutes_ago">%d hour %d min ago</string>
+    <string name="D_second_ago">%d second ago</string>
 </resources>

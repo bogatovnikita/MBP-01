@@ -25,10 +25,12 @@ class AppInfoRepositoryImplementation @Inject constructor(@ApplicationContext va
     private lateinit var hourBeginTime: Calendar
     private lateinit var hourEndTime: Calendar
     private var listHour: MutableList<Int> = mutableListOf()
+    private var listHourForMilliseconds: MutableList<Long> = mutableListOf()
 
     private lateinit var dayBeginTime: Calendar
     private lateinit var dayEndTime: Calendar
     private var listDay: MutableList<Int> = mutableListOf()
+    private var listDayForMilliseconds: MutableList<Long> = mutableListOf()
 
 
     override fun getAppInfo(
@@ -103,9 +105,9 @@ class AppInfoRepositoryImplementation @Inject constructor(@ApplicationContext va
             nameApp = getAppLabel(packageName).toString(),
             icon = getAppIcon(packageName),
             listTime = listHour,
-            lastLaunch = mapTimeToString(usageStats.lastTimeUsed),
+            lastLaunch = mapTimeToLastLaunch(usageStats.lastTimeUsed),
             data = "0",
-            totalTimeUsage = listHour.sum()
+            totalTimeUsage = mapTimeToTotalTimeUsage(listHourForMilliseconds.sum())
         )
     }
 
@@ -119,9 +121,9 @@ class AppInfoRepositoryImplementation @Inject constructor(@ApplicationContext va
             nameApp = getAppLabel(packageName).toString(),
             icon = getAppIcon(packageName),
             listTime = listDay,
-            lastLaunch = mapTimeToString(usageStats.lastTimeUsed),
+            lastLaunch = mapTimeToLastLaunch(usageStats.lastTimeUsed),
             data = "0",
-            totalTimeUsage = listHour.sum()
+            totalTimeUsage = mapTimeToTotalTimeUsage(listDayForMilliseconds.sum())
         )
     }
 
@@ -134,6 +136,7 @@ class AppInfoRepositoryImplementation @Inject constructor(@ApplicationContext va
                 hourEndTime.timeInMillis
             ).values.filter { it.packageName == packageName }.forEach {
                 listHour.add(mapTimeToMinutes(it.totalTimeInForeground))
+                listHourForMilliseconds.add(it.totalTimeInForeground)
             }
         }
     }
@@ -147,6 +150,7 @@ class AppInfoRepositoryImplementation @Inject constructor(@ApplicationContext va
                 dayEndTime.timeInMillis
             ).values.filter { it.packageName == packageName }.forEach {
                 listDay.add(mapTimeToMinutes(it.totalTimeInForeground))
+                listDayForMilliseconds.add(it.totalTimeInForeground)
             }
         }
     }
@@ -224,7 +228,19 @@ class AppInfoRepositoryImplementation @Inject constructor(@ApplicationContext va
         }
     }
 
-    private fun mapTimeToString(time: Long): String {
+    private fun mapTimeToLastLaunch(time: Long): String {
+        val date = Calendar.getInstance().timeInMillis - time
+        val hour = (date / (1000 * 60 * 60))
+        val minutes = ((date / (1000 * 60)) % 60)
+        val second = date / 1000
+        return if (hour == 0L && minutes == 0L) {
+            context.getString(R.string.D_second_ago, second)
+        } else {
+            context.getString(R.string.D_hour_D_minutes_ago, hour, minutes)
+        }
+    }
+
+    private fun mapTimeToTotalTimeUsage(time: Long): String {
         val hour = (time / (1000 * 60 * 60))
         val minutes = ((time / (1000 * 60)) % 60)
         val second = time / 1000
@@ -234,5 +250,4 @@ class AppInfoRepositoryImplementation @Inject constructor(@ApplicationContext va
             context.getString(R.string.D_hour_D_minutes, hour, minutes)
         }
     }
-
 }

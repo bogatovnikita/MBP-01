@@ -49,8 +49,9 @@ class SecondScreenTimeViewModel @Inject constructor(
                     icon = result.response.icon,
                     listTime = result.response.listTime,
                     lastLaunch = result.response.lastLaunch,
-                    data = result.response.data
-                ), isErrorLoading = true
+                    data = result.response.data,
+                    totalTimeUsage = result.response.totalTimeUsage
+                ), isLoading = true
             )
         }
     }

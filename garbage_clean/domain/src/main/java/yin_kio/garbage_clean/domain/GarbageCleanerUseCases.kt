@@ -8,6 +8,7 @@ import yin_kio.garbage_clean.domain.entities.GarbageType
 import yin_kio.garbage_clean.domain.gateways.Ads
 import yin_kio.garbage_clean.domain.gateways.Files
 import yin_kio.garbage_clean.domain.out.DeleteFormMapper
+import yin_kio.garbage_clean.domain.out.DeleteProgressState
 import yin_kio.garbage_clean.domain.out.OutBoundary
 
 class GarbageCleanerUseCases(
@@ -34,9 +35,9 @@ class GarbageCleanerUseCases(
     fun deleteIfCan() = async{
         if (deleteRequest.isNotEmpty()) {
             ads.preloadAd()
-            outBoundary.outDeleteProgress(true)
+            outBoundary.outDeleteProgress(DeleteProgressState.Progress)
             files.delete(interpreter.interpret(deleteRequest))
-            outBoundary.outDeleteProgress(false)
+            outBoundary.outDeleteProgress(DeleteProgressState.Complete)
         }
     }
 

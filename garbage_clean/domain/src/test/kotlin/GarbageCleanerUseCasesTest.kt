@@ -13,6 +13,7 @@ import yin_kio.garbage_clean.domain.gateways.Ads
 import yin_kio.garbage_clean.domain.gateways.Files
 import yin_kio.garbage_clean.domain.out.DeleteFormMapper
 import yin_kio.garbage_clean.domain.out.DeleteFormOut
+import yin_kio.garbage_clean.domain.out.DeleteProgressState
 import yin_kio.garbage_clean.domain.out.OutBoundary
 
 
@@ -40,8 +41,8 @@ class GarbageCleanerUseCasesTest {
             garbageFiles.deleteForm.switchSelectAll()
             garbageFiles.deleteForm.switchSelection(GarbageType.Apk)
 
-            outBoundary.outDeleteProgress(true)
-            outBoundary.outDeleteProgress(false)
+            outBoundary.outDeleteProgress(DeleteProgressState.Progress)
+            outBoundary.outDeleteProgress(DeleteProgressState.Complete)
             outBoundary.outDeleteForm(deleteFormOut)
 
             updateUseCase.update()
@@ -101,9 +102,9 @@ class GarbageCleanerUseCasesTest {
 
         coVerifyOrder {
             ads.preloadAd()
-            outBoundary.outDeleteProgress(true)
+            outBoundary.outDeleteProgress(DeleteProgressState.Progress)
             files.delete(listOf(APK, TEMP))
-            outBoundary.outDeleteProgress(false)
+            outBoundary.outDeleteProgress(DeleteProgressState.Complete)
         }
     }
 

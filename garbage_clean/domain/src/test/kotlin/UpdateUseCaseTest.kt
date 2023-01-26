@@ -12,6 +12,7 @@ import yin_kio.garbage_clean.domain.gateways.Files
 import yin_kio.garbage_clean.domain.gateways.Permissions
 import yin_kio.garbage_clean.domain.out.DeleteFormMapper
 import yin_kio.garbage_clean.domain.out.DeleteFormOut
+import yin_kio.garbage_clean.domain.out.DeleteProgressState
 import yin_kio.garbage_clean.domain.out.OutBoundary
 
 
@@ -31,6 +32,7 @@ class UpdateUseCaseTest {
 
     init {
         coEvery { files.getAll() } returns listOf()
+        coEvery { outBoundary.outDeleteProgress(DeleteProgressState.Wait) } returns Unit
     }
 
     @Test
@@ -48,6 +50,7 @@ class UpdateUseCaseTest {
         deleteFormOut: DeleteFormOut
     ) {
         coVerifyOrder {
+            outBoundary.outDeleteProgress(DeleteProgressState.Wait)
             outBoundary.outHasPermission(true)
             outBoundary.outUpdateProgress(true)
             outBoundary.outFileSystemInfo(fileSystemInfo)

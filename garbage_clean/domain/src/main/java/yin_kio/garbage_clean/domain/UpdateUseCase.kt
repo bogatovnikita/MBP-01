@@ -9,6 +9,7 @@ import yin_kio.garbage_clean.domain.gateways.Files
 import yin_kio.garbage_clean.domain.gateways.Permissions
 import yin_kio.garbage_clean.domain.out.DeleteFormMapper
 import yin_kio.garbage_clean.domain.out.DeleteFormOut
+import yin_kio.garbage_clean.domain.out.DeleteProgressState
 import yin_kio.garbage_clean.domain.out.OutBoundary
 
 class UpdateUseCase(
@@ -23,6 +24,7 @@ class UpdateUseCase(
 
     fun update() = async {
         if (permissions.hasStoragePermission){
+            outBoundary.outDeleteProgress(DeleteProgressState.Wait)
             outBoundary.outHasPermission(true)
             outBoundary.outUpdateProgress(true)
             outBoundary.outFileSystemInfo(getFileSystemInfo())

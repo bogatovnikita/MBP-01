@@ -31,7 +31,7 @@ class GarbageCleanerUseCases(
     fun switchSelection(garbageType: GarbageType) = async {
         deleteForm.switchSelection(garbageType)
     }
-    fun startDeleteIfCan() = async{
+    fun deleteIfCan() = async{
         if (deleteRequest.isNotEmpty()) {
             files.delete(interpreter.interpret(deleteRequest))
         }

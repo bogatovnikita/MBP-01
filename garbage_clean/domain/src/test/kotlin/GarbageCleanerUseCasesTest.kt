@@ -76,7 +76,7 @@ class GarbageCleanerUseCasesTest {
     }
 
     @Test
-    fun `testStartDeleteIfCan deleteRequest is not empty`() = setupTest{
+    fun `test deleteIfCan deleteRequest is not empty`() = setupTest{
         deleteRequest.add(GarbageType.Apk)
         deleteRequest.add(GarbageType.Temp)
 
@@ -86,17 +86,17 @@ class GarbageCleanerUseCasesTest {
 
         coEvery { files.delete(listOf(APK, TEMP)) } returns Unit
 
-        useCases.startDeleteIfCan()
+        useCases.deleteIfCan()
         wait()
 
         coVerify { files.delete(listOf(APK, TEMP)) }
     }
 
     @Test
-    fun `testStartDeleteIfCan deleteRequest is empty`() = setupTest{
+    fun `test deleteIfCan deleteRequest is empty`() = setupTest{
         coEvery { files.delete(listOf()) } returns Unit
 
-        useCases.startDeleteIfCan()
+        useCases.deleteIfCan()
 
         coVerify(inverse = true) { files.delete(listOf()) }
     }

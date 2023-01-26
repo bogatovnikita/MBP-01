@@ -131,10 +131,12 @@ class NotificationService : NotificationListenerService(), LifecycleOwner {
 
         private var isServiceRunning = false
 
+        //TODO подумать над неймингом и сделать private
         fun serviceStop() {
             isServiceRunning = false
         }
 
+        //TODO подумать над неймингом и сделать private
         fun serviceStart() {
             isServiceRunning = true
         }

@@ -10,7 +10,7 @@ import com.entertainment.event.ssearch.domain.models.AppWithNotifications
 import com.entertainment.event.ssearch.domain.models.Notification
 import com.entertainment.event.ssearch.domain.models.NotificationWithApp
 
-
+//TODO метод назван не правильно
 fun List<NotificationDb>.mapToNotificationDb() =
     this.map { notification ->
         Notification(

@@ -9,6 +9,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.entertainment.event.ssearch.presentation.R
 import com.entertainment.event.ssearch.presentation.databinding.FragmentMissedNotificationsBinding
@@ -25,9 +26,10 @@ class MissedNotificationsFragment : Fragment(R.layout.fragment_missed_notificati
     private val binding: FragmentMissedNotificationsBinding by viewBinding()
     private val viewModel: MissedNotificationViewModel by viewModels()
 
-    private val adapter: NotificationRecyclerViewAdapter = NotificationRecyclerViewAdapter { notification ->
-        viewModel.obtainEvent(MissedNotificationEvent.OpenAppByPackageName(notification))
-    }
+    private val adapter: NotificationRecyclerViewAdapter =
+        NotificationRecyclerViewAdapter { notification ->
+            viewModel.obtainEvent(MissedNotificationEvent.OpenAppByPackageName(notification))
+        }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -56,6 +58,25 @@ class MissedNotificationsFragment : Fragment(R.layout.fragment_missed_notificati
         with(binding) {
             btnGoBack.setOnClickListener { findNavController().popBackStack() }
             btnSettings.setOnClickListener { findNavController().popBackStack() }
+            binding.btnCleanAll.setCanDeleteListener { isCanDelete ->
+                if (isCanDelete)
+                    viewModel.obtainEvent(MissedNotificationEvent.CleanAll)
+            }
+            binding.root.setOnClickListener {
+                binding.btnCleanAll.hideButton()
+            }
+            binding.btnMissedNotifications.setOnClickListener {
+                binding.btnCleanAll.hideButton()
+            }
+            binding.recyclerView.setOnClickListener {
+                binding.btnCleanAll.hideButton()
+            }
+            binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                    super.onScrollStateChanged(recyclerView, newState)
+                    binding.btnCleanAll.hideButton()
+                }
+            })
         }
     }
 

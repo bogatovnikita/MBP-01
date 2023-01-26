@@ -39,7 +39,20 @@ class MissedNotificationViewModel @Inject constructor(
     fun obtainEvent(event: MissedNotificationEvent) {
         when (event) {
             is MissedNotificationEvent.OpenAppByPackageName -> openAppAndDeleteNotification(event.notificationUi)
+            is MissedNotificationEvent.CleanAll -> cleanAll()
             else -> {}
+        }
+    }
+
+    private fun cleanAll() {
+        viewModelScope.launch {
+            useCase.deleteAll()
+            updateState {
+                it.copy(
+                    notifications = emptyList(),
+                    notificationIsEmpty = true,
+                )
+            }
         }
     }
 

@@ -9,6 +9,7 @@ import yin_kio.garbage_clean.domain.UpdateUseCase
 import yin_kio.garbage_clean.domain.entities.DeleteRequest
 import yin_kio.garbage_clean.domain.entities.GarbageFiles
 import yin_kio.garbage_clean.domain.entities.GarbageType
+import yin_kio.garbage_clean.domain.gateways.Ads
 import yin_kio.garbage_clean.domain.gateways.Files
 import yin_kio.garbage_clean.domain.out.DeleteFormMapper
 import yin_kio.garbage_clean.domain.out.DeleteFormOut
@@ -22,6 +23,7 @@ class GarbageCleanerUseCasesTest {
     private val outBoundary: OutBoundary = mockk()
     private val mapper: DeleteFormMapper = mockk()
     private val updateUseCase: UpdateUseCase = mockk()
+    private val ads: Ads = mockk()
     private lateinit var useCases: GarbageCleanerUseCases
     private val garbageFiles: GarbageFiles = spyk()
     private lateinit var deleteRequest: DeleteRequest
@@ -43,6 +45,8 @@ class GarbageCleanerUseCasesTest {
             outBoundary.outDeleteForm(deleteFormOut)
 
             updateUseCase.update()
+
+            ads.preloadAd()
         } returns Unit
     }
 
@@ -56,7 +60,8 @@ class GarbageCleanerUseCasesTest {
                 coroutineScope = this,
                 outBoundary = outBoundary,
                 mapper = mapper,
-                updateUseCase = updateUseCase
+                updateUseCase = updateUseCase,
+                ads = ads
             )
             testBody()
         }
@@ -95,6 +100,7 @@ class GarbageCleanerUseCasesTest {
         wait()
 
         coVerifyOrder {
+            ads.preloadAd()
             outBoundary.outDeleteProgress(true)
             files.delete(listOf(APK, TEMP))
             outBoundary.outDeleteProgress(false)

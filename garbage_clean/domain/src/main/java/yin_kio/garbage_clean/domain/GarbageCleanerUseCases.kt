@@ -5,6 +5,7 @@ import kotlinx.coroutines.launch
 import yin_kio.garbage_clean.domain.entities.DeleteRequest
 import yin_kio.garbage_clean.domain.entities.GarbageFiles
 import yin_kio.garbage_clean.domain.entities.GarbageType
+import yin_kio.garbage_clean.domain.gateways.Ads
 import yin_kio.garbage_clean.domain.gateways.Files
 import yin_kio.garbage_clean.domain.out.DeleteFormMapper
 import yin_kio.garbage_clean.domain.out.OutBoundary
@@ -16,7 +17,8 @@ class GarbageCleanerUseCases(
     private val deleteRequest: DeleteRequest,
     private val outBoundary: OutBoundary,
     private val coroutineScope: CoroutineScope,
-    private val updateUseCase: UpdateUseCase
+    private val updateUseCase: UpdateUseCase,
+    private val ads: Ads
 ) {
 
     private val interpreter = DeleteRequestInterpreter(garbageFiles)
@@ -31,6 +33,7 @@ class GarbageCleanerUseCases(
     }
     fun deleteIfCan() = async{
         if (deleteRequest.isNotEmpty()) {
+            ads.preloadAd()
             outBoundary.outDeleteProgress(true)
             files.delete(interpreter.interpret(deleteRequest))
             outBoundary.outDeleteProgress(false)

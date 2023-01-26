@@ -1,7 +1,4 @@
-import io.mockk.coEvery
-import io.mockk.coVerify
-import io.mockk.coVerifyOrder
-import io.mockk.mockk
+import io.mockk.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
@@ -9,7 +6,6 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import yin_kio.garbage_clean.domain.GarbageCleanerUseCases
 import yin_kio.garbage_clean.domain.UpdateUseCase
-import yin_kio.garbage_clean.domain.entities.DeleteForm
 import yin_kio.garbage_clean.domain.entities.DeleteRequest
 import yin_kio.garbage_clean.domain.entities.GarbageFiles
 import yin_kio.garbage_clean.domain.entities.GarbageType
@@ -22,26 +18,25 @@ import yin_kio.garbage_clean.domain.out.OutBoundary
 @OptIn(ExperimentalCoroutinesApi::class)
 class GarbageCleanerUseCasesTest {
 
-    private val deleteForm: DeleteForm = mockk()
     private val files: Files = mockk()
     private val outBoundary: OutBoundary = mockk()
     private val mapper: DeleteFormMapper = mockk()
     private val updateUseCase: UpdateUseCase = mockk()
     private lateinit var useCases: GarbageCleanerUseCases
-    private lateinit var garbageFiles: GarbageFiles
+    private val garbageFiles: GarbageFiles = spyk()
     private lateinit var deleteRequest: DeleteRequest
 
     private val deleteFormOut = DeleteFormOut()
 
 
     init {
-        coEvery { mapper.createDeleteFormOut(deleteForm) } returns deleteFormOut
+        coEvery { mapper.createDeleteFormOut(garbageFiles.deleteForm) } returns deleteFormOut
         coEvery {
             files.delete(listOf(APK, TEMP))
             files.delete(listOf())
 
-            deleteForm.switchSelectAll()
-            deleteForm.switchSelection(GarbageType.Apk)
+            garbageFiles.deleteForm.switchSelectAll()
+            garbageFiles.deleteForm.switchSelection(GarbageType.Apk)
 
             outBoundary.outDeleteProgress(true)
             outBoundary.outDeleteProgress(false)
@@ -53,10 +48,8 @@ class GarbageCleanerUseCasesTest {
 
     private fun setupTest(testBody: suspend TestScope.() -> Unit){
         runTest {
-            garbageFiles = GarbageFiles()
             deleteRequest = DeleteRequest()
             useCases = GarbageCleanerUseCases(
-                deleteForm = deleteForm,
                 files = files,
                 garbageFiles = garbageFiles,
                 deleteRequest = deleteRequest,
@@ -76,7 +69,7 @@ class GarbageCleanerUseCasesTest {
         wait()
 
         coVerify {
-            deleteForm.switchSelectAll()
+            garbageFiles.deleteForm.switchSelectAll()
             outBoundary.outDeleteForm(deleteFormOut)
         }
     }
@@ -87,7 +80,7 @@ class GarbageCleanerUseCasesTest {
         useCases.switchSelection(GarbageType.Apk)
         wait()
 
-        coVerify { deleteForm.switchSelection(GarbageType.Apk) }
+        coVerify { garbageFiles.deleteForm.switchSelection(GarbageType.Apk) }
     }
 
     @Test

@@ -12,10 +12,12 @@ import android.os.Process
 import android.provider.Settings
 import android.view.View
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.hedgehog.presentation.R
 import com.hedgehog.presentation.base.BaseFragment
@@ -68,7 +70,22 @@ class FirstScreenTimeFragment :
             object : ScreenTimeAdapter.Listener {
                 override fun onChooseNote(item: AppScreenTime) {
                     if (viewModel.screenState.value.selectionMode) return
-                    showToast(item.name.toInt())
+                    val typeDateFormat = if (viewModel.screenState.value.choiceDay) {
+                        Calendar.DATE
+                    } else {
+                        Calendar.WEEK_OF_YEAR
+                    }
+
+                    findNavController().navigate(
+                        FirstScreenTimeFragmentDirections.actionFirstScreenTimeFragmentToSecondScreenTimeFragment(
+                            item.packageName,
+                            CalendarScreenTime(
+                                typeDateFormat,
+                                viewModel.beginTime,
+                                viewModel.endTime
+                            )
+                        )
+                    )
                 }
 
                 override fun onToggle(item: AppScreenTime) {

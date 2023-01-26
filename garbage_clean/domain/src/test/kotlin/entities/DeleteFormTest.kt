@@ -37,14 +37,29 @@ class DeleteFormTest {
 
     @Test
     fun testSwitchSelection(){
-        deleteForm.add(FormItem(GarbageType.Temp, 10))
-        deleteForm.add(FormItem(GarbageType.Apk, 10))
 
-        deleteForm.switchSelection(GarbageType.Apk)
-        assertTrue(deleteForm.deleteRequest.contains(GarbageType.Apk))
+        deleteForm.apply {
+            add(FormItem(GarbageType.Temp, 10))
+            add(FormItem(GarbageType.Apk, 10))
+            assertFalse(isAllSelected)
 
-        deleteForm.switchSelection(GarbageType.Apk)
-        assertFalse(deleteForm.deleteRequest.contains(GarbageType.Apk))
+            switchSelection(GarbageType.Apk)
+            assertTrue(deleteRequest.contains(GarbageType.Apk))
+            assertFalse(isAllSelected)
+
+            switchSelection(GarbageType.Apk)
+            assertTrue(deleteRequest.isEmpty())
+            assertFalse(isAllSelected)
+
+            switchSelection(GarbageType.Apk)
+            switchSelection(GarbageType.Temp)
+            assertTrue(isAllSelected)
+
+            switchSelection(GarbageType.Temp)
+            assertFalse(isAllSelected)
+        }
+
+
     }
 
     @Test

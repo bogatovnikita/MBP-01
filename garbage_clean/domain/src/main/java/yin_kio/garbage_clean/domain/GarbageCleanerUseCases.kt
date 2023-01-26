@@ -18,6 +18,7 @@ class GarbageCleanerUseCases(
     private val deleteRequest: DeleteRequest,
     private val outBoundary: OutBoundary,
     private val coroutineScope: CoroutineScope,
+    private val updateUseCase: UpdateUseCase
 ) {
 
     private val interpreter = DeleteRequestInterpreter(garbageFiles)
@@ -35,6 +36,8 @@ class GarbageCleanerUseCases(
             files.delete(interpreter.interpret(deleteRequest))
         }
     }
+
+    fun update() = updateUseCase.update()
 
     private fun async(action: suspend () -> Unit){
         coroutineScope.launch { action() }

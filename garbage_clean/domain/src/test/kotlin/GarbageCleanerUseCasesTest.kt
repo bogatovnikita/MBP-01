@@ -7,6 +7,7 @@ import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import yin_kio.garbage_clean.domain.GarbageCleanerUseCases
+import yin_kio.garbage_clean.domain.UpdateUseCase
 import yin_kio.garbage_clean.domain.entities.DeleteForm
 import yin_kio.garbage_clean.domain.entities.DeleteRequest
 import yin_kio.garbage_clean.domain.entities.GarbageFiles
@@ -24,6 +25,7 @@ class GarbageCleanerUseCasesTest {
     private val files: Files = mockk()
     private val outBoundary: OutBoundary = mockk()
     private val mapper: DeleteFormMapper = mockk()
+    private val updateUseCase: UpdateUseCase = mockk()
     private lateinit var useCases: GarbageCleanerUseCases
     private lateinit var garbageFiles: GarbageFiles
     private lateinit var deleteRequest: DeleteRequest
@@ -40,7 +42,8 @@ class GarbageCleanerUseCasesTest {
                 deleteRequest = deleteRequest,
                 coroutineScope = this,
                 outBoundary = outBoundary,
-                mapper = mapper
+                mapper = mapper,
+                updateUseCase = updateUseCase
             )
             testBody()
         }
@@ -96,6 +99,15 @@ class GarbageCleanerUseCasesTest {
         useCases.startDeleteIfCan()
 
         coVerify(inverse = true) { files.delete(listOf()) }
+    }
+
+    @Test
+    fun testUpdate() = setupTest{
+        coEvery { updateUseCase.update() } returns Unit
+
+        useCases.update()
+
+        coVerify { updateUseCase.update() }
     }
 
 

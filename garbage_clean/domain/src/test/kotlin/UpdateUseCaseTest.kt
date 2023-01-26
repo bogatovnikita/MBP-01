@@ -28,34 +28,11 @@ class UpdateUseCaseTest {
     private val fileSystemInfo = FileSystemInfo()
     private val deleteFormOut = DeleteFormOut()
 
-    private fun setupTest(testBody: suspend TestScope.() -> Unit){
-        runTest {
-            coEvery {
-                outBoundary.outUpdateProgress(true)
-                outBoundary.outFileSystemInfo(fileSystemInfo)
-                outBoundary.outDeleteForm(deleteFormOut)
-                outBoundary.outUpdateProgress(false)
-                outBoundary.outHasPermission(false)
-                outBoundary.outHasPermission(true)
-            } returns Unit
 
-            updateUseCase = UpdateUseCase(
-                outBoundary = outBoundary,
-                coroutineScope = this,
-                mapper = DeleteFormMapper(),
-                deleteForm = DeleteForm(),
-                fileSystemInfoProvider = fileSystemInfoProvider,
-                permissions = permissions
-            )
-            testBody()
-        }
-    }
 
     @Test
     fun `testUpdate with has permission`() = setupTest{
-
         coEvery { permissions.hasStoragePermission } returns true
-        coEvery { fileSystemInfoProvider.getFileSystemInfo() } returns FileSystemInfo()
 
         updateUseCase.update()
         wait()
@@ -84,6 +61,48 @@ class UpdateUseCaseTest {
         wait()
 
         coVerify { outBoundary.outHasPermission(false) }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    private fun setupTest(testBody: suspend TestScope.() -> Unit){
+        runTest {
+            coEvery {
+                outBoundary.outUpdateProgress(true)
+                outBoundary.outFileSystemInfo(fileSystemInfo)
+                outBoundary.outDeleteForm(deleteFormOut)
+                outBoundary.outUpdateProgress(false)
+                outBoundary.outHasPermission(false)
+                outBoundary.outHasPermission(true)
+            } returns Unit
+
+
+            coEvery { fileSystemInfoProvider.getFileSystemInfo() } returns FileSystemInfo()
+
+            updateUseCase = UpdateUseCase(
+                outBoundary = outBoundary,
+                coroutineScope = this,
+                mapper = DeleteFormMapper(),
+                deleteForm = DeleteForm(),
+                fileSystemInfoProvider = fileSystemInfoProvider,
+                permissions = permissions
+            )
+            testBody()
+        }
     }
 
 

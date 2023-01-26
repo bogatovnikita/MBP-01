@@ -33,7 +33,9 @@ class GarbageCleanerUseCases(
     }
     fun deleteIfCan() = async{
         if (deleteRequest.isNotEmpty()) {
+            outBoundary.outDeleteProgress(true)
             files.delete(interpreter.interpret(deleteRequest))
+            outBoundary.outDeleteProgress(false)
         }
     }
 

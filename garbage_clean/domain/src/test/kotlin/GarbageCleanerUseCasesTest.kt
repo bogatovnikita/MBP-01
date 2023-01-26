@@ -1,5 +1,6 @@
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.coVerifyOrder
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
@@ -30,6 +31,25 @@ class GarbageCleanerUseCasesTest {
     private lateinit var garbageFiles: GarbageFiles
     private lateinit var deleteRequest: DeleteRequest
 
+    private val deleteFormOut = DeleteFormOut()
+
+
+    init {
+        coEvery { mapper.createDeleteFormOut(deleteForm) } returns deleteFormOut
+        coEvery {
+            files.delete(listOf(APK, TEMP))
+            files.delete(listOf())
+
+            deleteForm.switchSelectAll()
+            deleteForm.switchSelection(GarbageType.Apk)
+
+            outBoundary.outDeleteProgress(true)
+            outBoundary.outDeleteProgress(false)
+            outBoundary.outDeleteForm(deleteFormOut)
+
+            updateUseCase.update()
+        } returns Unit
+    }
 
     private fun setupTest(testBody: suspend TestScope.() -> Unit){
         runTest {
@@ -52,23 +72,18 @@ class GarbageCleanerUseCasesTest {
 
     @Test
     fun testSwitchSelectAll() = setupTest {
-        val deleteFormOut = DeleteFormOut()
-        coEvery { mapper.createDeleteFormOut(deleteForm) } returns deleteFormOut
-        coEvery { outBoundary.outDeleteForm(deleteFormOut) } returns Unit
-        coEvery { deleteForm.switchSelectAll() } returns Unit
-
         useCases.switchSelectAll()
         wait()
 
-        coVerify { deleteForm.switchSelectAll() }
-        coVerify { outBoundary.outDeleteForm(deleteFormOut) }
+        coVerify {
+            deleteForm.switchSelectAll()
+            outBoundary.outDeleteForm(deleteFormOut)
+        }
     }
 
 
     @Test
     fun testSwitchSelection() = setupTest{
-        coEvery { deleteForm.switchSelection(GarbageType.Apk) } returns Unit
-
         useCases.switchSelection(GarbageType.Apk)
         wait()
 
@@ -83,19 +98,19 @@ class GarbageCleanerUseCasesTest {
         garbageFiles[GarbageType.Apk] = mutableSetOf(APK)
         garbageFiles[GarbageType.Temp] = mutableSetOf(TEMP)
 
-
-        coEvery { files.delete(listOf(APK, TEMP)) } returns Unit
-
         useCases.deleteIfCan()
         wait()
 
-        coVerify { files.delete(listOf(APK, TEMP)) }
+        coVerifyOrder {
+            outBoundary.outDeleteProgress(true)
+            files.delete(listOf(APK, TEMP))
+            outBoundary.outDeleteProgress(false)
+        }
     }
+
 
     @Test
     fun `test deleteIfCan deleteRequest is empty`() = setupTest{
-        coEvery { files.delete(listOf()) } returns Unit
-
         useCases.deleteIfCan()
 
         coVerify(inverse = true) { files.delete(listOf()) }
@@ -103,8 +118,6 @@ class GarbageCleanerUseCasesTest {
 
     @Test
     fun testUpdate() = setupTest{
-        coEvery { updateUseCase.update() } returns Unit
-
         useCases.update()
 
         coVerify { updateUseCase.update() }

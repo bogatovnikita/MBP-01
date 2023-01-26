@@ -5,6 +5,7 @@ import com.entertainment.event.ssearch.data.db.NotificationDatabase
 import com.entertainment.event.ssearch.data.db.dao.AppDao
 import com.entertainment.event.ssearch.data.db.dao.AppWithNotificationsDao
 import com.entertainment.event.ssearch.data.db.dao.NotificationsDao
+import com.entertainment.event.ssearch.data.db.dao.NotificationsWithAppDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -29,5 +30,9 @@ class DatabaseModule {
     @Provides
     fun provideAppWithNotificationsDao(db: NotificationDatabase): AppWithNotificationsDao =
         db.appWithNotificationsDao()
+
+    @Provides
+    fun provideNotificationsWithDaoApp(db: NotificationDatabase): NotificationsWithAppDao =
+        db.notificationsWithAppDao()
 
 }

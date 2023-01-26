@@ -1,19 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="@drawable/bg_dialog"
+    android:orientation="vertical"
+    android:paddingHorizontal="@dimen/_20sdp"
+    android:paddingVertical="@dimen/_20sdp"
     tools:context=".ui.dialogs.DialogCompleteClearFragment">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/ic_clean_completed" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/_29sdp"
-        android:text="sdsdfsdf"
-        android:textColor="@color/dark_blue"
+        android:layout_marginTop="@dimen/_6sdp"
+        android:fontFamily="@font/golos_text_bold"
         android:gravity="center_horizontal"
-        android:background="@color/gray"
-        android:layout_marginVertical="@dimen/_20sdp"/>
+        android:text="@string/notification_manager_notification_cleared"
+        android:textColor="@color/green"
+        android:textSize="@dimen/_13ssp" />
 
-</FrameLayout>
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_done"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/_6sdp"
+        android:background="@drawable/bg_button_full_blue"
+        android:gravity="center"
+        android:text="@string/notification_manager_cool"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_11ssp" />
+
+</LinearLayout>

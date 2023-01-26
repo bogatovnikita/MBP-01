@@ -13,7 +13,6 @@
         android:id="@+id/iv_icon"
         android:layout_width="@dimen/_26sdp"
         android:layout_height="@dimen/_26sdp"
-        android:background="@drawable/ic_moon"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

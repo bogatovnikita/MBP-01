@@ -4,12 +4,14 @@ import android.service.notification.StatusBarNotification
 import com.entertainment.event.ssearch.data.db.entity.AppDb
 import com.entertainment.event.ssearch.data.db.entity.AppWithNotificationsDb
 import com.entertainment.event.ssearch.data.db.entity.NotificationDb
+import com.entertainment.event.ssearch.data.db.entity.NotificationWithAppDb
 import com.entertainment.event.ssearch.domain.models.App
 import com.entertainment.event.ssearch.domain.models.AppWithNotifications
 import com.entertainment.event.ssearch.domain.models.Notification
+import com.entertainment.event.ssearch.domain.models.NotificationWithApp
 
-
-fun List<NotificationDb>.mapToNotification() =
+//TODO метод назван не правильно
+fun List<NotificationDb>.mapToNotificationDb() =
     this.map { notification ->
         Notification(
             appPackageName = notification.appPackageName,
@@ -19,7 +21,7 @@ fun List<NotificationDb>.mapToNotification() =
         )
     }
 
-fun Notification.mapToNotification() = NotificationDb(
+fun Notification.mapToNotificationDb() = NotificationDb(
     appPackageName = appPackageName,
     time = time,
     title = title,
@@ -29,11 +31,11 @@ fun Notification.mapToNotification() = NotificationDb(
 fun List<AppWithNotificationsDb>.mapToAppAppWithNotifications() = this.map { appWithNotifications ->
     AppWithNotifications(
         app = appWithNotifications.appDb.mapToApp(),
-        listNotifications = appWithNotifications.notificationDbs.mapToNotification(),
+        listNotifications = appWithNotifications.notificationDbs.mapToNotificationDb(),
     )
 }
 
-fun StatusBarNotification.mapToNotification() =
+fun StatusBarNotification.mapToNotificationDb() =
     Notification(
         appPackageName = packageName,
         time = postTime,
@@ -53,4 +55,17 @@ fun AppDb.mapToApp() = App(
     icon = icon,
     name = name,
     isSwitched = isSwitched
+)
+
+fun List<NotificationWithAppDb>.toNotificationWithApp() = this.map { notificationWithAppDb ->
+    notificationWithAppDb.toNotificationWithApp()
+}
+
+fun NotificationWithAppDb.toNotificationWithApp() = NotificationWithApp(
+    packageName = app.packageName,
+    name = app.name,
+    icon = app.icon,
+    title = notificationDb.title,
+    body = notificationDb.body,
+    time = notificationDb.time,
 )

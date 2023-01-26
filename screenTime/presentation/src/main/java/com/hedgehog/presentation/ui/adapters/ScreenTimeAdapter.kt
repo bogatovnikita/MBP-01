@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -24,30 +25,7 @@ class ScreenTimeAdapter(private val listener: Listener, private val isSelectedMo
     }
 
     override fun onBindViewHolder(holder: ScreenTimeViewHolder, position: Int) {
-        val item = getItem(position)
-        with(holder.binding) {
-            root.tag = item
-            checkbox.tag = item
-            iconIv.setImageDrawable(item.icon)
-            titleTv.text = item.name
-            descriptionTv.text = item.time
-            if (isSelectedMode) {
-                iconRightArrow.visibility = View.GONE
-                checkbox.visibility = View.VISIBLE
-                if (item.isItSystemApp) {
-                    checkbox.buttonDrawable = ContextCompat.getDrawable(
-                        holder.binding.root.context,
-                        R.drawable.ic_check_box_system_app
-                    )
-                } else {
-                    checkbox.buttonDrawable = ContextCompat.getDrawable(
-                        holder.binding.root.context,
-                        R.drawable.check_box_selector
-                    )
-                }
-            }
-            checkbox.isChecked = item.isChecked
-        }
+        holder.bind(getItem(position), isSelectedMode)
     }
 
     override fun onClick(view: View) {
@@ -77,6 +55,39 @@ class ScreenTimeAdapter(private val listener: Listener, private val isSelectedMo
         fun onToggle(item: AppScreenTime)
     }
 
-    class ScreenTimeViewHolder(val binding: ItemScreenTimeBinding) :
-        RecyclerView.ViewHolder(binding.root)
+    class ScreenTimeViewHolder(private val binding: ItemScreenTimeBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+
+        private val presenter = Presenter()
+
+        fun bind(item: AppScreenTime, isSelectedMode: Boolean) {
+            with(binding) {
+                root.tag = item
+                checkbox.tag = item
+                iconIv.setImageDrawable(item.icon)
+                titleTv.text = item.name
+                descriptionTv.text = item.time
+                checkbox.isChecked = item.isChecked
+                iconRightArrow.isVisible = !isSelectedMode
+                checkbox.isVisible = isSelectedMode
+                if (isSelectedMode) {
+                    checkbox.buttonDrawable = ContextCompat.getDrawable(
+                        binding.root.context,
+                        presenter.presentCheckBox(item)
+                    )
+                }
+            }
+        }
+    }
+}
+
+class Presenter {
+    fun presentCheckBox(item: AppScreenTime): Int {
+        return if (item.isItSystemApp) {
+            R.drawable.ic_check_box_system_app
+        } else {
+            R.drawable.check_box_selector
+        }
+    }
+
 }

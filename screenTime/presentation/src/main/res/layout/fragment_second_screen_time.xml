@@ -5,6 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group_loading_data"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        app:constraint_referenced_ids="icon_iv,delete_app,data_tv,stop_app,time_data_tv,res_consumption,custom_view,last_launch_tv,total_usage_time_tv,info_app_button,time_total_usage_time_tv,time_last_launch_tv" />
+
     <ImageView
         android:id="@+id/back_arrow"
         android:layout_width="wrap_content"
@@ -274,42 +281,6 @@
         app:layout_constraintTop_toBottomOf="@id/info_app_button" />
 
     <TextView
-        android:id="@+id/battery_charge_tv"
-        style="@style/Text.Body_1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_24sdp"
-        android:layout_marginTop="@dimen/_16sdp"
-        android:text="@string/battery_charge"
-        android:textColor="@color/dark_blue"
-        app:layout_constraintEnd_toStartOf="@id/time_battery_charge_tv"
-        app:layout_constraintHorizontal_chainStyle="spread_inside"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/res_consumption" />
-
-    <TextView
-        android:id="@+id/time_battery_charge_tv"
-        style="@style/Text.Body_2.1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_16sdp"
-        android:layout_marginEnd="@dimen/_24sdp"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/battery_charge_tv"
-        app:layout_constraintTop_toBottomOf="@id/res_consumption"
-        tools:text="30%" />
-
-    <View
-        android:id="@+id/separator_line"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_1sdp"
-        android:layout_marginHorizontal="@dimen/_24sdp"
-        android:layout_marginTop="@dimen/_8sdp"
-        android:background="@color/grey_dark"
-        app:layout_constraintTop_toBottomOf="@id/battery_charge_tv" />
-
-    <TextView
         android:id="@+id/data_tv"
         style="@style/Text.Body_1"
         android:layout_width="wrap_content"
@@ -321,7 +292,7 @@
         app:layout_constraintEnd_toStartOf="@id/time_data_tv"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/battery_charge_tv" />
+        app:layout_constraintTop_toBottomOf="@id/res_consumption" />
 
     <TextView
         android:id="@+id/time_data_tv"
@@ -333,8 +304,8 @@
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/data_tv"
-        app:layout_constraintTop_toBottomOf="@id/battery_charge_tv"
-        tools:text="3.2 Гб" />
+        app:layout_constraintTop_toBottomOf="@id/res_consumption"
+        tools:text="3,2 Гб" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/stop_app"
@@ -372,5 +343,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_percent="0.07"
         app:layout_constraintStart_toEndOf="@id/stop_app" />
+
+    <ProgressBar
+        android:id="@+id/loader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/guideline_custom_view" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -19,10 +19,10 @@
     </style>
 
     <style name="WideDialogStyle" parent="Base.Theme.AppCompat.Dialog">
-        <item name="android:windowMinWidthMajor">90%</item>
+        <item name="android:windowMinWidthMajor">10%</item>
     </style>
 
     <style name="NormalDialogStyle" parent="Base.Theme.AppCompat.Dialog">
-        <item name="android:windowMinWidthMajor">70%</item>
+        <item name="android:windowMinWidthMajor">69%</item>
     </style>
 </resources>

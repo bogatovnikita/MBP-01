@@ -44,13 +44,13 @@
         android:textAllCaps="false"
         android:textColor="@color/green"
         android:textSize="@dimen/_9ssp"
-        app:layout_constraintEnd_toStartOf="@id/btn_allow_notifications"
+        app:layout_constraintEnd_toStartOf="@id/btn_missed_notifications"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_title" />
 
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_allow_notifications"
+        android:id="@+id/btn_missed_notifications"
         android:layout_width="0dp"
         android:layout_height="@dimen/_27sdp"
         android:layout_marginStart="@dimen/_3sdp"
@@ -96,8 +96,15 @@
         android:id="@+id/group_empty_notifications"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone"
+        android:visibility="visible"
         app:constraint_referenced_ids="iv_empty_notifications, tv_empty_notifications" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group_notifications_not_empty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="recycler_view, btn_clean_all" />
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/btn_clean_all"
@@ -108,8 +115,8 @@
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingVertical="@dimen/_5sdp"
-        app:layout_constraintEnd_toEndOf="@+id/btn_allow_notifications"
-        app:layout_constraintTop_toBottomOf="@+id/btn_allow_notifications">
+        app:layout_constraintEnd_toEndOf="@+id/btn_missed_notifications"
+        app:layout_constraintTop_toBottomOf="@+id/btn_missed_notifications">
 
         <TextView
             android:layout_width="wrap_content"
@@ -129,6 +136,7 @@
     </androidx.appcompat.widget.LinearLayoutCompat>
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="@dimen/_3sdp"

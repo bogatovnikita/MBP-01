@@ -7,6 +7,7 @@ import androidx.room.RoomDatabase
 import com.entertainment.event.ssearch.data.db.dao.AppDao
 import com.entertainment.event.ssearch.data.db.dao.AppWithNotificationsDao
 import com.entertainment.event.ssearch.data.db.dao.NotificationsDao
+import com.entertainment.event.ssearch.data.db.dao.NotificationsWithAppDao
 import com.entertainment.event.ssearch.data.db.entity.AppDb
 import com.entertainment.event.ssearch.data.db.entity.NotificationDb
 
@@ -23,6 +24,8 @@ abstract class NotificationDatabase : RoomDatabase() {
     abstract fun appDao(): AppDao
 
     abstract fun appWithNotificationsDao(): AppWithNotificationsDao
+
+    abstract fun notificationsWithAppDao(): NotificationsWithAppDao
 
     companion object {
 

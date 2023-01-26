@@ -12,12 +12,12 @@ class Notifications @Inject constructor(
 ): NotificationRepository {
 
     override suspend fun readAll(): Flow<List<Notification>> =
-        db.readAll().map { notifications -> notifications.mapToNotification() }
+        db.readAll().map { notifications -> notifications.mapToNotificationDb() }
 
-    override suspend fun delete(time: Long) = db.delete(time)
+    override suspend fun delete(notification: Notification) = db.delete(notification.mapToNotificationDb())
 
     override suspend fun deleteAll() = db.deleteAll()
 
-    override suspend fun insert(notification: Notification) = db.insert(notification.mapToNotification())
+    override suspend fun insert(notification: Notification) = db.insert(notification.mapToNotificationDb())
 
 }

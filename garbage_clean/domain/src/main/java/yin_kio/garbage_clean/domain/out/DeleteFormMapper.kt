@@ -7,6 +7,7 @@ class DeleteFormMapper {
     fun createDeleteFormOut(deleteForm: DeleteForm) : DeleteFormOut {
         return DeleteFormOut(
             isAllSelected = deleteForm.isAllSelected,
+            canDelete = deleteForm.deleteRequest.isNotEmpty(),
             items = deleteForm.map {
                 DeleteFormOutItem(
                     garbageType = it.garbageType,

@@ -1,4 +1,4 @@
-import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import yin_kio.garbage_clean.domain.entities.DeleteForm
 import yin_kio.garbage_clean.domain.entities.FormItem
@@ -17,15 +17,17 @@ internal class DeleteFormMapperTest{
 
         val noSelected = mapper.createDeleteFormOut(deleteForm)
         assertItemsMapping(noSelected)
+        assertFalse(noSelected.canDelete)
 
         deleteForm.switchSelectAll()
         val allSelected = mapper.createDeleteFormOut(deleteForm)
         assertItemsMapping(allSelected)
+        assertTrue(allSelected.canDelete)
 
         deleteForm.switchSelection(GarbageType.Temp)
         val containsSelected = mapper.createDeleteFormOut(deleteForm)
         assertEquals(false, containsSelected.isAllSelected)
-
+        assertTrue(containsSelected.canDelete)
     }
 
     private fun assertItemsMapping(out: DeleteFormOut) {

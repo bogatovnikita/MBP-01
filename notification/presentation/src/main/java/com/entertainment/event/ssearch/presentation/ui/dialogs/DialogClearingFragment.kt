@@ -25,7 +25,11 @@ class DialogClearingFragment :
 
     override fun onStart() {
         super.onStart()
-        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog?.apply {
+            isCancelable = false
+            setCanceledOnTouchOutside(false)
+            window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        }
         performingCleanup()
     }
 

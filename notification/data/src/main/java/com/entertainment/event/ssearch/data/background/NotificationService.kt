@@ -19,7 +19,7 @@ import com.entertainment.event.ssearch.data.background.NotificationCleanBroadcas
 import com.entertainment.event.ssearch.data.providers.SettingsImpl
 import com.entertainment.event.ssearch.data.repositories.Apps
 import com.entertainment.event.ssearch.data.repositories.Notifications
-import com.entertainment.event.ssearch.data.repositories.mapToNotification
+import com.entertainment.event.ssearch.data.repositories.mapToNotificationDb
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -95,7 +95,7 @@ class NotificationService : NotificationListenerService(), LifecycleOwner {
             activeNotifications.forEach { notification ->
                 val isSwitched = apps.readApp(notification.packageName)?.isSwitched ?: false
                 if (isSwitched || settings.isDisturbModeSwitched()) {
-                    notifications.insert(notification.mapToNotification())
+                    notifications.insert(notification.mapToNotificationDb())
                     cancelNotification(notification.key)
                 }
             }

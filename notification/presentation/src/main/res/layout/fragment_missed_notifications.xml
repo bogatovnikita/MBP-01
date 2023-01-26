@@ -96,8 +96,15 @@
         android:id="@+id/group_empty_notifications"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone"
+        android:visibility="visible"
         app:constraint_referenced_ids="iv_empty_notifications, tv_empty_notifications" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group_notifications_not_empty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="recycler_view, btn_clean_all" />
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/btn_clean_all"

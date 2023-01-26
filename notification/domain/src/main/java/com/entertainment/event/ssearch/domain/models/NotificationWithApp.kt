@@ -1,6 +1,6 @@
-package com.entertainment.event.ssearch.presentation.models
+package com.entertainment.event.ssearch.domain.models
 
-data class NotificationUi(
+data class NotificationWithApp(
     val packageName: String,
     val title: String,
     val name: String,

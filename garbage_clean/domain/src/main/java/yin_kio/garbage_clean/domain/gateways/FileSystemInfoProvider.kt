@@ -4,6 +4,6 @@ import yin_kio.garbage_clean.domain.entities.FileSystemInfo
 
 interface FileSystemInfoProvider {
 
-    fun getFileSystemInfo() : FileSystemInfo
+    suspend fun getFileSystemInfo() : FileSystemInfo
 
 }

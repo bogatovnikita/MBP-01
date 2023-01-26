@@ -37,7 +37,7 @@ class UpdateUseCase(
 
     }
 
-    private fun getFileSystemInfo() : FileSystemInfo{
+    private suspend fun getFileSystemInfo() : FileSystemInfo{
         return fileSystemInfoProvider.getFileSystemInfo()
     }
 

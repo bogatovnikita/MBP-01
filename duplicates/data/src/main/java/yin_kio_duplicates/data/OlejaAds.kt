@@ -1,14 +1,14 @@
 package yin_kio_duplicates.data
 
-import android.app.Activity
+import android.content.Context
 import com.example.ads.preloadAd
 import yin_kio.duplicates.domain.gateways.Ads
 
 class OlejaAds(
-    private val activity: Activity
+    private val context: Context
 ) : Ads {
 
     override fun preloadAd() {
-        activity.preloadAd()
+        context.preloadAd()
     }
 }

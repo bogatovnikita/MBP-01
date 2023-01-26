@@ -30,7 +30,7 @@ class DuplicatesFragmentFactory : FragmentFactory() {
                             files = FilesImpl(FileUtilsImpl()),
                             imagesComparator = AndroidImagesComparator(),
                             permissions = PermissionsImpl(it),
-                            ads = OlejaAds(it)
+                            ads = OlejaAds(it.applicationContext)
                         )
 
                         DuplicatesViewModel(

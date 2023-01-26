@@ -1,6 +1,6 @@
 package yin_kio.duplicates.presentation.views
 
-import android.app.Activity
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
@@ -13,7 +13,7 @@ import yin_kio.duplicates.presentation.view_models.DuplicatesViewModel
 
 class ParentFragment(
     private val createNavigation: Fragment.(DuplicatesViewModel) -> Navigation,
-    viewModelCreator: ViewModel.(Activity) -> DuplicatesViewModel
+    viewModelCreator: ViewModel.(Context) -> DuplicatesViewModel
 ) : Fragment(R.layout.fragment_parent) {
 
     internal val viewModel by lifecycleAware(creator = {viewModelCreator(requireActivity())})

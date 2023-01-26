@@ -7,19 +7,21 @@ import androidx.fragment.app.Fragment
 import com.ads.library.AdsDelegate
 import com.ads.library.AdsManager
 import com.ads.library.SubscriptionProvider
-
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 fun Fragment.preloadAd(){
     requireActivity().preloadAd()
 }
 
-fun Activity.preloadAd(){
 
+
+fun Context.preloadAd(){
     if (!AdsManager.checkAdsLoaded()){
         Log.i("AdsWrapper", "preloadAds")
-        runOnUiThread { AdsManager.preloadAd(this, BuildConfig.ADMOB_INTERSTITIAL) }
-
+        CoroutineScope(Dispatchers.Main).launch { AdsManager.preloadAd(this@preloadAd, BuildConfig.ADMOB_INTERSTITIAL) }
     } else {
         Log.i("AdsWrapper", "Ads has already loaded")
     }

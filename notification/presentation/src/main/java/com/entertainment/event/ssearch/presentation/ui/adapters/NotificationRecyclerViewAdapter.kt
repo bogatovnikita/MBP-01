@@ -10,6 +10,9 @@ import com.bumptech.glide.Glide
 import com.entertainment.event.ssearch.presentation.R
 import com.entertainment.event.ssearch.presentation.databinding.ItemNotificationBinding
 import com.entertainment.event.ssearch.presentation.models.NotificationUi
+import java.text.SimpleDateFormat
+import java.util.*
+import java.util.concurrent.TimeUnit
 
 typealias OnNotificationClick = (NotificationUi) -> Unit
 
@@ -37,14 +40,34 @@ class NotificationRecyclerViewAdapter(
     ) :
         RecyclerView.ViewHolder(binding.root) {
 
+        private val timeNow = Calendar.getInstance().timeInMillis
+
         fun bind(state: NotificationUi) {
             with(state) {
                 setIcon(icon)
-                binding.tvName.text = name
+                binding.tvName.text = setTitle(title, name)
                 binding.tvBody.text = body
-                binding.tvTime.text = time.toString()
+                binding.tvTime.text = setTime(time)
                 binding.root.setOnClickListener { listener(state) }
             }
+        }
+
+        private fun setTime(time: Long): String {
+            return when (timeNow - time) {
+                in 0..TimeUnit.MINUTES.toMillis(1) -> binding.root.context.getString(R.string.notification_manager_now)
+                in 0..TimeUnit.HOURS.toMillis(1) -> binding.root.context.getString(
+                    R.string.notification_manager_min_ago,
+                    (((timeNow - time) / TimeUnit.MINUTES.toMillis(1)).toString())
+                )
+                in 0..TimeUnit.DAYS.toMillis(1) -> convertLongToTime(time, "HH:mm")
+                else -> convertLongToTime(time, "dd.MM.yyyy")
+            }
+        }
+
+        private fun convertLongToTime(time: Long, timeFormat: String): String {
+            val date = Date(time)
+            val format = SimpleDateFormat(timeFormat)
+            return format.format(date)
         }
 
         private fun setIcon(uri: String) {
@@ -54,6 +77,9 @@ class NotificationRecyclerViewAdapter(
                 .error(R.drawable.ic_default_app)
                 .into(binding.ivIcon)
         }
+
+        private fun setTitle(title: String, name: String): String =
+            if (title == "null") name else title
 
     }
 

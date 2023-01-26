@@ -18,5 +18,7 @@
     <string name="notification_manager_cool">Супер!</string>
     <string name="notification_manager_notification_cleared">Ваш телефон очищен\nот лишних\nуведомлений</string>
     <string name="notification_manager_clearing">Удаляем уведомления</string>
-    <string name="notification_manager_clearing_notification">Очищаем шторку...</string>
+    <string name="notification_manager_clearing_notification">Очищаем шторку…</string>
+    <string name="notification_manager_now">Сейчас</string>
+    <string name="notification_manager_min_ago">%s мин. назад</string>
 </resources>

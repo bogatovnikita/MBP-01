@@ -1,42 +1,33 @@
 package com.entertainment.event.ssearch.presentation.ui.dialogs
 
-import android.app.AlertDialog
-import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.DialogFragment
+import by.kirich1409.viewbindingdelegate.viewBinding
 import com.entertainment.event.ssearch.presentation.R
 import com.entertainment.event.ssearch.presentation.databinding.FragmentDialogCompleteClearBinding
 
 
 class DialogCompleteClearFragment :
-    DialogFragment() {
+    DialogFragment(R.layout.fragment_dialog_complete_clear) {
 
-    private var binding: FragmentDialogCompleteClearBinding? = null
+    private val binding: FragmentDialogCompleteClearBinding by viewBinding()
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-
-        binding = FragmentDialogCompleteClearBinding.inflate(layoutInflater)
-        val builder = AlertDialog.Builder(requireActivity())
-        setStyle(STYLE_NO_TITLE, R.style.WideDialogStyle)
-        builder.setView(binding!!.root)
-        setListeners()
-        Log.e("!!!", "onCreateDialog")
-
-        val dialog = builder.create()
-        dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-
-        return dialog
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setStyle(STYLE_NO_TITLE, R.style.NormalDialogStyle)
     }
 
-    private fun setListeners() {
+    override fun onResume() {
+        super.onResume()
+        initListeners()
+        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.e("!!!", "onDestroy")
-        binding = null
+    private fun initListeners() {
+        binding.btnDone.setOnClickListener {
+            dismiss()
+        }
     }
 }

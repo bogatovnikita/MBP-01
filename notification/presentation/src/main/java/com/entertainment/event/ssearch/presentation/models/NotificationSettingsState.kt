@@ -32,6 +32,8 @@ sealed class NotificationStateEvent() {
 
 //    object OpenTimeTable: NotificationStateEvent()
 
+    object OpenMissedNotification: NotificationStateEvent()
+
     class LimitApps(val isSwitch: Boolean): NotificationStateEvent()
 
 }

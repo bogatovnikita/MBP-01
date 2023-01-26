@@ -81,6 +81,7 @@ class NotificationSettingsFragment : Fragment(R.layout.fragment_notification_set
             is NotificationStateEvent.OpenPermissionDialog -> R.id.action_to_dialogNotificationPermissionFragment
             is NotificationStateEvent.OpenDialogClearing -> R.id.action_to_dialogClearingFragment
             is NotificationStateEvent.OpenDialogCompleteClean -> R.id.action_to_dialogCompleteClearFragment
+            is NotificationStateEvent.OpenMissedNotification -> R.id.action_to_missedNotificationsFragment
             else -> NOT_NAVIGATE
         }
         if (navId == NOT_NAVIGATE || findNavController().currentDestination?.id == navId) return
@@ -98,13 +99,9 @@ class NotificationSettingsFragment : Fragment(R.layout.fragment_notification_set
         binding.btnClearNotifications.setOnClickListener {
             viewModel.obtainEvent(NotificationStateEvent.ClearAllNotification)
         }
-//        binding.btnOpenTimetable.setOnClickListener {
-//            if (hasPermissionService()) {
-//
-//            } else {
-//                openPermissionDialog()
-//            }
-//        }
+        binding.btnMissedNotifications.setOnClickListener {
+            viewModel.obtainEvent(NotificationStateEvent.OpenMissedNotification)
+        }
         binding.switchModeDisturb.setOnClickListener {
             viewModel.obtainEvent(NotificationStateEvent.SwitchGeneralDisturbMode(binding.switchModeDisturb.isChecked))
         }

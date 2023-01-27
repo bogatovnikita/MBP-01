@@ -8,9 +8,9 @@ data class MissedNotificationState(
 
 sealed class MissedNotificationEvent {
 
-    object CleanAll : MissedNotificationEvent()
+    class DeleteAll(val isCanDelete: Boolean) : MissedNotificationEvent()
 
-    class CleanNotification(val notificationUi: NotificationUi) : MissedNotificationEvent()
+    class DeleteNotification(val notificationUi: NotificationUi) : MissedNotificationEvent()
 
     object Default : MissedNotificationEvent()
 

@@ -23,12 +23,11 @@ class MissedNotificationViewModel @Inject constructor(
     }
 
     private fun initScreen() {
-        viewModelScope.launch(Dispatchers.Default) { // TODO почему используется default?
+        viewModelScope.launch(Dispatchers.IO) {
             useCase.readAll().collect { notifications ->
-                if (notifications.isNotEmpty())
                 updateState {
                     it.copy(
-                        notificationIsEmpty = false,
+                        notificationIsEmpty = notifications.isEmpty(),
                         notifications= notifications.toNotificationUi()
                     )
                 }
@@ -39,30 +38,26 @@ class MissedNotificationViewModel @Inject constructor(
     fun obtainEvent(event: MissedNotificationEvent) {
         when (event) {
             is MissedNotificationEvent.OpenAppByPackageName -> openAppAndDeleteNotification(event.notificationUi)
-            is MissedNotificationEvent.CleanAll -> cleanAll()
+            is MissedNotificationEvent.DeleteAll -> deleteAll(event.isCanDelete)
+            is MissedNotificationEvent.DeleteNotification -> deleteNotification(event.notificationUi)
             else -> {}
         }
     }
 
-    private fun cleanAll() {
-        viewModelScope.launch { // TODO здесь не используется диспетчер вообще. Надо IO
+    private fun deleteAll(isCanDelete: Boolean) {
+        if (!isCanDelete) return
+        viewModelScope.launch(Dispatchers.IO) {
             useCase.deleteAll()
-            updateState {
-                it.copy(
-                    notifications = emptyList(),
-                    notificationIsEmpty = true,
-                )
-            }
         }
     }
 
     private fun openAppAndDeleteNotification(notification: NotificationUi) {
-        cleanNotification(notification)
+        deleteNotification(notification)
         useCase.startAppByPackageName(notification.packageName)
     }
 
-    private fun cleanNotification(notification: NotificationUi) { //TODO обычно, если хотят удалить все уведомления пишут clear. Лучше назвать deleteNotification
-        viewModelScope.launch {// TODO здесь не используется диспетчер вообще. Надо IO
+    private fun deleteNotification(notification: NotificationUi) {
+        viewModelScope.launch(Dispatchers.IO) {
             useCase.delete(notification.toNotification())
         }
     }

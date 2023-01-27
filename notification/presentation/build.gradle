@@ -74,4 +74,7 @@ dependencies {
 
     //Lottie
     implementation 'com.airbnb.android:lottie:5.2.0'
+
+    //SwipeRecyclerView
+    implementation 'com.github.aitsuki:SwipeMenuRecyclerView:2.1.5'
 }

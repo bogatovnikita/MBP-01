@@ -1,6 +1,6 @@
 package yin_kio.duplicates.presentation.views
 
-import general.PermissionFragment
+import yin_kio.permissions_views.PermissionFragment
 import yin_kio.duplicates.presentation.view_models.DuplicatesViewModel
 import yin_kio.duplicates.presentation.view_models.getParentViewModel
 

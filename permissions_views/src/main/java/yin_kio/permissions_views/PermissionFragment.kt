@@ -1,13 +1,12 @@
-package general
+package yin_kio.permissions_views
 
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import by.kirich1409.viewbindingdelegate.viewBinding
-import com.example.permissions.R
-import com.example.permissions.databinding.FragmentPermissionBinding
 import com.example.permissions.requestStoragePermissions
 import com.example.permissions.runtimePermissionsLauncher
+import yin_kio.permissions_views.databinding.FragmentPermissionBinding
 
 abstract class PermissionFragment<VM> : Fragment(R.layout.fragment_permission) {
 

@@ -42,6 +42,7 @@ dependencies {
     implementation project(':general:recycler_adapter')
     implementation project(':general:lifecycle_aware')
     implementation project(':general:permissions')
+    implementation project(':permissions_views')
 
     implementation project(':ads')
 

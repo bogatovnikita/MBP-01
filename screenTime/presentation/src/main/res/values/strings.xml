@@ -10,6 +10,7 @@
     <string name="stop_app">Принудительная остановка</string>
     <string name="delete">Удалить</string>
     <string name="delete_system_app">Это приложение нельзя удалить, оно обеспечивает нормальную работу вашего телефона</string>
+    <string name="stop_system_app">Это приложение нельзя принудительно остановить, оно обеспечивает нормальную работу вашего телефона</string>
     <string name="text_not_statistics">Вы не пользовались ни одним приложением в выбранный период\n\nВыберете другие даты для просмотра статистики экранного времени</string>
     <string name="kill_background_process_text">Принудительная остановка выполнена</string>
     <string name="select_the_app_to_stop">Выберите приложения для принудительной остановки</string>
@@ -20,5 +21,6 @@
     <string name="res_consumption">Расход ресурсов</string>
     <string name="battery_charge">Заряд батареи</string>
     <string name="data_text">Данные</string>
+    <string name="this_is_a_system_application_you_will_not_be_able_to_switch_to_it">Это системное приложение, вы не сможете переключиться на него</string>
 
 </resources>

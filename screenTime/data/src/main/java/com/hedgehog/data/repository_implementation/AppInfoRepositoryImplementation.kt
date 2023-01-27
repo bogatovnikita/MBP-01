@@ -3,6 +3,7 @@ package com.hedgehog.data.repository_implementation
 import android.app.usage.UsageStats
 import android.app.usage.UsageStatsManager
 import android.content.Context
+import android.content.pm.ApplicationInfo
 import com.hedgehog.data.R
 import com.hedgehog.domain.models.AppInfo
 import com.hedgehog.domain.models.CalendarScreenTime
@@ -107,7 +108,8 @@ class AppInfoRepositoryImplementation @Inject constructor(@ApplicationContext va
             listTime = listHour,
             lastLaunch = mapTimeToLastLaunch(usageStats.lastTimeUsed),
             data = "0",
-            totalTimeUsage = mapTimeToTotalTimeUsage(listHourForMilliseconds.sum())
+            totalTimeUsage = mapTimeToTotalTimeUsage(listHourForMilliseconds.sum()),
+            isSystemApp = checkIsSystemApp(usageStats)
         )
     }
 
@@ -123,7 +125,8 @@ class AppInfoRepositoryImplementation @Inject constructor(@ApplicationContext va
             listTime = listDay,
             lastLaunch = mapTimeToLastLaunch(usageStats.lastTimeUsed),
             data = "0",
-            totalTimeUsage = mapTimeToTotalTimeUsage(listDayForMilliseconds.sum())
+            totalTimeUsage = mapTimeToTotalTimeUsage(listDayForMilliseconds.sum()),
+            isSystemApp = checkIsSystemApp(usageStats)
         )
     }
 
@@ -249,5 +252,15 @@ class AppInfoRepositoryImplementation @Inject constructor(@ApplicationContext va
         } else {
             context.getString(R.string.D_hour_D_minutes, hour, minutes)
         }
+    }
+
+    private fun checkIsSystemApp(it: UsageStats) = try {
+        context.packageManager.getApplicationInfo(
+            it.packageName, 0
+        ).flags and ApplicationInfo.FLAG_SYSTEM != 0 || context.packageManager.getApplicationInfo(
+            it.packageName, 0
+        ).flags and ApplicationInfo.FLAG_UPDATED_SYSTEM_APP != 0
+    } catch (e: Exception) {
+        true
     }
 }

@@ -23,7 +23,7 @@ class MissedNotificationViewModel @Inject constructor(
     }
 
     private fun initScreen() {
-        viewModelScope.launch(Dispatchers.Default) {
+        viewModelScope.launch(Dispatchers.Default) { // TODO почему используется default?
             useCase.readAll().collect { notifications ->
                 if (notifications.isNotEmpty())
                 updateState {
@@ -45,7 +45,7 @@ class MissedNotificationViewModel @Inject constructor(
     }
 
     private fun cleanAll() {
-        viewModelScope.launch {
+        viewModelScope.launch { // TODO здесь не используется диспетчер вообще. Надо IO
             useCase.deleteAll()
             updateState {
                 it.copy(
@@ -61,8 +61,8 @@ class MissedNotificationViewModel @Inject constructor(
         useCase.startAppByPackageName(notification.packageName)
     }
 
-    private fun cleanNotification(notification: NotificationUi) {
-        viewModelScope.launch {
+    private fun cleanNotification(notification: NotificationUi) { //TODO обычно, если хотят удалить все уведомления пишут clear. Лучше назвать deleteNotification
+        viewModelScope.launch {// TODO здесь не используется диспетчер вообще. Надо IO
             useCase.delete(notification.toNotification())
         }
     }

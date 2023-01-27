@@ -1,4 +1,4 @@
-package yin_kio.garbage_clean.data
+package yin_kio.permissions_views
 
 import org.junit.Test
 

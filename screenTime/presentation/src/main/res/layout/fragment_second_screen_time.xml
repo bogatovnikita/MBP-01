@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="visible"
-        app:constraint_referenced_ids="icon_iv,delete_app,data_tv,stop_app,time_data_tv,res_consumption,custom_view,last_launch_tv,total_usage_time_tv,info_app_button,time_total_usage_time_tv,time_last_launch_tv" />
+        app:constraint_referenced_ids="delete_app,data_tv,stop_app,time_data_tv,res_consumption,custom_view,last_launch_tv,total_usage_time_tv,info_app_button,time_total_usage_time_tv,time_last_launch_tv" />
 
     <ImageView
         android:id="@+id/back_arrow"
@@ -22,18 +22,27 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <View
+        android:id="@+id/background_back_arrow"
+        android:layout_width="@dimen/_25sdp"
+        android:layout_height="@dimen/_25sdp"
+        app:layout_constraintBottom_toBottomOf="@id/back_arrow"
+        app:layout_constraintEnd_toEndOf="@id/back_arrow"
+        app:layout_constraintStart_toStartOf="@id/back_arrow"
+        app:layout_constraintTop_toTopOf="@id/back_arrow" />
+
     <TextView
         android:id="@+id/head_title"
         style="@style/Text.Body_1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/_8sdp"
+        android:text="@string/app_screen_time"
         android:textColor="@color/dark_blue"
         app:layout_constraintBottom_toTopOf="@id/guideline_bottom_bar"
         app:layout_constraintEnd_toStartOf="@id/guideline_background_icon"
         app:layout_constraintStart_toEndOf="@id/back_arrow"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="@string/app_screen_time" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_background_icon"
@@ -59,6 +68,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="@dimen/_4sdp"
+        android:elevation="5dp"
         app:layout_constraintBottom_toBottomOf="@id/background_icon"
         app:layout_constraintEnd_toEndOf="@id/background_icon"
         app:layout_constraintStart_toStartOf="@id/background_icon"
@@ -78,6 +88,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/_16sdp"
+        android:ellipsize="end"
+        android:maxLines="1"
         android:textColor="@color/dark_blue"
         app:layout_constraintEnd_toStartOf="@id/guideline_background_icon"
         app:layout_constraintStart_toStartOf="parent"
@@ -192,6 +204,7 @@
     <ImageView
         android:id="@+id/custom_view"
         android:layout_width="0dp"
+        android:visibility="invisible"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_test_custom_view"
         app:layout_constraintEnd_toEndOf="parent"
@@ -353,5 +366,88 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/guideline_custom_view" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group_not_statistics"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="icon_not_statistics,text_not_statistics" />
+
+    <ImageView
+        android:id="@+id/icon_not_statistics"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_icon_not_statics"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/text_not_statistics"
+        style="@style/Text.Body_1.2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_8sdp"
+        android:layout_marginTop="@dimen/_12sdp"
+        android:gravity="center"
+        android:text="@string/text_not_statistics"
+        android:textColor="@color/gray"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/icon_not_statistics" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/tutorial_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="tutorial_text,tutorial_transparent_button,tutorial_transparent_background,tutorial_transparent_icon" />
+
+    <ImageView
+        android:id="@+id/tutorial_transparent_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white_transparent"
+        android:elevation="4dp" />
+
+    <ImageView
+        android:id="@+id/tutorial_transparent_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_4sdp"
+        android:elevation="5dp"
+        android:src="@drawable/ic_touch_screen"
+        app:layout_constraintStart_toEndOf="@id/guideline_background_icon"
+        app:layout_constraintTop_toBottomOf="@id/guideline_bottom_bar" />
+
+    <View
+        android:id="@+id/tutorial_transparent_button"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:layout_marginEnd="@dimen/_8sdp"
+        android:background="@drawable/background_not_transparent_button_blue"
+        android:elevation="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.08"
+        app:layout_constraintStart_toStartOf="@id/week_button"
+        app:layout_constraintTop_toBottomOf="@id/guideline_name_app" />
+
+    <TextView
+        android:id="@+id/tutorial_text"
+        style="@style/Text.Subtitle_1"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:elevation="4dp"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="@dimen/_2sdp"
+        android:text="@string/If_you_want_to_open_the_app_just_click_on_its_icon"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="@id/tutorial_transparent_button"
+        app:layout_constraintEnd_toEndOf="@id/tutorial_transparent_button"
+        app:layout_constraintStart_toStartOf="@id/tutorial_transparent_button"
+        app:layout_constraintTop_toTopOf="@id/tutorial_transparent_button" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

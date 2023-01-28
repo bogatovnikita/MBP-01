@@ -68,6 +68,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="@dimen/_4sdp"
+        android:elevation="5dp"
         app:layout_constraintBottom_toBottomOf="@id/background_icon"
         app:layout_constraintEnd_toEndOf="@id/background_icon"
         app:layout_constraintStart_toStartOf="@id/background_icon"
@@ -394,5 +395,58 @@
         android:textColor="@color/gray"
         android:textSize="16sp"
         app:layout_constraintTop_toBottomOf="@id/icon_not_statistics" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/tutorial_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="tutorial_text,tutorial_transparent_button,tutorial_transparent_background,tutorial_transparent_icon" />
+
+    <ImageView
+        android:id="@+id/tutorial_transparent_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white_transparent"
+        android:elevation="4dp" />
+
+    <ImageView
+        android:id="@+id/tutorial_transparent_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_4sdp"
+        android:elevation="5dp"
+        android:src="@drawable/ic_touch_screen"
+        app:layout_constraintStart_toEndOf="@id/guideline_background_icon"
+        app:layout_constraintTop_toBottomOf="@id/guideline_bottom_bar" />
+
+    <View
+        android:id="@+id/tutorial_transparent_button"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:layout_marginEnd="@dimen/_8sdp"
+        android:background="@drawable/background_not_transparent_button_blue"
+        android:elevation="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.08"
+        app:layout_constraintStart_toStartOf="@id/week_button"
+        app:layout_constraintTop_toBottomOf="@id/guideline_name_app" />
+
+    <TextView
+        android:id="@+id/tutorial_text"
+        style="@style/Text.Subtitle_1"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:elevation="4dp"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="@dimen/_2sdp"
+        android:text="@string/If_you_want_to_open_the_app_just_click_on_its_icon"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="@id/tutorial_transparent_button"
+        app:layout_constraintEnd_toEndOf="@id/tutorial_transparent_button"
+        app:layout_constraintStart_toStartOf="@id/tutorial_transparent_button"
+        app:layout_constraintTop_toTopOf="@id/tutorial_transparent_button" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

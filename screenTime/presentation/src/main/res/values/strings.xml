@@ -22,5 +22,6 @@
     <string name="battery_charge">Заряд батареи</string>
     <string name="data_text">Данные</string>
     <string name="this_is_a_system_application_you_will_not_be_able_to_switch_to_it">Это системное приложение, вы не сможете переключиться на него</string>
+    <string name="If_you_want_to_open_the_app_just_click_on_its_icon">Если вы хотите открыть приложение, просто кликните по его иконке</string>
 
 </resources>

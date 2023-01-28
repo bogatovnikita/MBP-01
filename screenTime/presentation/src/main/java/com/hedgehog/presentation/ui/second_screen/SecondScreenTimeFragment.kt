@@ -3,6 +3,7 @@ package com.hedgehog.presentation.ui.second_screen
 import android.app.ActivityManager
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
@@ -24,9 +25,12 @@ import com.hedgehog.presentation.models.SwitchButtonState
 import com.hedgehog.presentation.ui.first_screen.FirstScreenTimeFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.*
+
 
 @AndroidEntryPoint
 class SecondScreenTimeFragment :
@@ -34,6 +38,7 @@ class SecondScreenTimeFragment :
 
     private val viewModel: SecondScreenTimeViewModel by viewModels()
     private val args by navArgs<SecondScreenTimeFragmentArgs>()
+    private lateinit var sharedPrefs: SharedPreferences
     private var resultLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             val result = requireContext().packageManager.getInstalledApplications(0)
@@ -41,12 +46,24 @@ class SecondScreenTimeFragment :
             if (result) findNavController().navigateUp()
         }
 
+    override fun onStart() {
+        super.onStart()
+        val result = requireContext().packageManager.getInstalledApplications(0)
+            .find { info -> info.packageName == args.packageName } == null
+        if (result) findNavController().navigateUp()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.getAppInfo(args.packageName, args.calendarScreenTime)
+        initSharedPrefs()
         checkArgForRenderScreen()
         initObserver()
         initClickListener()
+    }
+
+    private fun initSharedPrefs() {
+        sharedPrefs = requireContext().getSharedPreferences(FIRST_LAUNCH, 0)
     }
 
     private fun checkArgForRenderScreen() {
@@ -88,59 +105,108 @@ class SecondScreenTimeFragment :
 
     private fun initClickListener() {
         binding.iconIv.setOnClickListener {
-            try {
-                val intentLaunch =
-                    requireContext().packageManager.getLaunchIntentForPackage(args.packageName)
-                startActivity(intentLaunch)
-            } catch (e: Exception) {
-                Toast.makeText(
-                    requireActivity(),
-                    R.string.this_is_a_system_application_you_will_not_be_able_to_switch_to_it,
-                    Toast.LENGTH_SHORT
-                ).show()
+            if (sharedPrefs.getBoolean(FIRST_LAUNCH, true)) {
+                showTutorial()
+            } else {
+                binding.tutorialGroup.visibility = View.GONE
+                try {
+                    val intentLaunch =
+                        requireContext().packageManager.getLaunchIntentForPackage(args.packageName)
+                    startActivity(intentLaunch)
+                } catch (e: Exception) {
+                    Toast.makeText(
+                        requireActivity(),
+                        R.string.this_is_a_system_application_you_will_not_be_able_to_switch_to_it,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
         }
         binding.infoAppButton.setOnClickListener {
-            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-            val uri = Uri.fromParts("package", args.packageName, null)
-            intent.data = uri
-            startActivity(intent)
+            if (sharedPrefs.getBoolean(FIRST_LAUNCH, true)) {
+                showTutorial()
+            } else {
+                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                val uri = Uri.fromParts("package", args.packageName, null)
+                intent.data = uri
+                startActivity(intent)
+            }
         }
         binding.backgroundBackArrow.setOnClickListener {
-            findNavController().navigateUp()
+            if (sharedPrefs.getBoolean(FIRST_LAUNCH, true)) {
+                showTutorial()
+            } else {
+                findNavController().navigateUp()
+            }
         }
         binding.dayButton.setOnClickListener {
-            if (viewModel.screenState.value.choiceDay) return@setOnClickListener
-            choiceDay()
+            if (sharedPrefs.getBoolean(FIRST_LAUNCH, true)) {
+                showTutorial()
+            } else {
+                if (viewModel.screenState.value.choiceDay) return@setOnClickListener
+                choiceDay()
+            }
         }
         binding.weekButton.setOnClickListener {
-            if (viewModel.screenState.value.choiceWeek) return@setOnClickListener
-            choiceWeek()
+            if (sharedPrefs.getBoolean(FIRST_LAUNCH, true)) {
+                showTutorial()
+            } else {
+                if (viewModel.screenState.value.choiceWeek) return@setOnClickListener
+                choiceWeek()
+            }
         }
         binding.backgroundArrowLeft.setOnClickListener {
-            choiceLeftArrow()
+            if (sharedPrefs.getBoolean(FIRST_LAUNCH, true)) {
+                showTutorial()
+            } else {
+                choiceLeftArrow()
+            }
         }
         binding.backgroundArrowRight.setOnClickListener {
-            if (viewModel.beginTime == 0 && viewModel.endTime == -1) return@setOnClickListener
-            choiceRightArrow()
+            if (sharedPrefs.getBoolean(FIRST_LAUNCH, true)) {
+                showTutorial()
+            } else {
+                if (viewModel.beginTime == 0 && viewModel.endTime == -1) return@setOnClickListener
+                choiceRightArrow()
+            }
         }
         binding.stopApp.setOnClickListener {
-            if (viewModel.screenState.value.appInfo.isSystemApp) {
-                Toast.makeText(requireContext(), R.string.stop_system_app, Toast.LENGTH_SHORT)
-                    .show()
-                return@setOnClickListener
+            if (sharedPrefs.getBoolean(FIRST_LAUNCH, true)) {
+                showTutorial()
             } else {
-                clickStopAllButton()
+                if (viewModel.screenState.value.appInfo.isSystemApp) {
+                    Toast.makeText(requireContext(), R.string.stop_system_app, Toast.LENGTH_SHORT)
+                        .show()
+                    return@setOnClickListener
+                } else {
+                    clickStopAllButton()
+                }
             }
         }
         binding.deleteApp.setOnClickListener {
-            if (viewModel.screenState.value.appInfo.isSystemApp) {
-                Toast.makeText(requireContext(), R.string.delete_system_app, Toast.LENGTH_SHORT)
-                    .show()
-                return@setOnClickListener
+            if (sharedPrefs.getBoolean(FIRST_LAUNCH, true)) {
+                showTutorial()
             } else {
-                clickDeleteAppButton()
+                if (viewModel.screenState.value.appInfo.isSystemApp) {
+                    Toast.makeText(requireContext(), R.string.delete_system_app, Toast.LENGTH_SHORT)
+                        .show()
+                    return@setOnClickListener
+                } else {
+                    clickDeleteAppButton()
+                }
             }
+        }
+
+        binding.tutorialTransparentBackground.setOnClickListener {
+            binding.tutorialGroup.visibility = View.GONE
+        }
+    }
+
+    private fun showTutorial() {
+        lifecycleScope.launch {
+            delay(1000)
+            binding.tutorialGroup.visibility = View.VISIBLE
+            sharedPrefs.edit().putBoolean(FIRST_LAUNCH, false).apply()
         }
     }
 
@@ -310,4 +376,7 @@ class SecondScreenTimeFragment :
         }
     }
 
+    companion object {
+        private const val FIRST_LAUNCH = "FIRST_LAUNCH"
+    }
 }

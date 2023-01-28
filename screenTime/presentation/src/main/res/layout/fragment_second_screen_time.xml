@@ -204,6 +204,7 @@
     <ImageView
         android:id="@+id/custom_view"
         android:layout_width="0dp"
+        android:visibility="invisible"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_test_custom_view"
         app:layout_constraintEnd_toEndOf="parent"

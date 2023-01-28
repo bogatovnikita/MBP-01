@@ -4,6 +4,9 @@ import android.app.usage.UsageStats
 import android.app.usage.UsageStatsManager
 import android.content.Context
 import android.content.pm.ApplicationInfo
+import android.content.pm.IPackageStatsObserver
+import android.content.pm.PackageStats
+import android.util.Log
 import com.hedgehog.data.R
 import com.hedgehog.domain.models.AppInfo
 import com.hedgehog.domain.models.CalendarScreenTime
@@ -12,6 +15,7 @@ import com.hedgehog.domain.wrapper.CaseResult
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import java.lang.reflect.Method
 import java.util.*
 import javax.inject.Inject
 
@@ -102,6 +106,7 @@ class AppInfoRepositoryImplementation @Inject constructor(@ApplicationContext va
         usageStats: UsageStats
     ): AppInfo {
         hourAppInfo(packageName, calendarScreenTime)
+        getBatteryCharge(packageName)
         return AppInfo(
             nameApp = getAppLabel(packageName).toString(),
             icon = getAppIcon(packageName),
@@ -175,7 +180,16 @@ class AppInfoRepositoryImplementation @Inject constructor(@ApplicationContext va
         null
     }
 
-    private fun getBatteryCharge(packageName: String) {}
+    private fun getBatteryCharge(packageName: String) {
+        getPackageSizeInfo.invoke(
+            context.packageManager,
+            packageName,
+            object : IPackageStatsObserver.Stub() {
+                override fun onGetStatsCompleted(pStats: PackageStats?, succeeded: Boolean) {
+                    Log.e("pie", "onGetStatsCompleted: pStats=${pStats?.codeSize}")
+                }
+            })
+    }
 
     private fun initHourBeginEndTime(calendarScreenTime: CalendarScreenTime) {
         hourBeginTime = Calendar.getInstance()
@@ -263,4 +277,8 @@ class AppInfoRepositoryImplementation @Inject constructor(@ApplicationContext va
     } catch (e: Exception) {
         true
     }
+
+    var getPackageSizeInfo: Method = context.packageManager.javaClass.getMethod(
+        "getPackageSizeInfo", String::class.java, IPackageStatsObserver::class.java
+    )
 }

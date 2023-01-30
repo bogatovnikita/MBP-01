@@ -26,65 +26,83 @@
 
     </LinearLayout>
 
-    <FrameLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="24dp">
-
-        <include android:id="@+id/file_system_info"
-            layout="@layout/layout_file_system_info"/>
-    </FrameLayout>
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginTop="24dp">
-
-        <TextView
-            android:text="@string/garbage_files"
-            android:textAppearance="@style/Text.Header_3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/green"/>
-
-        <TextView
-            android:id="@+id/select_all_text"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:text="@string/select_all"
-            android:gravity="end|bottom"
-            android:layout_height="match_parent"
-            android:paddingEnd="8dp"/>
-
-        <CheckBox
-            android:id="@+id/select_all"
-            style="@style/CheckBox"/>
-
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/can_free"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/can_free"
-        android:layout_marginStart="16dp"
-        android:textAppearance="@style/Text.Subtitle_1.2"
-        android:textColor="@color/gray"/>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_weight="1"
-        android:id="@+id/recycler"
-        android:paddingHorizontal="24dp"
-        android:clipToPadding="false"
-        android:layout_width="wrap_content"
         android:layout_height="0dp"
-        tools:listitem="@layout/list_item_garbage"
-        android:orientation="vertical"
-        tools:itemCount="5"/>
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="24dp">
+
+                <include android:id="@+id/file_system_info"
+                    layout="@layout/layout_file_system_info"/>
+            </FrameLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="24dp"
+                android:layout_marginTop="24dp"
+                android:gravity="bottom">
+
+                <TextView
+                    android:text="@string/garbage_files"
+                    android:textAppearance="@style/Text.Header_3"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/green"/>
+
+                <TextView
+                    android:id="@+id/select_all_text"
+                    android:layout_width="wrap_content"
+                    android:text="@string/select_all"
+                    android:gravity="bottom|end"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@style/Text.Subtitle_1.2"
+                    android:paddingEnd="8dp"/>
+
+                <CheckBox
+                    android:id="@+id/select_all"
+                    style="@style/CheckBox"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/can_free"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/can_free"
+                android:layout_marginStart="16dp"
+                android:textAppearance="@style/Text.Subtitle_1.2"
+                android:textColor="@color/gray"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_weight="1"
+                android:id="@+id/recycler"
+                android:paddingHorizontal="24dp"
+                android:clipToPadding="false"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                tools:listitem="@layout/list_item_garbage"
+                android:orientation="vertical"
+                tools:itemCount="5"/>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+
 
     <TextView
         android:text="@string/delete"

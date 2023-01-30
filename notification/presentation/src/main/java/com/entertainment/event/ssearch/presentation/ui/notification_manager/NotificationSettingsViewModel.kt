@@ -71,7 +71,7 @@ class NotificationSettingsViewModel @Inject constructor(
                 useCases.setGeneralDisturbMode(isSwitched)
                 updateState {
                     it.copy(
-                        modeNotDisturb = isSwitched,
+                        modeDND = isSwitched,
                         event = NotificationStateEvent.Default
                     )
                 }
@@ -79,7 +79,7 @@ class NotificationSettingsViewModel @Inject constructor(
                 setEvent(NotificationStateEvent.OpenPermissionDialog)
                 updateState {
                     it.copy(
-                        modeNotDisturb = !isSwitched,
+                        modeDND = !isSwitched,
                     )
                 }
             }
@@ -128,7 +128,7 @@ class NotificationSettingsViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.Default) {
             updateState {
                 it.copy(
-                    modeNotDisturb = useCases.getDisturbMode(),
+                    modeDND = useCases.getDisturbMode(),
                     isAllAppsLimited = useCases.isAllAppsLimited(),
                     event = NotificationStateEvent.Default
                 )

@@ -16,7 +16,6 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ServiceLifecycleDispatcher
 import androidx.lifecycle.coroutineScope
 import com.entertainment.event.ssearch.data.background.NotificationCleanBroadcastReceiver.Companion.START_OBSERVE
-import com.entertainment.event.ssearch.data.providers.SettingsImpl
 import com.entertainment.event.ssearch.data.repositories.Apps
 import com.entertainment.event.ssearch.data.repositories.Notifications
 import com.entertainment.event.ssearch.data.repositories.mapToNotificationDb
@@ -32,9 +31,6 @@ class NotificationService : NotificationListenerService(), LifecycleOwner {
 
     @Inject
     lateinit var apps: Apps
-
-    @Inject
-    lateinit var settings: SettingsImpl
 
     private val dispatcher = ServiceLifecycleDispatcher(this)
 
@@ -56,7 +52,7 @@ class NotificationService : NotificationListenerService(), LifecycleOwner {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         dispatcher.onServicePreSuperOnStart()
-        serviceStart()
+        serviceStarted()
         createNotificationChannel()
         startForeground(BASE_CHANNEL_ID, createPersistNotification())
         observeClearEvent()
@@ -94,7 +90,7 @@ class NotificationService : NotificationListenerService(), LifecycleOwner {
         dispatcher.lifecycle.coroutineScope.launch {
             activeNotifications.forEach { notification ->
                 val isSwitched = apps.readApp(notification.packageName)?.isSwitched ?: false
-                if (isSwitched || settings.isDisturbModeSwitched()) {
+                if (isSwitched) {
                     notifications.insert(notification.mapToNotificationDb())
                     cancelNotification(notification.key)
                 }
@@ -121,7 +117,7 @@ class NotificationService : NotificationListenerService(), LifecycleOwner {
 
     override fun stopService(name: Intent?): Boolean {
         unregisterReceiver(reciver)
-        serviceStop()
+        serviceStopped()
         return super.stopService(name)
     }
 
@@ -131,13 +127,10 @@ class NotificationService : NotificationListenerService(), LifecycleOwner {
 
         private var isServiceRunning = false
 
-        //TODO подумать над неймингом и сделать private
-        fun serviceStop() {
+        private fun serviceStopped() {
             isServiceRunning = false
         }
-
-        //TODO подумать над неймингом и сделать private
-        fun serviceStart() {
+        private fun serviceStarted() {
             isServiceRunning = true
         }
 

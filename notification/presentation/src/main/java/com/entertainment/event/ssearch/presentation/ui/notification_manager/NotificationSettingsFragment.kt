@@ -61,7 +61,7 @@ class NotificationSettingsFragment : Fragment(R.layout.fragment_notification_set
     private fun renderState(state: NotificationSettingsState) {
         with(state) {
             adapter.submitList(apps)
-            binding.switchModeDisturb.isChecked = modeNotDisturb
+            binding.switchModeDisturb.isChecked = modeDND
             binding.switchLimitAllApplication.isChecked = isAllAppsLimited
         }
     }

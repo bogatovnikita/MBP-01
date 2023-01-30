@@ -1,7 +1,7 @@
 package com.entertainment.event.ssearch.presentation.models
 
 data class NotificationSettingsState(
-    val modeNotDisturb: Boolean = false,
+    val modeDND: Boolean = false,
     val apps: List<AppUi> = emptyList(),
     val isAllAppsLimited: Boolean = false,
     val hasServicePermission: Boolean = false,

@@ -11,9 +11,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.entertainment.event.ssearch.presentation.R
 import com.entertainment.event.ssearch.presentation.databinding.FragmentNotificationSettingsBinding
-import com.entertainment.event.ssearch.presentation.ui.adapters.AppRecyclerViewAdapter
 import com.entertainment.event.ssearch.presentation.models.NotificationSettingsState
 import com.entertainment.event.ssearch.presentation.models.NotificationStateEvent
+import com.entertainment.event.ssearch.presentation.ui.adapters.AppRecyclerViewAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 

@@ -8,5 +8,6 @@ data class AppInfo(
     val listTime: MutableList<Int> = mutableListOf(),
     val lastLaunch: String = "",
     val data: String = "",
-    val totalTimeUsage: String = ""
+    val totalTimeUsage: String = "",
+    val isSystemApp: Boolean = false
 )

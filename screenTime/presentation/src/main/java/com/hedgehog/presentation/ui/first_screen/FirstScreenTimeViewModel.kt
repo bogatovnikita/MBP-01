@@ -111,9 +111,9 @@ class FirstScreenTimeViewModel @Inject constructor(
             if (it.packageName == item.packageName) {
                 it.isChecked = !it.isChecked
                 if (it.isChecked) {
-                    temp -= 1
-                } else {
                     temp += 1
+                } else {
+                    temp -= 1
                 }
             }
         }

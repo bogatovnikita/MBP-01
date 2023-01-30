@@ -21,6 +21,7 @@ class SecondScreenTimeViewModel @Inject constructor(
     var secondCalendar: Calendar = Calendar.getInstance()
 
     fun getAppInfo(packageName: String, calendarScreenTime: CalendarScreenTime) {
+        updateState { it.copy(isLoading = false) }
         viewModelScope.launch {
             appInfoUseCase.invoke(
                 packageName, com.hedgehog.domain.models.CalendarScreenTime(
@@ -50,8 +51,27 @@ class SecondScreenTimeViewModel @Inject constructor(
                     listTime = result.response.listTime,
                     lastLaunch = result.response.lastLaunch,
                     data = result.response.data,
-                    totalTimeUsage = result.response.totalTimeUsage
+                    totalTimeUsage = result.response.totalTimeUsage,
+                    isSystemApp = result.response.isSystemApp
                 ), isLoading = true
+            )
+        }
+    }
+
+    fun choiceDay() {
+        updateState {
+            it.copy(
+                choiceDay = true,
+                choiceWeek = false
+            )
+        }
+    }
+
+    fun choiceWeek() {
+        updateState {
+            it.copy(
+                choiceDay = false,
+                choiceWeek = true
             )
         }
     }

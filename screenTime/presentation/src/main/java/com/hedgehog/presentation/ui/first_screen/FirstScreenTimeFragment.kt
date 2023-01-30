@@ -12,7 +12,6 @@ import android.os.Process
 import android.provider.Settings
 import android.view.View
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
@@ -24,6 +23,8 @@ import com.hedgehog.presentation.base.BaseFragment
 import com.hedgehog.presentation.databinding.FragmentFirstScreenTimeBinding
 import com.hedgehog.presentation.models.AppScreenTime
 import com.hedgehog.presentation.models.CalendarScreenTime
+import com.hedgehog.presentation.models.Period
+import com.hedgehog.presentation.models.SwitchButtonState
 import com.hedgehog.presentation.ui.adapters.ScreenTimeAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -46,7 +47,13 @@ class FirstScreenTimeFragment :
 
     private fun checkPermission() {
         if (checkPackageUsageStatePermission()) {
-            updateScreenTime(Calendar.DATE, viewModel.beginTime, viewModel.endTime)
+            if (viewModel.screenState.value.choiceDay) {
+                updateScreenTime(Calendar.DATE, viewModel.beginTime, viewModel.endTime)
+                showAppsByPeriod(Period.Day)
+            } else {
+                updateScreenTime(Calendar.WEEK_OF_YEAR, viewModel.beginTime, viewModel.endTime)
+                showAppsByPeriod(Period.Week)
+            }
         } else {
             startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS))
         }
@@ -248,8 +255,8 @@ class FirstScreenTimeFragment :
     }
 
     private fun choiceLeftArrow() {
-        if (viewModel.screenState.value.choiceDay && viewModel.beginTime == LIMIT_STATICS_FOR_DAY) return
-        if (viewModel.screenState.value.choiceWeek && viewModel.beginTime == LIMIT_STATICS_FOR_WEEK) return
+        if (viewModel.screenState.value.choiceDay && viewModel.beginTime == LIMIT_STATISTICS_FOR_DAY) return
+        if (viewModel.screenState.value.choiceWeek && viewModel.beginTime == LIMIT_STATISTICS_FOR_WEEK) return
         viewModel.beginTime += 1
         viewModel.endTime += 1
         if (viewModel.screenState.value.choiceDay) {
@@ -277,11 +284,8 @@ class FirstScreenTimeFragment :
 
     private fun choiceWeek() {
         viewModel.choiceWeek()
-        binding.weekButton.setBackgroundResource(R.drawable.background_not_transparent_button)
-        binding.weekButton.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
 
-        binding.dayButton.setBackgroundResource(R.drawable.background_transparent_button)
-        binding.dayButton.setTextColor(ContextCompat.getColor(requireContext(), R.color.green))
+        showAppsByPeriod(Period.Week)
 
         viewModel.beginTime = 0
         viewModel.endTime = -1
@@ -300,10 +304,9 @@ class FirstScreenTimeFragment :
 
     private fun choiceDay() {
         viewModel.choiceDay()
-        binding.dayButton.setBackgroundResource(R.drawable.background_not_transparent_button)
-        binding.dayButton.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
-        binding.weekButton.setBackgroundResource(R.drawable.background_transparent_button)
-        binding.weekButton.setTextColor(ContextCompat.getColor(requireContext(), R.color.green))
+
+        showAppsByPeriod(Period.Day)
+
         viewModel.beginTime = 0
         viewModel.endTime = -1
         viewModel.calendar = Calendar.getInstance()
@@ -311,6 +314,33 @@ class FirstScreenTimeFragment :
         updateScreenTime(Calendar.DATE, viewModel.beginTime, viewModel.endTime)
         if (viewModel.screenState.value.selectionMode) {
             selectedMode(binding.selectedMode)
+        }
+    }
+
+    private fun showAppsByPeriod(period: Period) {
+        val weekState = presentSwitchButton(period == Period.Week)
+        val dayState = presentSwitchButton(period == Period.Day)
+
+        binding.apply {
+            val periodControl = mapOf(weekButton to weekState, dayButton to dayState)
+            periodControl.entries.forEach {
+                it.key.setBackgroundResource(it.value.bgRes)
+                it.key.setTextColor(it.value.textColor)
+            }
+        }
+    }
+
+    private fun presentSwitchButton(isActive: Boolean): SwitchButtonState {
+        return if (isActive) {
+            SwitchButtonState(
+                textColor = ContextCompat.getColor(requireContext(), R.color.white),
+                bgRes = R.drawable.background_not_transparent_button
+            )
+        } else {
+            SwitchButtonState(
+                textColor = ContextCompat.getColor(requireContext(), R.color.green),
+                bgRes = R.drawable.background_transparent_button
+            )
         }
     }
 
@@ -352,7 +382,7 @@ class FirstScreenTimeFragment :
     }
 
     companion object {
-        const val LIMIT_STATICS_FOR_DAY = 30
-        const val LIMIT_STATICS_FOR_WEEK = 3
+        const val LIMIT_STATISTICS_FOR_DAY = 30
+        const val LIMIT_STATISTICS_FOR_WEEK = 3
     }
 }

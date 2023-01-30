@@ -72,6 +72,16 @@
         android:textAppearance="@style/Text.Subtitle_1.2"
         android:textColor="@color/gray"/>
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler"
+        android:paddingHorizontal="24dp"
+        android:clipToPadding="false"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:listitem="@layout/list_item_garbage"
+        android:orientation="vertical"
+        tools:itemCount="5"/>
+
 
 
 

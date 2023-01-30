@@ -16,4 +16,5 @@
     <string name="empty_folders">Пустые папки</string>
     <string name="miniatures">Миниатюры</string>
     <string name="delete">Удалить</string>
+    <string name="delete_progress_title">Удаляем мусорные файлы</string>
 </resources>

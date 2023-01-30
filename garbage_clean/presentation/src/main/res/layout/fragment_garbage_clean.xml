@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <LinearLayout
@@ -87,7 +88,9 @@
                 android:textAppearance="@style/Text.Subtitle_1.2"
                 android:textColor="@color/gray"/>
 
+
             <androidx.recyclerview.widget.RecyclerView
+                android:visibility="gone"
                 android:layout_weight="1"
                 android:id="@+id/recycler"
                 android:paddingHorizontal="24dp"
@@ -97,6 +100,32 @@
                 tools:listitem="@layout/list_item_garbage"
                 android:orientation="vertical"
                 tools:itemCount="5"/>
+
+            <LinearLayout
+                android:id="@+id/delete_has_been"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="16dp"
+                tools:ignore="UseCompoundDrawables">
+
+                <ImageView
+                    android:contentDescription="@string/delete_has_been"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/delete_has_been"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/delete_has_been"
+                    android:gravity="center"
+                    android:textAppearance="@style/Text.Body_1.2"
+                    android:textColor="@color/gray"/>
+
+            </LinearLayout>
 
         </LinearLayout>
 

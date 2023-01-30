@@ -10,5 +10,9 @@
     <string name="select_all">Выьрать все</string>
     <string name="can_free">Можно освободить %s</string>
     <string name="go_back">Назад</string>
-
+    <string name="apk_files">APK файлы</string>
+    <string name="temp_files">Временные файлы</string>
+    <string name="rest_files">Остаточные файлы</string>
+    <string name="empty_folders">Пустые папки</string>
+    <string name="miniatures">Миниатюры</string>
 </resources>

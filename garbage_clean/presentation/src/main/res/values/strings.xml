@@ -8,5 +8,6 @@
     <string name="total_storage_space">Общий объём внутренней памяти</string>
     <string name="garbage_files">Мусорные файлы</string>
     <string name="select_all">Выьрать все</string>
+    <string name="can_free">Можно освободить %s</string>
 
 </resources>

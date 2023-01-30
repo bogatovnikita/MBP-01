@@ -14,7 +14,8 @@
 
         <ImageView
             android:id="@+id/back"
-            style="@style/BackButton"/>
+            style="@style/BackButton"
+            android:contentDescription="@string/go_back" />
         
         <TextView
             android:layout_width="match_parent"

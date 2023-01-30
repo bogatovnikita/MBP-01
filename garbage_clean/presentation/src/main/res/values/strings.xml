@@ -9,5 +9,6 @@
     <string name="garbage_files">Мусорные файлы</string>
     <string name="select_all">Выьрать все</string>
     <string name="can_free">Можно освободить %s</string>
+    <string name="go_back">Назад</string>
 
 </resources>

@@ -15,4 +15,5 @@
     <string name="rest_files">Остаточные файлы</string>
     <string name="empty_folders">Пустые папки</string>
     <string name="miniatures">Миниатюры</string>
+    <string name="delete">Удалить</string>
 </resources>

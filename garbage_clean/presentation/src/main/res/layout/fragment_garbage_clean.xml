@@ -82,8 +82,9 @@
         android:orientation="vertical"
         tools:itemCount="5"/>
 
-
-
-
+    <TextView
+        android:text="@string/delete"
+        android:id="@+id/delete"
+        style="@style/MainButton"/>
 
 </LinearLayout>

@@ -1,5 +1,7 @@
 package yin_kio.garbage_clean.presentation
 
+import androidx.fragment.app.testing.launchFragment
+import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
 
@@ -20,5 +22,10 @@ class ExampleInstrumentedTest {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
         assertEquals("yin_kio.garbage_clean.presentation.test", appContext.packageName)
+    }
+
+    @Test
+    fun launchGarbageCleanFragment(){
+        launchFragmentInContainer { GarbageCleanFragment() }
     }
 }

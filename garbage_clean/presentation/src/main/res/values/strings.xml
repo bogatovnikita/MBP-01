@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="title">Очистка мусора</string>
+    <string name="internal_storage">Внутренняя память</string>
+    <string name="occupied">Занято</string>
+    <string name="available">Доступно</string>
+    <string name="total_storage_space">Общий объём внутренней памяти</string>
+
+</resources>

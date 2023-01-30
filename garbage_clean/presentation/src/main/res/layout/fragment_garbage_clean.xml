@@ -32,6 +32,35 @@
     </FrameLayout>
 
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="24dp">
+
+        <TextView
+            android:text="@string/garbage_files"
+            android:textAppearance="@style/Text.Header_3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/green"/>
+
+        <TextView
+            android:id="@+id/select_all_text"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:text="@string/select_all"
+            android:gravity="end|bottom"
+            android:layout_height="match_parent"
+            android:paddingEnd="8dp"/>
+
+        <CheckBox
+            android:id="@+id/select_all"
+            style="@style/CheckBox"/>
+
+    </LinearLayout>
+
+
 
 
 </LinearLayout>

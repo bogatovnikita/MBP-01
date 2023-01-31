@@ -2,7 +2,7 @@ package yin_kio.garbage_clean.test
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import yin_kio.garbage_clean.presentation.GarbageCleanParentFragment
+import yin_kio.garbage_clean.presentation.views.GarbageCleanParentFragment
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

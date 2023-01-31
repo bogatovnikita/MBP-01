@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/garbageCleanFragment"
-        android:name="yin_kio.garbage_clean.presentation.GarbageCleanFragment"
+        android:name="yin_kio.garbage_clean.presentation.views.GarbageCleanFragment"
         android:label="GarbageCleanFragment" >
         <action
             android:id="@+id/action_garbageCleanFragment_to_garbageCleanPermissionFragment"
@@ -14,6 +14,6 @@
     </fragment>
     <fragment
         android:id="@+id/permissionFragment"
-        android:name="yin_kio.garbage_clean.presentation.GarbageCleanPermissionFragment"
+        android:name="yin_kio.garbage_clean.presentation.views.GarbageCleanPermissionFragment"
         android:label="GarbageCleanPermissionFragment" />
 </navigation>

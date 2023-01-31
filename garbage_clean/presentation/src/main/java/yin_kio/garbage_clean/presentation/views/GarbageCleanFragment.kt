@@ -1,4 +1,4 @@
-package yin_kio.garbage_clean.presentation
+package yin_kio.garbage_clean.presentation.views
 
 import android.os.Bundle
 import android.view.View
@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.lifecycleScope
 import by.kirich1409.viewbindingdelegate.viewBinding
 import jamycake.lifecycle_aware.lifecycleAware
+import yin_kio.garbage_clean.presentation.R
 import yin_kio.garbage_clean.presentation.databinding.FragmentGarbageCleanBinding
 import yin_kio.garbage_clean.presentation.view_model.ObservableScreenViewModel
 import yin_kio.garbage_clean.presentation.view_model.ScreenViewModelFactory

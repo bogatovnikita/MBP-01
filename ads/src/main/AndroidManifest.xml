@@ -3,6 +3,11 @@
     package="com.example.ads">
 
     <uses-permission android:name="com.android.vending.BILLING" />
+    <application>
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="@string/ADMOB_APP_KEY" />
+    </application>
 
 
 </manifest>

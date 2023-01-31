@@ -11,21 +11,25 @@ import yin_kio.garbage_clean.presentation.models.UiFileSystemInfo
 
 class ScreenPresenter(
     private val context: Context,
-    private val viewModel: MutableScreenViewModel
 ) : OutBoundary {
+
+    var viewModel: MutableScreenViewModel? = null
 
     private val screenItemsPresenter = ScreenItemsPresenter(context)
 
     override fun outUpdateProgress(isInProgress: Boolean) {
-        viewModel.setIsInProgress(isInProgress)
+        viewModel?.setIsInProgress(isInProgress)
     }
 
     override fun outDeleteForm(deleteFormOut: DeleteFormOut) {
-        viewModel.setDeleteFormItems(uiDeleteFromItems(deleteFormOut))
-        viewModel.setCanFreeVolume(formatFileSize(context, deleteFormOut.items.sumOf { it.size }))
-        viewModel.setIsAllSelected(deleteFormOut.isAllSelected)
-        viewModel.setButtonText(screenItemsPresenter.presentButtonName(deleteFormOut.items.isEmpty()))
-        viewModel.setButtonBgRes(screenItemsPresenter.presentButtonBg(deleteFormOut.canDelete))
+        viewModel?.apply {
+            setDeleteFormItems(uiDeleteFromItems(deleteFormOut))
+
+            setCanFreeVolume(formatFileSize(context, deleteFormOut.items.sumOf { it.size }))
+            setIsAllSelected(deleteFormOut.isAllSelected)
+            setButtonText(screenItemsPresenter.presentButtonName(deleteFormOut.items.isEmpty()))
+            setButtonBgRes(screenItemsPresenter.presentButtonBg(deleteFormOut.canDelete))
+        }
     }
 
     private fun uiDeleteFromItems(deleteFormOut: DeleteFormOut) =
@@ -39,7 +43,7 @@ class ScreenPresenter(
 
 
     override fun outFileSystemInfo(fileSystemInfo: FileSystemInfo) {
-        viewModel.setFileSystemInfo(
+        viewModel?.setFileSystemInfo(
             UiFileSystemInfo(
                 occupied = formatFileSize(context, fileSystemInfo.occupied),
                 available = formatFileSize(context, fileSystemInfo.available),
@@ -49,10 +53,10 @@ class ScreenPresenter(
     }
 
     override fun outHasPermission(hasPermission: Boolean) {
-        viewModel.setHasPermission(hasPermission)
+        viewModel?.setHasPermission(hasPermission)
     }
 
     override fun outDeleteProgress(deleteProgressState: DeleteProgressState) {
-        viewModel.setDeleteProgress(deleteProgressState)
+        viewModel?.setDeleteProgress(deleteProgressState)
     }
 }

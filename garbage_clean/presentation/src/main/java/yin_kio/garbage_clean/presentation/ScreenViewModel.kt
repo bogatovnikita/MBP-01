@@ -2,16 +2,25 @@ package yin_kio.garbage_clean.presentation
 
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import yin_kio.garbage_clean.domain.use_cases.GarbageCleanUseCases
 import yin_kio.garbage_clean.domain.out.DeleteProgressState
 import yin_kio.garbage_clean.presentation.models.ScreenState
 import yin_kio.garbage_clean.presentation.models.UiDeleteFromItem
 import yin_kio.garbage_clean.presentation.models.UiFileSystemInfo
 
-class ScreenViewModel : MutableScreenViewModel, ObservableScreenViewModel {
+class ScreenViewModel(
+    private val useCases: GarbageCleanUseCases
+) : MutableScreenViewModel,
+    ObservableScreenViewModel,
+    GarbageCleanUseCases by useCases {
 
 
     private val _state = MutableStateFlow(ScreenState())
     override val state = _state.asStateFlow()
+
+    init {
+        update()
+    }
 
     override fun setFileSystemInfo(uiFileSystemInfo: UiFileSystemInfo) {
         _state.value = state.value.copy(

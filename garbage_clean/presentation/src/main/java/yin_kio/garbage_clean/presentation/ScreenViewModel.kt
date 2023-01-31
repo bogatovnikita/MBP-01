@@ -7,11 +7,11 @@ import yin_kio.garbage_clean.presentation.models.ScreenState
 import yin_kio.garbage_clean.presentation.models.UiDeleteFromItem
 import yin_kio.garbage_clean.presentation.models.UiFileSystemInfo
 
-class ScreenViewModel : MutableScreenViewModel {
+class ScreenViewModel : MutableScreenViewModel, ObservableScreenViewModel {
 
 
     private val _state = MutableStateFlow(ScreenState())
-    val state = _state.asStateFlow()
+    override val state = _state.asStateFlow()
 
     override fun setFileSystemInfo(uiFileSystemInfo: UiFileSystemInfo) {
         _state.value = state.value.copy(

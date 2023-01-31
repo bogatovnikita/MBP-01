@@ -18,12 +18,12 @@ import yin_kio.garbage_clean.presentation.models.UiFileSystemInfo
 
 
 @RunWith(RobolectricTestRunner::class)
-class PresenterTest {
+class ScreenPresenterTest {
 
 
     private val context: Context = RuntimeEnvironment.getApplication()
     private val viewModel: GarbageCleanViewModel = spyk()
-    private val presenter = Presenter(
+    private val presenter = ScreenPresenter(
         context, viewModel
     )
 

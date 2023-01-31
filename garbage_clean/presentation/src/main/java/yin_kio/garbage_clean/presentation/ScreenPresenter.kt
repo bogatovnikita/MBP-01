@@ -10,7 +10,7 @@ import yin_kio.garbage_clean.presentation.models.UiDeleteForm
 import yin_kio.garbage_clean.presentation.models.UiDeleteFromItem
 import yin_kio.garbage_clean.presentation.models.UiFileSystemInfo
 
-class Presenter(
+class ScreenPresenter(
     private val context: Context,
     private val viewModel: GarbageCleanViewModel
 ) : OutBoundary {

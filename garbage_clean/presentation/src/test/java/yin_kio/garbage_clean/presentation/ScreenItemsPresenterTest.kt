@@ -9,10 +9,10 @@ import org.robolectric.RuntimeEnvironment
 import yin_kio.garbage_clean.domain.entities.GarbageType
 
 @RunWith(RobolectricTestRunner::class)
-class DeleteFormItemPresenterTest {
+class ScreenItemsPresenterTest {
 
     private val context: Context = RuntimeEnvironment.getApplication()
-    private val presenter = DeleteFormItemPresenter(context)
+    private val presenter = ScreenItemsPresenter(context)
 
     @Test
     fun `test presentIcon`(){

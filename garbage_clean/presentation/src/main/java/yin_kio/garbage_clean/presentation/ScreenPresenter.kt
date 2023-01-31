@@ -15,7 +15,7 @@ class ScreenPresenter(
     private val viewModel: GarbageCleanViewModel
 ) : OutBoundary {
 
-    private val iconPresenter = DeleteFormItemPresenter(context)
+    private val iconPresenter = ScreenItemsPresenter(context)
 
     override fun outUpdateProgress(isInProgress: Boolean) {
         viewModel.isInProgress = isInProgress

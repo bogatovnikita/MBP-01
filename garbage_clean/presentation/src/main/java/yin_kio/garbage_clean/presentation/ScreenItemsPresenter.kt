@@ -2,9 +2,8 @@ package yin_kio.garbage_clean.presentation
 
 import android.content.Context
 import yin_kio.garbage_clean.domain.entities.GarbageType
-import yin_kio.garbage_clean.domain.out.DeleteFormOutItem
 
-class DeleteFormItemPresenter(
+class ScreenItemsPresenter(
     private val context: Context
 ) {
 

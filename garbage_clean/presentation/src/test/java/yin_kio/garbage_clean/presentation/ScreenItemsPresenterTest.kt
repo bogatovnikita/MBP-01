@@ -32,4 +32,16 @@ class ScreenItemsPresenterTest {
         assertEquals(context.getString(R.string.empty_folders), presenter.presentName(GarbageType.EmptyFolders))
     }
 
+    @Test
+    fun `test presentButtonName`(){
+        assertEquals(context.getString(R.string.go_to_main_screen), presenter.presentButtonName(true))
+        assertEquals(context.getString(R.string.delete), presenter.presentButtonName(false))
+    }
+
+    @Test
+    fun `test presentButtonBg`(){
+        assertEquals(general.R.drawable.bg_main_button_enabled, presenter.presentButtonBg(true))
+        assertEquals(general.R.drawable.bg_main_button_disabled, presenter.presentButtonBg(false))
+    }
+
 }

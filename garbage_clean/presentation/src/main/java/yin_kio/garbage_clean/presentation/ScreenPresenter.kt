@@ -6,7 +6,6 @@ import yin_kio.garbage_clean.domain.entities.FileSystemInfo
 import yin_kio.garbage_clean.domain.out.DeleteFormOut
 import yin_kio.garbage_clean.domain.out.DeleteProgressState
 import yin_kio.garbage_clean.domain.out.OutBoundary
-import yin_kio.garbage_clean.presentation.models.UiDeleteForm
 import yin_kio.garbage_clean.presentation.models.UiDeleteFromItem
 import yin_kio.garbage_clean.presentation.models.UiFileSystemInfo
 
@@ -15,26 +14,28 @@ class ScreenPresenter(
     private val viewModel: GarbageCleanViewModel
 ) : OutBoundary {
 
-    private val iconPresenter = ScreenItemsPresenter(context)
+    private val screenItemsPresenter = ScreenItemsPresenter(context)
 
     override fun outUpdateProgress(isInProgress: Boolean) {
-        viewModel.isInProgress = isInProgress
+        viewModel.setIsInProgress(isInProgress)
     }
 
     override fun outDeleteForm(deleteFormOut: DeleteFormOut) {
-        viewModel.setDeleteForm(
-            UiDeleteForm(
-                isAllSelected = deleteFormOut.isAllSelected,
-                canFree = formatFileSize(context, deleteFormOut.items.sumOf { it.size }),
-                items = deleteFormOut.items.map { UiDeleteFromItem(
-                    iconRes = iconPresenter.presentIcon(it.garbageType),
-                    name = iconPresenter.presentName(it.garbageType),
-                    size = formatFileSize(context, it.size)
-                ) }
-            )
-        )
+        viewModel.setDeleteFormItems(uiDeleteFromItems(deleteFormOut))
+        viewModel.setCanFreeVolume(formatFileSize(context, deleteFormOut.items.sumOf { it.size }))
+        viewModel.setIsAllSelected(deleteFormOut.isAllSelected)
+        viewModel.setButtonText(screenItemsPresenter.presentButtonName(deleteFormOut.items.isEmpty()))
+        viewModel.setButtonBgRes(screenItemsPresenter.presentButtonBg(deleteFormOut.canDelete))
     }
 
+    private fun uiDeleteFromItems(deleteFormOut: DeleteFormOut) =
+        deleteFormOut.items.map {
+            UiDeleteFromItem(
+                iconRes = screenItemsPresenter.presentIcon(it.garbageType),
+                name = screenItemsPresenter.presentName(it.garbageType),
+                size = formatFileSize(context, it.size)
+            )
+        }
 
 
     override fun outFileSystemInfo(fileSystemInfo: FileSystemInfo) {
@@ -47,8 +48,8 @@ class ScreenPresenter(
         )
     }
 
-    override fun outHasPermission(has: Boolean) {
-        viewModel.hasPermission = has
+    override fun outHasPermission(hasPermission: Boolean) {
+        viewModel.setHasPermission(hasPermission)
     }
 
     override fun outDeleteProgress(deleteProgressState: DeleteProgressState) {

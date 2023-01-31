@@ -4,16 +4,14 @@ import android.content.Context
 import android.text.format.Formatter.formatFileSize
 import io.mockk.spyk
 import io.mockk.verify
-import org.junit.Test
-
 import org.junit.Assert.*
+import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import yin_kio.garbage_clean.domain.entities.FileSystemInfo
 import yin_kio.garbage_clean.domain.out.DeleteFormOut
 import yin_kio.garbage_clean.domain.out.DeleteProgressState
-import yin_kio.garbage_clean.presentation.models.UiDeleteForm
 import yin_kio.garbage_clean.presentation.models.UiFileSystemInfo
 
 
@@ -51,19 +49,19 @@ class ScreenPresenterTest {
     @Test
     fun `test outUpdateProgress`(){
         presenter.outUpdateProgress(true)
-        verify { viewModel.isInProgress = true }
+        verify { viewModel.setIsInProgress(true) }
 
         presenter.outUpdateProgress(false)
-        verify { viewModel.isInProgress = false }
+        verify { viewModel.setIsInProgress(false) }
     }
 
     @Test
     fun `test outHasPermission`(){
         presenter.outHasPermission(true)
-        verify { viewModel.hasPermission = true }
+        verify { viewModel.setHasPermission(true) }
 
         presenter.outHasPermission(false)
-        verify { viewModel.hasPermission = false }
+        verify { viewModel.setHasPermission(false) }
     }
 
     @Test
@@ -79,12 +77,13 @@ class ScreenPresenterTest {
     fun `test outDeleteForm`(){
         val deleteFormOut = DeleteFormOut()
         presenter.outDeleteForm(deleteFormOut)
-        verify { viewModel.setDeleteForm(
-            UiDeleteForm(
-                isAllSelected = deleteFormOut.isAllSelected,
-                canFree = formatFileSize(context, 0),
-                items = listOf()
-        )) }
+        verify {
+            viewModel.setDeleteFormItems(emptyList())
+            viewModel.setCanFreeVolume(formatFileSize(context, 0))
+            viewModel.setIsAllSelected(deleteFormOut.isAllSelected)
+            viewModel.setButtonText(context.getString(R.string.go_to_main_screen))
+            viewModel.setButtonBgRes(general.R.drawable.bg_main_button_disabled)
+        }
     }
 
 }

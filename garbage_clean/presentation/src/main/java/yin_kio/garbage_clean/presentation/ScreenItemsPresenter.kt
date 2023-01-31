@@ -27,5 +27,21 @@ class ScreenItemsPresenter(
         }
     }
 
+    fun presentButtonName(deleteFormIsEmpty: Boolean) : String{
+        return if (deleteFormIsEmpty){
+            context.getString(R.string.go_to_main_screen)
+        } else {
+            context.getString(R.string.delete)
+        }
+    }
+
+    fun presentButtonBg(hasSelected: Boolean) : Int{
+        return if (hasSelected){
+            general.R.drawable.bg_main_button_enabled
+        } else {
+            general.R.drawable.bg_main_button_disabled
+        }
+    }
+
 
 }

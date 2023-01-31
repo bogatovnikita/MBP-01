@@ -7,7 +7,7 @@ interface OutBoundary {
     fun outUpdateProgress(isInProgress: Boolean)
     fun outDeleteForm(deleteFormOut: DeleteFormOut)
     fun outFileSystemInfo(fileSystemInfo: FileSystemInfo)
-    fun outHasPermission(has: Boolean)
+    fun outHasPermission(hasPermission: Boolean)
     fun outDeleteProgress(deleteProgressState: DeleteProgressState)
 
 }

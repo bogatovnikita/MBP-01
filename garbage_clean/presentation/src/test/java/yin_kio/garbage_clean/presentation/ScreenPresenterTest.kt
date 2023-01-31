@@ -20,7 +20,7 @@ class ScreenPresenterTest {
 
 
     private val context: Context = RuntimeEnvironment.getApplication()
-    private val viewModel: GarbageCleanViewModel = spyk()
+    private val viewModel: MutableScreenViewModel = spyk()
     private val presenter = ScreenPresenter(
         context, viewModel
     )

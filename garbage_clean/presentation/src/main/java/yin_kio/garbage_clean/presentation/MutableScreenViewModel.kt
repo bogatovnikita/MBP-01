@@ -4,7 +4,7 @@ import yin_kio.garbage_clean.domain.out.DeleteProgressState
 import yin_kio.garbage_clean.presentation.models.UiDeleteFromItem
 import yin_kio.garbage_clean.presentation.models.UiFileSystemInfo
 
-interface GarbageCleanViewModel {
+interface MutableScreenViewModel {
 
     fun setFileSystemInfo(uiFileSystemInfo: UiFileSystemInfo)
     fun setIsInProgress(isInProgress: Boolean)

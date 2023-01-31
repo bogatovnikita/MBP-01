@@ -11,7 +11,7 @@ import yin_kio.garbage_clean.presentation.models.UiFileSystemInfo
 
 class ScreenPresenter(
     private val context: Context,
-    private val viewModel: GarbageCleanViewModel
+    private val viewModel: MutableScreenViewModel
 ) : OutBoundary {
 
     private val screenItemsPresenter = ScreenItemsPresenter(context)

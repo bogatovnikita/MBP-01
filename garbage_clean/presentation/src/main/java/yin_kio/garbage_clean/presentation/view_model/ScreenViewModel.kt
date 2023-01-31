@@ -1,4 +1,4 @@
-package yin_kio.garbage_clean.presentation
+package yin_kio.garbage_clean.presentation.view_model
 
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

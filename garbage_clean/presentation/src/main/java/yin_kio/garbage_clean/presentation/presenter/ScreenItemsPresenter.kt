@@ -1,7 +1,8 @@
-package yin_kio.garbage_clean.presentation
+package yin_kio.garbage_clean.presentation.presenter
 
 import android.content.Context
 import yin_kio.garbage_clean.domain.entities.GarbageType
+import yin_kio.garbage_clean.presentation.R
 
 class ScreenItemsPresenter(
     private val context: Context

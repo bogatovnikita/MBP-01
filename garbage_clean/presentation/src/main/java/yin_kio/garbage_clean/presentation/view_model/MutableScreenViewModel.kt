@@ -1,4 +1,4 @@
-package yin_kio.garbage_clean.presentation
+package yin_kio.garbage_clean.presentation.view_model
 
 import yin_kio.garbage_clean.domain.out.DeleteProgressState
 import yin_kio.garbage_clean.presentation.models.UiDeleteFromItem

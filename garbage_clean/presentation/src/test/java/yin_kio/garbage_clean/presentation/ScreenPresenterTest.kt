@@ -13,6 +13,8 @@ import yin_kio.garbage_clean.domain.entities.FileSystemInfo
 import yin_kio.garbage_clean.domain.out.DeleteFormOut
 import yin_kio.garbage_clean.domain.out.DeleteProgressState
 import yin_kio.garbage_clean.presentation.models.UiFileSystemInfo
+import yin_kio.garbage_clean.presentation.presenter.ScreenPresenter
+import yin_kio.garbage_clean.presentation.view_model.MutableScreenViewModel
 
 
 @RunWith(RobolectricTestRunner::class)
@@ -22,8 +24,12 @@ class ScreenPresenterTest {
     private val context: Context = RuntimeEnvironment.getApplication()
     private val viewModel: MutableScreenViewModel = spyk()
     private val presenter = ScreenPresenter(
-        context, viewModel
+        context
     )
+
+    init {
+        presenter.viewModel = viewModel
+    }
 
 
 

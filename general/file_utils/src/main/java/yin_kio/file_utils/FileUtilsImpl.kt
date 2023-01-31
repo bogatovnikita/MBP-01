@@ -28,6 +28,31 @@ class FileUtilsImpl : FileUtils {
         return tempFiles
     }
 
+    override suspend fun getAllFilesAndFolders(folder: File): List<File> {
+        if (!folder.exists()) return listOf()
+        val files = folder.listFiles() ?: return listOf()
+
+        return getFilesAndFoldersRecursively(files)
+    }
+
+    private fun getFilesAndFoldersRecursively(files: Array<File>) : List<File> {
+        val res = mutableListOf<File>()
+
+        files.forEach { file ->
+            if (file.isDirectory){
+                file.listFiles()?.let {
+                    res.add(file)
+                    res.addAll(getFilesRecursively(it))
+                }
+            } else {
+                res.add(file)
+            }
+        }
+        return res
+    }
+
+
+
     override suspend fun copyFiles(files: List<File>, destination: File) {
         files.forEach { copyFile(it, destination) }
     }

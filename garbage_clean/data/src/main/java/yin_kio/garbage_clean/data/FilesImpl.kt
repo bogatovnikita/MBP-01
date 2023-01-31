@@ -14,6 +14,6 @@ class FilesImpl : Files {
     }
 
     override suspend fun getAll(): List<String> {
-        return fileUtils.getAllFiles(Environment.getExternalStorageDirectory()).map { it.absolutePath }
+        return fileUtils.getAllFilesAndFolders(Environment.getExternalStorageDirectory()).map { it.absolutePath }
     }
 }

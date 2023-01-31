@@ -39,9 +39,16 @@ class GarbageCleanFragment : Fragment(R.layout.fragment_garbage_clean) {
 
     private fun updateUi(it: ScreenState) {
         adapter.submitList(it.deleteFormItems)
+        showFileSystemInfo(it)
     }
 
-
+    private fun showFileSystemInfo(it: ScreenState) {
+        binding.fileSystemInfo.apply {
+            occupied.text = it.fileSystemInfo.occupied
+            available.text = it.fileSystemInfo.available
+            total.text = it.fileSystemInfo.total
+        }
+    }
 
 
     private fun ViewModel.screenViewModel() = ScreenViewModelFactory().create(

@@ -1,7 +1,6 @@
 package yin_kio.garbage_clean.presentation
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
@@ -23,8 +22,6 @@ class GarbageCleanFragment : Fragment(R.layout.fragment_garbage_clean) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.state.collect{
-                Log.d("!!!", "isInProgress: ${it.isInProgress}")
-                Log.d("!!!", "${it.hasPermission}")
 
             }
         }

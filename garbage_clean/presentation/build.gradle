@@ -45,7 +45,7 @@ dependencies {
     implementation project(':garbage_clean:data')
 
 //    implementation project(':ads')
-//    implementation project(':permissions_views')
+    implementation project(':permissions_views')
     implementation project(':general:lifecycle_aware')
     implementation project(':general:recycler_adapter')
     implementation project(':general:resources')

@@ -59,7 +59,8 @@ class GarbageCleanerUseCasesTest {
                 outBoundary = outBoundary,
                 mapper = mapper,
                 updateUseCase = updateUseCase,
-                ads = ads
+                ads = ads,
+                dispatcher = coroutineContext
             )
             testBody()
         }

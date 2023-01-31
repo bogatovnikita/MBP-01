@@ -1,6 +1,7 @@
 package yin_kio.garbage_clean.domain
 
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import yin_kio.garbage_clean.domain.entities.GarbageFiles
 import yin_kio.garbage_clean.domain.gateways.Ads
 import yin_kio.garbage_clean.domain.gateways.FileSystemInfoProvider
@@ -31,14 +32,16 @@ object GarbageCleanFactory {
             files = files,
             outBoundary = outBoundary,
             coroutineScope = coroutineScope,
-            UpdateUseCase(
+            dispatcher = Dispatchers.Default,
+            updateUseCase =  UpdateUseCase(
                 outBoundary = outBoundary,
                 coroutineScope = coroutineScope,
                 mapper = mapper,
                 garbageFiles = garbageFiles,
                 files = files,
                 fileSystemInfoProvider = fileSystemInfoProvider,
-                permissions = permissions
+                permissions = permissions,
+                dispatcher = Dispatchers.IO
             ),
             ads = ads
         )

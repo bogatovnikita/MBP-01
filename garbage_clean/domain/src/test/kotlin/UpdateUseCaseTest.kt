@@ -107,7 +107,8 @@ class UpdateUseCaseTest {
                 garbageFiles = garbageFiles,
                 fileSystemInfoProvider = fileSystemInfoProvider,
                 permissions = permissions,
-                files = files
+                files = files,
+                dispatcher = coroutineContext
             )
             testBody()
         }

@@ -10,6 +10,7 @@ import yin_kio.garbage_clean.domain.out.DeleteProgressState
 import yin_kio.garbage_clean.domain.out.OutBoundary
 import yin_kio.garbage_clean.domain.services.DeleteFormMapper
 import yin_kio.garbage_clean.domain.services.DeleteRequestInterpreter
+import kotlin.coroutines.CoroutineContext
 
 internal class GarbageCleanerUseCasesImpl(
     private val garbageFiles: GarbageFiles,
@@ -17,6 +18,7 @@ internal class GarbageCleanerUseCasesImpl(
     private val files: Files,
     private val outBoundary: OutBoundary,
     private val coroutineScope: CoroutineScope,
+    private val dispatcher: CoroutineContext,
     private val updateUseCase: UpdateUseCase,
     private val ads: Ads
 ) : GarbageCleanUseCases {
@@ -44,7 +46,7 @@ internal class GarbageCleanerUseCasesImpl(
     override fun update() = updateUseCase.update()
 
     private fun async(action: suspend () -> Unit){
-        coroutineScope.launch { action() }
+        coroutineScope.launch(dispatcher) { action() }
     }
 
 }

@@ -11,10 +11,12 @@ import yin_kio.garbage_clean.domain.gateways.Permissions
 import yin_kio.garbage_clean.domain.out.DeleteFormOut
 import yin_kio.garbage_clean.domain.out.DeleteProgressState
 import yin_kio.garbage_clean.domain.out.OutBoundary
+import kotlin.coroutines.CoroutineContext
 
 internal class UpdateUseCase(
     private val outBoundary: OutBoundary,
     private val coroutineScope: CoroutineScope,
+    private val dispatcher: CoroutineContext,
     private val mapper: DeleteFormMapper,
     private val garbageFiles: GarbageFiles,
     private val files: Files,
@@ -47,7 +49,7 @@ internal class UpdateUseCase(
 
 
     private fun async(action: suspend () -> Unit){
-        coroutineScope.launch { action() }
+        coroutineScope.launch(dispatcher) { action() }
     }
 
 }

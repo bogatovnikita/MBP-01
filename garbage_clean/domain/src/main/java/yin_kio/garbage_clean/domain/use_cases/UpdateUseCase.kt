@@ -1,18 +1,18 @@
-package yin_kio.garbage_clean.domain
+package yin_kio.garbage_clean.domain.use_cases
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import yin_kio.garbage_clean.domain.services.DeleteFormMapper
 import yin_kio.garbage_clean.domain.entities.FileSystemInfo
 import yin_kio.garbage_clean.domain.entities.GarbageFiles
 import yin_kio.garbage_clean.domain.gateways.FileSystemInfoProvider
 import yin_kio.garbage_clean.domain.gateways.Files
 import yin_kio.garbage_clean.domain.gateways.Permissions
-import yin_kio.garbage_clean.domain.out.DeleteFormMapper
 import yin_kio.garbage_clean.domain.out.DeleteFormOut
 import yin_kio.garbage_clean.domain.out.DeleteProgressState
 import yin_kio.garbage_clean.domain.out.OutBoundary
 
-class UpdateUseCase(
+internal class UpdateUseCase(
     private val outBoundary: OutBoundary,
     private val coroutineScope: CoroutineScope,
     private val mapper: DeleteFormMapper,

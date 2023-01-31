@@ -2,7 +2,7 @@ package yin_kio.garbage_clean.domain.entities
 
 import java.io.File
 
-class GarbageFiles : MutableMap<GarbageType, MutableSet<String>> by mutableMapOf() {
+internal class GarbageFiles : MutableMap<GarbageType, MutableSet<String>> by mutableMapOf() {
 
 
     private val apks = arrayOf(APK)

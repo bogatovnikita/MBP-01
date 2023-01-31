@@ -4,14 +4,14 @@ import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
-import yin_kio.garbage_clean.domain.GarbageCleanerUseCases
-import yin_kio.garbage_clean.domain.UpdateUseCase
+import yin_kio.garbage_clean.domain.use_cases.GarbageCleanerUseCasesImpl
+import yin_kio.garbage_clean.domain.use_cases.UpdateUseCase
 import yin_kio.garbage_clean.domain.entities.DeleteRequest
 import yin_kio.garbage_clean.domain.entities.GarbageFiles
 import yin_kio.garbage_clean.domain.entities.GarbageType
 import yin_kio.garbage_clean.domain.gateways.Ads
 import yin_kio.garbage_clean.domain.gateways.Files
-import yin_kio.garbage_clean.domain.out.DeleteFormMapper
+import yin_kio.garbage_clean.domain.services.DeleteFormMapper
 import yin_kio.garbage_clean.domain.out.DeleteFormOut
 import yin_kio.garbage_clean.domain.out.DeleteProgressState
 import yin_kio.garbage_clean.domain.out.OutBoundary
@@ -25,7 +25,7 @@ class GarbageCleanerUseCasesTest {
     private val mapper: DeleteFormMapper = mockk()
     private val updateUseCase: UpdateUseCase = mockk()
     private val ads: Ads = mockk()
-    private lateinit var useCases: GarbageCleanerUseCases
+    private lateinit var useCases: GarbageCleanerUseCasesImpl
     private val garbageFiles: GarbageFiles = spyk()
     private lateinit var deleteRequest: DeleteRequest
 
@@ -54,7 +54,7 @@ class GarbageCleanerUseCasesTest {
     private fun setupTest(testBody: suspend TestScope.() -> Unit){
         runTest {
             deleteRequest = DeleteRequest()
-            useCases = GarbageCleanerUseCases(
+            useCases = GarbageCleanerUseCasesImpl(
                 files = files,
                 garbageFiles = garbageFiles,
                 deleteRequest = deleteRequest,

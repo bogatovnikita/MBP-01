@@ -1,8 +1,10 @@
-package yin_kio.garbage_clean.domain.out
+package yin_kio.garbage_clean.domain.services
 
 import yin_kio.garbage_clean.domain.entities.DeleteForm
+import yin_kio.garbage_clean.domain.out.DeleteFormOut
+import yin_kio.garbage_clean.domain.out.DeleteFormOutItem
 
-class DeleteFormMapper {
+internal class DeleteFormMapper {
 
     fun createDeleteFormOut(deleteForm: DeleteForm) : DeleteFormOut {
         return DeleteFormOut(

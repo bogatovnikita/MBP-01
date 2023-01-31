@@ -1,9 +1,9 @@
-package yin_kio.garbage_clean.domain
+package yin_kio.garbage_clean.domain.services
 
 import yin_kio.garbage_clean.domain.entities.DeleteRequest
 import yin_kio.garbage_clean.domain.entities.GarbageFiles
 
-class DeleteRequestInterpreter(
+internal class DeleteRequestInterpreter(
     private val garbageFiles: GarbageFiles
 ) {
 

@@ -1,6 +1,6 @@
 package yin_kio.garbage_clean.domain.entities
 
-data class FormItem(
+internal data class FormItem(
     val garbageType: GarbageType,
     val size: Long
 ){

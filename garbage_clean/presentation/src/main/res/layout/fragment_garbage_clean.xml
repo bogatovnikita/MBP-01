@@ -90,7 +90,7 @@
 
 
             <androidx.recyclerview.widget.RecyclerView
-                android:visibility="gone"
+                android:visibility="visible"
                 android:layout_weight="1"
                 android:id="@+id/recycler"
                 android:paddingHorizontal="24dp"
@@ -98,10 +98,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 tools:listitem="@layout/list_item_garbage"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 android:orientation="vertical"
                 tools:itemCount="5"/>
 
             <LinearLayout
+                android:visibility="gone"
                 android:id="@+id/delete_has_been"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

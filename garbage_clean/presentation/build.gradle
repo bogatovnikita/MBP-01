@@ -32,14 +32,20 @@ android {
     buildFeatures{
         viewBinding true
     }
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
 }
 
 dependencies {
 
     implementation project(':garbage_clean:domain')
+    implementation project(':garbage_clean:data')
 
 //    implementation project(':ads')
-//    implementation project(':permissions_views')
+    implementation project(':permissions_views')
     implementation project(':general:lifecycle_aware')
     implementation project(':general:recycler_adapter')
     implementation project(':general:resources')
@@ -50,8 +56,16 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.5.1'
     implementation 'com.google.android.material:material:1.8.0'
     testImplementation 'junit:junit:4.13.2'
+    testImplementation 'io.mockk:mockk:1.13.3'
+    testImplementation 'org.robolectric:robolectric:4.8'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+
+    def nav_version = "2.5.3"
+
+    implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
+    implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
+
 
     def fragment_version = "1.5.5"
     debugImplementation "androidx.fragment:fragment-testing:$fragment_version"

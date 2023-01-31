@@ -1,6 +1,6 @@
 package yin_kio.garbage_clean.domain.entities
 
-class DeleteForm : MutableSet<FormItem> by mutableSetOf(){
+internal class DeleteForm : MutableSet<FormItem> by mutableSetOf(){
 
     val canFree: Long get() = sumOf { it.size }
 

@@ -4,13 +4,13 @@ import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
-import yin_kio.garbage_clean.domain.UpdateUseCase
+import yin_kio.garbage_clean.domain.use_cases.UpdateUseCase
 import yin_kio.garbage_clean.domain.entities.FileSystemInfo
 import yin_kio.garbage_clean.domain.entities.GarbageFiles
 import yin_kio.garbage_clean.domain.gateways.FileSystemInfoProvider
 import yin_kio.garbage_clean.domain.gateways.Files
 import yin_kio.garbage_clean.domain.gateways.Permissions
-import yin_kio.garbage_clean.domain.out.DeleteFormMapper
+import yin_kio.garbage_clean.domain.services.DeleteFormMapper
 import yin_kio.garbage_clean.domain.out.DeleteFormOut
 import yin_kio.garbage_clean.domain.out.DeleteProgressState
 import yin_kio.garbage_clean.domain.out.OutBoundary
@@ -107,7 +107,8 @@ class UpdateUseCaseTest {
                 garbageFiles = garbageFiles,
                 fileSystemInfoProvider = fileSystemInfoProvider,
                 permissions = permissions,
-                files = files
+                files = files,
+                dispatcher = coroutineContext
             )
             testBody()
         }

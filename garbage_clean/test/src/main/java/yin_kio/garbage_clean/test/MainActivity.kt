@@ -2,7 +2,7 @@ package yin_kio.garbage_clean.test
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import yin_kio.garbage_clean.presentation.GarbageCleanFragment
+import yin_kio.garbage_clean.presentation.views.GarbageCleanParentFragment
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -10,7 +10,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, GarbageCleanFragment())
+            .replace(R.id.fragment_container, GarbageCleanParentFragment())
             .commit()
 
     }

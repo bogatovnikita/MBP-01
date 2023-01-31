@@ -3,6 +3,7 @@ package yin_kio.garbage_clean.presentation.views
 import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.lifecycleScope
@@ -40,6 +41,15 @@ class GarbageCleanFragment : Fragment(R.layout.fragment_garbage_clean) {
     private fun updateUi(it: ScreenState) {
         adapter.submitList(it.deleteFormItems)
         showFileSystemInfo(it)
+        showButton(it)
+    }
+
+    private fun showButton(it: ScreenState) {
+        binding.delete.apply {
+            isVisible = it.buttonText.isNotEmpty()
+            text = it.buttonText
+            setBackgroundResource(it.buttonBgRes)
+        }
     }
 
     private fun showFileSystemInfo(it: ScreenState) {

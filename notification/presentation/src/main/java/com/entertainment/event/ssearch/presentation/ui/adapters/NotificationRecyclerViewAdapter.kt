@@ -2,10 +2,12 @@ package com.entertainment.event.ssearch.presentation.ui.adapters
 
 import android.net.Uri
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.aitsuki.swipe.SwipeLayout
 import com.bumptech.glide.Glide
 import com.entertainment.event.ssearch.presentation.R
 import com.entertainment.event.ssearch.presentation.databinding.ItemNotificationBinding
@@ -14,10 +16,12 @@ import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-typealias OnNotificationClick = (NotificationUi) -> Unit
+typealias OnNotificationClickListener = (NotificationUi) -> Unit
+typealias OnSwipeListener = (NotificationUi) -> Unit
 
 class NotificationRecyclerViewAdapter(
-    private val listener: OnNotificationClick,
+    private val onClick: OnNotificationClickListener,
+    private val onSwipe: OnSwipeListener,
 ) :
     ListAdapter<NotificationUi, NotificationRecyclerViewAdapter.NotificationViewHolder>(
         NotificationDiffUtilCallback()
@@ -26,7 +30,7 @@ class NotificationRecyclerViewAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NotificationViewHolder {
         val binding =
             ItemNotificationBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return NotificationViewHolder(binding, listener)
+        return NotificationViewHolder(binding, onClick, onSwipe)
     }
 
     override fun onBindViewHolder(holder: NotificationViewHolder, position: Int) {
@@ -36,7 +40,8 @@ class NotificationRecyclerViewAdapter(
 
     class NotificationViewHolder(
         private val binding: ItemNotificationBinding,
-        private val listener: OnNotificationClick,
+        private val onClick: OnNotificationClickListener,
+        private val onSwipe: OnSwipeListener,
     ) :
         RecyclerView.ViewHolder(binding.root) {
 
@@ -48,7 +53,14 @@ class NotificationRecyclerViewAdapter(
                 binding.tvName.text = setTitle(title, name)
                 binding.tvBody.text = body
                 binding.tvTime.text = setTime(time)
-                binding.root.setOnClickListener { listener(state) }
+                binding.root.setOnClickListener { onClick(state) }
+                binding.swipeLayout.addListener(object : SwipeLayout.Listener {
+                    override fun onSwipe(menuView: View, swipeOffset: Float) {
+                        super.onSwipe(menuView, swipeOffset)
+                        if (swipeOffset >= 1.0)
+                            onSwipe(state)
+                    }
+                })
             }
         }
 

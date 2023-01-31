@@ -1,6 +1,7 @@
 package com.entertainment.event.ssearch.domain.use_cases
 
 import android.app.Application
+import com.entertainment.event.ssearch.domain.dnd.DNDController
 import com.entertainment.event.ssearch.domain.mappers.mapToApp
 import com.entertainment.event.ssearch.domain.models.AppWithNotifications
 import com.entertainment.event.ssearch.domain.permission.Permission
@@ -19,6 +20,7 @@ class NotificationSettingsUseCases @Inject constructor(
     private val context: Application,
     private val permission: Permission,
     private val appsProvide: AppsProvider,
+    private val dndController: DNDController,
     private val serviceController: ServiceController,
     private val appsWithNotifications: AppWithNotificationsRepository,
 ) {
@@ -26,7 +28,8 @@ class NotificationSettingsUseCases @Inject constructor(
     suspend fun switchAppModeDisturb(packageName: String, isSwitched: Boolean) =
         apps.setSwitched(packageName, isSwitched)
 
-    suspend fun getDisturbMode(): Boolean = settings.isDisturbModeSwitched()
+    suspend fun getDisturbMode(): Boolean =
+        settings.isDisturbModeSwitched() && !dndController.isDNDModeOff()
 
     fun hasServicePermission() = permission.hasServicePermission()
 
@@ -36,8 +39,14 @@ class NotificationSettingsUseCases @Inject constructor(
 
     suspend fun isAllAppsLimited(): Boolean = settings.isAllAppsLimited()
 
-    suspend fun setGeneralDisturbMode(isSwitched: Boolean) =
+    suspend fun setGeneralDisturbMode(isSwitched: Boolean) {
         settings.switchOffDisturbMode(isSwitched)
+        if (isSwitched) {
+            dndController.setDNDModeOn()
+        } else {
+            dndController.setDNDModeOff()
+        }
+    }
 
     suspend fun getAppsInfo(): Flow<List<AppWithNotifications>> {
         return if (permission.hasServicePermission()) {

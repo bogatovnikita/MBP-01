@@ -27,9 +27,14 @@ class MissedNotificationsFragment : Fragment(R.layout.fragment_missed_notificati
     private val viewModel: MissedNotificationViewModel by viewModels()
 
     private val adapter: NotificationRecyclerViewAdapter =
-        NotificationRecyclerViewAdapter { notification ->
-            viewModel.obtainEvent(MissedNotificationEvent.OpenAppByPackageName(notification))
-        }
+        NotificationRecyclerViewAdapter(
+            onClick = { notification ->
+                viewModel.obtainEvent(MissedNotificationEvent.OpenAppByPackageName(notification))
+            },
+            onSwipe = { notification ->
+                viewModel.obtainEvent(MissedNotificationEvent.DeleteNotification(notification))
+            }
+        )
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -59,11 +64,10 @@ class MissedNotificationsFragment : Fragment(R.layout.fragment_missed_notificati
             btnGoBack.setOnClickListener { findNavController().popBackStack() }
             btnSettings.setOnClickListener { findNavController().popBackStack() }
             binding.btnCleanAll.setCanDeleteListener { isCanDelete ->
-                if (isCanDelete)
-                    viewModel.obtainEvent(MissedNotificationEvent.CleanAll)
+                viewModel.obtainEvent(MissedNotificationEvent.DeleteAll(isCanDelete))
             }
             binding.root.setOnClickListener {
-                binding.btnCleanAll.hideButton()
+                binding.btnCleanAll.hideButton() // TODO есть стандартное расширение isVisible
             }
             binding.btnMissedNotifications.setOnClickListener {
                 binding.btnCleanAll.hideButton()
@@ -74,7 +78,8 @@ class MissedNotificationsFragment : Fragment(R.layout.fragment_missed_notificati
             binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                     super.onScrollStateChanged(recyclerView, newState)
-                    binding.btnCleanAll.hideButton()
+                    binding.btnCleanAll.hideButton() // TODO Высокая связность между вьюшками: этот слушатель зависит от кнопки, как и другие.
+                    // TODO в качестве посредника лучше использовать вьюмодель, это снизит связность
                 }
             })
         }

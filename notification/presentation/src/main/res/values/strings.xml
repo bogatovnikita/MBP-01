@@ -21,4 +21,5 @@
     <string name="notification_manager_clearing_notification">Очищаем шторку…</string>
     <string name="notification_manager_now">Сейчас</string>
     <string name="notification_manager_min_ago">%s мин. назад</string>
+    <string name="notification_manager_delete">Удалить</string>
 </resources>

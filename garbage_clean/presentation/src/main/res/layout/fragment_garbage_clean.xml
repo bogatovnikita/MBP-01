@@ -141,7 +141,7 @@
                     tools:ignore="UseCompoundDrawables">
 
                     <ImageView
-                        android:contentDescription="@string/delete_has_been"
+                        android:contentDescription="@string/your_phone_is_clean"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:srcCompat="@drawable/delete_has_been"/>
@@ -149,7 +149,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/delete_has_been"
+                        android:text="@string/your_phone_is_clean"
                         android:gravity="center"
                         android:textAppearance="@style/Text.Body_1.2"
                         android:textColor="@color/gray"/>

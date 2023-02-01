@@ -27,6 +27,9 @@ class GarbageCleanFragment : Fragment(R.layout.fragment_garbage_clean) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.recycler.adapter = adapter
+
+        binding.selectAll.setOnClickListener { viewModel.switchSelectAll() }
+
         setupObserver()
     }
 
@@ -75,8 +78,9 @@ class GarbageCleanFragment : Fragment(R.layout.fragment_garbage_clean) {
             icon.setImageDrawable(ContextCompat.getDrawable(requireContext(), item.iconRes))
             name.text = item.name
             size.text = item.size
-            checkbox.isChecked
-        }
+            checkbox.isChecked = item.isSelected
+        },
+        areItemsTheSame = {old, new -> old.name == new.name}
     )
 
 

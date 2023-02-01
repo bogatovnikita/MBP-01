@@ -37,7 +37,8 @@ class ScreenPresenter(
             UiDeleteFromItem(
                 iconRes = screenItemsPresenter.presentIcon(it.garbageType),
                 name = screenItemsPresenter.presentName(it.garbageType),
-                size = formatFileSize(context, it.size)
+                size = formatFileSize(context, it.size),
+                isSelected =  it.isSelected
             )
         }
 

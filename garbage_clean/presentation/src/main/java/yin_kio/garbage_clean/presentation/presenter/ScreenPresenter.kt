@@ -56,7 +56,7 @@ class ScreenPresenter(
     }
 
     private fun occupiedPercents(fileSystemInfo: FileSystemInfo) =
-        ((fileSystemInfo.occupied.toFloat() / fileSystemInfo.total) * 100).toInt()
+        ((fileSystemInfo.occupied.toFloat() / fileSystemInfo.total))
 
     override fun outHasPermission(hasPermission: Boolean) {
         viewModel?.setHasPermission(hasPermission)

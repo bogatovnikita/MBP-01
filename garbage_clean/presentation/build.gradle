@@ -49,6 +49,7 @@ dependencies {
     implementation project(':general:lifecycle_aware')
     implementation project(':general:recycler_adapter')
     implementation project(':general:resources')
+    implementation project(':rect_progress_bar')
 
     implementation 'com.github.kirich1409:viewbindingpropertydelegate:1.5.6'
 

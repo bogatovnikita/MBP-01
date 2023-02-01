@@ -44,7 +44,7 @@ class ScreenPresenterTest {
             occupied = formatFileSize(context, input.occupied),
             available = formatFileSize(context, input.available),
             total = formatFileSize(context, input.total),
-            occupiedPercents = 10
+            occupiedPercents = 0.1f
         )
 
         presenter.outFileSystemInfo(input)

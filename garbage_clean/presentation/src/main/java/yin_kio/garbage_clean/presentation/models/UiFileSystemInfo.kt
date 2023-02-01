@@ -4,5 +4,5 @@ data class UiFileSystemInfo(
     val occupied: String = "",
     val available: String = "",
     val total: String = "",
-    val occupiedPercents: Int = 0
+    val occupiedPercents: Float = 0f
 )

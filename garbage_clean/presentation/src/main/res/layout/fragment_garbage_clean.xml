@@ -30,7 +30,8 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -89,45 +90,73 @@
                 android:textColor="@color/gray"/>
 
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:visibility="visible"
-                android:layout_weight="1"
-                android:id="@+id/recycler"
-                android:paddingHorizontal="24dp"
-                android:clipToPadding="false"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                tools:listitem="@layout/list_item_garbage"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                android:orientation="vertical"
-                tools:itemCount="5"/>
-
-            <LinearLayout
-                android:visibility="gone"
-                android:id="@+id/delete_has_been"
+            <LinearLayout android:id="@+id/progress_plate"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="vertical"
+                android:layout_gravity="center"
                 android:gravity="center"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="16dp"
-                tools:ignore="UseCompoundDrawables">
+                android:visibility="visible"
+                android:elevation="8dp">
 
                 <ImageView
-                    android:contentDescription="@string/delete_has_been"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    app:srcCompat="@drawable/ic_spinner"
+                    android:layout_marginBottom="8dp"/>
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/delete_has_been"/>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/delete_has_been"
-                    android:gravity="center"
-                    android:textAppearance="@style/Text.Body_1.2"
+                    android:text="@string/device_scanning"
+                    android:textAppearance="@style/Text.Subtitle_1.2"
                     android:textColor="@color/gray"/>
 
             </LinearLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <androidx.recyclerview.widget.RecyclerView android:id="@+id/recycler"
+                    android:visibility="gone"
+                    android:paddingHorizontal="24dp"
+                    android:clipToPadding="false"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    tools:listitem="@layout/list_item_garbage"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    android:orientation="vertical"
+                    tools:itemCount="5"/>
+
+                <LinearLayout android:id="@+id/delete_has_been"
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginTop="16dp"
+                    tools:ignore="UseCompoundDrawables">
+
+                    <ImageView
+                        android:contentDescription="@string/delete_has_been"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/delete_has_been"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/delete_has_been"
+                        android:gravity="center"
+                        android:textAppearance="@style/Text.Body_1.2"
+                        android:textColor="@color/gray"/>
+
+                </LinearLayout>
+
+            </FrameLayout>
+
+
 
         </LinearLayout>
 

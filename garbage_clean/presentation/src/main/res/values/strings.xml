@@ -19,4 +19,6 @@
     <string name="delete_progress_title">Удаляем мусорные файлы</string>
     <string name="delete_has_been">Вы недавно очистили свой телефон от всех мусорных файлов\n\nОчищайте свой телефон регулярно, чтобы не засорять память и обеспечить быструю работу устройства</string>
     <string name="go_to_main_screen">На главный экран</string>
+    <string name="device_scanning">Сканируем устройство...</string>
+
 </resources>

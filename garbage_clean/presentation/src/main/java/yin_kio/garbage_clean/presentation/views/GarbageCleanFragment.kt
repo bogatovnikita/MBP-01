@@ -74,11 +74,13 @@ class GarbageCleanFragment : Fragment(R.layout.fragment_garbage_clean) {
 
 
     private fun adapter() = recyclerAdapter<UiDeleteFromItem, ListItemGarbageBinding>(
-        onBind = { item, holder ->
+        onBind = { item, _ ->
             icon.setImageDrawable(ContextCompat.getDrawable(requireContext(), item.iconRes))
             name.text = item.name
             size.text = item.size
             checkbox.isChecked = item.isSelected
+            root.setOnClickListener { viewModel.switchSelection(item.garbageType) }
+            checkbox.setOnClickListener { viewModel.switchSelection(item.garbageType) }
         },
         areItemsTheSame = {old, new -> old.name == new.name}
     )

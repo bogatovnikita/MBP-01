@@ -85,6 +85,7 @@ class GarbageCleanerUseCasesTest {
         wait()
 
         coVerify { garbageFiles.deleteForm.switchSelection(GarbageType.Apk) }
+        coVerify { outBoundary.outDeleteForm(DeleteFormOut()) }
     }
 
     @Test

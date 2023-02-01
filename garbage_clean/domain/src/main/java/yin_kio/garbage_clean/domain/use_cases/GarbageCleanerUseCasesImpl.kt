@@ -27,12 +27,18 @@ internal class GarbageCleanerUseCasesImpl(
 
     override fun switchSelectAll() = async {
         garbageFiles.deleteForm.switchSelectAll()
-        val deleteFormOut = mapper.createDeleteFormOut(garbageFiles.deleteForm)
-        outBoundary.outDeleteForm(deleteFormOut)
+        updateDeleteForm()
     }
     override fun switchSelection(garbageType: GarbageType) = async {
         garbageFiles.deleteForm.switchSelection(garbageType)
+        updateDeleteForm()
     }
+
+    private fun updateDeleteForm() {
+        val deleteFormOut = mapper.createDeleteFormOut(garbageFiles.deleteForm)
+        outBoundary.outDeleteForm(deleteFormOut)
+    }
+
     override fun deleteIfCan() = async{
         val deleteRequest = garbageFiles.deleteForm.deleteRequest
         if (deleteRequest.isNotEmpty()) {

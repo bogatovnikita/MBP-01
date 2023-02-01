@@ -38,7 +38,8 @@ class ScreenPresenter(
                 iconRes = screenItemsPresenter.presentIcon(it.garbageType),
                 name = screenItemsPresenter.presentName(it.garbageType),
                 size = formatFileSize(context, it.size),
-                isSelected =  it.isSelected
+                isSelected =  it.isSelected,
+                garbageType = it.garbageType
             )
         }
 

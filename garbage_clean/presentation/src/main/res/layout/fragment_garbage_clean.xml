@@ -90,28 +90,28 @@
                 android:textColor="@color/gray"/>
 
 
-<!--            <LinearLayout android:id="@+id/progress_plate"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:orientation="vertical"-->
-<!--                android:layout_gravity="center"-->
-<!--                android:gravity="center"-->
-<!--                android:visibility="visible"-->
-<!--                android:elevation="8dp">-->
+            <LinearLayout android:id="@+id/progress_plate"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:visibility="visible"
+                android:elevation="8dp">
 
-<!--                <ImageView-->
-<!--                    android:layout_width="32dp"-->
-<!--                    android:layout_height="32dp"-->
-<!--                    app:srcCompat="@drawable/ic_spinner"-->
-<!--                    android:layout_marginBottom="8dp"/>-->
-<!--                <TextView-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:text="@string/device_scanning"-->
-<!--                    android:textAppearance="@style/Text.Subtitle_1.2"-->
-<!--                    android:textColor="@color/gray"/>-->
+                <ImageView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    app:srcCompat="@drawable/ic_spinner"
+                    android:layout_marginBottom="8dp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/device_scanning"
+                    android:textAppearance="@style/Text.Subtitle_1.2"
+                    android:textColor="@color/gray"/>
 
-<!--            </LinearLayout>-->
+            </LinearLayout>
 
             <FrameLayout
                 android:layout_width="match_parent"

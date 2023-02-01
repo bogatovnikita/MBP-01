@@ -1,6 +1,7 @@
 package yin_kio.garbage_clean.domain.use_cases
 
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import yin_kio.garbage_clean.domain.entities.GarbageFiles
 import yin_kio.garbage_clean.domain.entities.GarbageType
@@ -45,6 +46,7 @@ internal class GarbageCleanerUseCasesImpl(
             ads.preloadAd()
             outBoundary.outDeleteProgress(DeleteProgressState.Progress)
             files.delete(interpreter.interpret(deleteRequest))
+            delay(8000)
             outBoundary.outDeleteProgress(DeleteProgressState.Complete)
         }
     }

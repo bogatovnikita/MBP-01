@@ -28,6 +28,7 @@ class GarbageCleanFragment : Fragment(R.layout.fragment_garbage_clean) {
         binding.recycler.adapter = adapter
 
         binding.selectAll.setOnClickListener { viewModel.switchSelectAll() }
+        binding.selectAllText.setOnClickListener { viewModel.switchSelectAll() }
         binding.delete.setOnClickListener { viewModel.deleteIfCan() }
 
         setupObserver()

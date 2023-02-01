@@ -8,7 +8,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import jamycake.lifecycle_aware.lifecycleAware
+import yin_kio.garbage_clean.domain.out.DeleteProgressState
 import yin_kio.garbage_clean.presentation.R
+import yin_kio.garbage_clean.presentation.models.ScreenState
 import yin_kio.garbage_clean.presentation.view_model.ObservableScreenViewModel
 import yin_kio.garbage_clean.presentation.view_model.ScreenViewModelFactory
 
@@ -22,26 +24,32 @@ class GarbageCleanParentFragment : Fragment(R.layout.fragment_parent) {
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.state.collect{
-                handlePermission(it.hasPermission)
+                showPermissionScreen(it.hasPermission)
+                showDeleteProgress(it)
             }
         }
 
     }
 
-    private fun handlePermission(
+    private fun showDeleteProgress(it: ScreenState) {
+        if (it.deleteProgressState == DeleteProgressState.Progress) {
+            navController.navigate(R.id.deleteProgressDialog)
+        }
+    }
+
+    private fun showPermissionScreen(
         hasPermission: Boolean
     ) {
         if (!hasPermission) {
             navController.navigate(R.id.permissionFragment)
-        } else if (navController.destinationIs(R.id.permissionFragment)) {
+        } else if (destinationIs(R.id.permissionFragment)) {
             navController.navigateUp()
         }
     }
 
-    private fun NavController.destinationIs(id: Int) : Boolean{
-        return currentDestination?.id == id
+    private fun destinationIs(id: Int) : Boolean{
+        return navController.currentDestination?.id == id
     }
-
 
     private fun ViewModel.screenViewModel() = ScreenViewModelFactory().create(
         applicationContext = requireActivity().applicationContext,

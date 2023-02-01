@@ -5,7 +5,6 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.lifecycleScope
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.recycler_adapter.recyclerAdapter
@@ -16,12 +15,12 @@ import yin_kio.garbage_clean.presentation.databinding.ListItemGarbageBinding
 import yin_kio.garbage_clean.presentation.models.ScreenState
 import yin_kio.garbage_clean.presentation.models.UiDeleteFromItem
 import yin_kio.garbage_clean.presentation.view_model.ObservableScreenViewModel
-import yin_kio.garbage_clean.presentation.view_model.ScreenViewModelFactory
+import yin_kio.garbage_clean.presentation.view_model.parentViewModel
 
 class GarbageCleanFragment : Fragment(R.layout.fragment_garbage_clean) {
 
     private val binding: FragmentGarbageCleanBinding by viewBinding()
-    private val viewModel: ObservableScreenViewModel by lifecycleAware { screenViewModel() }
+    private val viewModel: ObservableScreenViewModel by lifecycleAware { parentViewModel() }
 
     private val adapter by lazy { adapter() }
 
@@ -66,13 +65,6 @@ class GarbageCleanFragment : Fragment(R.layout.fragment_garbage_clean) {
             total.text = it.fileSystemInfo.total
         }
     }
-
-
-    private fun ViewModel.screenViewModel() = ScreenViewModelFactory().create(
-        applicationContext = requireActivity().applicationContext,
-        androidViewModel = this
-    )
-
 
     private fun adapter() = recyclerAdapter<UiDeleteFromItem, ListItemGarbageBinding>(
         onBind = { item, _ ->

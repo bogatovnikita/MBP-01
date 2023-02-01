@@ -7,13 +7,13 @@
     <fragment
         android:id="@+id/garbageCleanFragment"
         android:name="yin_kio.garbage_clean.presentation.views.GarbageCleanFragment"
-        android:label="GarbageCleanFragment" >
-        <action
-            android:id="@+id/action_garbageCleanFragment_to_garbageCleanPermissionFragment"
-            app:destination="@id/permissionFragment" />
-    </fragment>
+        android:label="GarbageCleanFragment" />
     <fragment
         android:id="@+id/permissionFragment"
         android:name="yin_kio.garbage_clean.presentation.views.GarbageCleanPermissionFragment"
         android:label="GarbageCleanPermissionFragment" />
+    <dialog
+        android:id="@+id/deleteProgressDialog"
+        android:name="yin_kio.garbage_clean.presentation.views.DeleteProgressDialog"
+        android:label="DeleteProgressDialog" />
 </navigation>

@@ -1,6 +1,7 @@
 package yin_kio.garbage_clean.presentation.presenter
 
 import android.content.Context
+import android.text.format.Formatter.formatFileSize
 import yin_kio.garbage_clean.domain.entities.GarbageType
 import yin_kio.garbage_clean.presentation.R
 
@@ -42,6 +43,10 @@ class ScreenItemsPresenter(
         } else {
             general.R.drawable.bg_main_button_disabled
         }
+    }
+
+    fun presentCanFree(size: Long) : String{
+        return context.getString(R.string.can_free, formatFileSize(context, size))
     }
 
 

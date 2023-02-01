@@ -25,8 +25,7 @@ class ScreenPresenter(
     override fun outDeleteForm(deleteFormOut: DeleteFormOut) {
         viewModel?.apply {
             setDeleteFormItems(uiDeleteFromItems(deleteFormOut))
-
-            setCanFreeVolume(formatFileSize(context, deleteFormOut.items.sumOf { it.size }))
+            setCanFreeSize(screenItemsPresenter.presentCanFree(deleteFormOut.items.sumOf { it.size }))
             setIsAllSelected(deleteFormOut.isAllSelected)
             setButtonText(screenItemsPresenter.presentButtonName(deleteFormOut.items.isEmpty()))
             setButtonBgRes(screenItemsPresenter.presentButtonBg(deleteFormOut.canDelete))

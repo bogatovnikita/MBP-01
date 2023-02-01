@@ -85,10 +85,11 @@ class ScreenPresenterTest {
         presenter.outDeleteForm(deleteFormOut)
         verify {
             viewModel.setDeleteFormItems(emptyList())
-            viewModel.setCanFreeVolume(formatFileSize(context, 0))
+            viewModel.setCanFreeSize(formatFileSize(context, 0))
             viewModel.setIsAllSelected(deleteFormOut.isAllSelected)
             viewModel.setButtonText(context.getString(R.string.go_to_main_screen))
             viewModel.setButtonBgRes(general.R.drawable.bg_main_button_disabled)
+            viewModel.setCanFreeSize(context.getString(R.string.can_free, formatFileSize(context, 0)))
         }
     }
 

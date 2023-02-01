@@ -12,7 +12,7 @@ interface MutableScreenViewModel {
     fun setDeleteProgress(deleteProgressState: DeleteProgressState)
     fun setDeleteFormItems(deleteFormItems: List<UiDeleteFromItem>)
     fun setIsAllSelected(isAllSelected: Boolean)
-    fun setCanFreeVolume(canFreeVolume: String)
+    fun setCanFreeSize(canFreeVolume: String)
     fun setButtonText(text: String)
     fun setButtonBgRes(bgRes: Int)
 

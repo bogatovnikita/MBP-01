@@ -48,7 +48,7 @@ class ScreenViewModel(
         _state.value = state.value.copy(isAllSelected = isAllSelected)
     }
 
-    override fun setCanFreeVolume(canFreeVolume: String) {
+    override fun setCanFreeSize(canFreeVolume: String) {
         _state.value = state.value.copy(canFreeVolume = canFreeVolume)
     }
 

@@ -1,6 +1,7 @@
 package yin_kio.garbage_clean.presentation
 
 import android.content.Context
+import android.text.format.Formatter.formatFileSize
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -43,6 +44,11 @@ class ScreenItemsPresenterTest {
     fun `test presentButtonBg`(){
         assertEquals(general.R.drawable.bg_main_button_enabled, presenter.presentButtonBg(true))
         assertEquals(general.R.drawable.bg_main_button_disabled, presenter.presentButtonBg(false))
+    }
+
+    @Test
+    fun `test presentCanFree`(){
+        assertEquals(context.getString(R.string.can_free, formatFileSize(context, 0)), presenter.presentCanFree(0))
     }
 
 }

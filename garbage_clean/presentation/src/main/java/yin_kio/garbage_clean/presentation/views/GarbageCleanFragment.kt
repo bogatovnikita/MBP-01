@@ -42,6 +42,8 @@ class GarbageCleanFragment : Fragment(R.layout.fragment_garbage_clean) {
     }
 
     private fun updateUi(it: ScreenState) {
+        binding.selectAll.isChecked = it.isAllSelected
+
         adapter.submitList(it.deleteFormItems)
 
         binding.progressPlate.isVisible = it.isInProgress

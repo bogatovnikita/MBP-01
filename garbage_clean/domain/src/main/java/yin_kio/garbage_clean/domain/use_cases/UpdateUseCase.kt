@@ -30,7 +30,10 @@ internal class UpdateUseCase(
             outBoundary.outHasPermission(true)
             outBoundary.outUpdateProgress(true)
             outBoundary.outFileSystemInfo(getFileSystemInfo())
+
             garbageFiles.setFiles(files.getAll())
+            garbageFiles.deleteForm.switchSelectAll()
+
             outBoundary.outDeleteForm(getDeleteFormOut())
             outBoundary.outUpdateProgress(false)
         } else {

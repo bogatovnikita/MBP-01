@@ -47,6 +47,9 @@ class GarbageCleanFragment : Fragment(R.layout.fragment_garbage_clean) {
         binding.progressPlate.isVisible = it.isInProgress
         binding.canFree.text = it.canFreeVolume
 
+        binding.recycler.isVisible = it.deleteFormItems.isNotEmpty()
+        binding.deleteHasBeen.isVisible = it.deleteFormItems.isEmpty()
+
         showFileSystemInfo(it)
         showButton(it)
     }

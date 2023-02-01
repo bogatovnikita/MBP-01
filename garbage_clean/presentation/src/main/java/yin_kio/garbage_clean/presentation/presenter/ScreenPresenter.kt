@@ -49,10 +49,14 @@ class ScreenPresenter(
             UiFileSystemInfo(
                 occupied = formatFileSize(context, fileSystemInfo.occupied),
                 available = formatFileSize(context, fileSystemInfo.available),
-                total = formatFileSize(context, fileSystemInfo.total)
+                total = formatFileSize(context, fileSystemInfo.total),
+                occupiedPercents = occupiedPercents(fileSystemInfo)
             )
         )
     }
+
+    private fun occupiedPercents(fileSystemInfo: FileSystemInfo) =
+        ((fileSystemInfo.occupied.toFloat() / fileSystemInfo.total) * 100).toInt()
 
     override fun outHasPermission(hasPermission: Boolean) {
         viewModel?.setHasPermission(hasPermission)

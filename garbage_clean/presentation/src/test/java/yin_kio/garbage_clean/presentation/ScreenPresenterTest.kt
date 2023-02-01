@@ -37,13 +37,14 @@ class ScreenPresenterTest {
     fun `test outFileSystemInfo`() {
         val input = FileSystemInfo(
             occupied = 10,
-            available = 1_000_000,
-            total = 1_000_000_000,
+            available = 50,
+            total = 100,
         )
         val output = UiFileSystemInfo(
             occupied = formatFileSize(context, input.occupied),
             available = formatFileSize(context, input.available),
-            total = formatFileSize(context, input.total)
+            total = formatFileSize(context, input.total),
+            occupiedPercents = 10
         )
 
         presenter.outFileSystemInfo(input)

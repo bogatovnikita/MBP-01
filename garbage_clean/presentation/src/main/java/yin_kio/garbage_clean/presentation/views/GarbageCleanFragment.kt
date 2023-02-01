@@ -47,7 +47,10 @@ class GarbageCleanFragment : Fragment(R.layout.fragment_garbage_clean) {
 
         adapter.submitList(it.deleteFormItems)
 
+        binding.fileSystemInfo.progress.progress = it.fileSystemInfo.occupiedPercents
+
         binding.progressPlate.isVisible = it.isInProgress
+
         binding.canFree.text = it.canFreeVolume
 
         binding.recycler.isVisible = it.deleteFormItems.isNotEmpty()

@@ -12,5 +12,5 @@ data class ScreenState(
     val isAllSelected: Boolean = false,
     val canFreeVolume: String = "",
     val buttonText: String = "",
-    val buttonBgRes: Int = general.R.drawable.bg_main_button_enabled
+    val buttonBgRes: Int = general.R.drawable.bg_main_button_enabled,
 )

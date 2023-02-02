@@ -60,15 +60,15 @@ class TimePickerSettingsImpl @Inject constructor(
     override suspend fun isSundayIncluded(): Boolean = prefs.getBoolean(SUNDAY, false)
 
     companion object {
-        const val START_HOURS = "START_HOURS"
-        const val START_MINUTES = "START_MINUTES"
-        const val MONDAY = "MONDAY"
-        const val TUESDAY = "TUESDAY"
-        const val WEDNESDAY = "WEDNESDAY"
-        const val THURSDAY = "THURSDAY"
-        const val FRIDAY = "FRIDAY"
-        const val SATURDAY = "SATURDAY"
-        const val SUNDAY = "SUNDAY"
+        private const val START_HOURS = "START_HOURS"
+        private const val START_MINUTES = "START_MINUTES"
+        private const val MONDAY = "MONDAY"
+        private const val TUESDAY = "TUESDAY"
+        private const val WEDNESDAY = "WEDNESDAY"
+        private const val THURSDAY = "THURSDAY"
+        private const val FRIDAY = "FRIDAY"
+        private const val SATURDAY = "SATURDAY"
+        private const val SUNDAY = "SUNDAY"
     }
 
 }

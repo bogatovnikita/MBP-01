@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context=".ui.custom.DayPicker"
+    tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
+
+    <TextView
+        android:id="@+id/tv_repeat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/golos_text_bold"
+        android:text="@string/notification_manager_repeat"
+        android:textColor="@color/dark_blue"
+        android:textSize="@dimen/_12ssp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_days"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_3sdp"
+        android:fontFamily="@font/golos_text_regular"
+        android:text="@string/notification_manager_every_week"
+        android:textColor="@color/gray"
+        android:textSize="@dimen/_9ssp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_repeat" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_9sdp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_days">
+
+        <TextView
+            android:id="@+id/mon"
+            android:layout_width="@dimen/_35sdp"
+            android:layout_height="@dimen/_35sdp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_day_normal"
+            android:fontFamily="@font/golos_text_bold"
+            android:gravity="center"
+            android:text="@string/notification_manager_mon"
+            android:textColor="@color/gray"
+            android:textSize="@dimen/_16ssp" />
+
+        <TextView
+            android:id="@+id/tu"
+            android:layout_width="@dimen/_35sdp"
+            android:layout_height="@dimen/_35sdp"
+            android:layout_marginStart="@dimen/_6sdp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_day_normal"
+            android:fontFamily="@font/golos_text_bold"
+            android:gravity="center"
+            android:text="@string/notification_manager_tu"
+            android:textColor="@color/gray"
+            android:textSize="@dimen/_16ssp" />
+
+        <TextView
+            android:id="@+id/we"
+            android:layout_width="@dimen/_35sdp"
+            android:layout_height="@dimen/_35sdp"
+            android:layout_marginStart="@dimen/_6sdp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_day_normal"
+            android:fontFamily="@font/golos_text_bold"
+            android:gravity="center"
+            android:text="@string/notification_manager_we"
+            android:textColor="@color/gray"
+            android:textSize="@dimen/_16ssp" />
+
+        <TextView
+            android:id="@+id/th"
+            android:layout_width="@dimen/_35sdp"
+            android:layout_height="@dimen/_35sdp"
+            android:layout_marginStart="@dimen/_6sdp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_day_normal"
+            android:fontFamily="@font/golos_text_bold"
+            android:gravity="center"
+            android:text="@string/notification_manager_th"
+            android:textColor="@color/gray"
+            android:textSize="@dimen/_16ssp" />
+
+        <TextView
+            android:id="@+id/fr"
+            android:layout_width="@dimen/_35sdp"
+            android:layout_height="@dimen/_35sdp"
+            android:layout_marginStart="@dimen/_6sdp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_day_normal"
+            android:fontFamily="@font/golos_text_bold"
+            android:gravity="center"
+            android:text="@string/notification_manager_fr"
+            android:textColor="@color/gray"
+            android:textSize="@dimen/_16ssp" />
+
+        <TextView
+            android:id="@+id/sat"
+            android:layout_width="@dimen/_35sdp"
+            android:layout_height="@dimen/_35sdp"
+            android:layout_marginStart="@dimen/_6sdp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_day_normal"
+            android:fontFamily="@font/golos_text_bold"
+            android:gravity="center"
+            android:text="@string/notification_manager_sat"
+            android:textColor="@color/gray"
+            android:textSize="@dimen/_16ssp" />
+
+        <TextView
+            android:id="@+id/sun"
+            android:layout_width="@dimen/_35sdp"
+            android:layout_height="@dimen/_35sdp"
+            android:layout_marginStart="@dimen/_6sdp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_day_normal"
+            android:fontFamily="@font/golos_text_bold"
+            android:gravity="center"
+            android:text="@string/notification_manager_sun"
+            android:textColor="@color/gray"
+            android:textSize="@dimen/_16ssp" />
+
+    </LinearLayout>
+
+</merge>

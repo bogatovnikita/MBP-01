@@ -30,7 +30,7 @@ sealed class NotificationStateEvent() {
 
     class SwitchAppModeDisturb(val packageName: String, val isSwitch: Boolean) : NotificationStateEvent()
 
-//    object OpenTimeTable: NotificationStateEvent()
+    object OpenTimeTable: NotificationStateEvent()
 
     object OpenMissedNotification: NotificationStateEvent()
 

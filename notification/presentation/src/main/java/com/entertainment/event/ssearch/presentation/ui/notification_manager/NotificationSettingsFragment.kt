@@ -82,6 +82,7 @@ class NotificationSettingsFragment : Fragment(R.layout.fragment_notification_set
             is NotificationStateEvent.OpenDialogClearing -> R.id.action_to_dialogClearingFragment
             is NotificationStateEvent.OpenDialogCompleteClean -> R.id.action_to_dialogCompleteClearFragment
             is NotificationStateEvent.OpenMissedNotification -> R.id.action_to_missedNotificationsFragment
+            is NotificationStateEvent.OpenTimeTable -> R.id.action_to_DNDSettingsFragment
             else -> NOT_NAVIGATE
         }
         if (navId == NOT_NAVIGATE || findNavController().currentDestination?.id == navId) return
@@ -101,6 +102,9 @@ class NotificationSettingsFragment : Fragment(R.layout.fragment_notification_set
         }
         binding.btnMissedNotifications.setOnClickListener {
             viewModel.obtainEvent(NotificationStateEvent.OpenMissedNotification)
+        }
+        binding.btnOpenTimetable.setOnClickListener {
+            viewModel.obtainEvent(NotificationStateEvent.OpenTimeTable)
         }
         binding.switchModeDisturb.setOnClickListener {
             viewModel.obtainEvent(NotificationStateEvent.SwitchGeneralDisturbMode(binding.switchModeDisturb.isChecked))

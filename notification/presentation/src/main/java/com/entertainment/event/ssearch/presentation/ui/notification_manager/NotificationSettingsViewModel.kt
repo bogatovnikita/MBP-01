@@ -27,6 +27,7 @@ class NotificationSettingsViewModel @Inject constructor(
             is NotificationStateEvent.OpenDialogCompleteClean -> setEvent(event)
             is NotificationStateEvent.SwitchAppModeDisturb -> switchAppModeDisturb(event.packageName, event.isSwitch)
             is NotificationStateEvent.OpenMissedNotification -> setEvent(event)
+            is NotificationStateEvent.OpenTimeTable -> setEvent(event)
             else -> {}
         }
     }

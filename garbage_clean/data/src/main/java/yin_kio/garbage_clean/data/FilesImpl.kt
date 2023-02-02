@@ -9,8 +9,10 @@ class FilesImpl : Files {
 
     private val fileUtils = FileUtilsImpl()
 
-    override suspend fun delete(paths: List<String>) {
-        fileUtils.deleteFiles(paths.map { File(it) })
+    override suspend fun deleteAndGetNoDeletable(paths: List<String>) : List<String>{
+        val files = paths.map { File(it) }
+        fileUtils.deleteFiles(files)
+        return files.filter { it.exists() }.map { it.absolutePath }
     }
 
     override suspend fun getAll(): List<String> {

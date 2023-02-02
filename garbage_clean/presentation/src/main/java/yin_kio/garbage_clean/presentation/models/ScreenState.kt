@@ -1,5 +1,6 @@
 package yin_kio.garbage_clean.presentation.models
 
+import yin_kio.garbage_clean.domain.entities.GarbageType
 import yin_kio.garbage_clean.domain.out.DeleteProgressState
 
 data class ScreenState(
@@ -13,4 +14,5 @@ data class ScreenState(
     val canFreeVolume: String = "",
     val buttonText: String = "",
     val buttonBgRes: Int = general.R.drawable.bg_main_button_enabled,
+    val deleteRequest: List<GarbageType> = emptyList()
 )

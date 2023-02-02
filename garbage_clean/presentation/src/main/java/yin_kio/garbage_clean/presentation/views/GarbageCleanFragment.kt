@@ -27,11 +27,16 @@ class GarbageCleanFragment : Fragment(R.layout.fragment_garbage_clean) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.recycler.adapter = adapter
 
-        binding.selectAll.setOnClickListener { viewModel.switchSelectAll() }
-        binding.selectAllText.setOnClickListener { viewModel.switchSelectAll() }
-        binding.delete.setOnClickListener { viewModel.deleteIfCan() }
-
+        setupListeners()
         setupObserver()
+    }
+
+    private fun setupListeners() {
+        binding.apply {
+            selectAll.setOnClickListener { viewModel.switchSelectAll() }
+            selectAllText.setOnClickListener { viewModel.switchSelectAll() }
+            delete.setOnClickListener { viewModel.deleteIfCan() }
+        }
     }
 
     private fun setupObserver() {
@@ -43,18 +48,15 @@ class GarbageCleanFragment : Fragment(R.layout.fragment_garbage_clean) {
     }
 
     private fun updateUi(it: ScreenState) {
-        binding.selectAll.isChecked = it.isAllSelected
-
-        adapter.submitList(it.deleteFormItems)
-
-        binding.fileSystemInfo.progress.progress = it.fileSystemInfo.occupiedPercents
-
-        binding.progressPlate.isVisible = it.isInProgress
-
-        binding.canFree.text = it.canFreeVolume
-
-        binding.recycler.isVisible = it.deleteFormItems.isNotEmpty()
-        binding.deleteHasBeen.isVisible = it.deleteFormItems.isEmpty()
+        binding.apply {
+            selectAll.isChecked = it.isAllSelected
+            adapter.submitList(it.deleteFormItems)
+            fileSystemInfo.progress.progress = it.fileSystemInfo.occupiedPercents
+            progressPlate.isVisible = it.isInProgress
+            canFree.text = it.canFreeVolume
+            recycler.isVisible = it.deleteFormItems.isNotEmpty()
+            deleteHasBeen.isVisible = it.deleteFormItems.isEmpty()
+        }
 
         showFileSystemInfo(it)
         showButton(it)

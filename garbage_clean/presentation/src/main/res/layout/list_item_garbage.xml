@@ -29,7 +29,7 @@
             android:id="@+id/size"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/Text.Subtitle_1.2"
+            android:textAppearance="@style/Text.Subtitle_1"
             android:textColor="@color/gray"
             android:gravity="end"
             android:layout_marginEnd="8dp"

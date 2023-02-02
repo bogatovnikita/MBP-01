@@ -21,9 +21,12 @@
 
     <yin_kio.rect_progress_bar.RectProgressBar
         android:id="@+id/progress"
-        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
         android:layout_width="0dp"
         android:layout_height="20dp"
+        app:cornersRadius="@dimen/radius_5"
+        app:indicatorColor="@color/dark_blue"
+        app:canalColor="@color/green"
+        app:drawShadow="true"
         android:layout_marginStart="16dp"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="16dp"

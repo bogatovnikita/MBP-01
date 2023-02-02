@@ -52,6 +52,7 @@ dependencies {
     implementation project(':rect_progress_bar')
 
     implementation 'com.github.bosphere.android-fadingedgelayout:fadingedgelayout:1.0.0'
+    implementation 'com.airbnb.android:lottie:5.2.0'
 
     implementation 'com.github.kirich1409:viewbindingpropertydelegate:1.5.6'
 

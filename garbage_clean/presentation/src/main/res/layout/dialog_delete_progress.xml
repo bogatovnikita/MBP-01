@@ -12,7 +12,7 @@
         android:background="@drawable/bg_dialog">
 
 
-        <ImageView
+        <com.airbnb.lottie.LottieAnimationView
             android:contentDescription="@string/delete_progress_title"
             android:id="@+id/imageView2"
             android:layout_width="90dp"
@@ -23,7 +23,9 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_delete_progress" />
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/delete" />
 
         <TextView
             android:id="@+id/title"

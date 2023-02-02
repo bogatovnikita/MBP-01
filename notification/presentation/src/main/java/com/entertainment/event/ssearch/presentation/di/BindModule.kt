@@ -4,7 +4,8 @@ import com.entertainment.event.ssearch.data.background.NotificationServiceContro
 import com.entertainment.event.ssearch.data.dnd.DNDControllerImpl
 import com.entertainment.event.ssearch.data.permission.PermissionChecker
 import com.entertainment.event.ssearch.data.providers.AppsProviderImpl
-import com.entertainment.event.ssearch.data.providers.SettingsImpl
+import com.entertainment.event.ssearch.data.dnd.DNDSettingsImpl
+import com.entertainment.event.ssearch.data.dnd.TimePickerSettingsImpl
 import com.entertainment.event.ssearch.data.repositories.Apps
 import com.entertainment.event.ssearch.data.repositories.AppsWithNotifications
 import com.entertainment.event.ssearch.data.repositories.Notifications
@@ -12,7 +13,8 @@ import com.entertainment.event.ssearch.data.repositories.NotificationsWithApp
 import com.entertainment.event.ssearch.domain.dnd.DNDController
 import com.entertainment.event.ssearch.domain.permission.Permission
 import com.entertainment.event.ssearch.domain.providers.AppsProvider
-import com.entertainment.event.ssearch.domain.providers.Settings
+import com.entertainment.event.ssearch.domain.dnd.Settings
+import com.entertainment.event.ssearch.domain.dnd.TimePickerSettings
 import com.entertainment.event.ssearch.domain.repositories.AppRepository
 import com.entertainment.event.ssearch.domain.repositories.AppWithNotificationsRepository
 import com.entertainment.event.ssearch.domain.repositories.NotificationRepository
@@ -43,7 +45,10 @@ interface BindModule {
     fun bindAppsProviderToAppsProviderImpl(apps: AppsProviderImpl): AppsProvider
 
     @Binds
-    fun bindSettingsProviderToSettingsProviderImpl(settings: SettingsImpl): Settings
+    fun bindSettingsProviderToSettingsProviderImpl(settings: DNDSettingsImpl): Settings
+
+    @Binds
+    fun bindTimePickerSettingsToTimePickerSettingsImpl(settings: TimePickerSettingsImpl): TimePickerSettings
 
     @Binds
     fun bindPermissionCheckerToPermission(permission: PermissionChecker): Permission

@@ -6,7 +6,7 @@ import com.entertainment.event.ssearch.domain.mappers.mapToApp
 import com.entertainment.event.ssearch.domain.models.AppWithNotifications
 import com.entertainment.event.ssearch.domain.permission.Permission
 import com.entertainment.event.ssearch.domain.providers.AppsProvider
-import com.entertainment.event.ssearch.domain.providers.Settings
+import com.entertainment.event.ssearch.domain.dnd.Settings
 import com.entertainment.event.ssearch.domain.repositories.AppRepository
 import com.entertainment.event.ssearch.domain.repositories.AppWithNotificationsRepository
 import com.entertainment.event.ssearch.domain.service.ServiceController
@@ -29,7 +29,7 @@ class NotificationSettingsUseCases @Inject constructor(
         apps.setSwitched(packageName, isSwitched)
 
     suspend fun getDisturbMode(): Boolean =
-        settings.isDisturbModeSwitched() && !dndController.isDNDModeOff()
+        settings.isDisturbModeEnabled() && !dndController.isDNDModeOff()
 
     fun hasServicePermission() = permission.hasServicePermission()
 
@@ -40,7 +40,7 @@ class NotificationSettingsUseCases @Inject constructor(
     suspend fun isAllAppsLimited(): Boolean = settings.isAllAppsLimited()
 
     suspend fun setGeneralDisturbMode(isSwitched: Boolean) {
-        settings.switchOffDisturbMode(isSwitched)
+        settings.setDisturbMode(isSwitched)
         if (isSwitched) {
             dndController.setDNDModeOn()
         } else {
@@ -108,7 +108,7 @@ class NotificationSettingsUseCases @Inject constructor(
     }
 
     suspend fun switchModeDisturbForAllApps(isSwitched: Boolean) {
-        settings.switchLimitAllApps(isSwitched)
+        settings.setLimitAllApps(isSwitched)
         val updatedApps = apps.getApps().map { app -> app.copy(isSwitched = isSwitched) }
         apps.updateAll(updatedApps)
     }

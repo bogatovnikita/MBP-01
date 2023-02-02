@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="RectProgressBar">
+
+        <attr name="progress" format="float"/>
+        <attr name="indicatorColor" format="color"/>
+        <attr name="canalColor" format="color"/>
+        <attr name="cornersRadius" format="dimension"/>
+        <attr name="shadowColor" format="color"/>
+        <attr name="drawShadow" format="boolean"/>
+
+    </declare-styleable>
+
+</resources>

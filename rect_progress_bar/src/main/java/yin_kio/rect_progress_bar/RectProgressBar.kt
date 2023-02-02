@@ -9,19 +9,40 @@ import android.renderscript.RenderScript
 import android.renderscript.ScriptIntrinsicBlur
 import android.util.AttributeSet
 import android.view.View
+import androidx.core.content.withStyledAttributes
 
 class RectProgressBar : View {
 
-    var progressColor: Int = Color.BLUE
+
+    private val canalPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = Color.GREEN
+    }
+    private val indicatorPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = Color.BLUE
+    }
+    private val shadowPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = Color.BLACK
+    }
+
+    var indicatorColor: Int get() =  indicatorPaint.color
         set(value) {
-            field = value
+            indicatorPaint.color = value
             invalidate()
         }
-    var canalColor: Int = Color.CYAN
+    var canalColor: Int get() = canalPaint.color
         set(value) {
-            field = value
+            canalPaint.color = value
             invalidate()
         }
+    var shadowColor: Int get() = shadowPaint.color
+        set(value) {
+            shadowPaint.color = value
+            invalidate()
+        }
+    var isDrawShadow: Boolean = false
+
+
+    private var _cornerRadiusDp: Float = 5f.dp
     var cornersRadius: Float
         get() = _cornerRadiusDp.dpToFloat()
         set(value) {
@@ -29,13 +50,40 @@ class RectProgressBar : View {
             invalidate()
         }
 
-    private var _cornerRadiusDp: Float = 5f.dp
 
     var progress: Float = 0.5f
         set(value) {
             field = value
             invalidate()
         }
+
+
+    private val clipPath = Path()
+    private val canalRect = RectF()
+
+
+    constructor(context: Context?) : super(context)
+    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs) { initAttrs(context, attrs) }
+    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
+
+
+    private fun initAttrs(context: Context?, attrs: AttributeSet?){
+        context?.withStyledAttributes(
+            attrs,
+            R.styleable.RectProgressBar,
+            0
+        ){
+            progress = getFloat(R.styleable.RectProgressBar_progress, 0f)
+            indicatorColor = getColor(R.styleable.RectProgressBar_indicatorColor, Color.BLUE)
+            canalColor = getColor(R.styleable.RectProgressBar_canalColor, Color.GREEN)
+            shadowColor = getColor(R.styleable.RectProgressBar_shadowColor, Color.BLACK)
+            _cornerRadiusDp = getDimension(R.styleable.RectProgressBar_cornersRadius, 0f)
+            isDrawShadow = getBoolean(R.styleable.RectProgressBar_drawShadow, false)
+        }
+    }
+
+
+
 
     private val Float.dp: Float
         get() = (this * Resources.getSystem().displayMetrics.density + 0.5f)
@@ -46,29 +94,12 @@ class RectProgressBar : View {
     }
 
 
-    constructor(context: Context?) : super(context)
-    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
-    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
-
-
-    private val canalPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = canalColor
-    }
-    private val progressPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = progressColor
-    }
-    private val shadowPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = Color.BLACK
-    }
-    private val clipPath = Path()
-    private val canalRect = RectF()
-
-
     override fun onDraw(canvas: Canvas?) {
         canvas?.apply {
             setupCanalRect()
             clipOutCanal()
             drawCanal()
+            drawShadow()
             drawProgress()
         }
     }
@@ -101,12 +132,17 @@ class RectProgressBar : View {
     }
 
     private fun Canvas.drawProgress(){
+        drawProgressRect(indicatorPaint)
+    }
+
+    private fun Canvas.drawShadow() {
+        if (!isDrawShadow) return
+
         val bitmap = shadowBitmapOnNewCanvas {
             drawProgressRect(shadowPaint)
         }
 
         drawBitmap(bitmap, 0f, 0f, null)
-        drawProgressRect(progressPaint)
     }
 
     private fun Canvas.drawProgressRect(paint: Paint){

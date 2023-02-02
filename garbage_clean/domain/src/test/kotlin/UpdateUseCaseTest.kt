@@ -20,7 +20,7 @@ import yin_kio.garbage_clean.domain.out.OutBoundary
 @OptIn(ExperimentalCoroutinesApi::class)
 class UpdateUseCaseTest {
 
-    private val outBoundary: OutBoundary = mockk()
+    private val outBoundary: OutBoundary = spyk()
     private val fileSystemInfoProvider: FileSystemInfoProvider = mockk()
     private val permissions: Permissions = mockk()
     private val garbageFiles: GarbageFiles = spyk()
@@ -34,10 +34,6 @@ class UpdateUseCaseTest {
 
     init {
         coEvery { files.getAll() } returns listOf()
-        coEvery {
-            outBoundary.outDeleteProgress(DeleteProgressState.Wait)
-            outBoundary.outDeleteForm(deleteFormOut)
-        } returns Unit
     }
 
     @Test
@@ -93,15 +89,6 @@ class UpdateUseCaseTest {
 
     private fun setupTest(testBody: suspend TestScope.() -> Unit){
         runTest {
-            coEvery {
-                outBoundary.outUpdateProgress(true)
-                outBoundary.outFileSystemInfo(fileSystemInfo)
-                outBoundary.outDeleteForm(deleteFormOut)
-                outBoundary.outUpdateProgress(false)
-                outBoundary.outHasPermission(false)
-                outBoundary.outHasPermission(true)
-            } returns Unit
-
 
             coEvery { fileSystemInfoProvider.getFileSystemInfo() } returns FileSystemInfo()
 

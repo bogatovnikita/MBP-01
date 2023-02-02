@@ -22,7 +22,7 @@ import yin_kio.garbage_clean.domain.use_cases.UpdateUseCase
 class GarbageCleanerUseCasesTest {
 
     private val files: Files = mockk()
-    private val outBoundary: OutBoundary = mockk()
+    private val outBoundary: OutBoundary = spyk()
     private val mapper: DeleteFormMapper = mockk()
     private val updateUseCase: UpdateUseCase = mockk()
     private val ads: Ads = mockk()
@@ -43,11 +43,6 @@ class GarbageCleanerUseCasesTest {
 
             garbageFiles.deleteForm.switchSelectAll()
             garbageFiles.deleteForm.switchSelection(GarbageType.Apk)
-
-            outBoundary.outDeleteProgress(DeleteProgressState.Progress)
-            outBoundary.outDeleteProgress(DeleteProgressState.Complete)
-            outBoundary.outDeleteForm(deleteFormOut)
-            outBoundary.outDeleteRequest(listOf(GarbageType.Apk, GarbageType.Temp))
 
             updateUseCase.update()
 

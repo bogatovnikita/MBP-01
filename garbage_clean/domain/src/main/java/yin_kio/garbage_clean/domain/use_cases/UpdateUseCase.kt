@@ -32,7 +32,7 @@ internal class UpdateUseCase(
             outBoundary.outFileSystemInfo(getFileSystemInfo())
 
             garbageFiles.setFiles(files.getAll())
-            garbageFiles.deleteForm.switchSelectAll()
+            if (garbageFiles.isNotEmpty()) garbageFiles.deleteForm.switchSelectAll()
 
             outBoundary.outDeleteForm(getDeleteFormOut())
             outBoundary.outUpdateProgress(false)

@@ -32,7 +32,10 @@ class UpdateUseCaseTest {
 
     init {
         coEvery { files.getAll() } returns listOf()
-        coEvery { outBoundary.outDeleteProgress(DeleteProgressState.Wait) } returns Unit
+        coEvery {
+            outBoundary.outDeleteProgress(DeleteProgressState.Wait)
+            outBoundary.outDeleteForm(deleteFormOut)
+        } returns Unit
     }
 
     @Test

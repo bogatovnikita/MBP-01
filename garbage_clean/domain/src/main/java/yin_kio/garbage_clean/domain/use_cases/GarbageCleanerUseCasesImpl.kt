@@ -45,6 +45,7 @@ internal class GarbageCleanerUseCasesImpl(
         if (deleteRequest.isNotEmpty()) {
             ads.preloadAd()
             outBoundary.outDeleteProgress(DeleteProgressState.Progress)
+            outBoundary.outDeleteRequest(garbageFiles.deleteForm.deleteRequest.map { it })
             files.delete(interpreter.interpret(deleteRequest))
             delay(8000)
             outBoundary.outDeleteProgress(DeleteProgressState.Complete)

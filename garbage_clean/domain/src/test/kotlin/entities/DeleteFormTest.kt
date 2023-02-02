@@ -64,6 +64,7 @@ class DeleteFormTest {
 
     @Test
     fun testSwitchSelectAll(){
+        deleteForm.addAll(GarbageType.values().map { FormItem(it, 0) })
         deleteForm.switchSelectAll()
         assertTrue( deleteForm.deleteRequest.containsAll(GarbageType.values().toList()))
         assertTrue(deleteForm.isAllSelected)

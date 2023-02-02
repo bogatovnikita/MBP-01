@@ -43,6 +43,7 @@ class GarbageCleanerUseCasesTest {
             outBoundary.outDeleteProgress(DeleteProgressState.Progress)
             outBoundary.outDeleteProgress(DeleteProgressState.Complete)
             outBoundary.outDeleteForm(deleteFormOut)
+            outBoundary.outDeleteRequest(listOf(GarbageType.Apk, GarbageType.Temp))
 
             updateUseCase.update()
 
@@ -104,6 +105,7 @@ class GarbageCleanerUseCasesTest {
         coVerifyOrder {
             ads.preloadAd()
             outBoundary.outDeleteProgress(DeleteProgressState.Progress)
+            outBoundary.outDeleteRequest(listOf(GarbageType.Apk, GarbageType.Temp))
             files.delete(listOf(APK, TEMP))
             outBoundary.outDeleteProgress(DeleteProgressState.Complete)
         }

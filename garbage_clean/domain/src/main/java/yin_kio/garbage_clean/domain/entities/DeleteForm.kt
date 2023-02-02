@@ -23,7 +23,7 @@ internal class DeleteForm : MutableSet<FormItem> by mutableSetOf(){
         _isAllSelected = !isAllSelected
 
         if (_isAllSelected){
-            deleteRequest.addAll(GarbageType.values())
+            deleteRequest.addAll(map { it.garbageType })
         } else {
             deleteRequest.clear()
         }

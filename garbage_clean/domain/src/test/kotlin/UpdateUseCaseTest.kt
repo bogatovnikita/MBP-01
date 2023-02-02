@@ -9,6 +9,7 @@ import yin_kio.garbage_clean.domain.entities.FileSystemInfo
 import yin_kio.garbage_clean.domain.entities.GarbageFiles
 import yin_kio.garbage_clean.domain.gateways.FileSystemInfoProvider
 import yin_kio.garbage_clean.domain.gateways.Files
+import yin_kio.garbage_clean.domain.gateways.NoDeletableFiles
 import yin_kio.garbage_clean.domain.gateways.Permissions
 import yin_kio.garbage_clean.domain.services.DeleteFormMapper
 import yin_kio.garbage_clean.domain.out.DeleteFormOut
@@ -24,6 +25,7 @@ class UpdateUseCaseTest {
     private val permissions: Permissions = mockk()
     private val garbageFiles: GarbageFiles = spyk()
     private val files: Files = mockk()
+    private val noDeletableFiles: NoDeletableFiles = spyk()
     private lateinit var updateUseCase: UpdateUseCase
 
     private val fileSystemInfo = FileSystemInfo()
@@ -111,7 +113,8 @@ class UpdateUseCaseTest {
                 fileSystemInfoProvider = fileSystemInfoProvider,
                 permissions = permissions,
                 files = files,
-                dispatcher = coroutineContext
+                dispatcher = coroutineContext,
+                noDeletableFiles = noDeletableFiles
             )
             testBody()
         }

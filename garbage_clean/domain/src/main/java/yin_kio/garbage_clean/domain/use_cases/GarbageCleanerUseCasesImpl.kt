@@ -7,6 +7,7 @@ import yin_kio.garbage_clean.domain.entities.GarbageFiles
 import yin_kio.garbage_clean.domain.entities.GarbageType
 import yin_kio.garbage_clean.domain.gateways.Ads
 import yin_kio.garbage_clean.domain.gateways.Files
+import yin_kio.garbage_clean.domain.gateways.NoDeletableFiles
 import yin_kio.garbage_clean.domain.out.DeleteProgressState
 import yin_kio.garbage_clean.domain.out.OutBoundary
 import yin_kio.garbage_clean.domain.services.DeleteFormMapper
@@ -21,7 +22,8 @@ internal class GarbageCleanerUseCasesImpl(
     private val coroutineScope: CoroutineScope,
     private val dispatcher: CoroutineContext,
     private val updateUseCase: UpdateUseCase,
-    private val ads: Ads
+    private val ads: Ads,
+    private val noDeletableFiles: NoDeletableFiles
 ) : GarbageCleanUseCases {
 
     private val interpreter = DeleteRequestInterpreter(garbageFiles)
@@ -46,7 +48,8 @@ internal class GarbageCleanerUseCasesImpl(
             ads.preloadAd()
             outBoundary.outDeleteProgress(DeleteProgressState.Progress)
             outBoundary.outDeleteRequest(garbageFiles.deleteForm.deleteRequest.map { it })
-            files.delete(interpreter.interpret(deleteRequest))
+            val noDeletable = files.deleteAndGetNoDeletable(interpreter.interpret(deleteRequest))
+            noDeletableFiles.save(noDeletable)
             delay(8000)
             outBoundary.outDeleteProgress(DeleteProgressState.Complete)
         }

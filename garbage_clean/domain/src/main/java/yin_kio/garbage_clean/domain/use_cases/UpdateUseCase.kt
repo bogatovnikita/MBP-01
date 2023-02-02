@@ -7,6 +7,7 @@ import yin_kio.garbage_clean.domain.entities.FileSystemInfo
 import yin_kio.garbage_clean.domain.entities.GarbageFiles
 import yin_kio.garbage_clean.domain.gateways.FileSystemInfoProvider
 import yin_kio.garbage_clean.domain.gateways.Files
+import yin_kio.garbage_clean.domain.gateways.NoDeletableFiles
 import yin_kio.garbage_clean.domain.gateways.Permissions
 import yin_kio.garbage_clean.domain.out.DeleteFormOut
 import yin_kio.garbage_clean.domain.out.DeleteProgressState
@@ -21,25 +22,36 @@ internal class UpdateUseCase(
     private val garbageFiles: GarbageFiles,
     private val files: Files,
     private val fileSystemInfoProvider: FileSystemInfoProvider,
-    private val permissions: Permissions
+    private val permissions: Permissions,
+    private val noDeletableFiles: NoDeletableFiles
 ) {
 
     fun update() = async {
         if (permissions.hasStoragePermission){
-            outBoundary.outDeleteProgress(DeleteProgressState.Wait)
-            outBoundary.outHasPermission(true)
-            outBoundary.outUpdateProgress(true)
-            outBoundary.outFileSystemInfo(getFileSystemInfo())
-
-            garbageFiles.setFiles(files.getAll())
-            if (garbageFiles.isNotEmpty()) garbageFiles.deleteForm.switchSelectAll()
-
-            outBoundary.outDeleteForm(getDeleteFormOut())
-            outBoundary.outUpdateProgress(false)
+            outAll()
         } else {
             outBoundary.outHasPermission(false)
         }
 
+    }
+
+    private suspend fun outAll() {
+        outBoundary.outDeleteProgress(DeleteProgressState.Wait)
+        outBoundary.outHasPermission(true)
+        outBoundary.outUpdateProgress(true)
+        outBoundary.outFileSystemInfo(getFileSystemInfo())
+
+        loadFilesToEntityExceptNoDeletable()
+
+        if (garbageFiles.isNotEmpty()) garbageFiles.deleteForm.switchSelectAll()
+
+        outBoundary.outDeleteForm(getDeleteFormOut())
+        outBoundary.outUpdateProgress(false)
+    }
+
+    private suspend fun loadFilesToEntityExceptNoDeletable() {
+        val noDeletable = noDeletableFiles.get()
+        garbageFiles.setFiles(files.getAll().filter { !noDeletable.contains(it) })
     }
 
     private suspend fun getFileSystemInfo() : FileSystemInfo{

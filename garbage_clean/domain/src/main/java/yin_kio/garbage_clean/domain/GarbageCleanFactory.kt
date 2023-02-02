@@ -3,10 +3,7 @@ package yin_kio.garbage_clean.domain
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import yin_kio.garbage_clean.domain.entities.GarbageFiles
-import yin_kio.garbage_clean.domain.gateways.Ads
-import yin_kio.garbage_clean.domain.gateways.FileSystemInfoProvider
-import yin_kio.garbage_clean.domain.gateways.Files
-import yin_kio.garbage_clean.domain.gateways.Permissions
+import yin_kio.garbage_clean.domain.gateways.*
 import yin_kio.garbage_clean.domain.out.OutBoundary
 import yin_kio.garbage_clean.domain.services.DeleteFormMapper
 import yin_kio.garbage_clean.domain.use_cases.GarbageCleanUseCases
@@ -21,7 +18,8 @@ object GarbageCleanFactory {
         coroutineScope: CoroutineScope,
         fileSystemInfoProvider: FileSystemInfoProvider,
         permissions: Permissions,
-        ads: Ads
+        ads: Ads,
+        noDeletableFiles: NoDeletableFiles
     ) : GarbageCleanUseCases{
         val garbageFiles = GarbageFiles()
         val mapper = DeleteFormMapper()
@@ -41,9 +39,11 @@ object GarbageCleanFactory {
                 files = files,
                 fileSystemInfoProvider = fileSystemInfoProvider,
                 permissions = permissions,
-                dispatcher = Dispatchers.IO
+                dispatcher = Dispatchers.IO,
+                noDeletableFiles = noDeletableFiles
             ),
-            ads = ads
+            ads = ads,
+            noDeletableFiles = noDeletableFiles
         )
     }
 

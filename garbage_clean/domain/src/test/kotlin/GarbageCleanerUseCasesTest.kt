@@ -9,6 +9,7 @@ import yin_kio.garbage_clean.domain.entities.GarbageFiles
 import yin_kio.garbage_clean.domain.entities.GarbageType
 import yin_kio.garbage_clean.domain.gateways.Ads
 import yin_kio.garbage_clean.domain.gateways.Files
+import yin_kio.garbage_clean.domain.gateways.NoDeletableFiles
 import yin_kio.garbage_clean.domain.out.DeleteFormOut
 import yin_kio.garbage_clean.domain.out.DeleteProgressState
 import yin_kio.garbage_clean.domain.out.OutBoundary
@@ -25,6 +26,7 @@ class GarbageCleanerUseCasesTest {
     private val mapper: DeleteFormMapper = mockk()
     private val updateUseCase: UpdateUseCase = mockk()
     private val ads: Ads = mockk()
+    private val noDeletableFiles: NoDeletableFiles = spyk()
     private lateinit var useCases: GarbageCleanerUseCasesImpl
     private val garbageFiles: GarbageFiles = spyk()
 
@@ -34,8 +36,10 @@ class GarbageCleanerUseCasesTest {
     init {
         coEvery { mapper.createDeleteFormOut(garbageFiles.deleteForm) } returns deleteFormOut
         coEvery {
-            files.delete(listOf(APK, TEMP))
-            files.delete(listOf())
+            files.deleteAndGetNoDeletable(listOf(APK, TEMP))
+            files.deleteAndGetNoDeletable(listOf())
+        } returns listOf()
+        coEvery {
 
             garbageFiles.deleteForm.switchSelectAll()
             garbageFiles.deleteForm.switchSelection(GarbageType.Apk)
@@ -61,7 +65,8 @@ class GarbageCleanerUseCasesTest {
                 mapper = mapper,
                 updateUseCase = updateUseCase,
                 ads = ads,
-                dispatcher = coroutineContext
+                dispatcher = coroutineContext,
+                noDeletableFiles = noDeletableFiles
             )
             testBody()
         }
@@ -106,7 +111,8 @@ class GarbageCleanerUseCasesTest {
             ads.preloadAd()
             outBoundary.outDeleteProgress(DeleteProgressState.Progress)
             outBoundary.outDeleteRequest(listOf(GarbageType.Apk, GarbageType.Temp))
-            files.delete(listOf(APK, TEMP))
+            val noDeletable = files.deleteAndGetNoDeletable(listOf(APK, TEMP))
+            noDeletableFiles.save(noDeletable)
             outBoundary.outDeleteProgress(DeleteProgressState.Complete)
         }
     }
@@ -118,7 +124,7 @@ class GarbageCleanerUseCasesTest {
 
         useCases.deleteIfCan()
 
-        coVerify(inverse = true) { files.delete(listOf()) }
+        coVerify(inverse = true) { files.deleteAndGetNoDeletable(listOf()) }
     }
 
     @Test

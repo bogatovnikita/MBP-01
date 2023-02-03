@@ -77,4 +77,7 @@ dependencies {
 
     //SwipeRecyclerView
     implementation 'com.github.aitsuki:SwipeMenuRecyclerView:2.1.5'
+
+    //NumberPicker
+    implementation 'io.github.ShawnLin013:number-picker:2.4.13'
 }

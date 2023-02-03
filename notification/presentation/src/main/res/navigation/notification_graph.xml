@@ -47,7 +47,7 @@
         tools:layout="@layout/fragment_dialog_complete_clear" />
     <fragment
         android:id="@+id/DNDSettingsFragment"
-        android:name="com.entertainment.event.ssearch.presentation.ui.disturb_settings.DNDSettingsFragment"
+        android:name="com.entertainment.event.ssearch.presentation.ui.dnd_settings.DNDSettingsFragment"
         android:label="fragment_d_n_d_settings"
         tools:layout="@layout/fragment_d_n_d_settings" />
 </navigation>

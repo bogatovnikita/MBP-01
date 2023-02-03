@@ -1,20 +1,310 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.disturb_settings.DNDSettingsFragment">
+    android:paddingHorizontal="@dimen/_12sdp"
+    android:paddingTop="@dimen/_12sdp"
+    tools:context=".ui.dnd_settings.DNDSettingsFragment">
+
+    <ImageButton
+        android:id="@+id/btn_go_back"
+        android:layout_width="@dimen/_14sdp"
+        android:layout_height="@dimen/_18sdp"
+        android:background="@drawable/ic_arrow_back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_6sdp"
+        android:fontFamily="@font/golos_text_demibold"
+        android:text="@string/notification_manager_title"
+        android:textColor="@color/dark_blue"
+        android:textSize="@dimen/_13ssp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_go_back"
+        app:layout_constraintStart_toEndOf="@+id/btn_go_back"
+        app:layout_constraintTop_toTopOf="@+id/btn_go_back" />
+
+    <TextView
+        android:id="@+id/tv_dnd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:fontFamily="@font/golos_text_bold"
+        android:text="@string/notification_manager_do_not_disturb"
+        android:textColor="@color/dark_blue"
+        android:textSize="@dimen/_20ssp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_go_back" />
+
+    <TextView
+        android:id="@+id/tv_dnd_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_6sdp"
+        android:fontFamily="@font/golos_text_regular"
+        android:paddingEnd="@dimen/_13sdp"
+        android:text="@string/notification_manager_dnd_description"
+        android:textColor="@color/gray"
+        android:textSize="@dimen/_9ssp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_dnd" />
+
+    <ImageView
+        android:layout_width="@dimen/_40sdp"
+        android:layout_height="@dimen/_40sdp"
+        android:background="@drawable/ic_moon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tv_title" />
+
+    <TextView
+        android:id="@+id/tv_auto_mode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_6sdp"
+        android:layout_marginTop="@dimen/_23sdp"
+        android:fontFamily="@font/golos_text_demibold"
+        android:text="@string/notification_manager_auto_switch"
+        android:textColor="@color/dark_blue"
+        android:textSize="@dimen/_11ssp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_dnd_description" />
+
+    <Switch
+        android:id="@+id/switch_dnd_auto_mode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginTop="@dimen/_23sdp"
+        android:layout_marginEnd="@dimen/_8sdp"
+        android:checked="false"
+        android:thumb="@drawable/thumb_selector"
+        android:track="@drawable/track_selector"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_dnd_description" />
+
+    <View
+        android:id="@+id/separation_line"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_1sdp"
+        android:layout_marginTop="@dimen/_9sdp"
+        android:layout_marginEnd="@dimen/_2sdp"
+        android:background="@color/gray"
+        app:layout_constraintEnd_toEndOf="@+id/switch_dnd_auto_mode"
+        app:layout_constraintStart_toStartOf="@+id/tv_auto_mode"
+        app:layout_constraintTop_toBottomOf="@+id/tv_auto_mode" />
+
+    <TextView
+        android:id="@+id/tv_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_17sdp"
+        android:fontFamily="@font/golos_text_bold"
+        android:text="@string/notification_manager_time"
+        android:textColor="@color/dark_blue"
+        android:textSize="@dimen/_13ssp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/separation_line" />
+
+    <View
+        android:id="@+id/background_time"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="-19dp"
+        android:layout_marginBottom="-19dp"
+        android:background="@drawable/bg_time"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_time_before"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tv_time_since" />
+
+    <TextView
+        android:id="@+id/tv_since"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_19sdp"
+        android:layout_marginTop="@dimen/_25sdp"
+        android:fontFamily="@font/golos_text_regular"
+        android:text="@string/notification_manager_since"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_12ssp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_time" />
+
+    <TextView
+        android:id="@+id/tv_time_since"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/_19sdp"
+        android:fontFamily="@font/golos_text_bold"
+        android:text="23:00"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_19ssp"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_since"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tv_since" />
+
+    <View
+        android:id="@+id/separation_line_2"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_1sdp"
+        android:layout_marginHorizontal="@dimen/_14sdp"
+        android:layout_marginTop="@dimen/_9sdp"
+        android:background="@color/gray"
+        app:layout_constraintEnd_toEndOf="@+id/switch_dnd_auto_mode"
+        app:layout_constraintStart_toStartOf="@+id/tv_auto_mode"
+        app:layout_constraintTop_toBottomOf="@+id/tv_since" />
+
+    <TextView
+        android:id="@+id/tv_before"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_19sdp"
+        android:layout_marginTop="@dimen/_9sdp"
+        android:fontFamily="@font/golos_text_regular"
+        android:text="@string/notification_manager_before"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_12ssp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/separation_line_2" />
+
+    <TextView
+        android:id="@+id/tv_time_before"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_marginEnd="@dimen/_19sdp"
+        android:fontFamily="@font/golos_text_bold"
+        android:text="23:00"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_19ssp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/separation_line_2" />
 
     <com.entertainment.event.ssearch.presentation.ui.custom.DayPicker
         android:id="@+id/day_picker"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="@dimen/_12sdp"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginHorizontal="@dimen/_14sdp"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/background_time" />
+
+    <com.shawnlin.numberpicker.NumberPicker
+        android:id="@+id/picker_hours"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/btn_save"
+        app:layout_constraintEnd_toStartOf="@id/picker_minutes"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/day_picker"
+        app:np_dividerColor="@color/gray"
+        app:np_dividerThickness="0dp"
+        app:np_fadingEdgeStrength="0"
+        app:np_max="23"
+        app:np_min="0"
+        app:np_selectedTextColor="@color/dark_blue"
+        app:np_selectedTextSize="@dimen/_32ssp"
+        app:np_selectedTypeface="@font/golos_text_bold"
+        app:np_textColor="@color/gray"
+        app:np_textSize="@dimen/_32ssp"
+        app:np_typeface="@font/golos_text_bold" />
+
+    <ImageView
+        android:id="@+id/time_dots1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_time_dots"
+        app:layout_constraintBottom_toTopOf="@+id/dividers"
+        app:layout_constraintEnd_toStartOf="@+id/picker_minutes"
+        app:layout_constraintStart_toEndOf="@+id/picker_hours"
+        app:layout_constraintTop_toTopOf="@+id/picker_minutes" />
+
+    <ImageView
+        android:id="@+id/time_dots2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_time_dots_dark"
+        app:layout_constraintBottom_toBottomOf="@+id/dividers"
+        app:layout_constraintEnd_toStartOf="@+id/picker_minutes"
+        app:layout_constraintStart_toEndOf="@+id/picker_hours"
+        app:layout_constraintTop_toTopOf="@+id/dividers" />
+
+    <ImageView
+        android:id="@+id/time_dots3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_time_dots"
+        app:layout_constraintBottom_toBottomOf="@+id/picker_minutes"
+        app:layout_constraintEnd_toStartOf="@+id/picker_minutes"
+        app:layout_constraintStart_toEndOf="@+id/picker_hours"
+        app:layout_constraintTop_toBottomOf="@+id/dividers" />
+
+    <FrameLayout
+        android:id="@+id/dividers"
+        android:layout_width="@dimen/_180sdp"
+        android:layout_height="@dimen/_50sdp"
+        app:layout_constraintBottom_toBottomOf="@+id/picker_minutes"
+        app:layout_constraintEnd_toEndOf="@+id/picker_minutes"
+        app:layout_constraintStart_toStartOf="@+id/picker_hours"
+        app:layout_constraintTop_toTopOf="@+id/picker_minutes">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_1sdp"
+            android:layout_gravity="top"
+            android:background="@color/gray" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_1sdp"
+            android:layout_gravity="bottom"
+            android:background="@color/gray" />
+
+
+    </FrameLayout>
+
+    <com.shawnlin.numberpicker.NumberPicker
+        android:id="@+id/picker_minutes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/btn_save"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/picker_hours"
+        app:layout_constraintTop_toBottomOf="@+id/day_picker"
+        app:np_dividerDistance="@dimen/_50sdp"
+        app:np_dividerThickness="0dp"
+        app:np_fadingEdgeStrength="0"
+        app:np_max="59"
+        app:np_min="0"
+        app:np_selectedTextColor="@color/dark_blue"
+        app:np_selectedTextSize="@dimen/_32ssp"
+        app:np_selectedTypeface="@font/golos_text_bold"
+        app:np_textColor="@color/gray"
+        app:np_textSize="@dimen/_32ssp"
+        app:np_typeface="@font/golos_text_bold" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_save"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_40sdp"
+        android:layout_marginHorizontal="@dimen/_60sdp"
+        android:layout_marginBottom="@dimen/_12sdp"
+        android:background="@drawable/bg_button_full_blue"
+        android:fontFamily="@font/golos_text_bold"
+        android:text="@string/notification_manager_save"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_10ssp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

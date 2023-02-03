@@ -32,4 +32,10 @@
     <string name="notification_manager_repeat">Повтор</string>
     <string name="notification_manager_every_week">Еженедельно (%s)</string>
     <string name="notification_manager_only_today">Без повтора, только сегодня</string>
+    <string name="notification_manager_save">Сохранить</string>
+    <string name="notification_manager_time">Время</string>
+    <string name="notification_manager_auto_switch">Автоматическое включение</string>
+    <string name="notification_manager_dnd_description">Настройте время и дни недели, когда режим “Не беспокоить” будет активен</string>
+    <string name="notification_manager_since">С</string>
+    <string name="notification_manager_before">До</string>
 </resources>

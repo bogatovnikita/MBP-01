@@ -18,7 +18,7 @@ import yin_kio.garbage_clean.presentation.databinding.ListOtemDeleteProgressBind
 import yin_kio.garbage_clean.presentation.presenter.ScreenItemsPresenter
 import yin_kio.garbage_clean.presentation.view_model.parentViewModel
 
-class DeleteProgressDialog : DialogFragment(R.layout.dialog_delete_progress) {
+internal class DeleteProgressDialog : DialogFragment(R.layout.dialog_delete_progress) {
 
     private val binding: DialogDeleteProgressBinding by viewBinding()
     private val viewModel by lazy { parentViewModel() }

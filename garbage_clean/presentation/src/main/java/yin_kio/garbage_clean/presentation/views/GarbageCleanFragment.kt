@@ -17,7 +17,7 @@ import yin_kio.garbage_clean.presentation.models.UiDeleteFromItem
 import yin_kio.garbage_clean.presentation.view_model.ObservableScreenViewModel
 import yin_kio.garbage_clean.presentation.view_model.parentViewModel
 
-class GarbageCleanFragment : Fragment(R.layout.fragment_garbage_clean) {
+internal class GarbageCleanFragment : Fragment(R.layout.fragment_garbage_clean) {
 
     private val binding: FragmentGarbageCleanBinding by viewBinding()
     private val viewModel: ObservableScreenViewModel by lifecycleAware { parentViewModel() }

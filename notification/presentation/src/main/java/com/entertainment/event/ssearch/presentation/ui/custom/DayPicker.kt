@@ -6,7 +6,14 @@ import android.view.LayoutInflater
 import android.widget.TextView
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.constraintlayout.widget.ConstraintLayout
-import com.entertainment.event.ssearch.domain.dnd.TimePickerSettings
+import com.entertainment.event.ssearch.domain.dnd.DayPickerSettings
+import com.entertainment.event.ssearch.domain.use_cases.DNDSettingsUseCase.Companion.FRIDAY
+import com.entertainment.event.ssearch.domain.use_cases.DNDSettingsUseCase.Companion.MONDAY
+import com.entertainment.event.ssearch.domain.use_cases.DNDSettingsUseCase.Companion.SATURDAY
+import com.entertainment.event.ssearch.domain.use_cases.DNDSettingsUseCase.Companion.SUNDAY
+import com.entertainment.event.ssearch.domain.use_cases.DNDSettingsUseCase.Companion.THURSDAY
+import com.entertainment.event.ssearch.domain.use_cases.DNDSettingsUseCase.Companion.TUESDAY
+import com.entertainment.event.ssearch.domain.use_cases.DNDSettingsUseCase.Companion.WEDNESDAY
 import com.entertainment.event.ssearch.presentation.R
 import com.entertainment.event.ssearch.presentation.databinding.DayPickerLayoutBinding
 import com.entertainment.event.ssearch.presentation.models.DayPickerBtn
@@ -24,7 +31,7 @@ class DayPicker @JvmOverloads constructor(
 ) : ConstraintLayout(context, attr, defStyleAttr) {
 
     @Inject
-    lateinit var settings: TimePickerSettings
+    lateinit var settings: DayPickerSettings
 
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
@@ -127,14 +134,4 @@ class DayPicker @JvmOverloads constructor(
     private fun getStringById(id: Int) = _binding.root.context.getString(id)
 
     private fun getColor(id: Int) = _binding.root.context.getColor(id)
-
-    companion object {
-        private const val MONDAY = 1
-        private const val TUESDAY = 2
-        private const val WEDNESDAY = 3
-        private const val THURSDAY = 4
-        private const val FRIDAY = 5
-        private const val SATURDAY = 6
-        private const val SUNDAY = 7
-    }
 }

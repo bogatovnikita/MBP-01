@@ -1,6 +1,6 @@
 package com.entertainment.event.ssearch.domain.dnd
 
-interface Settings {
+interface DNDSettings {
 
     suspend fun setDisturbMode(isSwitched: Boolean)
 

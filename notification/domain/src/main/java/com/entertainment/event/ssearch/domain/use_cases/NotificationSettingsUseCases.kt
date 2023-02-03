@@ -6,7 +6,7 @@ import com.entertainment.event.ssearch.domain.mappers.mapToApp
 import com.entertainment.event.ssearch.domain.models.AppWithNotifications
 import com.entertainment.event.ssearch.domain.permission.Permission
 import com.entertainment.event.ssearch.domain.providers.AppsProvider
-import com.entertainment.event.ssearch.domain.dnd.Settings
+import com.entertainment.event.ssearch.domain.dnd.DNDSettings
 import com.entertainment.event.ssearch.domain.repositories.AppRepository
 import com.entertainment.event.ssearch.domain.repositories.AppWithNotificationsRepository
 import com.entertainment.event.ssearch.domain.service.ServiceController
@@ -15,10 +15,10 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class NotificationSettingsUseCases @Inject constructor(
-    private val settings: Settings,
     private val apps: AppRepository,
     private val context: Application,
     private val permission: Permission,
+    private val DNDSettings: DNDSettings,
     private val appsProvide: AppsProvider,
     private val dndController: DNDController,
     private val serviceController: ServiceController,
@@ -29,7 +29,7 @@ class NotificationSettingsUseCases @Inject constructor(
         apps.setSwitched(packageName, isSwitched)
 
     suspend fun getDisturbMode(): Boolean =
-        settings.isDisturbModeEnabled() && !dndController.isDNDModeOff()
+        DNDSettings.isDisturbModeEnabled() && !dndController.isDNDModeOff()
 
     fun hasServicePermission() = permission.hasServicePermission()
 
@@ -37,10 +37,10 @@ class NotificationSettingsUseCases @Inject constructor(
         serviceController.cleanAllNotification()
     }
 
-    suspend fun isAllAppsLimited(): Boolean = settings.isAllAppsLimited()
+    suspend fun isAllAppsLimited(): Boolean = DNDSettings.isAllAppsLimited()
 
     suspend fun setGeneralDisturbMode(isSwitched: Boolean) {
-        settings.setDisturbMode(isSwitched)
+        DNDSettings.setDisturbMode(isSwitched)
         if (isSwitched) {
             dndController.setDNDModeOn()
         } else {
@@ -108,7 +108,7 @@ class NotificationSettingsUseCases @Inject constructor(
     }
 
     suspend fun switchModeDisturbForAllApps(isSwitched: Boolean) {
-        settings.setLimitAllApps(isSwitched)
+        DNDSettings.setLimitAllApps(isSwitched)
         val updatedApps = apps.getApps().map { app -> app.copy(isSwitched = isSwitched) }
         apps.updateAll(updatedApps)
     }

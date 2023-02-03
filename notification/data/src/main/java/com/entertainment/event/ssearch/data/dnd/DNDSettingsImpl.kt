@@ -2,12 +2,12 @@ package com.entertainment.event.ssearch.data.dnd
 
 import android.app.Application
 import android.content.Context.MODE_PRIVATE
-import com.entertainment.event.ssearch.domain.dnd.Settings
+import com.entertainment.event.ssearch.domain.dnd.DNDSettings
 import javax.inject.Inject
 
 class DNDSettingsImpl @Inject constructor(
     context: Application
-) : Settings {
+) : DNDSettings {
 
     private val prefs = context.getSharedPreferences(NOTIFICATION_SETTINGS, MODE_PRIVATE)
 

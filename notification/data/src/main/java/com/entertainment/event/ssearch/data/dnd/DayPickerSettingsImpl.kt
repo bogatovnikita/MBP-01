@@ -3,26 +3,17 @@ package com.entertainment.event.ssearch.data.dnd
 import android.app.Application
 import android.content.Context
 import com.entertainment.event.ssearch.data.dnd.DNDSettingsImpl.Companion.NOTIFICATION_SETTINGS
-import com.entertainment.event.ssearch.domain.dnd.TimePickerSettings
+import com.entertainment.event.ssearch.domain.dnd.DayPickerSettings
 import javax.inject.Inject
 
-class TimePickerSettingsImpl @Inject constructor(
+class DayPickerSettingsImpl @Inject constructor(
     context: Application
-) : TimePickerSettings {
+) : DayPickerSettings {
 
     private val prefs = context.getSharedPreferences(
         NOTIFICATION_SETTINGS,
         Context.MODE_PRIVATE
     )
-
-    override suspend fun getStartHours(): Int = prefs.getInt(START_HOURS, 0)
-
-    override suspend fun setStartHours(hours: Int) = prefs.edit().putInt(START_HOURS, hours).apply()
-
-    override suspend fun getStartMinutes(): Int = prefs.getInt(START_MINUTES, 0)
-
-    override suspend fun setStartMinutes(minutes: Int) =
-        prefs.edit().putInt(START_MINUTES, minutes).apply()
 
     override suspend fun setMondayInclude(isSwitched: Boolean) =
         prefs.edit().putBoolean(MONDAY, isSwitched).apply()
@@ -60,8 +51,6 @@ class TimePickerSettingsImpl @Inject constructor(
     override suspend fun isSundayIncluded(): Boolean = prefs.getBoolean(SUNDAY, false)
 
     companion object {
-        private const val START_HOURS = "START_HOURS"
-        private const val START_MINUTES = "START_MINUTES"
         private const val MONDAY = "MONDAY"
         private const val TUESDAY = "TUESDAY"
         private const val WEDNESDAY = "WEDNESDAY"

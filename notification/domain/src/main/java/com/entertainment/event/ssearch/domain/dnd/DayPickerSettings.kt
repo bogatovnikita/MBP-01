@@ -1,14 +1,6 @@
 package com.entertainment.event.ssearch.domain.dnd
 
-interface TimePickerSettings {
-
-    suspend fun getStartHours(): Int
-
-    suspend fun setStartHours(hours: Int)
-
-    suspend fun getStartMinutes(): Int
-
-    suspend fun setStartMinutes(minutes: Int)
+interface DayPickerSettings {
 
     suspend fun setMondayInclude(isSwitched: Boolean)
 

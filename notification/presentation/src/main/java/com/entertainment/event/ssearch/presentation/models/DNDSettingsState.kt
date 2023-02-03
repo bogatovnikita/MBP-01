@@ -1,29 +1,27 @@
 package com.entertainment.event.ssearch.presentation.models
 
 data class DNDSettingsState(
-    val isAutoModeSwitched: Boolean = false,
-    val startTime: Int = 0,
     val endTime: Int = 0,
+    val startTime: Int = 0,
+    val timeStartSelected: Boolean = false,
+    val timeEndSelected: Boolean = false,
+    val isAutoModeSwitched: Boolean = false,
     val selectedDays: List<Int> = emptyList(),
-    val timeSinceSelected: Boolean = false,
-    val timeBeforeSelected: Boolean = false,
     val event: DNDSettingsEvent = DNDSettingsEvent.Default,
-) {
+)
 
-    sealed class DNDSettingsEvent {
+sealed class DNDSettingsEvent {
 
-        object Default: DNDSettingsEvent()
+    object Default: DNDSettingsEvent()
 
-        class SetAutoModeDND(val isSwitched: Boolean): DNDSettingsEvent()
+    class SetAutoModeDND(val isSwitched: Boolean): DNDSettingsEvent()
 
-        object SelectTimeSince: DNDSettingsEvent()
+    object SelectStartTime: DNDSettingsEvent()
 
-        object SelectTimeBefore: DNDSettingsEvent()
+    object SelectEndTime: DNDSettingsEvent()
 
-        class UpdateSelectedDayList(val days: List<Int>): DNDSettingsEvent()
+    class UpdateSelectedDayList(val days: List<Int>): DNDSettingsEvent()
 
-        class SaveTime(val time: Int): DNDSettingsEvent()
-
-    }
+    class SaveTime(val time: Int): DNDSettingsEvent()
 
 }

@@ -13,6 +13,8 @@ class DNDSettingsUseCase @Inject constructor(
 
     suspend fun isAutoModeSwitched() = dndSettings.isAutoModeDNDEnabled()
 
+    suspend fun setAutoModeDND(isSwitched: Boolean) = dndSettings.setAutoModeDND(isSwitched)
+
     suspend fun getSelectedDays(): List<Int> {
         return mutableListOf<Int>().apply {
             if (dayPickerSettings.isMondayIncluded()) add(MONDAY)

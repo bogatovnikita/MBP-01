@@ -120,10 +120,10 @@
         android:layout_marginTop="-19dp"
         android:layout_marginBottom="-19dp"
         android:background="@drawable/bg_time"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_time_before"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_time_end"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/tv_time_since" />
+        app:layout_constraintTop_toTopOf="@id/tv_time_start" />
 
     <TextView
         android:id="@+id/tv_since"
@@ -139,7 +139,7 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_time" />
 
     <TextView
-        android:id="@+id/tv_time_since"
+        android:id="@+id/tv_time_start"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/_19sdp"
@@ -176,7 +176,7 @@
         app:layout_constraintTop_toBottomOf="@+id/separation_line_2" />
 
     <TextView
-        android:id="@+id/tv_time_before"
+        android:id="@+id/tv_time_end"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_5sdp"
@@ -270,6 +270,14 @@
 
 
     </FrameLayout>
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group_time_picker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="picker_hours, picker_minutes,
+        time_dots1, time_dots2, time_dots3, dividers,btn_save"/>
 
     <com.shawnlin.numberpicker.NumberPicker
         android:id="@+id/picker_minutes"

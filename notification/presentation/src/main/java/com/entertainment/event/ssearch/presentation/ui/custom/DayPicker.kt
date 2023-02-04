@@ -17,6 +17,7 @@ import com.entertainment.event.ssearch.domain.use_cases.DNDSettingsUseCase.Compa
 import com.entertainment.event.ssearch.presentation.R
 import com.entertainment.event.ssearch.presentation.databinding.DayPickerLayoutBinding
 import com.entertainment.event.ssearch.presentation.models.DayPickerBtn
+import com.entertainment.event.ssearch.presentation.ui.dnd_settings.setAlphaAndAvailability
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import javax.inject.Inject
@@ -53,6 +54,10 @@ class DayPicker @JvmOverloads constructor(
 
     fun setOnChosenDaysListener(block: OnDayClick) {
         onDayClick = block
+    }
+
+    fun setAlphaAndAvailability(alpha: Float) {
+        _binding.groupAll.setAlphaAndAvailability(alpha)
     }
 
     private fun initState() {

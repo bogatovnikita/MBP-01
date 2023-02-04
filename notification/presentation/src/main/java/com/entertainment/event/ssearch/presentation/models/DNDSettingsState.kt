@@ -22,6 +22,8 @@ sealed class DNDSettingsEvent {
 
     class UpdateSelectedDayList(val days: List<Int>): DNDSettingsEvent()
 
+    object WrongFormat: DNDSettingsEvent()
+
     class SaveTime(val time: Int): DNDSettingsEvent()
 
 }

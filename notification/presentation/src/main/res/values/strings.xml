@@ -38,4 +38,5 @@
     <string name="notification_manager_dnd_description">Настройте время и дни недели, когда режим “Не беспокоить” будет активен</string>
     <string name="notification_manager_since">С</string>
     <string name="notification_manager_before">До</string>
+    <string name="notification_manager_wrong_format">Установите корректное время</string>
 </resources>

@@ -133,4 +133,11 @@
 
     </LinearLayout>
 
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group_All"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="sun, sat, fr, th,
+        we, tu, mon, tv_days, tv_repeat"/>
+
 </merge>

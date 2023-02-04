@@ -37,6 +37,7 @@ class DNDSettingsViewModel @Inject constructor(
             is DNDSettingsEvent.SelectStartTime -> selectTimePicker(true)
             is DNDSettingsEvent.SelectEndTime -> selectTimePicker(false)
             is DNDSettingsEvent.SaveTime -> saveTime(event.time)
+            is DNDSettingsEvent.Default -> setEvent(event)
             else -> {}
         }
 
@@ -53,15 +54,20 @@ class DNDSettingsViewModel @Inject constructor(
 
     private fun saveTime(time: Int) {
         viewModelScope.launch {
-            if (screenState.value.timeStartSelected) {
+            if (screenState.value.timeStartSelected && screenState.value.endTime > time) {
                 useCase.setStartTime(time)
-            } else {
+            } else if (screenState.value.timeEndSelected && screenState.value.startTime < time) {
                 useCase.setEndTime(time)
+            } else {
+                setEvent(DNDSettingsEvent.WrongFormat)
+                return@launch
             }
             updateState {
                 it.copy(
                     timeStartSelected = false,
                     timeEndSelected =  false,
+                    startTime = useCase.getStartTime(),
+                    endTime = useCase.getEndTime(),
                 )
             }
         }
@@ -70,6 +76,11 @@ class DNDSettingsViewModel @Inject constructor(
     private fun setAutoModeDND(isSwitched: Boolean) {
         viewModelScope.launch {
             useCase.setAutoModeDND(isSwitched)
+            updateState {
+                it.copy(
+                    isAutoModeSwitched = isSwitched
+                )
+            }
         }
     }
 

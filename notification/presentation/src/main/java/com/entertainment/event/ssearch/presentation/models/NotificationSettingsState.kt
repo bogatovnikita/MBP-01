@@ -1,12 +1,15 @@
 package com.entertainment.event.ssearch.presentation.models
 
 data class NotificationSettingsState(
+    val timeEnd: Int = 0,
+    val timeStart: Int = 0,
     val modeDND: Boolean = false,
     val apps: List<AppUi> = emptyList(),
+    val isAutoModeEnable: Boolean = false,
     val isAllAppsLimited: Boolean = false,
     val hasServicePermission: Boolean = false,
+    val selectedDays: List<Int> = emptyList(),
     val isAllNotificationCleared: Boolean = false,
-    val tableTimeSate: TableTimeSate = TableTimeSate(),
     val event: NotificationStateEvent = NotificationStateEvent.Default,
 )
 

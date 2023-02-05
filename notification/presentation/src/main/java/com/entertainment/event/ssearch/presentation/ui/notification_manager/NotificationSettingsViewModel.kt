@@ -1,7 +1,9 @@
 package com.entertainment.event.ssearch.presentation.ui.notification_manager
 
 import androidx.lifecycle.viewModelScope
+import com.entertainment.event.ssearch.domain.use_cases.DNDSettingsUseCase
 import com.entertainment.event.ssearch.domain.use_cases.NotificationSettingsUseCases
+import com.entertainment.event.ssearch.presentation.R
 import com.entertainment.event.ssearch.presentation.ui.base.BaseViewModel
 import com.entertainment.event.ssearch.presentation.mappers.mapToAppUiList
 import com.entertainment.event.ssearch.presentation.models.NotificationSettingsState
@@ -14,13 +16,17 @@ import javax.inject.Inject
 @HiltViewModel
 class NotificationSettingsViewModel @Inject constructor(
     private val useCases: NotificationSettingsUseCases,
+    private val useCasesDND: DNDSettingsUseCase,
 ) : BaseViewModel<NotificationSettingsState>(NotificationSettingsState()) {
 
     fun obtainEvent(event: NotificationStateEvent) {
         when (event) {
             is NotificationStateEvent.ClearAllNotification -> openDialogClearingOrPermission()
             is NotificationStateEvent.Default -> setEvent(NotificationStateEvent.Default)
-            is NotificationStateEvent.Update -> updateAppsAndService()
+            is NotificationStateEvent.Update -> {
+                updateAppsAndService()
+                updateTimetableState()
+            }
             is NotificationStateEvent.SwitchGeneralDisturbMode -> switchGeneralDisturbMode(event.isSwitch)
             is NotificationStateEvent.LimitApps -> setToAllAppsModeDisturb(event.isSwitch)
             is NotificationStateEvent.CloseDialogClearing -> clearAllNotification(event)
@@ -29,6 +35,33 @@ class NotificationSettingsViewModel @Inject constructor(
             is NotificationStateEvent.OpenMissedNotification -> setEvent(event)
             is NotificationStateEvent.OpenTimeTable -> setEvent(event)
             else -> {}
+        }
+    }
+
+    private fun updateTimetableState() {
+        viewModelScope.launch {
+            updateState {
+                it.copy(
+                    isAutoModeEnable = useCasesDND.isAutoModeSwitched(),
+                    timeStart = useCasesDND.getStartTime(),
+                    timeEnd = useCasesDND.getEndTime(),
+                    selectedDays = useCasesDND.getSelectedDays().map(::toResId),
+                )
+            }
+        }
+        setEvent(NotificationStateEvent.Default)
+    }
+
+    private fun toResId(day: Int): Int {
+        return when (day) {
+            DNDSettingsUseCase.MONDAY -> R.string.notification_manager_mon
+            DNDSettingsUseCase.TUESDAY -> R.string.notification_manager_tu
+            DNDSettingsUseCase.WEDNESDAY -> R.string.notification_manager_we
+            DNDSettingsUseCase.THURSDAY -> R.string.notification_manager_th
+            DNDSettingsUseCase.FRIDAY -> R.string.notification_manager_fr
+            DNDSettingsUseCase.SATURDAY -> R.string.notification_manager_sat
+            DNDSettingsUseCase.SUNDAY -> R.string.notification_manager_sun
+            else -> R.string.notification_manager_mon
         }
     }
 

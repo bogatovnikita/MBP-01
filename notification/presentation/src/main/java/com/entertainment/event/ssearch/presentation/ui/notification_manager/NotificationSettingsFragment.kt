@@ -2,6 +2,7 @@ package com.entertainment.event.ssearch.presentation.ui.notification_manager
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.coroutineScope
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.entertainment.event.ssearch.presentation.R
 import com.entertainment.event.ssearch.presentation.databinding.FragmentNotificationSettingsBinding
+import com.entertainment.event.ssearch.presentation.extensions.toTime
 import com.entertainment.event.ssearch.presentation.models.NotificationSettingsState
 import com.entertainment.event.ssearch.presentation.models.NotificationStateEvent
 import com.entertainment.event.ssearch.presentation.ui.adapters.AppRecyclerViewAdapter
@@ -63,6 +65,25 @@ class NotificationSettingsFragment : Fragment(R.layout.fragment_notification_set
             adapter.submitList(apps)
             binding.switchModeDisturb.isChecked = modeDND
             binding.switchLimitAllApplication.isChecked = isAllAppsLimited
+            renderTimetableState(state)
+        }
+    }
+
+    private fun renderTimetableState(state: NotificationSettingsState) {
+        with(state) {
+            val isNeedShow = selectedDays.isNotEmpty() || isAutoModeEnable
+            binding.tvAddTimetable.isVisible = !isNeedShow
+            binding.groupTimetable.isVisible = isNeedShow
+            binding.tvTimeDisturb.text = "${timeStart.toTime()}-${timeEnd.toTime()}"
+            binding.tvModeDisturbOn.isVisible = isNeedShow && isAutoModeEnable
+            binding.tvModeDisturbOff.isVisible = isNeedShow && !isAutoModeEnable
+            binding.tvDayOfWeek.text = if (selectedDays.isNotEmpty()) {
+                val days = selectedDays.map { "${getString(it)}, " }.reduce { acc, day -> acc + day }
+                    .removeSuffix(", ")
+                getString(R.string.notification_manager_every_week, days)
+            } else {
+                getString(R.string.notification_manager_only_today)
+            }
         }
     }
 

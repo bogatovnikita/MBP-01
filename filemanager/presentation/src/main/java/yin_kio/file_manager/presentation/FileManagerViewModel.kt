@@ -2,7 +2,7 @@ package yin_kio.file_manager.presentation
 
 import kotlinx.coroutines.flow.map
 import yin_kio.file_manager.domain.FileManager
-import yin_kio.file_manager.presentation.models.UiState
+import yin_kio.file_manager.presentation.models.ScreenState
 import yin_kio.file_manager.presentation.presenters.FileManagerPresenter
 
 class FileManagerViewModel(
@@ -12,7 +12,7 @@ class FileManagerViewModel(
 
     val flow = fileManager.stateHolder.flow
         .map {
-            UiState(
+            ScreenState(
                 fileRequest = it.fileRequest,
                 isAllSelected = it.isAllSelected,
                 listShowingMode = it.listShowingMode,

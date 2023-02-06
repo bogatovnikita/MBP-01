@@ -2,7 +2,7 @@ package yin_kio.file_manager.presentation.models
 
 import yin_kio.file_manager.domain.models.*
 
-data class UiState(
+data class ScreenState(
     val fileRequest: FileRequest,
     val isAllSelected: Boolean,
     val listShowingMode: ListShowingMode,

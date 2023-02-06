@@ -1,6 +1,7 @@
 package yin_kio.file_manager.domain.models
 
 internal data class MutableState(
+    override var isClosed: Boolean = false,
     override var version: Int = 0,
     override var hasPermission: Boolean = true,
     override var inProgress: Boolean = true,

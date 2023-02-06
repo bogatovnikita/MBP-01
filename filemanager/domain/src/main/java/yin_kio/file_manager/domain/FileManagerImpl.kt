@@ -192,9 +192,15 @@ internal class FileManagerImpl(
         updateState()
     }
 
+    override fun close() {
+        state.isClosed = true
+        updateState()
+    }
+
     private fun updateState() {
         _stateHolder.update(state.copy())
     }
+
 }
 
 

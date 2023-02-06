@@ -347,6 +347,12 @@ internal class FileManagerTest{
         assertFalse(state.isShowSortingModeSelector)
     }
 
+    @Test
+    fun `close - state is closed`() = runTest{
+        fileManager().close()
+        assertTrue(state.isClosed)
+    }
+
 
 
 

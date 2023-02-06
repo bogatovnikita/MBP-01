@@ -9,7 +9,7 @@
         android:name="yin_kio.garbage_clean.presentation.views.GarbageCleanParentFragment"
         android:label="GarbageCleanParentFragment" >
         <action
-            android:id="@+id/action_garbageCleanParentFragment_to_advicesFragment"
+            android:id="@+id/toAdvices"
             app:destination="@id/advicesFragment"
             app:popUpTo="@id/mainMenuFragment" />
         <argument
@@ -21,13 +21,13 @@
         android:name="yin_kio.main_menu.presentation.MainMenuFragment"
         android:label="MainMenuFragment" >
         <action
-            android:id="@+id/action_mainMenuFragment_to_garbageCleanParentFragment"
+            android:id="@+id/toGarbageClean"
             app:destination="@id/garbageCleanParentFragment" />
         <action
-            android:id="@+id/action_mainMenuFragment_to_fileManagerParentFragment"
+            android:id="@+id/toFileManager"
             app:destination="@id/fileManagerParentFragment" />
         <action
-            android:id="@+id/action_mainMenuFragment_to_duplicatesParentFragment"
+            android:id="@+id/toDuplicates"
             app:destination="@id/duplicatesParentFragment" />
     </fragment>
     <fragment
@@ -46,7 +46,7 @@
             android:name="completeId"
             app:argType="integer" />
         <action
-            android:id="@+id/action_duplicatesParentFragment_to_advicesFragment"
+            android:id="@+id/toAdvices"
             app:destination="@id/advicesFragment"
             app:popUpTo="@id/mainMenuFragment" />
     </fragment>

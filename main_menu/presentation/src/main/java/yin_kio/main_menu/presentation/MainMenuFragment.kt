@@ -13,32 +13,33 @@ class MainMenuFragment : Fragment(R.layout.fragment_main_menu) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         parentFragmentManager.fragmentFactory = MainMenuFragmentFactory()
+        setupListeners()
+    }
 
+    private fun setupListeners() {
         binding.apply {
-            fileManager.setOnClickListener{ openFileManager() }
-            duplicates.setOnClickListener{ openDuplicates() }
-            garbageClean.setOnClickListener{ openGarbageClean() }
+            fileManager.setOnClickListener { openFileManager() }
+            duplicates.setOnClickListener { openDuplicates() }
+            garbageClean.setOnClickListener { openGarbageClean() }
         }
     }
 
     private fun openFileManager() {
-        findNavController().navigate(R.id.action_mainMenuFragment_to_fileManagerParentFragment)
+        findNavController().navigate(R.id.toFileManager)
     }
 
     private fun openDuplicates(){
-        findNavController().navigate(R.id.action_mainMenuFragment_to_duplicatesParentFragment,
-            Bundle().apply {
-                putInt("completeId", R.id.action_duplicatesParentFragment_to_advicesFragment)
-            }
-        )
+        findNavController().navigate(R.id.toDuplicates, completeDestination())
     }
 
     private fun openGarbageClean() {
-        findNavController().navigate(R.id.action_mainMenuFragment_to_garbageCleanParentFragment,
-            Bundle().apply {
-                putInt("completeId", R.id.action_garbageCleanParentFragment_to_advicesFragment)
-            }
-        )
+        findNavController().navigate(R.id.toGarbageClean, completeDestination())
+    }
+
+    private fun completeDestination() : Bundle {
+        return Bundle().apply {
+            putInt(ArgNames.COMPLETE_DESTINATION_ID, R.id.toAdvices)
+        }
     }
 
 }

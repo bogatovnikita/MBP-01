@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import jamycake.lifecycle_aware.lifecycleAware
 import yin_kio.file_manager.domain.models.DeleteState
 import yin_kio.file_manager.presentation.FileManagerViewModel
@@ -36,9 +37,16 @@ class FileManagerParentFragment(
     private fun setupObserver() {
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.flow.collect {
+                goBackIfClosed(it)
                 handleDeleteState(it)
                 handlePermission(it)
             }
+        }
+    }
+
+    private fun goBackIfClosed(it: ScreenState) {
+        if (it.isClosed) {
+            findNavController().navigateUp()
         }
     }
 

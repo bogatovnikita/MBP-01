@@ -3,6 +3,7 @@ package yin_kio.file_manager.presentation.models
 import yin_kio.file_manager.domain.models.*
 
 data class ScreenState(
+    val isClosed: Boolean,
     val fileRequest: FileRequest,
     val isAllSelected: Boolean,
     val listShowingMode: ListShowingMode,

@@ -39,6 +39,7 @@ class FileManagerFragment(
 
     private fun setupListeners(){
         binding.apply {
+            back.setOnClickListener{ viewModel.obtainIntention(Intention.Close) }
             allFiles.setOnClickListener { viewModel.obtainIntention(
                 Intention.SwitchFileMode(
                     FileRequest.AllFiles

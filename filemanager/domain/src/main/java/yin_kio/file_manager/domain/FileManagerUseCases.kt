@@ -4,7 +4,7 @@ import yin_kio.file_manager.domain.models.FileRequest
 import yin_kio.file_manager.domain.models.SortingMode
 import yin_kio.file_manager.domain.models.StateHolder
 
-interface FileManager {
+interface FileManagerUseCases {
     val stateHolder: StateHolder
 
     fun updateFiles()

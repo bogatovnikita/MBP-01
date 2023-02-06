@@ -9,14 +9,14 @@ import yin_kio.file_manager.domain.gateways.PermissionChecker
 import yin_kio.file_manager.domain.models.*
 import kotlin.coroutines.CoroutineContext
 
-internal class FileManagerImpl(
+internal class FileManagerUseCasesImpl(
     private val _stateHolder: MutableStateHolder,
     private val permissionChecker: PermissionChecker,
     private val files: Files,
     private val coroutineScope: CoroutineScope,
     private val coroutineContext: CoroutineContext,
     private val ads: Ads
-) : FileManager {
+) : FileManagerUseCases {
 
     private val state = MutableState()
     override val stateHolder: StateHolder get() =  _stateHolder
@@ -48,7 +48,7 @@ internal class FileManagerImpl(
                 inProgress = true
                 updateState()
                 delay(1)
-                files = this@FileManagerImpl.files.getFiles(state.fileRequest)
+                files = this@FileManagerUseCasesImpl.files.getFiles(state.fileRequest)
 
                 setSortingMode(state.sortingMode)
                 inProgress = false

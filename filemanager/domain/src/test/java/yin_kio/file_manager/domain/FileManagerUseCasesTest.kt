@@ -16,7 +16,7 @@ import yin_kio.file_manager.domain.gateways.PermissionChecker
 import yin_kio.file_manager.domain.models.*
 
 @OptIn(ExperimentalCoroutinesApi::class)
-internal class FileManagerTest{
+internal class FileManagerUseCasesTest{
 
     private lateinit var stateHolder: MutableStateHolder
     private val state get() = stateHolder.value
@@ -102,13 +102,13 @@ internal class FileManagerTest{
         }
     }
 
-    private fun FileManager.assertSorted(sortingMode: SortingMode, expected: List<Long>, sortBy: (FileInfo) -> Long){
+    private fun FileManagerUseCases.assertSorted(sortingMode: SortingMode, expected: List<Long>, sortBy: (FileInfo) -> Long){
         switchSortingMode(sortingMode)
         val actual = state.files.map(sortBy)
         assertTrue(expected.contentEquals(actual), "expected: $expected, actual: $actual")
     }
 
-    private fun FileManagerImpl.assertSortingModeSwitching() {
+    private fun FileManagerUseCasesImpl.assertSortingModeSwitching() {
         SortingMode.values().forEach {
             switchSortingMode(it)
             assertEquals(it, state.sortingMode)
@@ -357,7 +357,7 @@ internal class FileManagerTest{
 
 
 
-    private fun TestScope.callAfterLoading(fileManager: FileManagerImpl = fileManager(), action: FileManagerImpl.() -> Unit){
+    private fun TestScope.callAfterLoading(fileManager: FileManagerUseCasesImpl = fileManager(), action: FileManagerUseCasesImpl.() -> Unit){
         wait()
         fileManager.action()
     }
@@ -369,7 +369,7 @@ internal class FileManagerTest{
 
 
 
-    private fun TestScope.assertFileModeSwitching(fileManager: FileManagerImpl){
+    private fun TestScope.assertFileModeSwitching(fileManager: FileManagerUseCasesImpl){
         FileRequest.values().forEach {
             fileManager.switchFileMode(it)
             wait()
@@ -377,7 +377,7 @@ internal class FileManagerTest{
         }
     }
 
-    private fun TestScope.assertGetFilesCalls(fileManager: FileManagerImpl){
+    private fun TestScope.assertGetFilesCalls(fileManager: FileManagerUseCasesImpl){
         for (value in FileRequest.values()) {
             fileManager.apply {
                 switchFileMode(value)
@@ -390,8 +390,8 @@ internal class FileManagerTest{
 
 
 
-    private fun TestScope.fileManager(hasPermission: Boolean = true) : FileManagerImpl{
-        return FileManagerImpl(
+    private fun TestScope.fileManager(hasPermission: Boolean = true) : FileManagerUseCasesImpl{
+        return FileManagerUseCasesImpl(
             stateHolder, permissionChecker(hasPermission), files,
             coroutineScope = this,
             coroutineContext = coroutineContext,

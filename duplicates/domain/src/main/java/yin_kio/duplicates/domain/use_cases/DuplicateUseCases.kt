@@ -11,5 +11,6 @@ interface DuplicateUseCases {
     fun closeInter()
     fun continueUniting()
     fun completeUniting()
+    fun close()
 
 }

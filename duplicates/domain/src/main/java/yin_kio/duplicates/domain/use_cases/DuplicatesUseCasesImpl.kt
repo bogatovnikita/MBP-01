@@ -123,4 +123,8 @@ internal class DuplicatesUseCasesImpl(
         coroutineScope.launch(coroutineContext) { action() }
     }
 
+    override fun close() {
+        state.isClosed = true
+        state.update()
+    }
 }

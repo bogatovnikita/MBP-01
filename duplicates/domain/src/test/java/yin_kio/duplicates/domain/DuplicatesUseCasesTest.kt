@@ -25,14 +25,14 @@ import yin_kio.duplicates.domain.use_cases.UniteUseCase
 
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class DuplicatesUseCaseTest {
+class DuplicatesUseCasesTest {
 
     private lateinit var state: MutableStateHolder
     private val dispatcher = StandardTestDispatcher()
     private val coroutineScope = CoroutineScope(dispatcher)
     private lateinit var files: Files
     private lateinit var permissions: Permissions
-    private lateinit var useCase: DuplicatesUseCasesImpl
+    private lateinit var useCases: DuplicatesUseCasesImpl
     private lateinit var duplicateRemover: DuplicateRemover
     private val uniteUseCase: UniteUseCase = mockk()
     private val ads: Ads = mockk()
@@ -47,7 +47,7 @@ class DuplicatesUseCaseTest {
         coEvery { ads.preloadAd() } returns Unit
         coEvery { uniteUseCase.unite() } returns Unit
         every { permissions.hasStoragePermissions } returns true
-        useCase = createDuplicatesUseCase()
+        useCases = createDuplicatesUseCase()
         waitCoroutines()
     }
 
@@ -113,13 +113,13 @@ class DuplicatesUseCaseTest {
 
     @Test
     fun switchGroupSelection() = runTest{
-        useCase.switchGroupSelection(0)
+        useCases.switchGroupSelection(0)
 
         state.apply {
             assertTrue(selected.isNotEmpty())
             assertTrue(selected[0]!!.containsAll(duplicatesLists[0].data))
 
-            useCase.switchGroupSelection(0)
+            useCases.switchGroupSelection(0)
 
             assertTrue(selected.isEmpty())
         }
@@ -127,18 +127,18 @@ class DuplicatesUseCaseTest {
 
     @Test
     fun switchItemSelection() = runTest {
-        useCase.switchItemSelection(0, FIRST_FILE)
-        useCase.switchItemSelection(0, SECOND_FILE)
+        useCases.switchItemSelection(0, FIRST_FILE)
+        useCases.switchItemSelection(0, SECOND_FILE)
 
         state.apply {
             assertTrue(selected[0]!!.containsAll(duplicatesLists[0].data))
 
-            useCase.switchItemSelection(0, FIRST_FILE)
+            useCases.switchItemSelection(0, FIRST_FILE)
 
             assertFalse(isItemSelected(0, FIRST_FILE))
             assertTrue(isItemSelected(0, SECOND_FILE))
 
-            useCase.switchItemSelection(0, SECOND_FILE)
+            useCases.switchItemSelection(0, SECOND_FILE)
 
             assertNull(selected[0])
             assertTrue(selected.isEmpty())
@@ -150,7 +150,7 @@ class DuplicatesUseCaseTest {
     @Test
     fun navigate() = runTest{
         Destination.values().forEach {
-            useCase.navigate(it)
+            useCases.navigate(it)
             assertEquals(it, state.destination)
         }
     }
@@ -160,11 +160,11 @@ class DuplicatesUseCaseTest {
     @Test
     fun `closeInter with item selection`() = runTest{
         state.uniteWay = UniteWay.Selected
-        useCase.closeInter()
+        useCases.closeInter()
         assertEquals(Destination.AskContinue, state.destination)
 
         state.uniteWay = UniteWay.All
-        useCase.closeInter()
+        useCases.closeInter()
         assertEquals(Destination.AdvicesWithDialog, state.destination)
     }
 
@@ -172,20 +172,27 @@ class DuplicatesUseCaseTest {
 
     @Test
     fun continueUniting(){
-        useCase.continueUniting()
+        useCases.continueUniting()
         assertEquals(Destination.List, state.destination)
     }
 
     @Test
     fun completeUniting() {
-        useCase.completeUniting()
+        useCases.completeUniting()
         assertEquals(Destination.Advices, state.destination)
     }
 
     @Test
     fun unite() = runTest{
-        useCase.unite()
+        useCases.unite()
         coVerify { uniteUseCase.unite() }
+    }
+
+    @Test
+    fun close() = runTest{
+        useCases.close()
+
+        assertTrue(state.isClosed)
     }
 
 

@@ -3,6 +3,7 @@ package yin_kio.duplicates.domain.models
 import kotlinx.coroutines.flow.Flow
 
 interface StateHolder {
+    val isClosed: Boolean
     val isInProgress: Boolean
     val duplicatesLists: List<DuplicatesList>
     val selected: Map<Int, Set<ImageInfo>>

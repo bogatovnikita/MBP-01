@@ -25,6 +25,7 @@ class DuplicatesFragment : Fragment(R.layout.fragment_duplicates) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.recycler.adapter = adapter
 
+        binding.back.setOnClickListener{ viewModel.close() }
         binding.unite.setOnClickListener { viewModel.unite() }
 
         setupObserver()

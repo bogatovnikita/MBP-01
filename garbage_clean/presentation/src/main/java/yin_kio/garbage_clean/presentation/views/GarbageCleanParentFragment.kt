@@ -16,7 +16,7 @@ import yin_kio.garbage_clean.presentation.models.ScreenState
 import yin_kio.garbage_clean.presentation.view_model.ObservableScreenViewModel
 import yin_kio.garbage_clean.presentation.view_model.ScreenViewModelFactory
 
-class GarbageCleanParentFragment : Fragment(R.layout.fragment_parent) {
+class GarbageCleanParentFragment : Fragment(R.layout.fragment_garbage_clean_parent) {
 
     internal val viewModel: ObservableScreenViewModel by lifecycleAware { screenViewModel() }
     private lateinit var childNavController: NavController
@@ -25,6 +25,7 @@ class GarbageCleanParentFragment : Fragment(R.layout.fragment_parent) {
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
         completeId = requireArguments().getInt("completeId")
         childNavController = findChildNavController()
         setupObserver()
@@ -32,7 +33,7 @@ class GarbageCleanParentFragment : Fragment(R.layout.fragment_parent) {
     }
 
     private fun findChildNavController() =
-        (childFragmentManager.findFragmentById(R.id.fragment_container) as NavHostFragment).navController
+        (childFragmentManager.findFragmentById(R.id.garbage_clean_fragment_container) as NavHostFragment).navController
 
     private fun setupObserver() {
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {

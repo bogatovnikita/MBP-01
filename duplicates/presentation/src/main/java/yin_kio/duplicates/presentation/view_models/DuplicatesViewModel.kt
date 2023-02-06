@@ -41,15 +41,16 @@ class DuplicatesViewModel(
             state.stateFlow.collect{
                 _uiState.emit(
                     UIState(
-                    destination = it.destination,
-                    duplicatesLists = it.duplicatesLists,
-                    isInProgress = it.isInProgress,
-                    selected = it.selected,
-                    buttonState = ButtonState(
-                        bgResId = bgResId(it),
-                        titleResId = titleResId(it)
+                        isClosed = it.isClosed,
+                        destination = it.destination,
+                        duplicatesLists = it.duplicatesLists,
+                        isInProgress = it.isInProgress,
+                        selected = it.selected,
+                        buttonState = ButtonState(
+                            bgResId = bgResId(it),
+                            titleResId = titleResId(it)
+                        )
                     )
-                )
                 )
             }
         }

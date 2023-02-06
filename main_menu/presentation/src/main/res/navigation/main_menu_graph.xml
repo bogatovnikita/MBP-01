@@ -26,6 +26,9 @@
         <action
             android:id="@+id/action_mainMenuFragment_to_fileManagerParentFragment"
             app:destination="@id/fileManagerParentFragment" />
+        <action
+            android:id="@+id/action_mainMenuFragment_to_duplicatesParentFragment"
+            app:destination="@id/duplicatesParentFragment" />
     </fragment>
     <fragment
         android:id="@+id/advicesFragment"
@@ -35,4 +38,16 @@
         android:id="@+id/fileManagerParentFragment"
         android:name="yin_kio.file_manager.presentation.views.FileManagerParentFragment"
         android:label="FileManagerParentFragment" />
+    <fragment
+        android:id="@+id/duplicatesParentFragment"
+        android:name="yin_kio.duplicates.presentation.views.DuplicatesParentFragment"
+        android:label="DuplicatesParentFragment" >
+        <argument
+            android:name="completeId"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_duplicatesParentFragment_to_advicesFragment"
+            app:destination="@id/advicesFragment"
+            app:popUpTo="@id/mainMenuFragment" />
+    </fragment>
 </navigation>

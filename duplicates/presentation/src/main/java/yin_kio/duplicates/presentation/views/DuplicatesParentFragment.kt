@@ -3,7 +3,6 @@ package yin_kio.duplicates.presentation.views
 import android.content.Context
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.lifecycleScope
@@ -34,9 +33,8 @@ class DuplicatesParentFragment(
             childNavController = childNavController,
             activity = requireActivity(),
             onCloseInter = { viewModel.closeInter() },
-            onNotImplemented = {
-                Toast.makeText(requireContext(), "Not implemented yet", Toast.LENGTH_SHORT).show()
-            }
+            completeDestination = requireArguments().getInt("completeId"),
+            parentNavController = findNavController()
         )
     }
 

@@ -3,7 +3,7 @@ package com.example.test
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.ads.initAds
-import yin_kio.duplicates.presentation.views.ParentFragment
+import yin_kio.duplicates.presentation.views.DuplicatesParentFragment
 import yin_kio_duplicates.di.DuplicatesFragmentFactory
 
 class MainActivity : AppCompatActivity() {
@@ -15,7 +15,7 @@ class MainActivity : AppCompatActivity() {
         initAds()
 
         supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, supportFragmentManager.fragmentFactory.instantiate(classLoader, ParentFragment::class.java.name))
+            .replace(R.id.fragment_container, supportFragmentManager.fragmentFactory.instantiate(classLoader, DuplicatesParentFragment::class.java.name))
             .commit()
     }
 }

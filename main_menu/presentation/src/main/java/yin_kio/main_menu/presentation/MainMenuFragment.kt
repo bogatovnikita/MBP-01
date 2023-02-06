@@ -5,7 +5,6 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
-import yin_kio.file_manager.di.FileManagerFragmentFactory
 import yin_kio.main_menu.presentation.databinding.FragmentMainMenuBinding
 
 class MainMenuFragment : Fragment(R.layout.fragment_main_menu) {
@@ -13,17 +12,25 @@ class MainMenuFragment : Fragment(R.layout.fragment_main_menu) {
     private val binding: FragmentMainMenuBinding by viewBinding()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        parentFragmentManager.fragmentFactory = FileManagerFragmentFactory()
+        parentFragmentManager.fragmentFactory = MainMenuFragmentFactory()
 
         binding.apply {
             fileManager.setOnClickListener{ openFileManager() }
-            duplicates.setOnClickListener{}
+            duplicates.setOnClickListener{ openDuplicates() }
             garbageClean.setOnClickListener{ openGarbageClean() }
         }
     }
 
     private fun openFileManager() {
         findNavController().navigate(R.id.action_mainMenuFragment_to_fileManagerParentFragment)
+    }
+
+    private fun openDuplicates(){
+        findNavController().navigate(R.id.action_mainMenuFragment_to_duplicatesParentFragment,
+            Bundle().apply {
+                putInt("completeId", R.id.action_duplicatesParentFragment_to_advicesFragment)
+            }
+        )
     }
 
     private fun openGarbageClean() {

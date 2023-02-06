@@ -36,6 +36,7 @@ internal class GarbageCleanFragment : Fragment(R.layout.fragment_garbage_clean) 
             selectAll.setOnClickListener { viewModel.switchSelectAll() }
             selectAllText.setOnClickListener { viewModel.switchSelectAll() }
             delete.setOnClickListener { viewModel.deleteIfCan() }
+            back.setOnClickListener { viewModel.close() }
         }
     }
 

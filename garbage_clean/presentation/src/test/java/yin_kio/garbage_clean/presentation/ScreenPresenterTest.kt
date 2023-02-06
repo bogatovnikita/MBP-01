@@ -94,4 +94,11 @@ class ScreenPresenterTest {
         }
     }
 
+    @Test
+    fun `test outIsClosed`(){
+        presenter.outIsClosed(true)
+
+        verify { viewModel.setIsClosed(true) }
+    }
+
 }

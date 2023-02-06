@@ -64,4 +64,8 @@ class ScreenViewModel(
     override fun setDeleteRequest(deleteRequest: List<GarbageType>) {
         _state.value = state.value.copy(deleteRequest = deleteRequest)
     }
+
+    override fun setIsClosed(isClosed: Boolean) {
+        _state.value = state.value.copy(isClosed = isClosed)
+    }
 }

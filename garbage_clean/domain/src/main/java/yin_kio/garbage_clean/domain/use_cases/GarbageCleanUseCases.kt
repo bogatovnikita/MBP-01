@@ -7,4 +7,5 @@ interface GarbageCleanUseCases {
     fun switchSelection(garbageType: GarbageType)
     fun deleteIfCan()
     fun update()
+    fun close()
 }

@@ -47,9 +47,9 @@ internal class DeleteProgressDialog : DialogFragment(R.layout.dialog_delete_prog
             if (deleteRequest.isEmpty()) return@launch
 
             val size = deleteRequest.size
-            for (i in deleteRequest) {
+            for (i in 0..size) {
                 delay(8000L / size)
-                deleteRequest.removeFirst()
+                deleteRequest.removeFirstOrNull()
                 adapter.notifyItemRemoved(0)
             }
         }

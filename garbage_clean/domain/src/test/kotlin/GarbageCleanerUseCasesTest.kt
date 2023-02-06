@@ -129,6 +129,13 @@ class GarbageCleanerUseCasesTest {
         coVerify { updateUseCase.update() }
     }
 
+    @Test
+    fun testClose() = setupTest {
+        useCases.close()
+
+        coVerify { outBoundary.outIsClosed(true) }
+    }
+
 
 
     private fun TestScope.wait() {

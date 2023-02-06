@@ -61,4 +61,7 @@ internal class GarbageCleanerUseCasesImpl(
         coroutineScope.launch(dispatcher) { action() }
     }
 
+    override fun close() {
+        outBoundary.outIsClosed(true)
+    }
 }

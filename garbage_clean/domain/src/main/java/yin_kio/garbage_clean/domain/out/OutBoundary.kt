@@ -11,5 +11,6 @@ interface OutBoundary {
     fun outHasPermission(hasPermission: Boolean)
     fun outDeleteProgress(deleteProgressState: DeleteProgressState)
     fun outDeleteRequest(deleteRequest: List<GarbageType>)
+    fun outIsClosed(isClosed: Boolean)
 
 }

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_menu_graph"
+    app:startDestination="@id/mainMenuFragment">
+
+    <fragment
+        android:id="@+id/garbageCleanParentFragment"
+        android:name="yin_kio.garbage_clean.presentation.views.GarbageCleanParentFragment"
+        android:label="GarbageCleanParentFragment" >
+        <action
+            android:id="@+id/action_garbageCleanParentFragment_to_advicesFragment"
+            app:destination="@id/advicesFragment"
+            app:popUpTo="@id/mainMenuFragment" />
+        <argument
+            android:name="completeId"
+            app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/mainMenuFragment"
+        android:name="yin_kio.main_menu.presentation.MainMenuFragment"
+        android:label="MainMenuFragment" >
+        <action
+            android:id="@+id/action_mainMenuFragment_to_garbageCleanParentFragment"
+            app:destination="@id/garbageCleanParentFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/advicesFragment"
+        android:name="yin_kio.main_menu.presentation.AdvicesFragment"
+        android:label="AdvicesFragment" />
+</navigation>

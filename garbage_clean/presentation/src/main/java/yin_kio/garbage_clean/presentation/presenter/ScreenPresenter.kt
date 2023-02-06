@@ -70,4 +70,8 @@ class ScreenPresenter(
     override fun outDeleteRequest(deleteRequest: List<GarbageType>) {
         viewModel?.setDeleteRequest(deleteRequest)
     }
+
+    override fun outIsClosed(isClosed: Boolean) {
+        viewModel?.setIsClosed(isClosed)
+    }
 }

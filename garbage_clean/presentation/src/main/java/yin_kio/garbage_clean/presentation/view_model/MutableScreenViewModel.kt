@@ -17,5 +17,6 @@ interface MutableScreenViewModel {
     fun setButtonText(text: String)
     fun setButtonBgRes(bgRes: Int)
     fun setDeleteRequest(deleteRequest: List<GarbageType>)
+    fun setIsClosed(isClosed: Boolean)
 
 }

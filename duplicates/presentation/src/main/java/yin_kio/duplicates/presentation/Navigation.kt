@@ -14,28 +14,24 @@ class Navigation(
 
     private var currentDestination = Destination.List
 
-
+    private  val navigateUpDestinations = arrayOf(
+        Destination.List,
+        Destination.AskContinue
+    )
 
     fun navigate(destination: Destination){
-        if (currentDestination != destination){
-            val navigateUpDestinations = arrayOf(
-                Destination.List,
-                Destination.AskContinue
-            )
+        if (currentDestination == destination) return
 
-            if (navigateUpDestinations.contains(destination)) navigateUp()
+        if (navigateUpDestinations.contains(destination)) navigateUp()
 
-            val id = destination.adapt()
-            if (id == INTER_ID) {
-                activity.showInter(onClosed = onCloseInter)
-            } else if (id == NOT_IMPLEMENTED){
-                onNotImplemented()
-            } else {
-                childNavController.navigate(id)
-            }
-
-            currentDestination = destination
+        when(val id = destination.adapt()){
+            INTER_ID -> activity.showInter(onClosed = onCloseInter)
+            NOT_IMPLEMENTED -> onNotImplemented()
+            else -> childNavController.navigate(id)
         }
+
+
+        currentDestination = destination
     }
 
     private fun Destination.adapt() : Int{

@@ -23,9 +23,16 @@
         <action
             android:id="@+id/action_mainMenuFragment_to_garbageCleanParentFragment"
             app:destination="@id/garbageCleanParentFragment" />
+        <action
+            android:id="@+id/action_mainMenuFragment_to_fileManagerParentFragment"
+            app:destination="@id/fileManagerParentFragment" />
     </fragment>
     <fragment
         android:id="@+id/advicesFragment"
         android:name="yin_kio.main_menu.presentation.AdvicesFragment"
         android:label="AdvicesFragment" />
+    <fragment
+        android:id="@+id/fileManagerParentFragment"
+        android:name="yin_kio.file_manager.presentation.views.FileManagerParentFragment"
+        android:label="FileManagerParentFragment" />
 </navigation>

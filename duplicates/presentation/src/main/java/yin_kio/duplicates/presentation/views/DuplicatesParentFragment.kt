@@ -11,7 +11,7 @@ import yin_kio.duplicates.presentation.Navigation
 import yin_kio.duplicates.presentation.R
 import yin_kio.duplicates.presentation.view_models.DuplicatesViewModel
 
-class ParentFragment(
+class DuplicatesParentFragment(
     private val createNavigation: Fragment.(DuplicatesViewModel) -> Navigation,
     viewModelCreator: ViewModel.(Context) -> DuplicatesViewModel
 ) : Fragment(R.layout.fragment_parent) {

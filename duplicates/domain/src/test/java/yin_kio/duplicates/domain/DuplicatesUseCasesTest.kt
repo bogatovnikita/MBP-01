@@ -1,9 +1,6 @@
 package yin_kio.duplicates.domain
 
-import io.mockk.coEvery
-import io.mockk.coVerify
-import io.mockk.every
-import io.mockk.mockk
+import io.mockk.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
@@ -11,7 +8,6 @@ import kotlinx.coroutines.test.*
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import yin_kio.duplicates.domain.gateways.Ads
 import yin_kio.duplicates.domain.gateways.Files
 import yin_kio.duplicates.domain.gateways.ImagesComparator
 import yin_kio.duplicates.domain.gateways.Permissions
@@ -19,7 +15,6 @@ import yin_kio.duplicates.domain.models.Destination
 import yin_kio.duplicates.domain.models.ImageInfo
 import yin_kio.duplicates.domain.models.MutableStateHolder
 import yin_kio.duplicates.domain.models.UniteWay
-import yin_kio.duplicates.domain.use_cases.DuplicateRemover
 import yin_kio.duplicates.domain.use_cases.DuplicatesUseCasesImpl
 import yin_kio.duplicates.domain.use_cases.UniteUseCase
 
@@ -30,23 +25,17 @@ class DuplicatesUseCasesTest {
     private lateinit var state: MutableStateHolder
     private val dispatcher = StandardTestDispatcher()
     private val coroutineScope = CoroutineScope(dispatcher)
-    private lateinit var files: Files
-    private lateinit var permissions: Permissions
+    private val files: Files = mockk()
+    private val permissions: Permissions = mockk()
     private lateinit var useCases: DuplicatesUseCasesImpl
-    private lateinit var duplicateRemover: DuplicateRemover
-    private val uniteUseCase: UniteUseCase = mockk()
-    private val ads: Ads = mockk()
+    private val uniteUseCase: UniteUseCase = spyk()
 
     @BeforeEach
     fun setup() = runTest(dispatcher){
-        files = mockk()
-        permissions = mockk()
-        duplicateRemover = mockk()
         state = MutableStateHolder(coroutineScope, dispatcher)
 
-        coEvery { ads.preloadAd() } returns Unit
-        coEvery { uniteUseCase.unite() } returns Unit
         every { permissions.hasStoragePermissions } returns true
+
         useCases = createDuplicatesUseCase()
         waitCoroutines()
     }
@@ -78,13 +67,22 @@ class DuplicatesUseCasesTest {
 
     @Test
     fun `updateFiles with permission`() = runTest(dispatcher){
-        every { permissions.hasStoragePermissions } returns false
-
         val useCase = createDuplicatesUseCase()
+        assertHasNotPermissions()
+        assertHasFiles(useCase)
+        assertHasNotFiles(useCase)
+        assertProgressChanging(useCase)
+    }
+
+    private fun TestScope.assertHasNotFiles(useCase: DuplicatesUseCasesImpl) {
+        coEvery { files.getImages() } returns emptyList()
+        useCase.updateFiles()
         waitCoroutines()
 
-        assertEquals(Destination.Permission, state.destination)
+        assertEquals(Destination.AdvicesNoFiles, state.destination)
+    }
 
+    private fun TestScope.assertHasFiles(useCase: DuplicatesUseCasesImpl) {
         every { permissions.hasStoragePermissions } returns true
 
         useCase.updateFiles()
@@ -93,22 +91,22 @@ class DuplicatesUseCasesTest {
         assertEquals(Destination.List, state.destination)
     }
 
-    @Test
-    fun `updateFiles without permission`() = runTest(dispatcher){
-        state.apply {
-            val oldDuplicates = duplicatesLists
+    private fun TestScope.assertHasNotPermissions() {
+        every { permissions.hasStoragePermissions } returns false
 
-            val useCase = createDuplicatesUseCase()
-            waitCoroutines()
+        waitCoroutines()
 
-            useCase.updateFiles()
-            delay(1)
-            assertTrue(isInProgress)
-            waitCoroutines()
-            assertFalse(isInProgress)
-            assertFalse(duplicatesLists === oldDuplicates)
-            assertEquals(Destination.List, state.destination)
-        }
+        assertEquals(Destination.Permission, state.destination)
+    }
+
+    private suspend fun TestScope.assertProgressChanging(
+        useCase: DuplicatesUseCasesImpl,
+    ) {
+        useCase.updateFiles()
+        delay(1)
+        assertTrue(state.isInProgress)
+        waitCoroutines()
+        assertFalse(state.isInProgress)
     }
 
     @Test
@@ -165,7 +163,7 @@ class DuplicatesUseCasesTest {
 
         state.uniteWay = UniteWay.All
         useCases.closeInter()
-        assertEquals(Destination.AdvicesWithDialog, state.destination)
+        assertEquals(Destination.AdvicesUnited, state.destination)
     }
 
 

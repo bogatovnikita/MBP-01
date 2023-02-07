@@ -38,6 +38,7 @@ internal class DuplicatesUseCasesImpl(
         update()
 
         duplicatesLists = getDuplicates().mapIndexed { index, imageInfos -> DuplicatesList(index, imageInfos)  }
+        if (duplicatesLists.isEmpty()) destination = Destination.AdvicesNoFiles
         isInProgress = false
 
         update()
@@ -103,7 +104,7 @@ internal class DuplicatesUseCasesImpl(
     override fun closeInter(){
         state.destination = when(state.uniteWay){
             UniteWay.Selected -> Destination.AskContinue
-            UniteWay.All -> Destination.AdvicesWithDialog
+            UniteWay.All -> Destination.AdvicesUnited
         }
         state.update()
     }

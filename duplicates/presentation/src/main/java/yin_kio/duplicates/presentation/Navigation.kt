@@ -26,7 +26,9 @@ class Navigation(
     fun navigate(destination: Destination){
         if (currentDestination == destination) return
 
-        if (destination == Destination.Advices || destination == Destination.AdvicesWithDialog
+        if (destination == Destination.Advices
+            || destination == Destination.AdvicesUnited
+            || destination == Destination.AdvicesNoFiles
         ) {
             parentNavController.navigate(completeDestination, bundle)
             return
@@ -51,7 +53,8 @@ class Navigation(
             Destination.Inter -> INTER_ID
             Destination.AskContinue -> R.id.action_duplicatesFragment_to_askContinueDialog
             Destination.Advices -> completeDestination
-            Destination.AdvicesWithDialog -> completeDestination
+            Destination.AdvicesUnited -> completeDestination
+            Destination.AdvicesNoFiles -> completeDestination
         }
     }
 

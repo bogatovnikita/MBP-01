@@ -7,5 +7,6 @@ enum class Destination {
     Inter,
     AskContinue,
     Advices,
-    AdvicesWithDialog
+    AdvicesUnited,
+    AdvicesNoFiles
 }

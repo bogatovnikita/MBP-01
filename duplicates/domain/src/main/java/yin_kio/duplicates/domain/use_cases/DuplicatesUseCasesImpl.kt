@@ -35,6 +35,8 @@ internal class DuplicatesUseCasesImpl(
         isInProgress = true
         delay(1)
         duplicatesLists = emptyList()
+        selected = mutableMapOf()
+        canUnite = true
         update()
 
         duplicatesLists = getDuplicates().mapIndexed { index, imageInfos -> DuplicatesList(index, imageInfos)  }
@@ -61,9 +63,7 @@ internal class DuplicatesUseCasesImpl(
 
     override fun switchGroupSelection(index: Int) = with(state){
         if (selected[index] == null) {
-            val set = mutableSetOf<ImageInfo>()
-            set.addAll(duplicatesLists[index].data)
-            selected[index] = set
+            selectRelevantImages(index)
         } else {
             selected.remove(index)
         }
@@ -71,9 +71,15 @@ internal class DuplicatesUseCasesImpl(
         update()
     }
 
+    private fun MutableStateHolder.selectRelevantImages(index: Int) {
+        val imageInfos = mutableSetOf<ImageInfo>()
+        imageInfos.addAll(duplicatesLists[index].imageInfos)
+        selected[index] = imageInfos
+    }
+
 
     override fun switchItemSelection(groupIndex: Int, path: String) = with(state){
-        val item = duplicatesLists[groupIndex].data.find { it.path == path }
+        val item = duplicatesLists[groupIndex].imageInfos.find { it.path == path }
 
         item?.also {
             val group = selected[groupIndex]
@@ -85,8 +91,20 @@ internal class DuplicatesUseCasesImpl(
 
             if (group?.isEmpty() == true) selected.remove(groupIndex)
         }
+        canUnite = canUnite()
 
         update()
+    }
+
+    private fun canUnite() : Boolean{
+        if (state.selected.isEmpty()) return true
+
+        state.selected.forEach {
+            if (it.value.size > 1){
+                return true
+            }
+        }
+        return false
     }
 
     override fun navigate(destination: Destination){

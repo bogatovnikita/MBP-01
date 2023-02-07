@@ -6,11 +6,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:gravity="end">
+    android:orientation="vertical">
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="bottom"
@@ -18,6 +18,14 @@
         android:layout_marginTop="24dp"
         android:layout_marginBottom="8dp">
 
+
+        <TextView
+            android:layout_weight="1"
+            android:id="@+id/restriction_message"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/select_but_one_2_photo"
+            android:textAppearance="@style/Text.Subtitle_1"/>
 
         <TextView
             android:id="@+id/select"

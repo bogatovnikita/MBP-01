@@ -20,6 +20,7 @@ internal class UniteUseCaseImpl(
 
 
     override fun unite(){
+        if (!state.canUnite) return
         navigate(Destination.UniteProgress)
         async {
             state.apply {
@@ -45,7 +46,7 @@ internal class UniteUseCaseImpl(
     private fun MutableStateHolder.getImagesForUniting(): List<Collection<ImageInfo>> {
         val forUniting = when (uniteWay) {
             UniteWay.Selected -> selected.map { it.value }.filter { it.size > 1 }
-            UniteWay.All -> state.duplicatesLists.map { it.data }
+            UniteWay.All -> state.duplicatesLists.map { it.imageInfos }
         }
         return forUniting
     }

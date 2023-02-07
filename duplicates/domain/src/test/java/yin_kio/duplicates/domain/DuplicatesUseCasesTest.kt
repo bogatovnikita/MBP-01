@@ -115,7 +115,7 @@ class DuplicatesUseCasesTest {
 
         state.apply {
             assertTrue(selected.isNotEmpty())
-            assertTrue(selected[0]!!.containsAll(duplicatesLists[0].data))
+            assertTrue(selected[0]!!.containsAll(duplicatesLists[0].imageInfos))
 
             useCases.switchGroupSelection(0)
 
@@ -129,7 +129,7 @@ class DuplicatesUseCasesTest {
         useCases.switchItemSelection(0, SECOND_FILE)
 
         state.apply {
-            assertTrue(selected[0]!!.containsAll(duplicatesLists[0].data))
+            assertTrue(selected[0]!!.containsAll(duplicatesLists[0].imageInfos))
 
             useCases.switchItemSelection(0, FIRST_FILE)
 

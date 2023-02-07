@@ -15,4 +15,6 @@
 
     <string name="dialog_all_duplicates_done_title">Все дубликаты объединены</string>
 
+    <string name="select_but_one_2_photo">Выберите хотя бы 2 фото</string>
+
 </resources>

@@ -69,7 +69,7 @@ internal class UniteUseCaseTest{
 
     @Test
     fun `unite if has not selected`() = runTest(dispatcher) {
-        coEvery { duplicateRemover.invoke(state.duplicatesLists.map { it.data }) } returns Unit
+        coEvery { duplicateRemover.invoke(state.duplicatesLists.map { it.imageInfos }) } returns Unit
 
         useCase.unite()
 
@@ -77,7 +77,7 @@ internal class UniteUseCaseTest{
 
 
         coVerify { ads.preloadAd() }
-        coVerify(inverse = true) { duplicateRemover.invoke(state.duplicatesLists.map { it.data }) }
+        coVerify(inverse = true) { duplicateRemover.invoke(state.duplicatesLists.map { it.imageInfos }) }
     }
 
     @Test

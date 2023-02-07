@@ -5,6 +5,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import yin_kio.duplicates.domain.models.StateHolder
+import yin_kio.duplicates.presentation.adapters.DuplicatesState
 
 class ImagesGroupViewModel(
     private val stateHolder: StateHolder,
@@ -13,7 +14,7 @@ class ImagesGroupViewModel(
     private val coroutineScope: CoroutineScope,
 ) {
 
-    val state = MutableStateFlow(false)
+    val state = MutableStateFlow(DuplicatesState())
     private val itemViewModels: MutableList<ItemViewModel> = mutableListOf()
 
     private var groupPosition = -1
@@ -21,20 +22,29 @@ class ImagesGroupViewModel(
     init {
         coroutineScope.launch(Dispatchers.Default){
             stateHolder.stateFlow.collect{
-                state.emit(it.isGroupSelected(groupPosition))
+                state.emit(
+                    newState(it)
+                )
             }
         }
     }
 
+
+
     fun switchSelection(position: Int){
         switchGroupSelection(position)
-        state.value = stateHolder.isGroupSelected(position)
+        state.value = state.value.copy(isSelected = stateHolder.isGroupSelected(position))
     }
 
     fun updateState(position: Int){
         this.groupPosition = position
-        state.value = stateHolder.isGroupSelected(position)
+        state.value = newState(stateHolder)
     }
+
+    private fun newState(it: StateHolder) = DuplicatesState(
+        isSelected = it.isGroupSelected(groupPosition),
+        isShowRestrictionMessage = it.selected[groupPosition]?.size == 1
+    )
 
 
     fun createItemViewModel() : ItemViewModel {

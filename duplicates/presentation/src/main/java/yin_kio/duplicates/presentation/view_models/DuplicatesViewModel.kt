@@ -57,15 +57,20 @@ class DuplicatesViewModel(
         selected = it.selected,
         buttonState = ButtonState(
             bgResId = presentBg(it),
-            titleResId = presentTitle(it)
+            titleResId = presentTitle(it),
         )
     )
 
     private fun presentTitle(it: StateHolder) =
         if (it.selected.isEmpty()) R.string.unite_all_duplicates else R.string.unite_selected_duplicates
 
-    private fun presentBg(it: StateHolder) =
-        if (it.selected.isEmpty()) general.R.drawable.bg_main_button_enabled else R.drawable.bg_unite_selected
+    private fun presentBg(it: StateHolder) : Int {
+        return when{
+            it.selected.isEmpty() -> general.R.drawable.bg_main_button_enabled
+            !it.canUnite -> R.drawable.bg_unite_selected_disabled
+            else -> R.drawable.bg_unite_selected
+        }
+    }
 
 
 }

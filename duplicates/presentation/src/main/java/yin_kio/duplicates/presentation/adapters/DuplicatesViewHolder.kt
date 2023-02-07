@@ -2,6 +2,7 @@ package yin_kio.duplicates.presentation.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.isInvisible
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -28,7 +29,8 @@ class DuplicatesViewHolder private constructor (
 
         coroutineScope.launch {
             viewModel.state.collect{
-                binding.checkbox.isChecked = it
+                binding.checkbox.isChecked = it.isSelected
+                binding.restrictionMessage.isInvisible = !it.isShowRestrictionMessage
             }
         }
     }
@@ -36,7 +38,7 @@ class DuplicatesViewHolder private constructor (
     fun bind(item: DuplicatesList){
         viewModel.updateState(item.id)
         adapter.groupPosition = item.id
-        adapter.submitList(item.data)
+        adapter.submitList(item.imageInfos)
         binding.select.setOnClickListener { viewModel.switchSelection(item.id) }
         binding.checkbox.setOnClickListener { viewModel.switchSelection(item.id) }
     }

@@ -15,7 +15,7 @@ class DuplicatesViewModel(
     useCase: DuplicateUseCases,
     private val state: StateHolder,
     private val coroutineScope: CoroutineScope,
-    coroutineDispatcher: CoroutineContext
+    private val coroutineDispatcher: CoroutineContext
 ) : DuplicateUseCases by useCase{
 
     private val _uiState = MutableSharedFlow<UIState>(
@@ -23,43 +23,48 @@ class DuplicatesViewModel(
     )
     val uiState = _uiState.asSharedFlow()
 
-    private val groupViewModels = mutableListOf<GroupViewModel>()
+    private val imagesGroupViewModels = mutableListOf<ImagesGroupViewModel>()
 
-    fun createGroupViewModel() : GroupViewModel {
-        val groupViewModel = GroupViewModel(
+    init { setupObserver() }
+
+    private fun setupObserver() {
+        coroutineScope.launch(coroutineDispatcher) {
+            state.stateFlow.collect {
+                _uiState.emit(presentState(it))
+            }
+        }
+    }
+
+
+    fun createImagesGroupViewModel() : ImagesGroupViewModel {
+        val imagesGroupViewModel = ImagesGroupViewModel(
             stateHolder = state,
             switchGroupSelection = { switchGroupSelection(it) },
             switchItemSelection = ::switchItemSelection,
             coroutineScope = coroutineScope
         )
-        groupViewModels.add(groupViewModel)
-        return groupViewModel
+        imagesGroupViewModels.add(imagesGroupViewModel)
+        return imagesGroupViewModel
     }
 
-    init {
-        coroutineScope.launch(coroutineDispatcher) {
-            state.stateFlow.collect{
-                _uiState.emit(
-                    UIState(
-                        isClosed = it.isClosed,
-                        destination = it.destination,
-                        duplicatesLists = it.duplicatesLists,
-                        isInProgress = it.isInProgress,
-                        selected = it.selected,
-                        buttonState = ButtonState(
-                            bgResId = bgResId(it),
-                            titleResId = titleResId(it)
-                        )
-                    )
-                )
-            }
-        }
-    }
 
-    private fun titleResId(it: StateHolder) =
+
+    private fun presentState(it: StateHolder) = UIState(
+        isClosed = it.isClosed,
+        destination = it.destination,
+        duplicatesLists = it.duplicatesLists,
+        isInProgress = it.isInProgress,
+        selected = it.selected,
+        buttonState = ButtonState(
+            bgResId = presentBg(it),
+            titleResId = presentTitle(it)
+        )
+    )
+
+    private fun presentTitle(it: StateHolder) =
         if (it.selected.isEmpty()) R.string.unite_all_duplicates else R.string.unite_selected_duplicates
 
-    private fun bgResId(it: StateHolder) =
+    private fun presentBg(it: StateHolder) =
         if (it.selected.isEmpty()) general.R.drawable.bg_main_button_enabled else R.drawable.bg_unite_selected
 
 

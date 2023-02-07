@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import yin_kio.duplicates.domain.models.StateHolder
 
-class GroupViewModel(
+class ImagesGroupViewModel(
     private val stateHolder: StateHolder,
     private val switchGroupSelection: (index: Int) -> Unit,
     private val switchItemSelection: (groupIndex: Int, path: String) -> Unit,

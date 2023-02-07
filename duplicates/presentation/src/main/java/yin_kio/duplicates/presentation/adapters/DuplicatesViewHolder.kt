@@ -7,12 +7,12 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import yin_kio.duplicates.domain.models.DuplicatesList
 import yin_kio.duplicates.presentation.databinding.ListItemGroupBinding
-import yin_kio.duplicates.presentation.view_models.GroupViewModel
+import yin_kio.duplicates.presentation.view_models.ImagesGroupViewModel
 
 class DuplicatesViewHolder private constructor (
     private val binding: ListItemGroupBinding,
     private val coroutineScope: CoroutineScope,
-    private val viewModel: GroupViewModel
+    private val viewModel: ImagesGroupViewModel
 ) : RecyclerView.ViewHolder(binding.root){
 
 
@@ -45,7 +45,7 @@ class DuplicatesViewHolder private constructor (
     companion object{
         fun from(parent: ViewGroup,
                  coroutineScope: CoroutineScope,
-                 viewModel: GroupViewModel
+                 viewModel: ImagesGroupViewModel
         ) : DuplicatesViewHolder {
             val binding = ListItemGroupBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             return DuplicatesViewHolder(

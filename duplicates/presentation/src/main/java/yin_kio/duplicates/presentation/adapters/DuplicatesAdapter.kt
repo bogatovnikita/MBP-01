@@ -5,18 +5,18 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import kotlinx.coroutines.CoroutineScope
 import yin_kio.duplicates.domain.models.DuplicatesList
-import yin_kio.duplicates.presentation.view_models.GroupViewModel
+import yin_kio.duplicates.presentation.view_models.ImagesGroupViewModel
 
 class DuplicatesAdapter(
     private val coroutineScope: CoroutineScope,
-    private val createGroupViewModel: () -> GroupViewModel
+    private val createImagesGroupViewModel: () -> ImagesGroupViewModel
 ) : ListAdapter<DuplicatesList, DuplicatesViewHolder>(difCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DuplicatesViewHolder {
         return DuplicatesViewHolder.from(
             parent = parent,
             coroutineScope = coroutineScope,
-            viewModel = createGroupViewModel(),
+            viewModel = createImagesGroupViewModel(),
         )
     }
 

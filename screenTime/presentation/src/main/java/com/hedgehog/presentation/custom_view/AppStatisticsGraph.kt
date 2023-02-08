@@ -24,9 +24,7 @@ class AppStatisticsGraph(
 
     constructor(context: Context) : this(context, null)
 
-    var progressesHeights: List<Int> = listOf(
-        1,2,3,4,5,6,7,8,30,0,1,2,60,4,5,6,7,8,9,0,1,2,3,4
-    )
+    var progressesHeights: List<Int> = emptyList()
         set(value) {
             if (value.size != 24) throw Exception("Value size must be 24")
             field = value
@@ -49,7 +47,6 @@ class AppStatisticsGraph(
         resources.getString(R.string.min_30),
         resources.getString(R.string.min_0)
     )
-
 
     private lateinit var backgroundColorPaint: Paint
     private lateinit var brokenLinePaint: Paint
@@ -90,14 +87,14 @@ class AppStatisticsGraph(
         textPaint = textPaint()
     }
 
-    private fun progressPaint() : Paint {
+    private fun progressPaint(): Paint {
         return Paint(Paint.ANTI_ALIAS_FLAG).apply {
             style = Paint.Style.FILL
             color = Color.CYAN
         }
     }
 
-    private fun textPaint() : Paint {
+    private fun textPaint(): Paint {
         return Paint(Paint.ANTI_ALIAS_FLAG).apply {
             color = Color.WHITE
             style = Paint.Style.FILL
@@ -105,14 +102,14 @@ class AppStatisticsGraph(
         }
     }
 
-    private fun straightLinePaint() : Paint{
+    private fun straightLinePaint(): Paint {
         return Paint(Paint.ANTI_ALIAS_FLAG).apply {
             color = lineColor
             style = Paint.Style.STROKE
         }
     }
 
-    private fun brokenLinePaint() : Paint {
+    private fun brokenLinePaint(): Paint {
         return Paint(Paint.ANTI_ALIAS_FLAG).apply {
             color = lineColor
             style = Paint.Style.STROKE
@@ -120,19 +117,16 @@ class AppStatisticsGraph(
         }
     }
 
-    private fun bgColorPaint() : Paint {
+    private fun bgColorPaint(): Paint {
         return Paint(Paint.ANTI_ALIAS_FLAG).apply { color = backgroundScreenColor }
     }
 
-    private val Int.sp : Float get() = TypedValue.applyDimension(
-        TypedValue.COMPLEX_UNIT_SP,
-        this.toFloat(),
-        resources.displayMetrics
-    )
-
-
-
-
+    private val Int.sp: Float
+        get() = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_SP,
+            this.toFloat(),
+            resources.displayMetrics
+        )
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
@@ -148,11 +142,6 @@ class AppStatisticsGraph(
         marginWidthSmallCell = cellWidth * 0.1f
         widthSmallCellSize = cellWidth / 3 - marginWidthSmallCell
     }
-
-
-
-
-
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
@@ -186,7 +175,6 @@ class AppStatisticsGraph(
             paint = straightLinePaint
         )
 
-
         drawLines(
             canvas,
             lineDrawWay = LineDrawWay.Vertically,
@@ -199,25 +187,20 @@ class AppStatisticsGraph(
         )
     }
 
-
     private fun drawText(canvas: Canvas) {
-        drawHorizontaText(canvas, horizontalLinesTexts, cellHeight)
+        drawHorizontalText(canvas, horizontalLinesTexts, cellHeight)
         drawVerticalText(canvas, verticalLinesTexts, cellWidth)
     }
 
-
-
-
-    private fun drawHorizontaText(
+    private fun drawHorizontalText(
         canvas: Canvas,
         textItems: List<String>,
         spaceBetweenLines: Float
     ) {
-
-        for (i in 0 until textItems.size) {
+        for (i in textItems.indices) {
             canvas.drawText(
                 textItems[i],
-                chartRect.right ,
+                chartRect.right + 20f,
                 chartRect.top + (spaceBetweenLines * i),
                 textPaint
             )
@@ -229,12 +212,11 @@ class AppStatisticsGraph(
         textItems: List<String>,
         spaceBetweenLines: Float
     ) {
-
-        for (i in 0 until textItems.size) {
+        for (i in textItems.indices) {
             canvas.drawText(
                 textItems[i],
-                chartRect.left + (spaceBetweenLines * i),
-                chartRect.bottom,
+                chartRect.left + (spaceBetweenLines * i) - 15f,
+                chartRect.bottom + 40f,
                 textPaint
             )
         }
@@ -249,31 +231,37 @@ class AppStatisticsGraph(
         edgeStartPoint: Float,
         lineLength: Float,
         paint: Paint
-    ){
+    ) {
         for (i in 0..linesCount) {
             val stepValue = linesStartPoint + spaceBetween * i
-            when(lineDrawWay){
+            when (lineDrawWay) {
                 LineDrawWay.Vertically -> {
-                    canvas.drawLine(stepValue, edgeStartPoint, stepValue, lineLength + edgeStartPoint, paint)
+                    canvas.drawLine(
+                        stepValue,
+                        edgeStartPoint,
+                        stepValue,
+                        lineLength + edgeStartPoint,
+                        paint
+                    )
                 }
                 LineDrawWay.Horizontally -> {
-                    canvas.drawLine(edgeStartPoint, stepValue, lineLength + edgeStartPoint, stepValue, paint)
+                    canvas.drawLine(
+                        edgeStartPoint,
+                        stepValue,
+                        lineLength + edgeStartPoint,
+                        stepValue,
+                        paint
+                    )
                 }
             }
         }
     }
 
-
-    private fun drawProgress(
-        canvas: Canvas
-    ) {
-
-
+    private fun drawProgress(canvas: Canvas) {
         val progressesCount = 24
         val progressMargin = 5f
         val progressContainerWidth = chartRect.width() / progressesCount
         val progressWidth = progressContainerWidth - progressMargin * 2
-
 
         canvas.clipRect(
             chartRect.left,
@@ -283,19 +271,21 @@ class AppStatisticsGraph(
             Region.Op.DIFFERENCE
         )
 
-        progressesHeights.forEachIndexed {index, i ->
+        progressesHeights.forEachIndexed { index, i ->
             val left = index * (progressContainerWidth) + chartRect.left + progressMargin
             val top = chartRect.bottom
-            val right = index * (progressContainerWidth)  + progressWidth + chartRect.left + progressMargin
-            val bottom = (i.toFloat() / 60) * -chartRect.height() + chartRect.height() + chartRect.top
+            val right =
+                index * (progressContainerWidth) + progressWidth + chartRect.left + progressMargin
+            val bottom =
+                (i.toFloat() / 60) * -chartRect.height() + chartRect.height() + chartRect.top
 
             progressPaint.shader = LinearGradient(
                 0f,
                 top,
                 0f,
                 bottom,
-                Color.YELLOW,
-                Color.RED,
+                resources.getColor(R.color.white),
+                resources.getColor(R.color.green),
                 Shader.TileMode.CLAMP
             )
 
@@ -306,16 +296,12 @@ class AppStatisticsGraph(
                 bottom,
                 5f,
                 5f,
-                progressPaint)
-
-
-
+                progressPaint
+            )
         }
-
-
     }
 
-    private enum class LineDrawWay{
+    private enum class LineDrawWay {
         Vertically,
         Horizontally
     }

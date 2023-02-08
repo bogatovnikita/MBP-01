@@ -12,5 +12,6 @@ interface OutBoundary {
     fun outDeleteProgress(deleteProgressState: DeleteProgressState)
     fun outDeleteRequest(deleteRequest: List<GarbageType>)
     fun outIsClosed(isClosed: Boolean)
+    fun outDeletedSize(size: Long)
 
 }

@@ -109,6 +109,7 @@ class GarbageCleanerUseCasesTest {
             outBoundary.outDeleteRequest(listOf(GarbageType.Apk, GarbageType.Temp))
             files.deleteAndGetNoDeletable(listOf(APK, TEMP))
             noDeletableFiles.save(listOf())
+            outBoundary.outDeletedSize(0)
             outBoundary.outDeleteProgress(DeleteProgressState.Complete)
         }
     }

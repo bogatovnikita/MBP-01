@@ -12,6 +12,7 @@ import yin_kio.garbage_clean.domain.out.DeleteProgressState
 import yin_kio.garbage_clean.domain.out.OutBoundary
 import yin_kio.garbage_clean.domain.services.DeleteFormMapper
 import yin_kio.garbage_clean.domain.services.DeleteRequestInterpreter
+import java.io.File
 import kotlin.coroutines.CoroutineContext
 
 internal class GarbageCleanerUseCasesImpl(
@@ -52,9 +53,12 @@ internal class GarbageCleanerUseCasesImpl(
             val interpretedRequest = interpreter.interpret(deleteRequest)
             val noDeletable = files.deleteAndGetNoDeletable(interpretedRequest)
 
+            val deleted = interpretedRequest.filter { !noDeletable.contains(it) }
+            val deletedSize = deleted.sumOf { File(it).length() }
 
             noDeletableFiles.save(noDeletable)
             delay(8000)
+            outBoundary.outDeletedSize(deletedSize)
             outBoundary.outDeleteProgress(DeleteProgressState.Complete)
         }
     }

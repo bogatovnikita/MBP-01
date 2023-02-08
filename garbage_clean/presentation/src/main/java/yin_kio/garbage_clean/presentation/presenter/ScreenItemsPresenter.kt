@@ -49,5 +49,9 @@ class ScreenItemsPresenter(
         return context.getString(R.string.can_free, formatFileSize(context, size))
     }
 
+    fun presentFreed(size: Long) : String{
+        return context.getString(R.string.freed, formatFileSize(context, size))
+    }
+
 
 }

@@ -4,6 +4,7 @@ import yin_kio.garbage_clean.domain.entities.GarbageType
 import yin_kio.garbage_clean.domain.out.DeleteProgressState
 
 data class ScreenState(
+    val freed: String = "",
     val isClosed: Boolean = false,
     val deleteProgressState: DeleteProgressState = DeleteProgressState.Wait,
     val hasPermission: Boolean = true,

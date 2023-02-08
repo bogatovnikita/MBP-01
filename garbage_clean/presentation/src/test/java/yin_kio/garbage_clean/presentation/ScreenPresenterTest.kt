@@ -101,4 +101,11 @@ class ScreenPresenterTest {
         verify { viewModel.setIsClosed(true) }
     }
 
+    @Test
+    fun `test outDeletedSize`(){
+        presenter.outDeletedSize(0)
+
+        verify { viewModel.setDeletedSize(context.getString(R.string.freed, formatFileSize(context, 0))) }
+    }
+
 }

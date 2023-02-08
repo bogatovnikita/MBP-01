@@ -20,5 +20,7 @@
     <string name="your_phone_is_clean">Ваш телефон чист\n\nОчищайте свой телефон регулярно, чтобы не засорять память и обеспечить быструю работу устройства</string>
     <string name="go_to_main_screen">На главный экран</string>
     <string name="device_scanning">Сканируем устройство...</string>
+    <string name="your_phone_is_cleaned">Ваш телефон очищен</string>
+    <string name="freed">Освобождено %s</string>
 
 </resources>

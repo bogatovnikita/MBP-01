@@ -51,4 +51,9 @@ class ScreenItemsPresenterTest {
         assertEquals(context.getString(R.string.can_free, formatFileSize(context, 0)), presenter.presentCanFree(0))
     }
 
+    @Test
+    fun `test presentFreed`(){
+        assertEquals(context.getString(R.string.freed, formatFileSize(context, 0)), presenter.presentFreed(0))
+    }
+
 }

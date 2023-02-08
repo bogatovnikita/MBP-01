@@ -68,4 +68,8 @@ class ScreenViewModel(
     override fun setIsClosed(isClosed: Boolean) {
         _state.value = state.value.copy(isClosed = isClosed)
     }
+
+    override fun setDeletedSize(size: String) {
+        _state.value = state.value.copy(freed = size)
+    }
 }

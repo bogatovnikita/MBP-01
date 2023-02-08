@@ -33,7 +33,12 @@
     <fragment
         android:id="@+id/advicesFragment"
         android:name="yin_kio.main_menu.presentation.AdvicesFragment"
-        android:label="AdvicesFragment" />
+        android:label="AdvicesFragment" >
+        <argument
+            android:name="dialog_title"
+            app:argType="string" />
+        <argument android:name="dialog_description" />
+    </fragment>
     <fragment
         android:id="@+id/fileManagerParentFragment"
         android:name="yin_kio.file_manager.presentation.views.FileManagerParentFragment"

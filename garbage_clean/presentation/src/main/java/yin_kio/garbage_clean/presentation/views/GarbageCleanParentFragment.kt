@@ -26,7 +26,7 @@ class GarbageCleanParentFragment : Fragment(R.layout.fragment_garbage_clean_pare
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        completeId = requireArguments().getInt("completeId")
+        completeId = requireArguments().getInt(ARG_COMPLETE_ID)
         childNavController = findChildNavController()
         setupObserver()
 
@@ -76,10 +76,16 @@ class GarbageCleanParentFragment : Fragment(R.layout.fragment_garbage_clean_pare
         if (screenState.deleteProgressState == DeleteProgressState.Complete
             && destinationIs(R.id.deleteProgressDialog)
         ){
-            childNavController.navigateUp()
             showInter {
-                parentNavController()?.navigate(completeId)
+                parentNavController()?.navigate(completeId, advicesArgs(screenState))
             }
+        }
+    }
+
+    private fun advicesArgs(screenState: ScreenState) : Bundle {
+        return Bundle().apply {
+            putString(ADVICES_DIALOG_TITLE, getString(R.string.your_phone_is_cleaned))
+            putString(ADVICES_DIALOG_DESCRIPTION, screenState.freed)
         }
     }
 
@@ -102,4 +108,10 @@ class GarbageCleanParentFragment : Fragment(R.layout.fragment_garbage_clean_pare
         applicationContext = requireActivity().applicationContext,
         androidViewModel = this
     )
+
+    companion object{
+        private const val ADVICES_DIALOG_TITLE = "dialog_title"
+        private const val ADVICES_DIALOG_DESCRIPTION = "dialog_description"
+        private const val ARG_COMPLETE_ID = "completeId"
+    }
 }

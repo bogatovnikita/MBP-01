@@ -74,4 +74,8 @@ class ScreenPresenter(
     override fun outIsClosed(isClosed: Boolean) {
         viewModel?.setIsClosed(isClosed)
     }
+
+    override fun outDeletedSize(size: Long) {
+        viewModel?.setDeletedSize(screenItemsPresenter.presentFreed(size))
+    }
 }

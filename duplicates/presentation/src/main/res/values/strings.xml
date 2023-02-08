@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools"
     tools:ignore="TypographyEllipsis">
-    <string name="title">Удаление дубликатов</string>
+    <string name="duplicates_title">Удаление дубликатов</string>
     <string name="unite_all_duplicates">Объединить все дубликаты</string>
     <string name="unite_selected_duplicates">Объединить выбранные</string>
     <string name="select">Выбрать</string>

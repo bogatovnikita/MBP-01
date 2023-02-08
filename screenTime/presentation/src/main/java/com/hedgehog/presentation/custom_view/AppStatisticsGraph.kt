@@ -24,13 +24,16 @@ class AppStatisticsGraph(
 
     constructor(context: Context) : this(context, null)
 
-    var appStaticsField: List<Int> = emptyList()
+    var progressesHeights: List<Int> = listOf(
+        1,2,3,4,5,6,7,8,30,0,1,2,60,4,5,6,7,8,9,0,1,2,3,4
+    )
         set(value) {
+            if (value.size != 24) throw Exception("Value size must be 24")
             field = value
             invalidate()
         }
 
-    private val fieldRect = RectF(0f, 0f, 0f, 0f)
+    private val chartRect = RectF(0f, 0f, 0f, 0f)
     private var cellWidth = 0f
     private var cellHeight = 0f
 
@@ -52,7 +55,7 @@ class AppStatisticsGraph(
     private lateinit var brokenLinePaint: Paint
     private lateinit var straightLinePaint: Paint
     private lateinit var textPaint: Paint
-    private lateinit var progressPaint: Paint
+    private val progressPaint = progressPaint()
 
     init {
         initAttributes(attributesSet, defStyleAttr, defStyleRes)
@@ -85,21 +88,12 @@ class AppStatisticsGraph(
         brokenLinePaint = brokenLinePaint()
         straightLinePaint = straightLinePaint()
         textPaint = textPaint()
-        progressPaint = progressPaint()
     }
 
     private fun progressPaint() : Paint {
         return Paint(Paint.ANTI_ALIAS_FLAG).apply {
-            style = Paint.Style.STROKE
-    //            shader = LinearGradient(
-    //                100f,
-    //                100f,
-    //                0f,
-    //                0f,
-    //                Color.YELLOW,
-    //                Color.GREEN,
-    //                Shader.TileMode.CLAMP
-    //            )
+            style = Paint.Style.FILL
+            color = Color.CYAN
         }
     }
 
@@ -143,13 +137,13 @@ class AppStatisticsGraph(
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
 
-        fieldRect.left = (width * 0.05).toFloat()
-        fieldRect.right = (width * 0.84).toFloat()
-        fieldRect.top = (height * 0.1).toFloat()
-        fieldRect.bottom = (height * 0.8).toFloat()
+        chartRect.left = (width * 0.05).toFloat()
+        chartRect.right = (width * 0.84).toFloat()
+        chartRect.top = (height * 0.1).toFloat()
+        chartRect.bottom = (height * 0.8).toFloat()
 
-        cellWidth = (width - (fieldRect.left + (width - fieldRect.right))) / 8
-        cellHeight = (height - (fieldRect.top + (height - fieldRect.bottom))) / 2
+        cellWidth = (width - (chartRect.left + (width - chartRect.right))) / 8
+        cellHeight = (height - (chartRect.top + (height - chartRect.bottom))) / 2
 
         marginWidthSmallCell = cellWidth * 0.1f
         widthSmallCellSize = cellWidth / 3 - marginWidthSmallCell
@@ -186,9 +180,9 @@ class AppStatisticsGraph(
             lineDrawWay = LineDrawWay.Horizontally,
             linesCount = 2,
             spaceBetween = cellHeight,
-            linesStartPoint = fieldRect.top,
-            lineLength = fieldRect.width(),
-            edgeStartPoint = fieldRect.left,
+            linesStartPoint = chartRect.top,
+            lineLength = chartRect.width(),
+            edgeStartPoint = chartRect.left,
             paint = straightLinePaint
         )
 
@@ -198,9 +192,9 @@ class AppStatisticsGraph(
             lineDrawWay = LineDrawWay.Vertically,
             linesCount = 8,
             spaceBetween = cellWidth,
-            linesStartPoint = fieldRect.left,
-            lineLength = fieldRect.height(),
-            edgeStartPoint = fieldRect.top,
+            linesStartPoint = chartRect.left,
+            lineLength = chartRect.height(),
+            edgeStartPoint = chartRect.top,
             paint = brokenLinePaint
         )
     }
@@ -223,8 +217,8 @@ class AppStatisticsGraph(
         for (i in 0 until textItems.size) {
             canvas.drawText(
                 textItems[i],
-                fieldRect.right ,
-                fieldRect.top + (spaceBetweenLines * i),
+                chartRect.right ,
+                chartRect.top + (spaceBetweenLines * i),
                 textPaint
             )
         }
@@ -239,8 +233,8 @@ class AppStatisticsGraph(
         for (i in 0 until textItems.size) {
             canvas.drawText(
                 textItems[i],
-                fieldRect.left + (spaceBetweenLines * i),
-                fieldRect.bottom,
+                chartRect.left + (spaceBetweenLines * i),
+                chartRect.bottom,
                 textPaint
             )
         }
@@ -270,7 +264,54 @@ class AppStatisticsGraph(
     }
 
 
-    private fun drawProgress(canvas: Canvas) {
+    private fun drawProgress(
+        canvas: Canvas
+    ) {
+
+
+        val progressesCount = 24
+        val progressMargin = 5f
+        val progressContainerWidth = chartRect.width() / progressesCount
+        val progressWidth = progressContainerWidth - progressMargin * 2
+
+
+        canvas.clipRect(
+            chartRect.left,
+            chartRect.height() + chartRect.top,
+            chartRect.right,
+            chartRect.height() + 5f + chartRect.top,
+            Region.Op.DIFFERENCE
+        )
+
+        progressesHeights.forEachIndexed {index, i ->
+            val left = index * (progressContainerWidth) + chartRect.left + progressMargin
+            val top = chartRect.bottom
+            val right = index * (progressContainerWidth)  + progressWidth + chartRect.left + progressMargin
+            val bottom = (i.toFloat() / 60) * -chartRect.height() + chartRect.height() + chartRect.top
+
+            progressPaint.shader = LinearGradient(
+                0f,
+                top,
+                0f,
+                bottom,
+                Color.YELLOW,
+                Color.RED,
+                Shader.TileMode.CLAMP
+            )
+
+            canvas.drawRoundRect(
+                left,
+                top + 5f,
+                right,
+                bottom,
+                5f,
+                5f,
+                progressPaint)
+
+
+
+        }
+
 
     }
 

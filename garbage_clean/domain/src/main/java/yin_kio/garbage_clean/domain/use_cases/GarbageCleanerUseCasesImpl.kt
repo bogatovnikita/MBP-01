@@ -48,7 +48,11 @@ internal class GarbageCleanerUseCasesImpl(
             ads.preloadAd()
             outBoundary.outDeleteProgress(DeleteProgressState.Progress)
             outBoundary.outDeleteRequest(garbageFiles.deleteForm.deleteRequest.map { it })
-            val noDeletable = files.deleteAndGetNoDeletable(interpreter.interpret(deleteRequest))
+
+            val interpretedRequest = interpreter.interpret(deleteRequest)
+            val noDeletable = files.deleteAndGetNoDeletable(interpretedRequest)
+
+
             noDeletableFiles.save(noDeletable)
             delay(8000)
             outBoundary.outDeleteProgress(DeleteProgressState.Complete)

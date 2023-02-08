@@ -98,6 +98,7 @@ class GarbageCleanerUseCasesTest {
             garbageFiles[GarbageType.Apk] = mutableSetOf(APK)
             garbageFiles[GarbageType.Temp] = mutableSetOf(TEMP)
         }
+        coEvery { files.deleteAndGetNoDeletable(listOf(APK, TEMP)) } returns listOf()
 
         useCases.deleteIfCan()
         wait()
@@ -106,8 +107,8 @@ class GarbageCleanerUseCasesTest {
             ads.preloadAd()
             outBoundary.outDeleteProgress(DeleteProgressState.Progress)
             outBoundary.outDeleteRequest(listOf(GarbageType.Apk, GarbageType.Temp))
-            val noDeletable = files.deleteAndGetNoDeletable(listOf(APK, TEMP))
-            noDeletableFiles.save(noDeletable)
+            files.deleteAndGetNoDeletable(listOf(APK, TEMP))
+            noDeletableFiles.save(listOf())
             outBoundary.outDeleteProgress(DeleteProgressState.Complete)
         }
     }

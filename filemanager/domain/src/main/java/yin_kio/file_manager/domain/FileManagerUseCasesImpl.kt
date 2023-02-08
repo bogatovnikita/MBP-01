@@ -163,6 +163,7 @@ internal class FileManagerUseCasesImpl(
     }
 
     override fun askDelete(){
+        if (state.selectedFiles.isEmpty()) return
         state.deleteState = DeleteState.Ask
         updateState()
     }

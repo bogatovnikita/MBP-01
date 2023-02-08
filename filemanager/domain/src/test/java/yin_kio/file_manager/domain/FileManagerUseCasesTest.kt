@@ -258,8 +258,16 @@ internal class FileManagerUseCasesTest{
 
     @Test
     fun `askDelete - delete state is Ask`() = runTest{
-        fileManager().askDelete()
-        assertEquals(DeleteState.Ask, state.deleteState)
+        fileManager().apply {
+            wait()
+            askDelete()
+            assertNotEquals(DeleteState.Ask, state.deleteState)
+
+            switchSelectAll() // or selectItem
+            askDelete()
+            assertEquals(DeleteState.Ask, state.deleteState)
+        }
+
     }
 
     @Test

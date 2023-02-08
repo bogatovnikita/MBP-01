@@ -31,14 +31,22 @@ class AppStatisticsGraph(
         }
 
     private val fieldRect = RectF(0f, 0f, 0f, 0f)
-    private var widthCellSize = 0f
-    private var heightCellSize = 0f
+    private var cellWidth = 0f
+    private var cellHeight = 0f
 
     private var marginWidthSmallCell = 0f
     private var widthSmallCellSize = 0f
 
     private var backgroundScreenColor by Delegates.notNull<Int>()
     private var lineColor by Delegates.notNull<Int>()
+    private val verticalLinesTexts = listOf("00", "03", "06", "09", "12", "15", "18", "21", "00")
+
+    private val horizontalLinesTexts = listOf(
+        resources.getString(R.string.min_60),
+        resources.getString(R.string.min_30),
+        resources.getString(R.string.min_0)
+    )
+
 
     private lateinit var backgroundColorPaint: Paint
     private lateinit var brokenLinePaint: Paint
@@ -73,40 +81,64 @@ class AppStatisticsGraph(
     }
 
     private fun initPaints() {
-        backgroundColorPaint =
-            Paint(Paint.ANTI_ALIAS_FLAG).apply { color = backgroundScreenColor }
+        backgroundColorPaint = bgColorPaint()
+        brokenLinePaint = brokenLinePaint()
+        straightLinePaint = straightLinePaint()
+        textPaint = textPaint()
+        progressPaint = progressPaint()
+    }
 
-        brokenLinePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+    private fun progressPaint() : Paint {
+        return Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            style = Paint.Style.STROKE
+    //            shader = LinearGradient(
+    //                100f,
+    //                100f,
+    //                0f,
+    //                0f,
+    //                Color.YELLOW,
+    //                Color.GREEN,
+    //                Shader.TileMode.CLAMP
+    //            )
+        }
+    }
+
+    private fun textPaint() : Paint {
+        return Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            color = Color.WHITE
+            style = Paint.Style.FILL
+            textSize = 10.sp
+        }
+    }
+
+    private fun straightLinePaint() : Paint{
+        return Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            color = lineColor
+            style = Paint.Style.STROKE
+        }
+    }
+
+    private fun brokenLinePaint() : Paint {
+        return Paint(Paint.ANTI_ALIAS_FLAG).apply {
             color = lineColor
             style = Paint.Style.STROKE
             pathEffect = DashPathEffect(floatArrayOf(10f, 10f, 10f, 10f), 0f)
         }
-
-        straightLinePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-            color = lineColor
-            style = Paint.Style.STROKE
-        }
-
-        textPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-            color = Color.WHITE
-            style = Paint.Style.FILL
-            textSize =
-                TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 10f, resources.displayMetrics)
-        }
-
-        progressPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-            style = Paint.Style.STROKE
-//            shader = LinearGradient(
-//                100f,
-//                100f,
-//                0f,
-//                0f,
-//                Color.YELLOW,
-//                Color.GREEN,
-//                Shader.TileMode.CLAMP
-//            )
-        }
     }
+
+    private fun bgColorPaint() : Paint {
+        return Paint(Paint.ANTI_ALIAS_FLAG).apply { color = backgroundScreenColor }
+    }
+
+    private val Int.sp : Float get() = TypedValue.applyDimension(
+        TypedValue.COMPLEX_UNIT_SP,
+        this.toFloat(),
+        resources.displayMetrics
+    )
+
+
+
+
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
@@ -116,18 +148,23 @@ class AppStatisticsGraph(
         fieldRect.top = (height * 0.1).toFloat()
         fieldRect.bottom = (height * 0.8).toFloat()
 
-        widthCellSize = (width - (fieldRect.left + (width - fieldRect.right))) / 8
-        heightCellSize = (height - (fieldRect.top + (height - fieldRect.bottom))) / 2
+        cellWidth = (width - (fieldRect.left + (width - fieldRect.right))) / 8
+        cellHeight = (height - (fieldRect.top + (height - fieldRect.bottom))) / 2
 
-        marginWidthSmallCell = widthCellSize * 0.1f
-        widthSmallCellSize = widthCellSize / 3 - marginWidthSmallCell
+        marginWidthSmallCell = cellWidth * 0.1f
+        widthSmallCellSize = cellWidth / 3 - marginWidthSmallCell
     }
+
+
+
+
+
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         drawBackground(canvas)
-        drawHorizontalLineAndText(canvas)
-        drawVerticalLineAndText(canvas)
+        drawGrid(canvas)
+        drawText(canvas)
         drawProgress(canvas)
     }
 
@@ -143,39 +180,102 @@ class AppStatisticsGraph(
         )
     }
 
-    private fun drawHorizontalLineAndText(canvas: Canvas) {
-        val listTime = listOf(
-            resources.getString(R.string.min_60),
-            resources.getString(R.string.min_30),
-            resources.getString(R.string.min_0)
+    private fun drawGrid(canvas: Canvas) {
+        drawLines(
+            canvas,
+            lineDrawWay = LineDrawWay.Horizontally,
+            linesCount = 2,
+            spaceBetween = cellHeight,
+            linesStartPoint = fieldRect.top,
+            lineLength = fieldRect.width(),
+            edgeStartPoint = fieldRect.left,
+            paint = straightLinePaint
         )
-        for (i in 0..2) {
-            val y = fieldRect.top + heightCellSize * i
-            canvas.drawLine(fieldRect.left, y, fieldRect.right, y, straightLinePaint)
+
+
+        drawLines(
+            canvas,
+            lineDrawWay = LineDrawWay.Vertically,
+            linesCount = 8,
+            spaceBetween = cellWidth,
+            linesStartPoint = fieldRect.left,
+            lineLength = fieldRect.height(),
+            edgeStartPoint = fieldRect.top,
+            paint = brokenLinePaint
+        )
+    }
+
+
+    private fun drawText(canvas: Canvas) {
+        drawHorizontaText(canvas, horizontalLinesTexts, cellHeight)
+        drawVerticalText(canvas, verticalLinesTexts, cellWidth)
+    }
+
+
+
+
+    private fun drawHorizontaText(
+        canvas: Canvas,
+        textItems: List<String>,
+        spaceBetweenLines: Float
+    ) {
+
+        for (i in 0 until textItems.size) {
             canvas.drawText(
-                listTime[i],
-                fieldRect.right + 25,
-                fieldRect.top + (heightCellSize * i) + 10,
+                textItems[i],
+                fieldRect.right ,
+                fieldRect.top + (spaceBetweenLines * i),
                 textPaint
             )
         }
     }
 
-    private fun drawVerticalLineAndText(canvas: Canvas) {
-        val listTime = listOf("00", "03", "06", "09", "12", "15", "18", "21", "00")
-        for (i in 0..8) {
-            val x = fieldRect.left + widthCellSize * i
-            canvas.drawLine(x, fieldRect.top - 10f, x, fieldRect.bottom, brokenLinePaint)
+    private fun drawVerticalText(
+        canvas: Canvas,
+        textItems: List<String>,
+        spaceBetweenLines: Float
+    ) {
+
+        for (i in 0 until textItems.size) {
             canvas.drawText(
-                listTime[i],
-                fieldRect.left + (widthCellSize * i) - 10f,
-                fieldRect.bottom + 40,
+                textItems[i],
+                fieldRect.left + (spaceBetweenLines * i),
+                fieldRect.bottom,
                 textPaint
             )
         }
     }
+
+    private fun drawLines(
+        canvas: Canvas,
+        lineDrawWay: LineDrawWay,
+        linesCount: Int,
+        spaceBetween: Float,
+        linesStartPoint: Float,
+        edgeStartPoint: Float,
+        lineLength: Float,
+        paint: Paint
+    ){
+        for (i in 0..linesCount) {
+            val stepValue = linesStartPoint + spaceBetween * i
+            when(lineDrawWay){
+                LineDrawWay.Vertically -> {
+                    canvas.drawLine(stepValue, edgeStartPoint, stepValue, lineLength + edgeStartPoint, paint)
+                }
+                LineDrawWay.Horizontally -> {
+                    canvas.drawLine(edgeStartPoint, stepValue, lineLength + edgeStartPoint, stepValue, paint)
+                }
+            }
+        }
+    }
+
 
     private fun drawProgress(canvas: Canvas) {
 
+    }
+
+    private enum class LineDrawWay{
+        Vertically,
+        Horizontally
     }
 }

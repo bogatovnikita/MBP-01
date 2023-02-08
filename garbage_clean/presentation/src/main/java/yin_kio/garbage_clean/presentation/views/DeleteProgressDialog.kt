@@ -13,14 +13,14 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import yin_kio.garbage_clean.domain.entities.GarbageType
 import yin_kio.garbage_clean.presentation.R
-import yin_kio.garbage_clean.presentation.databinding.DialogDeleteProgressBinding
+import yin_kio.garbage_clean.presentation.databinding.DialogGarbageCleanDeleteProgressBinding
 import yin_kio.garbage_clean.presentation.databinding.ListOtemDeleteProgressBinding
 import yin_kio.garbage_clean.presentation.presenter.ScreenItemsPresenter
 import yin_kio.garbage_clean.presentation.view_model.parentViewModel
 
-internal class DeleteProgressDialog : DialogFragment(R.layout.dialog_delete_progress) {
+internal class DeleteProgressDialog : DialogFragment(R.layout.dialog_garbage_clean_delete_progress) {
 
-    private val binding: DialogDeleteProgressBinding by viewBinding()
+    private val binding: DialogGarbageCleanDeleteProgressBinding by viewBinding()
     private val viewModel by lazy { parentViewModel() }
     private val presenter by lazy { ScreenItemsPresenter(requireContext()) }
     private val adapter by lazy { adapter() }

@@ -33,8 +33,10 @@ class DuplicatesParentFragment(
             childNavController = childNavController,
             activity = requireActivity(),
             onCloseInter = { viewModel.closeInter() },
-            completeDestination = requireArguments().getInt("completeId"),
-            parentNavController = findNavController()
+            advicesDestination = requireArguments().getInt(ARG_COMPLETE_ID),
+            parentNavController = findNavController(),
+            advicesUnitedTitle = getString(R.string.advices_united_title),
+            advicesNoFilesTitle = getString(R.string.advices_no_files_title)
         )
     }
 
@@ -51,6 +53,10 @@ class DuplicatesParentFragment(
         if (it.isClosed) {
             findNavController().navigateUp()
         }
+    }
+
+    companion object{
+        private const val ARG_COMPLETE_ID = "completeId"
     }
 
 }

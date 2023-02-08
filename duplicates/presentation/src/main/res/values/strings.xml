@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="TypographyEllipsis">
     <string name="title">Удаление дубликатов</string>
     <string name="unite_all_duplicates">Объединить все дубликаты</string>
     <string name="unite_selected_duplicates">Объединить выбранные</string>
@@ -16,5 +17,7 @@
     <string name="dialog_all_duplicates_done_title">Все дубликаты объединены</string>
 
     <string name="select_but_one_2_photo">Выберите хотя бы 2 фото</string>
+    <string name="advices_united_title">Все дубликаты объединены</string>
+    <string name="advices_no_files_title">Дубликатов не найдено!</string>
 
 </resources>

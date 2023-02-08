@@ -11,59 +11,47 @@ class Navigation(
     private val parentNavController: NavController,
     private val activity: Activity,
     private val onCloseInter: () -> Unit,
-    private val completeDestination: Int
+    private val advicesDestination: Int,
+    private val advicesUnitedTitle: String,
+    private val advicesNoFilesTitle: String
 ) {
 
     private var currentDestination = Destination.List
 
-    private  val navigateUpDestinations = arrayOf(
-        Destination.List,
-        Destination.AskContinue
-    )
-
-    private val bundle: Bundle = Bundle()
-
     fun navigate(destination: Destination){
         if (currentDestination == destination) return
 
-        if (destination == Destination.Advices
-            || destination == Destination.AdvicesUnited
-            || destination == Destination.AdvicesNoFiles
-        ) {
-            parentNavController.navigate(completeDestination, bundle)
-            return
-        }
-
-        if (navigateUpDestinations.contains(destination)) navigateUp()
-
-        when(val id = destination.adapt()){
-            INTER_ID -> activity.showInter(onClosed = onCloseInter)
-            else -> childNavController.navigate(id)
-        }
-
+        handelDestination(destination)
 
         currentDestination = destination
     }
 
-    private fun Destination.adapt() : Int{
-        return when(this){
-            Destination.Permission -> R.id.action_duplicatesFragment_to_duplicatesPermissionFragment
-            Destination.List -> R.id.duplicatesFragment
-            Destination.UniteProgress -> R.id.action_duplicatesFragment_to_progressDialog
-            Destination.Inter -> INTER_ID
-            Destination.AskContinue -> R.id.action_duplicatesFragment_to_askContinueDialog
-            Destination.Advices -> completeDestination
-            Destination.AdvicesUnited -> completeDestination
-            Destination.AdvicesNoFiles -> completeDestination
+    private fun handelDestination(destination: Destination){
+        when(destination){
+            Destination.Permission -> childNavController.navigate(R.id.toPermission)
+            Destination.List -> childNavController.navigateUp()
+            Destination.UniteProgress -> childNavController.navigate(R.id.toUniteProgress)
+            Destination.Inter ->  activity.showInter(onClosed = onCloseInter)
+            Destination.AskContinue -> goToAskContinue()
+            Destination.Advices -> parentNavController.navigate(advicesDestination)
+            Destination.AdvicesUnited -> parentNavController.navigate(advicesDestination, title(advicesUnitedTitle))
+            Destination.AdvicesNoFiles -> parentNavController.navigate(advicesDestination, title(advicesNoFilesTitle))
         }
     }
 
-    private fun navigateUp(){
+    private fun goToAskContinue() {
         childNavController.navigateUp()
+        childNavController.navigate(R.id.toAskContinue)
+    }
+
+    private fun title(title: String) : Bundle{
+        return Bundle().apply {
+            putString(ADVICES_DIALOG_TITLE, title)
+        }
     }
 
     companion object{
-        private const val INTER_ID = -1
+        private const val ADVICES_DIALOG_TITLE =  "dialog_title"
     }
 
 }

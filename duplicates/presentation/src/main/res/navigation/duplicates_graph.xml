@@ -9,13 +9,13 @@
         android:name="yin_kio.duplicates.presentation.views.DuplicatesFragment"
         android:label="DuplicatesFragment" >
         <action
-            android:id="@+id/action_duplicatesFragment_to_duplicatesPermissionFragment"
+            android:id="@+id/toPermission"
             app:destination="@id/duplicatesPermissionFragment" />
         <action
-            android:id="@+id/action_duplicatesFragment_to_progressDialog"
+            android:id="@+id/toUniteProgress"
             app:destination="@id/progressDialog" />
         <action
-            android:id="@+id/action_duplicatesFragment_to_askContinueDialog"
+            android:id="@+id/toAskContinue"
             app:destination="@id/askContinueDialog" />
     </fragment>
     <fragment

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AppStatisticsGraphStyle">
+        <item name="background_color">@color/dark_blue</item>
+        <item name="brush_color">@color/grey_medium_dark</item>
+    </style>
+</resources>

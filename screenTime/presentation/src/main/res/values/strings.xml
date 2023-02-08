@@ -23,5 +23,8 @@
     <string name="data_text">Данные</string>
     <string name="this_is_a_system_application_you_will_not_be_able_to_switch_to_it">Это системное приложение, вы не сможете переключиться на него</string>
     <string name="If_you_want_to_open_the_app_just_click_on_its_icon">Если вы хотите открыть приложение, просто кликните по его иконке</string>
+    <string name="min_60">60 min</string>
+    <string name="min_30">30 min</string>
+    <string name="min_0">0 min</string>
 
 </resources>

@@ -52,7 +52,7 @@ internal class GarbageCleanFragment : Fragment(R.layout.fragment_garbage_clean) 
         binding.apply {
             selectAll.isChecked = it.isAllSelected
             adapter.submitList(it.deleteFormItems)
-            fileSystemInfo.progress.progress = it.fileSystemInfo.occupiedPercents
+            storageInfo.binding.progress.progress = it.fileSystemInfo.occupiedPercents
             progressPlate.isVisible = it.isInProgress
             canFree.text = it.canFreeVolume
             recycler.isVisible = it.deleteFormItems.isNotEmpty()
@@ -72,7 +72,7 @@ internal class GarbageCleanFragment : Fragment(R.layout.fragment_garbage_clean) 
     }
 
     private fun showFileSystemInfo(it: ScreenState) {
-        binding.fileSystemInfo.apply {
+        binding.storageInfo.binding.apply {
             occupied.text = it.fileSystemInfo.occupied
             available.text = it.fileSystemInfo.available
             total.text = it.fileSystemInfo.total

@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace 'yin_kio.garbage_clean.presentation'
+    namespace 'com.example.storage_info_view'
     compileSdk 33
 
     defaultConfig {
@@ -32,25 +32,13 @@ android {
     buildFeatures{
         viewBinding true
     }
-    testOptions {
-        unitTests {
-            includeAndroidResources = true
-        }
-    }
 }
 
 dependencies {
 
-    implementation project(':storage_info_view')
-
-    implementation project(':garbage_clean:domain')
-    implementation project(':garbage_clean:data')
+    implementation project(':general:resources')
     implementation project(':rect_progress_bar')
 
-    implementation 'com.github.bosphere.android-fadingedgelayout:fadingedgelayout:1.0.0'
-
-    implementation presentation.values()
-    testImplementation presentation_test.values()
-    androidTestImplementation presentation_android_test.values()
-
+    implementation 'androidx.core:core-ktx:1.7.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 }

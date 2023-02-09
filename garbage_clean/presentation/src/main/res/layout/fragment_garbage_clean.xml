@@ -38,15 +38,16 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <FrameLayout
+            <yin_kio.storage_info_view.StorageInfoView
+                android:id="@+id/storage_info"
+                app:title="@string/internal_storage"
+                app:total_storage_title="@string/total_storage_space"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="24dp">
 
-                <include android:id="@+id/file_system_info"
-                    layout="@layout/layout_file_system_info"/>
-            </FrameLayout>
+            </yin_kio.storage_info_view.StorageInfoView>
 
 
             <LinearLayout

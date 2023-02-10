@@ -52,7 +52,7 @@ internal class GarbageCleanFragment : Fragment(R.layout.fragment_garbage_clean) 
         binding.apply {
             selectAll.isChecked = it.isAllSelected
             adapter.submitList(it.deleteFormItems)
-            storageInfo.binding.progress.progress = it.fileSystemInfo.occupiedPercents
+            storageInfo.binding.progressBar.progress = it.fileSystemInfo.occupiedPercents
             progressPlate.isVisible = it.isInProgress
             canFree.text = it.canFreeVolume
             recycler.isVisible = it.deleteFormItems.isNotEmpty()

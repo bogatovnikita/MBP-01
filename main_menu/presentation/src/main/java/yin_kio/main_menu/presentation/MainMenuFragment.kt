@@ -29,11 +29,13 @@ class MainMenuFragment : Fragment(R.layout.fragment_main_menu) {
             fileManager.setOnClickListener { openFileManager() }
             duplicates.setOnClickListener { openDuplicates() }
             garbageClean.setOnClickListener { openGarbageClean() }
-            toMemory.setOnClickListener {
-                onBackPressedCallback.isEnabled = true
-                findNavController().navigate(R.id.toMemory)
-            }
+            toMemory.setOnClickListener { openMemory() }
         }
+    }
+
+    private fun openMemory() {
+        onBackPressedCallback.isEnabled = true
+        findNavController().navigate(R.id.toMemory)
     }
 
     private fun openFileManager() {

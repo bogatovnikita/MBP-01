@@ -36,6 +36,7 @@ android {
 
 dependencies {
 
+    implementation project(':memory:presentation')
     implementation project(':garbage_clean:presentation')
     implementation project(':filemanager:presentation')
     implementation project(':filemanager:di')

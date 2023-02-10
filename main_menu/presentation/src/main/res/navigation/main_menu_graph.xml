@@ -29,6 +29,9 @@
         <action
             android:id="@+id/toDuplicates"
             app:destination="@id/duplicatesParentFragment" />
+        <action
+            android:id="@+id/toMemory"
+            app:destination="@id/memoryFragment" />
     </fragment>
     <fragment
         android:id="@+id/advicesFragment"
@@ -55,4 +58,8 @@
             app:destination="@id/advicesFragment"
             app:popUpTo="@id/mainMenuFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/memoryFragment"
+        android:name="yin_kio.memory.presentation.MemoryFragment"
+        android:label="MemoryFragment" />
 </navigation>

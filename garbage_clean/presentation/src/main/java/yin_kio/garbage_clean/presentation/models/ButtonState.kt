@@ -1,8 +1,6 @@
 package yin_kio.garbage_clean.presentation.models
 
-import android.graphics.drawable.Drawable
-
 data class ButtonState(
-    val text: String,
-    val bg: Drawable
+    val text: String = "",
+    val bgRes: Int = general.R.drawable.bg_main_button_enabled
 )

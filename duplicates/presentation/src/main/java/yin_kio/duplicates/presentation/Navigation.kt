@@ -1,62 +1,57 @@
 package yin_kio.duplicates.presentation
 
 import android.app.Activity
+import android.os.Bundle
 import androidx.navigation.NavController
 import com.example.ads.showInter
 import yin_kio.duplicates.domain.models.Destination
 
 class Navigation(
     private val childNavController: NavController,
+    private val parentNavController: NavController,
     private val activity: Activity,
     private val onCloseInter: () -> Unit,
-    private val onNotImplemented: () -> Unit
+    private val advicesDestination: Int,
+    private val advicesUnitedTitle: String,
+    private val advicesNoFilesTitle: String
 ) {
 
     private var currentDestination = Destination.List
 
-
-
     fun navigate(destination: Destination){
-        if (currentDestination != destination){
-            val navigateUpDestinations = arrayOf(
-                Destination.List,
-                Destination.AskContinue
-            )
+        if (currentDestination == destination) return
 
-            if (navigateUpDestinations.contains(destination)) navigateUp()
+        handelDestination(destination)
 
-            val id = destination.adapt()
-            if (id == INTER_ID) {
-                activity.showInter(onClosed = onCloseInter)
-            } else if (id == NOT_IMPLEMENTED){
-                onNotImplemented()
-            } else {
-                childNavController.navigate(id)
-            }
+        currentDestination = destination
+    }
 
-            currentDestination = destination
+    private fun handelDestination(destination: Destination){
+        when(destination){
+            Destination.Permission -> childNavController.navigate(R.id.toPermission)
+            Destination.List -> childNavController.navigateUp()
+            Destination.UniteProgress -> childNavController.navigate(R.id.toUniteProgress)
+            Destination.Inter ->  activity.showInter(onClosed = onCloseInter)
+            Destination.AskContinue -> goToAskContinue()
+            Destination.Advices -> parentNavController.navigate(advicesDestination)
+            Destination.AdvicesUnited -> parentNavController.navigate(advicesDestination, title(advicesUnitedTitle))
+            Destination.AdvicesNoFiles -> parentNavController.navigate(advicesDestination, title(advicesNoFilesTitle))
         }
     }
 
-    private fun Destination.adapt() : Int{
-        return when(this){
-            Destination.Permission -> R.id.action_duplicatesFragment_to_duplicatesPermissionFragment
-            Destination.List -> R.id.duplicatesFragment
-            Destination.UniteProgress -> R.id.action_duplicatesFragment_to_progressDialog
-            Destination.Inter -> INTER_ID
-            Destination.AskContinue -> R.id.action_duplicatesFragment_to_askContinueDialog
-            Destination.Advices -> NOT_IMPLEMENTED
-            Destination.AdvicesWithDialog -> NOT_IMPLEMENTED
-        }
-    }
-
-    private fun navigateUp(){
+    private fun goToAskContinue() {
         childNavController.navigateUp()
+        childNavController.navigate(R.id.toAskContinue)
+    }
+
+    private fun title(title: String) : Bundle{
+        return Bundle().apply {
+            putString(ADVICES_DIALOG_TITLE, title)
+        }
     }
 
     companion object{
-        private const val INTER_ID = -1
-        private const val NOT_IMPLEMENTED = -2
+        private const val ADVICES_DIALOG_TITLE =  "dialog_title"
     }
 
 }

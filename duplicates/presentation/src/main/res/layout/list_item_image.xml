@@ -13,7 +13,15 @@
         android:layout_width="115dp"
         android:layout_height="115dp"
         android:scaleType="centerCrop"
-        tools:srcCompat="@tools:sample/avatars"/>
+        tools:srcCompat="@tools:sample/avatars"
+        tools:ignore="ContentDescription" />
+
+    <FrameLayout
+        android:id="@+id/foreground"
+        android:layout_width="115dp"
+        android:layout_height="115dp"
+        android:background="@color/dark_blue"
+        android:alpha="0.4"/>
 
     <CheckBox
         android:id="@+id/checkbox"

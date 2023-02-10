@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="title">Очистка мусора</string>
+    <string name="garbage_clean_title">Очистка мусора</string>
     <string name="internal_storage">Внутренняя память</string>
     <string name="occupied">Занято</string>
     <string name="available">Доступно</string>
@@ -17,5 +17,10 @@
     <string name="miniatures">Миниатюры</string>
     <string name="delete">Удалить</string>
     <string name="delete_progress_title">Удаляем мусорные файлы</string>
-    <string name="delete_has_been">Вы недавно очистили свой телефон от всех мусорных файлов\n\nОчищайте свой телефон регулярно, чтобы не засорять память и обеспечить быструю работу устройства</string>
+    <string name="your_phone_is_clean">Ваш телефон чист\n\nОчищайте свой телефон регулярно, чтобы не засорять память и обеспечить быструю работу устройства</string>
+    <string name="go_to_main_screen">На главный экран</string>
+    <string name="device_scanning">Сканируем устройство...</string>
+    <string name="your_phone_is_cleaned">Ваш телефон очищен</string>
+    <string name="freed">Освобождено %s</string>
+
 </resources>

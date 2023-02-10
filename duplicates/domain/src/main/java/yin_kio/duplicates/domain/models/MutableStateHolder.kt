@@ -8,6 +8,8 @@ import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
 internal data class MutableStateHolder(
+    override var canUnite: Boolean = true,
+    override var isClosed: Boolean = false,
     override var isInProgress: Boolean = true,
     override var duplicatesLists: List<DuplicatesList> = emptyList(),
     override var selected: MutableMap<Int, MutableSet<ImageInfo>> = mutableMapOf(),
@@ -35,11 +37,8 @@ internal data class MutableStateHolder(
     }
 
     override fun isGroupSelected(groupIndex: Int): Boolean {
-        if (duplicatesLists.isEmpty()
-            || groupIndex >= duplicatesLists.size
-        ) return false
-
-        return (selected[groupIndex]?.size ?: 0) == duplicatesLists[groupIndex].data.size
+        if (duplicatesLists.isEmpty() || groupIndex >= duplicatesLists.size) return false
+        return (selected[groupIndex]?.size ?: 0) == duplicatesLists[groupIndex].imageInfos.size
     }
 
     fun update(){

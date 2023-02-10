@@ -1,18 +1,19 @@
 package yin_kio.file_manager.presentation
 
 import kotlinx.coroutines.flow.map
-import yin_kio.file_manager.domain.FileManager
-import yin_kio.file_manager.presentation.models.UiState
+import yin_kio.file_manager.domain.FileManagerUseCases
+import yin_kio.file_manager.presentation.models.ScreenState
 import yin_kio.file_manager.presentation.presenters.FileManagerPresenter
 
 class FileManagerViewModel(
-    private val fileManager: FileManager,
+    private val fileManagerUseCases: FileManagerUseCases,
     private val presenter: FileManagerPresenter
 ) {
 
-    val flow = fileManager.stateHolder.flow
+    val flow = fileManagerUseCases.stateHolder.flow
         .map {
-            UiState(
+            ScreenState(
+                isClosed = it.isClosed,
                 fileRequest = it.fileRequest,
                 isAllSelected = it.isAllSelected,
                 listShowingMode = it.listShowingMode,
@@ -36,20 +37,21 @@ class FileManagerViewModel(
 
     fun obtainIntention(intention: Intention){
         when(intention){
-            Intention.AskDelete -> fileManager.askDelete()
-            Intention.CancelDelete -> fileManager.cancelDelete()
-            Intention.CompleteDelete -> fileManager.completeDelete()
-            Intention.Delete -> fileManager.delete()
-            Intention.GoBack -> fileManager.goBack()
-            Intention.HideInter -> fileManager.hideInter()
-            Intention.ShowSortingModeSelector -> fileManager.showSortingModeSelector()
-            is Intention.SwitchFileMode -> fileManager.switchFileMode(intention.fileRequest)
-            Intention.SwitchSelectAll -> fileManager.switchSelectAll()
-            is Intention.SwitchSelectFile -> fileManager.switchSelectFile(intention.path)
-            Intention.SwitchShowingMode -> fileManager.switchShowingMode()
-            is Intention.SwitchSortingMode -> fileManager.switchSortingMode(intention.sortingMode)
-            Intention.UpdateFiles -> fileManager.updateFiles()
-            Intention.HideSortingModeSelector -> fileManager.hideSortingModeSelector()
+            Intention.AskDelete -> fileManagerUseCases.askDelete()
+            Intention.CancelDelete -> fileManagerUseCases.cancelDelete()
+            Intention.CompleteDelete -> fileManagerUseCases.completeDelete()
+            Intention.Delete -> fileManagerUseCases.delete()
+            Intention.GoBack -> fileManagerUseCases.goBack()
+            Intention.HideInter -> fileManagerUseCases.hideInter()
+            Intention.ShowSortingModeSelector -> fileManagerUseCases.showSortingModeSelector()
+            is Intention.SwitchFileMode -> fileManagerUseCases.switchFileMode(intention.fileRequest)
+            Intention.SwitchSelectAll -> fileManagerUseCases.switchSelectAll()
+            is Intention.SwitchSelectFile -> fileManagerUseCases.switchSelectFile(intention.path)
+            Intention.SwitchShowingMode -> fileManagerUseCases.switchShowingMode()
+            is Intention.SwitchSortingMode -> fileManagerUseCases.switchSortingMode(intention.sortingMode)
+            Intention.UpdateFiles -> fileManagerUseCases.updateFiles()
+            Intention.HideSortingModeSelector -> fileManagerUseCases.hideSortingModeSelector()
+            Intention.Close -> fileManagerUseCases.close()
         }
     }
 

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_menu_graph"
+    app:startDestination="@id/mainMenuFragment">
+
+    <fragment
+        android:id="@+id/garbageCleanParentFragment"
+        android:name="yin_kio.garbage_clean.presentation.views.GarbageCleanParentFragment"
+        android:label="GarbageCleanParentFragment" >
+        <action
+            android:id="@+id/toAdvices"
+            app:destination="@id/advicesFragment"
+            app:popUpTo="@id/mainMenuFragment" />
+        <argument
+            android:name="completeId"
+            app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/mainMenuFragment"
+        android:name="yin_kio.main_menu.presentation.MainMenuFragment"
+        android:label="MainMenuFragment" >
+        <action
+            android:id="@+id/toGarbageClean"
+            app:destination="@id/garbageCleanParentFragment" />
+        <action
+            android:id="@+id/toFileManager"
+            app:destination="@id/fileManagerParentFragment" />
+        <action
+            android:id="@+id/toDuplicates"
+            app:destination="@id/duplicatesParentFragment" />
+        <action
+            android:id="@+id/toMemory"
+            app:destination="@id/memoryFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/advicesFragment"
+        android:name="yin_kio.main_menu.presentation.AdvicesFragment"
+        android:label="AdvicesFragment" >
+        <argument
+            android:name="dialog_title"
+            app:argType="string" />
+        <argument android:name="dialog_description" />
+    </fragment>
+    <fragment
+        android:id="@+id/fileManagerParentFragment"
+        android:name="yin_kio.file_manager.presentation.views.FileManagerParentFragment"
+        android:label="FileManagerParentFragment" />
+    <fragment
+        android:id="@+id/duplicatesParentFragment"
+        android:name="yin_kio.duplicates.presentation.views.DuplicatesParentFragment"
+        android:label="DuplicatesParentFragment" >
+        <argument
+            android:name="completeId"
+            app:argType="integer" />
+        <action
+            android:id="@+id/toAdvices"
+            app:destination="@id/advicesFragment"
+            app:popUpTo="@id/mainMenuFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/memoryFragment"
+        android:name="yin_kio.memory.presentation.MemoryFragment"
+        android:label="MemoryFragment" />
+</navigation>

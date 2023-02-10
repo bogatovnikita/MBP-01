@@ -14,8 +14,8 @@ object FileManagerCreator {
         files: Files,
         coroutineScope: CoroutineScope,
         ads: Ads
-    ) : FileManager{
-        return FileManagerImpl(
+    ) : FileManagerUseCases{
+        return FileManagerUseCasesImpl(
             _stateHolder = MutableStateHolder(),
             permissionChecker = permissionChecker,
             files = files,

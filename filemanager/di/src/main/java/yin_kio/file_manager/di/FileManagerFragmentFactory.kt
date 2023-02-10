@@ -24,7 +24,7 @@ class FileManagerFragmentFactory : FragmentFactory() {
     private fun viewModelCreator(): ViewModel.(Activity) -> FileManagerViewModel =
         { context ->
             FileManagerViewModel(
-                fileManager = FileManagerCreator.create(
+                fileManagerUseCases = FileManagerCreator.create(
                     permissionChecker = DataFactory.createPermissionChecker(context),
                     files = DataFactory.createFiles(),
                     coroutineScope = viewModelScope,

@@ -1,6 +1,6 @@
 package yin_kio.garbage_clean.domain.entities
 
-class DeleteForm : MutableSet<FormItem> by mutableSetOf(){
+internal class DeleteForm : MutableSet<FormItem> by mutableSetOf(){
 
     val canFree: Long get() = sumOf { it.size }
 
@@ -23,7 +23,7 @@ class DeleteForm : MutableSet<FormItem> by mutableSetOf(){
         _isAllSelected = !isAllSelected
 
         if (_isAllSelected){
-            deleteRequest.addAll(GarbageType.values())
+            deleteRequest.addAll(map { it.garbageType })
         } else {
             deleteRequest.clear()
         }

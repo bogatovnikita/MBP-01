@@ -3,6 +3,8 @@ package yin_kio.duplicates.domain.models
 import kotlinx.coroutines.flow.Flow
 
 interface StateHolder {
+    val canUnite: Boolean
+    val isClosed: Boolean
     val isInProgress: Boolean
     val duplicatesLists: List<DuplicatesList>
     val selected: Map<Int, Set<ImageInfo>>
@@ -17,5 +19,5 @@ interface StateHolder {
 
 data class DuplicatesList(
     val id: Int,
-    val data: List<ImageInfo>
+    val imageInfos: List<ImageInfo>
 )

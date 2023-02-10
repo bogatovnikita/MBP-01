@@ -5,26 +5,53 @@ import java.io.*
 class FileUtilsImpl : FileUtils {
 
     override suspend fun getAllFiles(folder: File): List<File> {
-        fun getFiles(files: Array<File>) : List<File> {
-            val tempFiles = mutableListOf<File>()
 
-            files.forEach { file ->
-                if (file.isDirectory){
-                    file.listFiles()?.let {
-                        tempFiles.addAll(getFiles(it))
-                    }
-                } else {
-                    tempFiles.add(file)
-                }
-            }
-            return tempFiles
-        }
 
         if (!folder.exists()) return listOf()
         val files = folder.listFiles() ?: return listOf()
 
-        return getFiles(files)
+        return getFilesRecursively(files)
     }
+
+    private fun getFilesRecursively(files: Array<File>) : List<File> {
+        val tempFiles = mutableListOf<File>()
+
+        files.forEach { file ->
+            if (file.isDirectory){
+                file.listFiles()?.let {
+                    tempFiles.addAll(getFilesRecursively(it))
+                }
+            } else {
+                tempFiles.add(file)
+            }
+        }
+        return tempFiles
+    }
+
+    override suspend fun getAllFilesAndFolders(folder: File): List<File> {
+        if (!folder.exists()) return listOf()
+        val files = folder.listFiles() ?: return listOf()
+
+        return getFilesAndFoldersRecursively(files)
+    }
+
+    private fun getFilesAndFoldersRecursively(files: Array<File>) : List<File> {
+        val res = mutableListOf<File>()
+
+        files.forEach { file ->
+            if (file.isDirectory){
+                file.listFiles()?.let {
+                    res.add(file)
+                    res.addAll(getFilesRecursively(it))
+                }
+            } else {
+                res.add(file)
+            }
+        }
+        return res
+    }
+
+
 
     override suspend fun copyFiles(files: List<File>, destination: File) {
         files.forEach { copyFile(it, destination) }

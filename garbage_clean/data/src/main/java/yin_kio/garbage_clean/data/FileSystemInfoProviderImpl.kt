@@ -14,6 +14,8 @@ class FileSystemInfoProviderImpl(
 ) : FileSystemInfoProvider {
 
     override suspend fun getFileSystemInfo(): FileSystemInfo {
+        // Здесь получение инфы дублируется с модулем memory:data.
+        // Если этот код появится ещё где-то, рекоменудую создать для него отдельный модуль
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val storageStatsManager =  context.getSystemService(Context.STORAGE_STATS_SERVICE) as StorageStatsManager
             val total = storageStatsManager.getTotalBytes(StorageManager.UUID_DEFAULT)

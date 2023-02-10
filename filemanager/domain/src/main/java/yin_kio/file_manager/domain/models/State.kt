@@ -1,6 +1,7 @@
 package yin_kio.file_manager.domain.models
 
 interface State {
+    val isClosed: Boolean
     val version: Int
     val hasPermission: Boolean
     val inProgress: Boolean

@@ -4,9 +4,9 @@ import android.widget.PopupWindow
 import androidx.fragment.app.Fragment
 import yin_kio.file_manager.domain.models.SortingMode
 import yin_kio.file_manager.presentation.databinding.PopupSortingBinding
-import yin_kio.file_manager.presentation.models.UiState
+import yin_kio.file_manager.presentation.models.ScreenState
 
-fun Fragment.sortingPopup(state: UiState,
+fun Fragment.sortingPopup(state: ScreenState,
                           onItemCLick: (SortingMode) -> Unit,
                           onDismiss: () -> Unit
     ) : PopupWindow {

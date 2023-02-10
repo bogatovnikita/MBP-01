@@ -2,6 +2,7 @@ package yin_kio.duplicates.presentation.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import kotlinx.coroutines.CoroutineScope
@@ -23,6 +24,7 @@ class ImageInfoViewHolder private constructor(
         coroutineScope.launch {
             viewModel.state.collect {
                 binding.checkbox.isChecked = it.isSelected
+                binding.foreground.isVisible = it.isSelected
                 loadImage(it.path)
             }
         }

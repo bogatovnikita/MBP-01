@@ -19,12 +19,13 @@ class DuplicatesFragment : Fragment(R.layout.fragment_duplicates) {
 
     private val adapter by lazy { DuplicatesAdapter(
         coroutineScope = viewLifecycleOwner.lifecycleScope,
-        createGroupViewModel = {viewModel.createGroupViewModel()},
+        createImagesGroupViewModel = {viewModel.createImagesGroupViewModel()},
     ) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.recycler.adapter = adapter
 
+        binding.back.setOnClickListener{ viewModel.close() }
         binding.unite.setOnClickListener { viewModel.unite() }
 
         setupObserver()

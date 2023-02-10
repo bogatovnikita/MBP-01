@@ -13,7 +13,7 @@ import yin_kio.file_manager.domain.models.FileRequest
 import yin_kio.file_manager.presentation.Intention
 import yin_kio.file_manager.presentation.R
 import yin_kio.file_manager.presentation.databinding.FragmentFileManagerBinding
-import yin_kio.file_manager.presentation.models.UiState
+import yin_kio.file_manager.presentation.models.ScreenState
 import yin_kio.file_manager.presentation.parentViewModel
 
 class FileManagerFragment(
@@ -39,6 +39,7 @@ class FileManagerFragment(
 
     private fun setupListeners(){
         binding.apply {
+            back.setOnClickListener{ viewModel.obtainIntention(Intention.Close) }
             allFiles.setOnClickListener { viewModel.obtainIntention(
                 Intention.SwitchFileMode(
                     FileRequest.AllFiles
@@ -95,17 +96,17 @@ class FileManagerFragment(
         }
     }
 
-    private fun showInter(state: UiState) {
+    private fun showInter(state: ScreenState) {
         if (state.isShowInter) {
             showInter { viewModel.obtainIntention(Intention.HideInter) }
         }
     }
 
-    private fun showList(state: UiState) {
+    private fun showList(state: ScreenState) {
         binding.recycler.mutableAdapter?.submitList(state.files)
     }
 
-    private fun showProgress(state: UiState){
+    private fun showProgress(state: ScreenState){
         binding.apply {
             recycler.alpha = state.progressAlpha
             delete.alpha = state.progressAlpha
@@ -113,7 +114,7 @@ class FileManagerFragment(
         }
     }
 
-    private fun showListShowingMode(state: UiState) {
+    private fun showListShowingMode(state: ScreenState) {
         binding.showingMode.setImageDrawable(
             ContextCompat.getDrawable(
                 requireContext(),
@@ -122,7 +123,7 @@ class FileManagerFragment(
         )
     }
 
-    private fun showSortingPopup(state: UiState) {
+    private fun showSortingPopup(state: ScreenState) {
         if (state.isShowSortingModeSelector) {
             sortingPopup(state,
                 onDismiss = { viewModel.obtainIntention(Intention.HideSortingModeSelector) },
@@ -131,30 +132,30 @@ class FileManagerFragment(
         }
     }
 
-    private fun observeState(action: (UiState) -> Unit){
+    private fun observeState(action: (ScreenState) -> Unit){
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.flow.collect(action)
         }
     }
 
 
-    private fun showRecycler(it: UiState) {
+    private fun showRecycler(it: ScreenState) {
         binding.recycler.setListShowingMode(it.listShowingMode)
     }
 
-    private fun showIsAllSelected(it: UiState) {
+    private fun showIsAllSelected(it: ScreenState) {
         binding.isAllSelected.isChecked = it.isAllSelected
     }
 
-    private fun showSortIcon(it: UiState) {
+    private fun showSortIcon(it: ScreenState) {
         binding.sort.imageTintList = ColorStateList.valueOf(it.sortingIconColor)
     }
 
-    private fun showDeleteButton(it: UiState) {
+    private fun showDeleteButton(it: ScreenState) {
         binding.delete.background = ContextCompat.getDrawable(requireContext(), it.deleteButtonBg)
     }
 
-    private fun showFileRequest(it: UiState) {
+    private fun showFileRequest(it: ScreenState) {
         binding.apply {
             allFiles.isChecked = it.fileRequest == FileRequest.AllFiles
             images.isChecked = it.fileRequest == FileRequest.Images

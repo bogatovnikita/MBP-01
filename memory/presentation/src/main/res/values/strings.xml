@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="memory">Память</string>
+    <string name="ram">Оперативная память</string>
+    <string name="ram_total_title">Общий объем оперативной памяти</string>
+    <string name="storage">Внутренняя память</string>
+    <string name="storage_total_title">Общий объем внутренней памяти</string>
+</resources>

@@ -13,7 +13,7 @@ class StorageInfoProvider(
     private val applicationContext: Context
 )  : StorageInfo{
 
-    override fun provide() : MemoryInfoOut {
+    override suspend fun provide() : MemoryInfoOut {
         // Здесь получение инфы дублируется с модулем garbage_clean:data.
         // Если этот код появится ещё где-то, рекоменудую создать для него отдельный модуль
 

@@ -10,7 +10,7 @@ class RamInfoProvider(
     private val context: Context
 ) : RamInfo {
 
-    override fun provide(): MemoryInfoOut {
+    override suspend fun provide(): MemoryInfoOut {
         val memInfo = MemoryInfo()
         val activityManager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
         activityManager.getMemoryInfo(memInfo)

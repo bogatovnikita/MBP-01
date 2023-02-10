@@ -31,7 +31,6 @@ import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.*
 
-
 @AndroidEntryPoint
 class SecondScreenTimeFragment :
     BaseFragment<FragmentSecondScreenTimeBinding>(FragmentSecondScreenTimeBinding::inflate) {
@@ -287,6 +286,7 @@ class SecondScreenTimeFragment :
         if (state.isLoading) {
             binding.groupLoadingData.isVisible = state.isLoading
             binding.loader.isVisible = !state.isLoading
+//            binding.customViewGraph.progressesHeights = state.appInfo.listTime
             initScreen(state)
             if (state.appInfo.listTime.isEmpty()) {
                 stateListIsEmpty()

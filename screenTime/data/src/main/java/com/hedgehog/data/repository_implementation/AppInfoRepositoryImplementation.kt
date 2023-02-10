@@ -13,13 +13,19 @@ import com.hedgehog.domain.models.CalendarScreenTime
 import com.hedgehog.domain.repository.AppInfoRepository
 import com.hedgehog.domain.wrapper.CaseResult
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.launch
 import java.lang.reflect.Method
 import java.util.*
 import javax.inject.Inject
 
-class AppInfoRepositoryImplementation @Inject constructor(@ApplicationContext val context: Context) :
+class AppInfoRepositoryImplementation @Inject constructor(
+    @ApplicationContext val context: Context,
+    private val coroutineScope: CoroutineScope
+) :
     AppInfoRepository {
 
     private lateinit var stats: UsageStatsManager
@@ -29,11 +35,13 @@ class AppInfoRepositoryImplementation @Inject constructor(@ApplicationContext va
 
     private lateinit var hourBeginTime: Calendar
     private lateinit var hourEndTime: Calendar
+
     private var listHour: MutableList<Int> = mutableListOf()
     private var listHourForMilliseconds: MutableList<Long> = mutableListOf()
 
     private lateinit var dayBeginTime: Calendar
     private lateinit var dayEndTime: Calendar
+
     private var listDay: MutableList<Int> = mutableListOf()
     private var listDayForMilliseconds: MutableList<Long> = mutableListOf()
 
@@ -44,6 +52,7 @@ class AppInfoRepositoryImplementation @Inject constructor(@ApplicationContext va
     ): Flow<CaseResult<AppInfo, String>> = flow {
         initTotalBeginEndTime(calendarScreenTime)
 
+        clearAllList()
         stats = context.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
         val statsList = stats.queryAndAggregateUsageStats(
             totalBeginTime.timeInMillis, totalEndTime.timeInMillis
@@ -76,6 +85,13 @@ class AppInfoRepositoryImplementation @Inject constructor(@ApplicationContext va
         }
     }
 
+    private fun clearAllList() {
+        listHour.clear()
+        listHourForMilliseconds.clear()
+        listDay.clear()
+        listDayForMilliseconds.clear()
+    }
+
     private fun initTotalBeginEndTime(calendarScreenTime: CalendarScreenTime) {
         totalBeginTime = Calendar.getInstance()
         totalBeginTime.set(Calendar.HOUR_OF_DAY, 0)
@@ -106,7 +122,7 @@ class AppInfoRepositoryImplementation @Inject constructor(@ApplicationContext va
         usageStats: UsageStats
     ): AppInfo {
         hourAppInfo(packageName, calendarScreenTime)
-        getBatteryCharge(packageName)
+//        getBatteryCharge(packageName)
         return AppInfo(
             nameApp = getAppLabel(packageName).toString(),
             icon = getAppIcon(packageName),
@@ -137,14 +153,21 @@ class AppInfoRepositoryImplementation @Inject constructor(@ApplicationContext va
 
     private fun hourAppInfo(packageName: String, calendarScreenTime: CalendarScreenTime) {
         initHourBeginEndTime(calendarScreenTime)
-        for (i in 0..23) {
-            calculationHourTime(i)
-            stats.queryAndAggregateUsageStats(
-                hourBeginTime.timeInMillis,
-                hourEndTime.timeInMillis
-            ).values.filter { it.packageName == packageName }.forEach {
-                listHour.add(mapTimeToMinutes(it.totalTimeInForeground))
-                listHourForMilliseconds.add(it.totalTimeInForeground)
+        coroutineScope.launch(Dispatchers.Default) {
+            for (i in 0..23) {
+                calculationHourTime(i)
+                stats.queryAndAggregateUsageStats(
+                    hourBeginTime.timeInMillis,
+                    hourEndTime.timeInMillis
+                ).values.forEach {
+                    if (it.packageName == packageName) {
+                        listHour.add(mapTimeToMinutes(it.totalTimeInForeground))
+                        listHourForMilliseconds.add(it.totalTimeInForeground)
+                    } else {
+                        listHour.add(0)
+                        listHourForMilliseconds.add(0)
+                    }
+                }
             }
         }
     }
@@ -156,9 +179,14 @@ class AppInfoRepositoryImplementation @Inject constructor(@ApplicationContext va
             stats.queryAndAggregateUsageStats(
                 dayBeginTime.timeInMillis,
                 dayEndTime.timeInMillis
-            ).values.filter { it.packageName == packageName }.forEach {
-                listDay.add(mapTimeToMinutes(it.totalTimeInForeground))
-                listDayForMilliseconds.add(it.totalTimeInForeground)
+            ).values.forEach {
+                if (it.packageName == packageName) {
+                    listDay.add(mapTimeToMinutes(it.totalTimeInForeground))
+                    listDayForMilliseconds.add(it.totalTimeInForeground)
+                } else {
+                    listDay.add(0)
+                    listDayForMilliseconds.add(0)
+                }
             }
         }
     }

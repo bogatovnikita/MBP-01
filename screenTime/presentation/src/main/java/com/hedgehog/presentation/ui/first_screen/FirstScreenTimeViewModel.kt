@@ -21,6 +21,7 @@ class FirstScreenTimeViewModel @Inject constructor(
     var secondCalendar: Calendar = Calendar.getInstance()
 
     fun getListTimeScreenData(calendarScreenTime: CalendarScreenTime) {
+        updateState { it.copy(isLoading = false) }
         viewModelScope.launch {
             getScreenTimeDataUseCase.invoke(
                 com.hedgehog.domain.models.CalendarScreenTime(

@@ -14,11 +14,11 @@ class TimeSettingsImpl @Inject constructor(
         Context.MODE_PRIVATE
     )
 
-    override suspend fun getStartTime(): Int = prefs.getInt(START_TIME, 0)
+    override suspend fun getStartTime(): Int = prefs.getInt(START_TIME, DEFAULT_START_TIME)
 
     override suspend fun setStartTime(time: Int) = prefs.edit().putInt(START_TIME, time).apply()
 
-    override suspend fun getEndTime(): Int = prefs.getInt(END_TIME, 0)
+    override suspend fun getEndTime(): Int = prefs.getInt(END_TIME, DEFAULT_END_TIME)
 
     override suspend fun setEndTime(time: Int) =
         prefs.edit().putInt(END_TIME, time).apply()
@@ -26,6 +26,8 @@ class TimeSettingsImpl @Inject constructor(
     companion object {
         private const val START_TIME = "START_HOURS"
         private const val END_TIME = "START_MINUTES"
+        private const val DEFAULT_START_TIME = 480
+        private const val DEFAULT_END_TIME = 1380
     }
 
 }

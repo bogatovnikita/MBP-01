@@ -2,6 +2,8 @@ package com.entertainment.event.ssearch.presentation.ui.dnd_settings
 
 import androidx.lifecycle.viewModelScope
 import com.entertainment.event.ssearch.domain.use_cases.DNDSettingsUseCase
+import com.entertainment.event.ssearch.presentation.extensions.toHours
+import com.entertainment.event.ssearch.presentation.extensions.toMinutes
 import com.entertainment.event.ssearch.presentation.models.DNDSettingsEvent
 import com.entertainment.event.ssearch.presentation.models.DNDSettingsState
 import com.entertainment.event.ssearch.presentation.ui.base.BaseViewModel
@@ -38,9 +40,20 @@ class DNDSettingsViewModel @Inject constructor(
             is DNDSettingsEvent.SelectEndTime -> selectTimePicker(false)
             is DNDSettingsEvent.SaveTime -> saveTime(event.time)
             is DNDSettingsEvent.Default -> setEvent(event)
+            is DNDSettingsEvent.UpdateSelectedDayList -> setAlarms(event.days)
             else -> {}
         }
 
+    }
+
+    private fun setAlarms(days: List<Int>) {
+        updateState {
+            it.copy(
+                selectedDays = days
+            )
+        }
+        useCase.setRepeatAlarmStart(screenState.value.startTime.toHours(), screenState.value.startTime.toMinutes(), days)
+        useCase.setRepeatAlarmEnd(screenState.value.endTime.toHours(), screenState.value.endTime.toMinutes(), days)
     }
 
     private fun selectTimePicker(isStart: Boolean) {
@@ -56,8 +69,10 @@ class DNDSettingsViewModel @Inject constructor(
         viewModelScope.launch {
             if (screenState.value.timeStartSelected && screenState.value.endTime > time) {
                 useCase.setStartTime(time)
+                useCase.setRepeatAlarmStart(time.toHours(), time.toMinutes(), screenState.value.selectedDays)
             } else if (screenState.value.timeEndSelected && screenState.value.startTime < time) {
                 useCase.setEndTime(time)
+                useCase.setRepeatAlarmEnd(time.toHours(), time.toMinutes(), screenState.value.selectedDays)
             } else {
                 setEvent(DNDSettingsEvent.WrongFormat)
                 return@launch
@@ -80,6 +95,13 @@ class DNDSettingsViewModel @Inject constructor(
                 it.copy(
                     isAutoModeSwitched = isSwitched
                 )
+            }
+            if (isSwitched) {
+                useCase.setRepeatAlarmStart(screenState.value.startTime.toHours(), screenState.value.startTime.toMinutes(), screenState.value.selectedDays)
+                useCase.setRepeatAlarmEnd(screenState.value.endTime.toHours(), screenState.value.endTime.toMinutes(), screenState.value.selectedDays)
+            } else {
+                useCase.setRepeatAlarmStart(screenState.value.startTime.toHours(), screenState.value.startTime.toMinutes(), emptyList())
+                useCase.setRepeatAlarmEnd(screenState.value.endTime.toHours(), screenState.value.endTime.toMinutes(), emptyList())
             }
         }
     }

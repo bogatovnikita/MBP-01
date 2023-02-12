@@ -28,8 +28,7 @@ class NotificationSettingsUseCases @Inject constructor(
     suspend fun switchAppModeDisturb(packageName: String, isSwitched: Boolean) =
         apps.setSwitched(packageName, isSwitched)
 
-    suspend fun getDisturbMode(): Boolean =
-        DNDSettings.isDisturbModeEnabled() && !dndController.isDNDModeOff()
+    suspend fun getDisturbMode(): Boolean = !dndController.isDNDModeOff()
 
     fun hasServicePermission() = permission.hasServicePermission()
 

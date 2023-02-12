@@ -33,7 +33,7 @@ class NotificationSettingsViewModel @Inject constructor(
             is NotificationStateEvent.OpenDialogCompleteClean -> setEvent(event)
             is NotificationStateEvent.SwitchAppModeDisturb -> switchAppModeDisturb(event.packageName, event.isSwitch)
             is NotificationStateEvent.OpenMissedNotification -> setEvent(event)
-            is NotificationStateEvent.OpenTimeTable -> setEvent(event)
+            is NotificationStateEvent.OpenTimeTable -> openTimeTable(event)
             else -> {}
         }
     }
@@ -81,6 +81,14 @@ class NotificationSettingsViewModel @Inject constructor(
     private fun clearAllNotification(event: NotificationStateEvent) {
         useCases.clearAllNotification()
         setEvent(event)
+    }
+
+    private fun openTimeTable(event: NotificationStateEvent) {
+        if (useCases.hasServicePermission()) {
+            setEvent(event)
+        } else {
+            setEvent(NotificationStateEvent.OpenPermissionDialog)
+        }
     }
 
     private fun openDialogClearingOrPermission() {

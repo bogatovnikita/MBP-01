@@ -52,12 +52,16 @@ class NotificationSettingsViewModel @Inject constructor(
 
     private fun updateTimetableState() {
         viewModelScope.launch {
+            val isAutoModeSwitched = useCasesDND.isAutoModeSwitched()
+            val selectedDays = useCasesDND.getSelectedDays().map(::toResId)
+            val isNeedShowTimetableInfo = isAutoModeSwitched || selectedDays.isNotEmpty() || isAutoModeSwitched && useCasesDND.isOnlyToday()
             updateState {
                 it.copy(
-                    isAutoModeEnable = useCasesDND.isAutoModeSwitched(),
+                    isAutoModeEnable = isAutoModeSwitched,
                     timeStart = useCasesDND.getStartTime(),
                     timeEnd = useCasesDND.getEndTime(),
-                    selectedDays = useCasesDND.getSelectedDays().map(::toResId),
+                    selectedDays = selectedDays,
+                    isNeedShowTimetableInfo = isNeedShowTimetableInfo,
                 )
             }
         }

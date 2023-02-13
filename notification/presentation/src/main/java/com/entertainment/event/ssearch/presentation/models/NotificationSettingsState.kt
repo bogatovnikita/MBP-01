@@ -7,6 +7,7 @@ data class NotificationSettingsState(
     val apps: List<AppUi> = emptyList(),
     val isAutoModeEnable: Boolean = false,
     val isAllAppsLimited: Boolean = false,
+    val isNeedShowTimetableInfo: Boolean = false,
     val hasServicePermission: Boolean = false,
     val selectedDays: List<Int> = emptyList(),
     val isAllNotificationCleared: Boolean = false,

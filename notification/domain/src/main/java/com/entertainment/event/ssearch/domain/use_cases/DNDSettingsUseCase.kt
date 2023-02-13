@@ -72,6 +72,8 @@ class DNDSettingsUseCase @Inject constructor(
         dndSettings.setOnlyToday(days.isEmpty())
     }
 
+    suspend fun isOnlyToday(): Boolean = dndSettings.isOnlyToday()
+
     suspend fun getStartTime() = timeSettings.getStartTime()
 
     suspend fun setStartTime(time: Int) = timeSettings.setStartTime(time)

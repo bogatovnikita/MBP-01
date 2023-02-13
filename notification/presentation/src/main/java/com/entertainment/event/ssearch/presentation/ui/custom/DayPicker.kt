@@ -110,7 +110,7 @@ class DayPicker @JvmOverloads constructor(
     private fun updateChosenDays() {
         val chosenDays = listBtn.filterValues { state -> state.isChosen }
         if (chosenDays.isEmpty()) {
-            _binding.tvDays.text = getStringById(R.string.notification_manager_only_today)
+            _binding.tvDays.text = getStringById(R.string.notification_manager_only_today_without_repeat)
         } else {
             _binding.tvDays.text =
                 _binding.root.context.getString(

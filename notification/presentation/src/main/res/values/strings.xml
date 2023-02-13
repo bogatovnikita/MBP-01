@@ -31,7 +31,8 @@
     <string name="notification_manager_sun">Вс</string>
     <string name="notification_manager_repeat">Повтор</string>
     <string name="notification_manager_every_week">Еженедельно (%s)</string>
-    <string name="notification_manager_only_today">Без повтора, только сегодня</string>
+    <string name="notification_manager_only_today_without_repeat">Без повтора, только сегодня</string>
+    <string name="notification_manager_only_today">Только сегодня</string>
     <string name="notification_manager_save">Сохранить</string>
     <string name="notification_manager_time">Время</string>
     <string name="notification_manager_auto_switch">Автоматическое включение</string>

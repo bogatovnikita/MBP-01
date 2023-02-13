@@ -46,6 +46,7 @@ class DNDReceiver : BroadcastReceiver() {
                     dndController.setDNDModeOff()
                     if (dndSettings.isOnlyToday()) {
                         dndSettings.setOnlyToday(false)
+                        dndSettings.setAutoModeDND(false)
                     }
                 }
             }

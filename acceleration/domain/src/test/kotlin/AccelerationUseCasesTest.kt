@@ -68,11 +68,35 @@ class AccelerationUseCasesTest {
 
         coEvery { ramInfo.provide() } returns  ramInfoOut
 
-        useCases.update()
+        val appsList = listOf<String>()
+        ifHasPermission(
+            usaCase = { update() },
+            outs = {
+                showRamInfo(ramInfoOut)
+                showAppsList(appsList)
+            }
+        )
 
-        coVerify { outer.showRamInfo(ramInfoOut) }
+        ifHasNotPermission(
+            useCase = { update() },
+            outs = {
+                showRamInfo(ramInfoOut)
+                showPermissionOnList()
+            }
+        )
 
     }
+
+
+
+
+
+
+
+
+
+
+
 
     private fun ifHasNotPermission(
         useCase: AccelerationUseCases.() -> Unit,

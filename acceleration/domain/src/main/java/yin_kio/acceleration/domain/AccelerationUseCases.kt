@@ -30,6 +30,11 @@ class AccelerationUseCases(
 
     fun update(){
         outer.showRamInfo(ramInfo.provide())
+        if (permissions.hasPermission){
+            outer.showAppsList(listOf())
+        } else {
+            outer.showPermissionOnList()
+        }
     }
 
 }

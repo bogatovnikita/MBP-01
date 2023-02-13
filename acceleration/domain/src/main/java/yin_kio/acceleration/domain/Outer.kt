@@ -13,4 +13,7 @@ interface Outer {
 
     fun showRamInfo(ramInfo: RamInfoOut)
 
+    fun showAppsList(apps: List<String>)
+    fun showPermissionOnList()
+
 }

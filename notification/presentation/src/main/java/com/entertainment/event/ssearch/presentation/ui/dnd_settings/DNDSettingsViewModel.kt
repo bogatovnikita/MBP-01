@@ -18,6 +18,7 @@ class DNDSettingsViewModel @Inject constructor(
 
     init {
         initState()
+        checkAlarmOnNextDay()
     }
 
     private fun initState() {
@@ -41,9 +42,7 @@ class DNDSettingsViewModel @Inject constructor(
             is DNDSettingsEvent.SaveTime -> saveTime(event.time)
             is DNDSettingsEvent.Default -> setEvent(event)
             is DNDSettingsEvent.UpdateSelectedDayList -> setAlarms(event.days)
-            else -> {}
         }
-
     }
 
     private fun setAlarms(days: List<Int>) {
@@ -52,37 +51,74 @@ class DNDSettingsViewModel @Inject constructor(
                 selectedDays = days
             )
         }
-        useCase.setRepeatAlarmStart(screenState.value.startTime.toHours(), screenState.value.startTime.toMinutes(), days)
-        useCase.setRepeatAlarmEnd(screenState.value.endTime.toHours(), screenState.value.endTime.toMinutes(), days)
+        useCase.setRepeatAlarmStart(
+            screenState.value.startTime.toHours(),
+            screenState.value.startTime.toMinutes(),
+            days
+        )
+        useCase.setRepeatAlarmEnd(
+            screenState.value.endTime.toHours(),
+            screenState.value.endTime.toMinutes(),
+            days,
+            screenState.value.isAlarmOnNextDay
+        )
     }
 
     private fun selectTimePicker(isStart: Boolean) {
         updateState {
             it.copy(
                 timeStartSelected = isStart,
-                timeEndSelected =  !isStart,
+                timeEndSelected = !isStart,
             )
         }
     }
 
     private fun saveTime(time: Int) {
         viewModelScope.launch {
-            if (screenState.value.timeStartSelected && screenState.value.endTime > time) {
-                useCase.setStartTime(time)
-                useCase.setRepeatAlarmStart(time.toHours(), time.toMinutes(), screenState.value.selectedDays)
-            } else if (screenState.value.timeEndSelected && screenState.value.startTime < time) {
-                useCase.setEndTime(time)
-                useCase.setRepeatAlarmEnd(time.toHours(), time.toMinutes(), screenState.value.selectedDays)
-            } else {
-                setEvent(DNDSettingsEvent.WrongFormat)
-                return@launch
+            var isAlarmOnNextDay = false
+            val hours = time.toHours()
+            val minutes = time.toMinutes()
+            with(screenState.value) {
+                if (timeStartSelected && endTime > time) {
+                    useCase.setStartTime(time)
+                    useCase.setRepeatAlarmStart(hours, minutes, selectedDays)
+                } else if (timeEndSelected && startTime < time) {
+                    useCase.setEndTime(time)
+                    useCase.setRepeatAlarmEnd(hours, minutes, selectedDays, isAlarmOnNextDay)
+                } else if (timeStartSelected) {
+                    isAlarmOnNextDay = true
+                    useCase.setStartTime(time)
+                    useCase.setRepeatAlarmStart(hours, minutes, selectedDays)
+                    useCase.setRepeatAlarmEnd(
+                        endTime.toHours(),
+                        endTime.toMinutes(),
+                        selectedDays,
+                        isAlarmOnNextDay
+                    )
+                } else if (timeEndSelected) {
+                    isAlarmOnNextDay = true
+                    useCase.setEndTime(time)
+                    useCase.setRepeatAlarmEnd(hours, minutes, selectedDays, isAlarmOnNextDay)
+                } else {
+                }
             }
             updateState {
                 it.copy(
+                    isAlarmOnNextDay = isAlarmOnNextDay,
                     timeStartSelected = false,
-                    timeEndSelected =  false,
+                    timeEndSelected = false,
                     startTime = useCase.getStartTime(),
                     endTime = useCase.getEndTime(),
+                )
+            }
+        }
+    }
+
+    private fun checkAlarmOnNextDay() {
+        viewModelScope.launch {
+            updateState {
+                it.copy(
+                    isAlarmOnNextDay = useCase.getEndTime() < useCase.getStartTime(),
                 )
             }
         }
@@ -96,12 +132,32 @@ class DNDSettingsViewModel @Inject constructor(
                     isAutoModeSwitched = isSwitched
                 )
             }
-            if (isSwitched) {
-                useCase.setRepeatAlarmStart(screenState.value.startTime.toHours(), screenState.value.startTime.toMinutes(), screenState.value.selectedDays)
-                useCase.setRepeatAlarmEnd(screenState.value.endTime.toHours(), screenState.value.endTime.toMinutes(), screenState.value.selectedDays)
-            } else {
-                useCase.setRepeatAlarmStart(screenState.value.startTime.toHours(), screenState.value.startTime.toMinutes(), emptyList())
-                useCase.setRepeatAlarmEnd(screenState.value.endTime.toHours(), screenState.value.endTime.toMinutes(), emptyList())
+            with(screenState.value) {
+                if (isSwitched) {
+                    useCase.setRepeatAlarmStart(
+                        startTime.toHours(),
+                        startTime.toMinutes(),
+                        selectedDays
+                    )
+                    useCase.setRepeatAlarmEnd(
+                        endTime.toHours(),
+                        endTime.toMinutes(),
+                        selectedDays,
+                        isAlarmOnNextDay
+                    )
+                } else {
+                    useCase.setRepeatAlarmStart(
+                        startTime.toHours(),
+                        startTime.toMinutes(),
+                        emptyList()
+                    )
+                    useCase.setRepeatAlarmEnd(
+                        endTime.toHours(),
+                        endTime.toMinutes(),
+                        emptyList(),
+                        isAlarmOnNextDay
+                    )
+                }
             }
         }
     }

@@ -2,7 +2,6 @@ package com.entertainment.event.ssearch.presentation.ui.dnd_settings
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.constraintlayout.widget.Group
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -37,7 +36,6 @@ class DNDSettingsFragment : Fragment(R.layout.fragment_d_n_d_settings) {
         lifecycleScope.launch {
             viewModel.screenState.collect { state ->
                 renderState(state)
-                showToastIfWrongFormat(state)
             }
         }
     }
@@ -48,6 +46,7 @@ class DNDSettingsFragment : Fragment(R.layout.fragment_d_n_d_settings) {
             binding.groupTimePicker.isVisible = (state.timeEndSelected || state.timeStartSelected)
             binding.tvTimeStart.text = startTime.toTime()
             binding.tvTimeEnd.text = endTime.toTime()
+            binding.tvNextDay.isVisible = isAlarmOnNextDay
             setAccessibilityChanges(isAutoModeSwitched, timeStartSelected, timeEndSelected)
             renderSelectedPicker(timeStartSelected, startTime, endTime)
         }
@@ -110,17 +109,6 @@ class DNDSettingsFragment : Fragment(R.layout.fragment_d_n_d_settings) {
     private fun setTimeToPicker(time: Int) {
         binding.pickerHours.value = time.toHours()
         binding.pickerMinutes.value = time.toMinutes()
-    }
-
-    private fun showToastIfWrongFormat(state: DNDSettingsState) {
-        if (state.event is DNDSettingsEvent.WrongFormat) {
-            Toast.makeText(
-                requireContext(),
-                requireContext().getText(R.string.notification_manager_wrong_format),
-                Toast.LENGTH_SHORT
-            ).show()
-            viewModel.obtainEvent(DNDSettingsEvent.Default)
-        }
     }
 
     private fun convertToTime(hours: Int, minutes: Int): Int = hours * 60 + minutes

@@ -19,10 +19,6 @@ class NotificationSettingsViewModel @Inject constructor(
     private val useCasesDND: DNDSettingsUseCase,
 ) : BaseViewModel<NotificationSettingsState>(NotificationSettingsState()) {
 
-    init {
-        checkIsAllAppsLimited()
-    }
-
     fun obtainEvent(event: NotificationStateEvent) {
         when (event) {
             is NotificationStateEvent.ClearAllNotification -> openDialogClearingOrPermission()
@@ -43,7 +39,7 @@ class NotificationSettingsViewModel @Inject constructor(
     }
 
     private fun checkIsAllAppsLimited() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             useCases.checkAllAppsLimited().collect{ isLimited ->
                 updateState {
                     it.copy(
@@ -148,6 +144,7 @@ class NotificationSettingsViewModel @Inject constructor(
         if (useCases.hasServicePermission()) {
             viewModelScope.launch(Dispatchers.Default) {
                 useCases.switchAppModeDisturb(packageName, isSwitched)
+                checkIsAllAppsLimited()
             }
         } else {
             setEvent(NotificationStateEvent.OpenPermissionDialog)

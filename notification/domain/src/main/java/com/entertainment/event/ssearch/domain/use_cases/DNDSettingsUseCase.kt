@@ -46,11 +46,18 @@ class DNDSettingsUseCase @Inject constructor(
         hours: Int,
         minutes: Int,
         daysOfWeek: List<Int>,
+        needOnNextDay: Boolean,
     ) {
+        var shiftedDays = daysOfWeek
+        if (needOnNextDay) {
+            shiftedDays = daysOfWeek.map {
+                if (it == 7) 1 else it + 1
+            }
+        }
         dndAutoModeController.setRepeatAlarm(
             hours = hours,
             minutes = minutes,
-            daysOfWeek = daysOfWeek,
+            daysOfWeek = shiftedDays,
             action = DND_OFF
         )
     }

@@ -53,7 +53,7 @@ class NotificationRecyclerViewAdapter(
                 binding.tvName.text = setTitle(title, name)
                 binding.tvBody.text = body
                 binding.tvTime.text = setTime(time)
-                binding.root.setOnClickListener { onClick(state) }
+                binding.mainContainer.setOnClickListener { onClick(state) }
                 binding.swipeLayout.addListener(object : SwipeLayout.Listener {
                     override fun onSwipe(menuView: View, swipeOffset: Float) {
                         super.onSwipe(menuView, swipeOffset)

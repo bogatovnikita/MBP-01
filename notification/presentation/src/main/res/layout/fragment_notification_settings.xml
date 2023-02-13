@@ -112,7 +112,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_19sdp"
-                    android:layout_marginTop="@dimen/_11sdp"
+                    android:layout_marginTop="@dimen/_12sdp"
                     android:background="@drawable/ic_moon"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_description_disturb" />
@@ -128,8 +128,7 @@
                     android:textSize="@dimen/_11ssp"
                     app:layout_constraintBottom_toBottomOf="@+id/im_moon"
                     app:layout_constraintStart_toEndOf="@+id/im_moon"
-                    app:layout_constraintTop_toTopOf="@+id/im_moon"
-                    app:layout_constraintVertical_bias="1.0" />
+                    app:layout_constraintTop_toTopOf="@+id/im_moon" />
 
                 <Switch
                     android:id="@+id/switch_mode_disturb"
@@ -146,7 +145,7 @@
                     android:id="@+id/separation_line"
                     android:layout_width="0dp"
                     android:layout_height="1dp"
-                    android:layout_marginTop="@dimen/_7sdp"
+                    android:layout_marginTop="@dimen/_8sdp"
                     android:background="@color/gray"
                     app:layout_constraintEnd_toEndOf="@id/switch_mode_disturb"
                     app:layout_constraintStart_toStartOf="@+id/im_moon"
@@ -157,7 +156,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_19sdp"
-                    android:layout_marginTop="@dimen/_4sdp"
+                    android:layout_marginTop="@dimen/_7sdp"
                     android:background="@drawable/ic_watch"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/separation_line" />
@@ -197,6 +196,7 @@
                     android:text="Еженедельно (Пн, Вт, Ср, Чт, Пт, Сб, Вс)"
                     android:textColor="@color/gray"
                     android:textSize="@dimen/_9ssp"
+                    android:layout_marginBottom="-1dp"
                     app:layout_constraintBottom_toBottomOf="@id/im_watch"
                     app:layout_constraintStart_toEndOf="@+id/im_watch" />
 
@@ -252,14 +252,15 @@
                     app:layout_constraintBottom_toBottomOf="@+id/im_watch"
                     app:layout_constraintEnd_toEndOf="@+id/switch_mode_disturb"
                     app:layout_constraintStart_toStartOf="@+id/switch_mode_disturb"
-                    app:layout_constraintTop_toTopOf="@+id/im_watch" />
+                    app:layout_constraintTop_toTopOf="@+id/im_watch"
+                    app:layout_constraintHorizontal_bias="0.7"/>
 
                 <TextView
                     android:id="@+id/tv_clear_notifications"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_12sdp"
-                    android:layout_marginTop="@dimen/_16sdp"
+                    android:layout_marginTop="@dimen/_20sdp"
                     android:fontFamily="@font/golos_text_bold"
                     android:text="@string/notification_manager_clear_notification"
                     android:textColor="@color/green"
@@ -286,7 +287,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_42sdp"
                     android:layout_marginHorizontal="@dimen/_27sdp"
-                    android:layout_marginTop="@dimen/_12sdp"
+                    android:layout_marginTop="@dimen/_13sdp"
                     android:background="@drawable/bg_button_blue_stroke"
                     android:fontFamily="@font/golos_text_bold"
                     android:text="@string/notification_manager_clear_notofications"
@@ -333,7 +334,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_12sdp"
-            android:layout_marginTop="@dimen/_16sdp"
+            android:layout_marginTop="@dimen/_13sdp"
             android:fontFamily="@font/golos_text_bold"
             android:text="@string/notification_manager_applications_limitations"
             android:textColor="@color/green"

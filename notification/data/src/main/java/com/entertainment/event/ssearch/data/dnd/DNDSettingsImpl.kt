@@ -19,7 +19,7 @@ class DNDSettingsImpl @Inject constructor(
     override suspend fun setLimitAllApps(isSwitched: Boolean) =
         prefs.edit().putBoolean(LIMIT_ALL_APP, isSwitched).apply()
 
-    override suspend fun isAllAppsLimited(): Boolean = prefs.getBoolean(LIMIT_ALL_APP, false)
+    override suspend fun isAllAppsLimited(): Boolean = prefs.getBoolean(LIMIT_ALL_APP, true)
 
     override suspend fun setAutoModeDND(isSwitched: Boolean) =
         prefs.edit().putBoolean(AUTO_MODE_DND, isSwitched).apply()

@@ -15,7 +15,7 @@ fun PackageInfo.mapToApp(context: Context) =
         packageName = packageName,
         icon = Uri.parse("android.resource://" + packageName + "/" + applicationInfo.icon).toString(),
         name = context.packageManager.getApplicationLabel(context.packageManager.getApplicationInfo(packageName, 0)).toString(),
-        isSwitched = false
+        isSwitched = true
     )
 
 fun List<App>.mapToAppWithEmptyNotifications() = this.map { app ->

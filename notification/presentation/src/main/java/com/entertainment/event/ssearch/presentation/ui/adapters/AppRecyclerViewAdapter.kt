@@ -40,7 +40,7 @@ class AppRecyclerViewAdapter(
 
         private fun switchModeOrIgnore(app: AppUi, isChecked: Boolean): Boolean {
             listener.switchModeDisturb(app.packageName, isChecked)
-            return if (!app.hasPermission) false else isChecked
+            return if (!app.hasPermission) true else isChecked
         }
 
         private fun setIcon(uri: String) {

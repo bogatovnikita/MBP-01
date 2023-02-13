@@ -17,7 +17,7 @@ interface AppRepository {
 
     suspend fun readApp(packageName: String): App?
 
-    suspend fun setSwitched(packageName: String, switched: Boolean)
+    suspend fun setNotificationDisabled(packageName: String, switched: Boolean)
 
     suspend fun updateAll(apps: List<App>)
 

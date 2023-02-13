@@ -19,6 +19,10 @@ class NotificationSettingsViewModel @Inject constructor(
     private val useCasesDND: DNDSettingsUseCase,
 ) : BaseViewModel<NotificationSettingsState>(NotificationSettingsState()) {
 
+    init {
+        checkIsAllAppsLimited()
+    }
+
     fun obtainEvent(event: NotificationStateEvent) {
         when (event) {
             is NotificationStateEvent.ClearAllNotification -> openDialogClearingOrPermission()
@@ -35,6 +39,18 @@ class NotificationSettingsViewModel @Inject constructor(
             is NotificationStateEvent.OpenMissedNotification -> setEvent(event)
             is NotificationStateEvent.OpenTimeTable -> openTimeTable(event)
             else -> {}
+        }
+    }
+
+    private fun checkIsAllAppsLimited() {
+        viewModelScope.launch {
+            useCases.checkAllAppsLimited().collect{ isLimited ->
+                updateState {
+                    it.copy(
+                        isAllAppsLimited = !isLimited
+                    )
+                }
+            }
         }
     }
 

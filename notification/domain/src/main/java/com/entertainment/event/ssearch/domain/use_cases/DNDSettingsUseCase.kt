@@ -4,6 +4,7 @@ import com.entertainment.event.ssearch.domain.dnd.DNDAutoModeController
 import com.entertainment.event.ssearch.domain.dnd.DNDSettings
 import com.entertainment.event.ssearch.domain.dnd.DayPickerSettings
 import com.entertainment.event.ssearch.domain.dnd.TimeSettings
+import java.util.*
 import javax.inject.Inject
 
 class DNDSettingsUseCase @Inject constructor(
@@ -29,37 +30,46 @@ class DNDSettingsUseCase @Inject constructor(
         }
     }
 
-    fun setRepeatAlarmStart(
+    suspend fun setRepeatAlarmStart(
         hours: Int,
         minutes: Int,
         daysOfWeek: List<Int>,
     ) {
+        val days = if (dndSettings.isOnlyToday()) {
+            listOf(Calendar.getInstance().get(Calendar.DAY_OF_WEEK))
+        } else daysOfWeek
         dndAutoModeController.setRepeatAlarm(
             hours = hours,
             minutes = minutes,
-            daysOfWeek = daysOfWeek,
+            daysOfWeek = days,
             action = DND_ON
         )
     }
 
-    fun setRepeatAlarmEnd(
+    suspend fun setRepeatAlarmEnd(
         hours: Int,
         minutes: Int,
         daysOfWeek: List<Int>,
         needOnNextDay: Boolean,
     ) {
-        var shiftedDays = daysOfWeek
+        var days = if (dndSettings.isOnlyToday()) {
+            listOf(Calendar.getInstance().get(Calendar.DAY_OF_WEEK))
+        } else daysOfWeek
         if (needOnNextDay) {
-            shiftedDays = daysOfWeek.map {
+            days = days.map {
                 if (it == 7) 1 else it + 1
             }
         }
         dndAutoModeController.setRepeatAlarm(
             hours = hours,
             minutes = minutes,
-            daysOfWeek = shiftedDays,
+            daysOfWeek = days,
             action = DND_OFF
         )
+    }
+
+    suspend fun setOnlyToday(days: List<Int>) {
+        dndSettings.setOnlyToday(days.isEmpty())
     }
 
     suspend fun getStartTime() = timeSettings.getStartTime()

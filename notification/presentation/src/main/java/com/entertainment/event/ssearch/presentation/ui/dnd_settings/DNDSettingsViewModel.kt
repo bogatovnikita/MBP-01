@@ -51,17 +51,20 @@ class DNDSettingsViewModel @Inject constructor(
                 selectedDays = days
             )
         }
-        useCase.setRepeatAlarmStart(
-            screenState.value.startTime.toHours(),
-            screenState.value.startTime.toMinutes(),
-            days
-        )
-        useCase.setRepeatAlarmEnd(
-            screenState.value.endTime.toHours(),
-            screenState.value.endTime.toMinutes(),
-            days,
-            screenState.value.isAlarmOnNextDay
-        )
+        viewModelScope.launch {
+            useCase.setOnlyToday(days)
+            useCase.setRepeatAlarmStart(
+                screenState.value.startTime.toHours(),
+                screenState.value.startTime.toMinutes(),
+                days
+            )
+            useCase.setRepeatAlarmEnd(
+                screenState.value.endTime.toHours(),
+                screenState.value.endTime.toMinutes(),
+                days,
+                screenState.value.isAlarmOnNextDay
+            )
+        }
     }
 
     private fun selectTimePicker(isStart: Boolean) {
@@ -79,6 +82,7 @@ class DNDSettingsViewModel @Inject constructor(
             val hours = time.toHours()
             val minutes = time.toMinutes()
             with(screenState.value) {
+                useCase.setOnlyToday(selectedDays)
                 if (timeStartSelected && endTime > time) {
                     useCase.setStartTime(time)
                     useCase.setRepeatAlarmStart(hours, minutes, selectedDays)

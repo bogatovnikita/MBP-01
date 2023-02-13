@@ -1,6 +1,6 @@
 package com.hedgehog.data.repository_implementation
 
-import android.app.usage.UsageStats
+import android.app.usage.UsageEvents
 import android.app.usage.UsageStatsManager
 import android.content.Context
 import android.content.pm.ApplicationInfo
@@ -13,75 +13,43 @@ import com.hedgehog.domain.models.CalendarScreenTime
 import com.hedgehog.domain.repository.AppInfoRepository
 import com.hedgehog.domain.wrapper.CaseResult
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.launch
 import java.lang.reflect.Method
 import java.util.*
 import javax.inject.Inject
 
 class AppInfoRepositoryImplementation @Inject constructor(
-    @ApplicationContext val context: Context,
-    private val coroutineScope: CoroutineScope
-) :
-    AppInfoRepository {
+    @ApplicationContext val context: Context
+) : AppInfoRepository {
 
-    private lateinit var stats: UsageStatsManager
-
-    private lateinit var totalBeginTime: Calendar
-    private lateinit var totalEndTime: Calendar
+    private lateinit var usageEventsGeneral: UsageStatsManager
+    private val sortedEvents = mutableMapOf<String, MutableList<UsageEvents.Event>>()
 
     private lateinit var hourBeginTime: Calendar
     private lateinit var hourEndTime: Calendar
 
-    private var listHour: MutableList<Int> = mutableListOf()
+    private var listHour: MutableList<Long> = mutableListOf()
     private var listHourForMilliseconds: MutableList<Long> = mutableListOf()
 
     private lateinit var dayBeginTime: Calendar
     private lateinit var dayEndTime: Calendar
 
-    private var listDay: MutableList<Int> = mutableListOf()
+    private var listDay: MutableList<Long> = mutableListOf()
     private var listDayForMilliseconds: MutableList<Long> = mutableListOf()
-
 
     override fun getAppInfo(
         packageName: String,
         calendarScreenTime: CalendarScreenTime
     ): Flow<CaseResult<AppInfo, String>> = flow {
-        initTotalBeginEndTime(calendarScreenTime)
-
         clearAllList()
-        stats = context.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
-        val statsList = stats.queryAndAggregateUsageStats(
-            totalBeginTime.timeInMillis, totalEndTime.timeInMillis
-        )
-        val checkPackage = statsList.filter { it.key == packageName }
+        usageEventsGeneral =
+            context.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
 
-        if (checkPackage.isNotEmpty()) {
-            when (calendarScreenTime.dataType) {
-                Calendar.DATE -> emit(
-                    CaseResult.Success(
-                        createAppInfoForDay(
-                            packageName,
-                            calendarScreenTime,
-                            checkPackage.values.first()
-                        )
-                    )
-                )
-                Calendar.WEEK_OF_YEAR -> emit(
-                    CaseResult.Success(
-                        createAppInfoForWeek(
-                            packageName,
-                            calendarScreenTime,
-                            checkPackage.values.first()
-                        )
-                    )
-                )
-            }
+        if (calendarScreenTime.dataType == Calendar.DATE) {
+            emit(CaseResult.Success(createAppInfoForDay(packageName, calendarScreenTime)))
         } else {
-            emit(CaseResult.Success(AppInfo()))
+            emit(CaseResult.Success(createAppInfoForWeek(packageName, calendarScreenTime)))
         }
     }
 
@@ -92,131 +60,34 @@ class AppInfoRepositoryImplementation @Inject constructor(
         listDayForMilliseconds.clear()
     }
 
-    private fun initTotalBeginEndTime(calendarScreenTime: CalendarScreenTime) {
-        totalBeginTime = Calendar.getInstance()
-        totalBeginTime.set(Calendar.HOUR_OF_DAY, 0)
-        totalBeginTime.set(Calendar.MINUTE, 0)
-        totalBeginTime.set(Calendar.SECOND, 0)
-        totalBeginTime.set(Calendar.MILLISECOND, 0)
-
-        totalEndTime = Calendar.getInstance()
-        totalEndTime.set(Calendar.HOUR_OF_DAY, 0)
-        totalEndTime.set(Calendar.MINUTE, 0)
-        totalEndTime.set(Calendar.SECOND, -1)
-        totalEndTime.set(Calendar.MILLISECOND, 0)
-
-        if (calendarScreenTime.dataType == Calendar.DATE) {
-            totalBeginTime.add(calendarScreenTime.dataType, -calendarScreenTime.beginTime)
-            totalEndTime.add(calendarScreenTime.dataType, -calendarScreenTime.endTime)
-        } else {
-            totalBeginTime.set(Calendar.DAY_OF_WEEK, totalBeginTime.firstDayOfWeek)
-            totalBeginTime.add(Calendar.WEEK_OF_YEAR, -calendarScreenTime.beginTime)
-            totalEndTime.set(Calendar.DAY_OF_WEEK, totalBeginTime.firstDayOfWeek)
-            totalEndTime.add(Calendar.WEEK_OF_YEAR, -calendarScreenTime.endTime)
-        }
-    }
-
     private fun createAppInfoForDay(
         packageName: String,
-        calendarScreenTime: CalendarScreenTime,
-        usageStats: UsageStats
+        calendarScreenTime: CalendarScreenTime
     ): AppInfo {
         hourAppInfo(packageName, calendarScreenTime)
-//        getBatteryCharge(packageName)
         return AppInfo(
             nameApp = getAppLabel(packageName).toString(),
             icon = getAppIcon(packageName),
-            listTime = listHour,
-            lastLaunch = mapTimeToLastLaunch(usageStats.lastTimeUsed),
+            listTime = mapLongToTime(listHour),
+            lastLaunch = mapTimeToLastLaunch(packageName),
             data = "0",
             totalTimeUsage = mapTimeToTotalTimeUsage(listHourForMilliseconds.sum()),
-            isSystemApp = checkIsSystemApp(usageStats)
-        )
-    }
-
-    private fun createAppInfoForWeek(
-        packageName: String,
-        calendarScreenTime: CalendarScreenTime,
-        usageStats: UsageStats
-    ): AppInfo {
-        dayAppInfo(packageName, calendarScreenTime)
-        return AppInfo(
-            nameApp = getAppLabel(packageName).toString(),
-            icon = getAppIcon(packageName),
-            listTime = listDay,
-            lastLaunch = mapTimeToLastLaunch(usageStats.lastTimeUsed),
-            data = "0",
-            totalTimeUsage = mapTimeToTotalTimeUsage(listDayForMilliseconds.sum()),
-            isSystemApp = checkIsSystemApp(usageStats)
+            isSystemApp = checkIsSystemApp(packageName)
         )
     }
 
     private fun hourAppInfo(packageName: String, calendarScreenTime: CalendarScreenTime) {
         initHourBeginEndTime(calendarScreenTime)
-        coroutineScope.launch(Dispatchers.Default) {
-            for (i in 0..23) {
-                calculationHourTime(i)
-                stats.queryAndAggregateUsageStats(
-                    hourBeginTime.timeInMillis,
-                    hourEndTime.timeInMillis
-                ).values.forEach {
-                    if (it.packageName == packageName) {
-                        listHour.add(mapTimeToMinutes(it.totalTimeInForeground))
-                        listHourForMilliseconds.add(it.totalTimeInForeground)
-                    } else {
-                        listHour.add(0)
-                        listHourForMilliseconds.add(0)
-                    }
-                }
-            }
+        for (i in 0..23) {
+            calculationHourTime(i)
+            searchStatics(packageName, calendarScreenTime)
         }
     }
 
-    private fun dayAppInfo(packageName: String, calendarScreenTime: CalendarScreenTime) {
-        initDayBeginEndTime(calendarScreenTime)
-        for (i in 2..8) {
-            calculateDayTime(i)
-            stats.queryAndAggregateUsageStats(
-                dayBeginTime.timeInMillis,
-                dayEndTime.timeInMillis
-            ).values.forEach {
-                if (it.packageName == packageName) {
-                    listDay.add(mapTimeToMinutes(it.totalTimeInForeground))
-                    listDayForMilliseconds.add(it.totalTimeInForeground)
-                } else {
-                    listDay.add(0)
-                    listDayForMilliseconds.add(0)
-                }
-            }
-        }
-    }
-
-    private fun mapTimeToMinutes(totalTimeInForeground: Long): Int {
-        return (totalTimeInForeground / 60000).toInt()
-    }
-
-    private fun getAppLabel(packageName: String) = try {
-        context.packageManager.getApplicationInfo(packageName, 0)
-            .loadLabel(context.packageManager)
-    } catch (e: Exception) {
-        packageName
-    }
-
-    private fun getAppIcon(packageName: String) = try {
-        context.packageManager.getApplicationIcon(packageName)
-    } catch (e: Exception) {
-        null
-    }
-
-    private fun getBatteryCharge(packageName: String) {
-        getPackageSizeInfo.invoke(
-            context.packageManager,
-            packageName,
-            object : IPackageStatsObserver.Stub() {
-                override fun onGetStatsCompleted(pStats: PackageStats?, succeeded: Boolean) {
-                    Log.e("pie", "onGetStatsCompleted: pStats=${pStats?.codeSize}")
-                }
-            })
+    private fun calculationHourTime(hour: Int) {
+        if (hour == 0) return
+        hourBeginTime.set(Calendar.HOUR_OF_DAY, hour)
+        hourEndTime.set(Calendar.HOUR_OF_DAY, hour + 1)
     }
 
     private fun initHourBeginEndTime(calendarScreenTime: CalendarScreenTime) {
@@ -236,12 +107,29 @@ class AppInfoRepositoryImplementation @Inject constructor(
         hourEndTime.add(calendarScreenTime.dataType, -calendarScreenTime.beginTime)
     }
 
-    private fun calculationHourTime(hour: Int) {
-        if (hour == 0) return
-        hourBeginTime.set(Calendar.HOUR_OF_DAY, hour)
-        hourEndTime.set(Calendar.HOUR_OF_DAY, hour + 1)
+    private fun createAppInfoForWeek(
+        packageName: String,
+        calendarScreenTime: CalendarScreenTime
+    ): AppInfo {
+        dayAppInfo(packageName, calendarScreenTime)
+        return AppInfo(
+            nameApp = getAppLabel(packageName).toString(),
+            icon = getAppIcon(packageName),
+            listTime = mapLongToTime(listDay),
+            lastLaunch = mapTimeToLastLaunch(packageName),
+            data = "0",
+            totalTimeUsage = mapTimeToTotalTimeUsage(listDayForMilliseconds.sum()),
+            isSystemApp = checkIsSystemApp(packageName)
+        )
     }
 
+    private fun dayAppInfo(packageName: String, calendarScreenTime: CalendarScreenTime) {
+        initDayBeginEndTime(calendarScreenTime)
+        for (i in 2..8) {
+            calculateDayTime(i)
+            searchStatics(packageName, calendarScreenTime)
+        }
+    }
 
     private fun initDayBeginEndTime(calendarScreenTime: CalendarScreenTime) {
         dayBeginTime = Calendar.getInstance()
@@ -273,15 +161,141 @@ class AppInfoRepositoryImplementation @Inject constructor(
         }
     }
 
-    private fun mapTimeToLastLaunch(time: Long): String {
-        val date = Calendar.getInstance().timeInMillis - time
-        val hour = (date / (1000 * 60 * 60))
-        val minutes = ((date / (1000 * 60)) % 60)
-        val second = date / 1000
-        return if (hour == 0L && minutes == 0L) {
-            context.getString(R.string.D_second_ago, second)
+    private fun mapTimeToMinutes(totalTimeInForeground: Long): Int {
+        return (totalTimeInForeground / 60000).toInt()
+    }
+
+    private fun getAppLabel(packageName: String) = try {
+        context.packageManager.getApplicationInfo(packageName, 0)
+            .loadLabel(context.packageManager)
+    } catch (e: Exception) {
+        packageName
+    }
+
+    private fun getAppIcon(packageName: String) = try {
+        context.packageManager.getApplicationIcon(packageName)
+    } catch (e: Exception) {
+        null
+    }
+
+    private fun getBatteryCharge(packageName: String) {
+        getPackageSizeInfo.invoke(
+            context.packageManager,
+            packageName,
+            object : IPackageStatsObserver.Stub() {
+                override fun onGetStatsCompleted(pStats: PackageStats?, succeeded: Boolean) {
+                    Log.e("pie", "onGetStatsCompleted: pStats=${pStats?.codeSize}")
+                }
+            })
+    }
+
+    private fun searchStatics(thisPackageName: String, calendarScreenTime: CalendarScreenTime) {
+        val usageEvents = if (calendarScreenTime.dataType == Calendar.DATE) {
+            usageEventsGeneral.queryEvents(hourBeginTime.timeInMillis, hourEndTime.timeInMillis)
         } else {
-            context.getString(R.string.D_hour_D_minutes_ago, hour, minutes)
+            usageEventsGeneral.queryEvents(dayBeginTime.timeInMillis, dayEndTime.timeInMillis)
+        }
+
+        while (usageEvents.hasNextEvent()) {
+            val event = UsageEvents.Event()
+            usageEvents.getNextEvent(event)
+            val packageEvents = sortedEvents[event.packageName] ?: mutableListOf()
+            packageEvents.add(event)
+            sortedEvents[event.packageName] = packageEvents
+        }
+
+        if (!sortedEvents.keys.contains(thisPackageName)) {
+            if (calendarScreenTime.dataType == Calendar.DATE) {
+                listHour.add(0)
+                listHourForMilliseconds.add(0)
+            } else {
+                listDay.add(0)
+                listDayForMilliseconds.add(0)
+            }
+        } else {
+            sortedEvents.forEach { (packageName, events) ->
+                var startTime = 0L
+                var closeTime = 0L
+                var totalTime = 0L
+                if (thisPackageName != packageName) return@forEach
+                events.forEach { usageEvents ->
+                    when (usageEvents.eventType) {
+                        UsageEvents.Event.ACTIVITY_RESUMED -> startTime = usageEvents.timeStamp
+                        UsageEvents.Event.ACTIVITY_PAUSED -> closeTime = usageEvents.timeStamp
+                    }
+                    if (startTime != 0L && closeTime != 0L) {
+                        totalTime += closeTime - startTime
+                        startTime = 0L
+                        closeTime = 0L
+                    }
+                }
+                if (calendarScreenTime.dataType == Calendar.DATE) {
+                    listHour.add(totalTime)
+                    listHourForMilliseconds.add(totalTime)
+                } else {
+                    listDay.add(totalTime)
+                    listDayForMilliseconds.add(totalTime)
+                }
+                totalTime = 0L
+            }
+            sortedEvents.clear()
+        }
+    }
+
+    private fun mapTimeToLastLaunch(thisPackageName: String): String {
+        val listLastLaunchApp = mutableListOf<Long>()
+        val totalEndLastLaunchTime = Calendar.getInstance()
+        val totalBeginLastLaunchTime = Calendar.getInstance()
+        totalBeginLastLaunchTime.set(Calendar.DATE, -20)
+
+        val usageEvents =
+            usageEventsGeneral.queryEvents(
+                totalBeginLastLaunchTime.timeInMillis,
+                totalEndLastLaunchTime.timeInMillis
+            )
+        while (usageEvents.hasNextEvent()) {
+            val event = UsageEvents.Event()
+            usageEvents.getNextEvent(event)
+            val packageEvents = sortedEvents[event.packageName] ?: mutableListOf()
+            packageEvents.add(event)
+            sortedEvents[event.packageName] = packageEvents
+        }
+
+        sortedEvents.forEach { (packageName, events) ->
+            if (thisPackageName != packageName) return@forEach
+            events.forEach { usageEvents ->
+                if (usageEvents.eventType == UsageEvents.Event.ACTIVITY_RESUMED) {
+                    listLastLaunchApp.add(usageEvents.timeStamp)
+                }
+            }
+        }
+
+        sortedEvents.clear()
+        return try {
+            val date = System.currentTimeMillis() - listLastLaunchApp.last()
+            val day = date / (60 * 60 * 24 * 1000)
+            val hour = (date / (1000 * 60 * 60)) % 24
+            val minutes = ((date / (1000 * 60)) % 60)
+            val second = (date / 1000) % 60
+            when {
+                day != 0L -> context.getString(R.string.D_day_D_hour_ago, day, hour)
+                day == 0L && hour != 0L -> context.getString(
+                    R.string.D_hour_D_minutes_ago,
+                    hour,
+                    minutes
+                )
+                day == 0L && hour == 0L && minutes != 0L -> context.getString(
+                    R.string.D_minute_D_second_ago,
+                    minutes,
+                    second
+                )
+                day == 0L && hour == 0L && minutes == 0L -> context.getString(
+                    R.string.D_second_ago, second
+                )
+                else -> context.getString(R.string.is_unknown)
+            }
+        } catch (e: Exception) {
+            context.getString(R.string.is_unknown)
         }
     }
 
@@ -296,11 +310,23 @@ class AppInfoRepositoryImplementation @Inject constructor(
         }
     }
 
-    private fun checkIsSystemApp(it: UsageStats) = try {
+    private fun mapLongToTime(time: MutableList<Long>): MutableList<Int> {
+        val newList = mutableListOf<Int>()
+        time.forEach {
+            if (it == 0L) {
+                newList.add(0)
+            } else {
+                newList.add(((it / 60_000) % 60).toInt())
+            }
+        }
+        return newList
+    }
+
+    private fun checkIsSystemApp(packageName: String) = try {
         context.packageManager.getApplicationInfo(
-            it.packageName, 0
+            packageName, 0
         ).flags and ApplicationInfo.FLAG_SYSTEM != 0 || context.packageManager.getApplicationInfo(
-            it.packageName, 0
+            packageName, 0
         ).flags and ApplicationInfo.FLAG_UPDATED_SYSTEM_APP != 0
     } catch (e: Exception) {
         true

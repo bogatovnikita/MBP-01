@@ -143,18 +143,14 @@ class FirstScreenTimeFragment :
         } else {
             binding.loader.visibility = View.VISIBLE
             binding.recyclerView.visibility = View.GONE
+            binding.groupNotStatistics.visibility = View.GONE
         }
-    }
 
-    private fun stateListIsNotEmpty() {
-        binding.selectedMode.isEnabled = true
-        binding.selectedMode.isClickable = true
-
-        binding.reverseStatistics.isEnabled = true
-        binding.reverseStatistics.isClickable = true
-
-        binding.groupNotStatistics.visibility = View.GONE
-        binding.recyclerView.visibility = View.VISIBLE
+        if (state.isLoading && state.selectionMode) {
+            binding.groupCheckbox.visibility = View.VISIBLE
+        } else {
+            binding.groupCheckbox.visibility = View.GONE
+        }
     }
 
     private fun stateListIsEmpty() {
@@ -167,6 +163,17 @@ class FirstScreenTimeFragment :
 
         binding.groupNotStatistics.visibility = View.VISIBLE
         binding.recyclerView.visibility = View.GONE
+    }
+
+    private fun stateListIsNotEmpty() {
+        binding.selectedMode.isEnabled = true
+        binding.selectedMode.isClickable = true
+
+        binding.reverseStatistics.isEnabled = true
+        binding.reverseStatistics.isClickable = true
+
+        binding.groupNotStatistics.visibility = View.GONE
+        binding.recyclerView.visibility = View.VISIBLE
     }
 
     private fun initClickListeners() {
@@ -203,18 +210,11 @@ class FirstScreenTimeFragment :
         }
     }
 
-    private fun clickDeleteAppButton() {
-        val checkList = viewModel.screenState.value.listDataScreenTime.filter { it.isChecked }
-        if (checkList.isNotEmpty()) {
-            viewModel.screenState.value.listDataScreenTime.filter {
-                !it.isItSystemApp && it.isChecked
-            }.forEach { appScreenTime ->
-                val intent = Intent(Intent.ACTION_DELETE)
-                intent.data = Uri.parse("package:" + appScreenTime.packageName)
-                startActivity(intent)
-            }
+    private fun clickCheckbox() {
+        if (viewModel.screenState.value.totalCheckedCount == viewModel.screenState.value.listDataScreenTime.size - viewModel.screenState.value.systemCheckedCount) {
+            viewModel.cleanToggleCheckBox()
         } else {
-            showToast(R.string.select_the_app_to_delete)
+            viewModel.selectAll()
         }
     }
 
@@ -235,11 +235,18 @@ class FirstScreenTimeFragment :
         }
     }
 
-    private fun clickCheckbox() {
-        if (viewModel.screenState.value.totalCheckedCount == viewModel.screenState.value.listDataScreenTime.size - viewModel.screenState.value.systemCheckedCount) {
-            viewModel.cleanToggleCheckBox()
+    private fun clickDeleteAppButton() {
+        val checkList = viewModel.screenState.value.listDataScreenTime.filter { it.isChecked }
+        if (checkList.isNotEmpty()) {
+            viewModel.screenState.value.listDataScreenTime.filter {
+                !it.isItSystemApp && it.isChecked
+            }.forEach { appScreenTime ->
+                val intent = Intent(Intent.ACTION_DELETE)
+                intent.data = Uri.parse("package:" + appScreenTime.packageName)
+                startActivity(intent)
+            }
         } else {
-            viewModel.selectAll()
+            showToast(R.string.select_the_app_to_delete)
         }
     }
 
@@ -281,6 +288,21 @@ class FirstScreenTimeFragment :
         }
     }
 
+    private fun choiceDay() {
+        viewModel.choiceDay()
+
+        showAppsByPeriod(Period.Day)
+
+        viewModel.beginTime = 0
+        viewModel.endTime = -1
+        viewModel.calendar = Calendar.getInstance()
+        viewModel.secondCalendar = Calendar.getInstance()
+        updateScreenTime(Calendar.DATE, viewModel.beginTime, viewModel.endTime)
+        if (viewModel.screenState.value.selectionMode) {
+            selectedMode(binding.selectedMode)
+        }
+    }
+
     private fun choiceWeek() {
         viewModel.choiceWeek()
 
@@ -296,21 +318,6 @@ class FirstScreenTimeFragment :
         viewModel.calendar.add(Calendar.WEEK_OF_YEAR, 0)
         viewModel.secondCalendar.add(Calendar.WEEK_OF_YEAR, +1)
         updateScreenTime(Calendar.WEEK_OF_YEAR, viewModel.beginTime, viewModel.endTime)
-        if (viewModel.screenState.value.selectionMode) {
-            selectedMode(binding.selectedMode)
-        }
-    }
-
-    private fun choiceDay() {
-        viewModel.choiceDay()
-
-        showAppsByPeriod(Period.Day)
-
-        viewModel.beginTime = 0
-        viewModel.endTime = -1
-        viewModel.calendar = Calendar.getInstance()
-        viewModel.secondCalendar = Calendar.getInstance()
-        updateScreenTime(Calendar.DATE, viewModel.beginTime, viewModel.endTime)
         if (viewModel.screenState.value.selectionMode) {
             selectedMode(binding.selectedMode)
         }

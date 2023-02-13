@@ -41,8 +41,14 @@ class AccelerationUseCasesTest {
 
     @Test
     fun testUploadBackgroundProcess(){
-        verifyShowPermission { useCases.uploadBackgroundProcess() }
-        verifyShowSelectableAcceleration()
+        ifHasNotPermission(
+            useCase = { uploadBackgroundProcess() },
+            outs = { showPermission() }
+        )
+        ifHasPermission(
+            usaCase = { uploadBackgroundProcess() },
+            outs = { showSelectableAcceleration()  }
+        )
     }
 
     private fun verifyShowPermission(
@@ -53,14 +59,6 @@ class AccelerationUseCasesTest {
         action()
 
         coVerify { outer.showPermission() }
-    }
-
-    private fun verifyShowSelectableAcceleration() {
-        coEvery { permissions.hasPermission } returns true
-
-        useCases.uploadBackgroundProcess()
-
-        coVerify { outer.showSelectableAcceleration() }
     }
 
 
@@ -74,6 +72,28 @@ class AccelerationUseCasesTest {
 
         coVerify { outer.showRamInfo(ramInfoOut) }
 
+    }
+
+    private fun ifHasNotPermission(
+        useCase: AccelerationUseCases.() -> Unit,
+        outs: Outer.() -> Unit
+    ){
+        coEvery { permissions.hasPermission } returns false
+
+        useCases.useCase()
+
+        coVerify { outer.outs() }
+    }
+
+    private fun ifHasPermission(
+        usaCase: AccelerationUseCases.() -> Unit,
+        outs: Outer.() -> Unit
+    ){
+        coEvery { permissions.hasPermission } returns true
+
+        useCases.usaCase()
+
+        coVerify { outer.outs() }
     }
 
 

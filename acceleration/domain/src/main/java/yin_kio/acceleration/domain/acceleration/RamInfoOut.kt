@@ -1,4 +1,4 @@
-package yin_kio.acceleration.domain
+package yin_kio.acceleration.domain.acceleration
 
 data class RamInfoOut(
     val occupied: Long = 0,

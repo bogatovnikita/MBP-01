@@ -1,6 +1,6 @@
-package yin_kio.acceleration.domain
+package yin_kio.acceleration.domain.acceleration
 
-interface Outer {
+interface AccelerationOuter {
 
     fun close()
 

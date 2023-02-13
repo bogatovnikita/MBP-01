@@ -2,18 +2,18 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.spyk
 import org.junit.jupiter.api.Test
-import yin_kio.acceleration.domain.*
+import yin_kio.acceleration.domain.acceleration.*
 
 class AccelerationUseCasesTest {
 
-    private val outer: Outer = spyk()
+    private val accelerationOuter: AccelerationOuter = spyk()
     private val permissions: Permissions = spyk()
-    private val accelerateRunner: AccelerateRunner = spyk()
+    private val accelerator: Accelerator = spyk()
     private val ramInfo: RamInfo = spyk()
     private val useCases = AccelerationUseCases(
-        outer = outer,
+        accelerationOuter = accelerationOuter,
         permissions = permissions,
-        runner = accelerateRunner,
+        runner = accelerator,
         ramInfo = ramInfo
     )
 
@@ -21,7 +21,7 @@ class AccelerationUseCasesTest {
     fun testClose(){
         useCases.close()
 
-        coVerify { outer.close() }
+        coVerify { accelerationOuter.close() }
     }
 
     @Test
@@ -36,7 +36,7 @@ class AccelerationUseCasesTest {
 
         useCases.accelerate()
 
-        coVerify { accelerateRunner.run() }
+        coVerify { accelerator.accelerate() }
     }
 
     @Test
@@ -58,7 +58,7 @@ class AccelerationUseCasesTest {
 
         action()
 
-        coVerify { outer.showPermission() }
+        coVerify { accelerationOuter.showPermission() }
     }
 
 
@@ -100,24 +100,24 @@ class AccelerationUseCasesTest {
 
     private fun ifHasNotPermission(
         useCase: AccelerationUseCases.() -> Unit,
-        outs: Outer.() -> Unit
+        outs: AccelerationOuter.() -> Unit
     ){
         coEvery { permissions.hasPermission } returns false
 
         useCases.useCase()
 
-        coVerify { outer.outs() }
+        coVerify { accelerationOuter.outs() }
     }
 
     private fun ifHasPermission(
         usaCase: AccelerationUseCases.() -> Unit,
-        outs: Outer.() -> Unit
+        outs: AccelerationOuter.() -> Unit
     ){
         coEvery { permissions.hasPermission } returns true
 
         useCases.usaCase()
 
-        coVerify { outer.outs() }
+        coVerify { accelerationOuter.outs() }
     }
 
 

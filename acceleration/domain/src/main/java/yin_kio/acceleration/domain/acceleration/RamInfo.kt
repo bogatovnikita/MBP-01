@@ -1,4 +1,4 @@
-package yin_kio.acceleration.domain
+package yin_kio.acceleration.domain.acceleration
 
 interface RamInfo {
 

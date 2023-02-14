@@ -1,8 +1,8 @@
-import io.mockk.coVerifyOrder
+import io.mockk.coVerifySequence
 import io.mockk.spyk
 import org.junit.jupiter.api.Test
-import yin_kio.acceleration.domain.acceleration.AcceleratorImpl
 import yin_kio.acceleration.domain.acceleration.AccelerationOuter
+import yin_kio.acceleration.domain.acceleration.AcceleratorImpl
 
 class AcceleratorTest {
 
@@ -13,7 +13,7 @@ class AcceleratorTest {
     fun testRun(){
         runner.accelerate()
 
-        coVerifyOrder {
+        coVerifySequence {
             accelerationOuter.showAccelerateProgress()
             accelerationOuter.showInter()
             accelerationOuter.complete()

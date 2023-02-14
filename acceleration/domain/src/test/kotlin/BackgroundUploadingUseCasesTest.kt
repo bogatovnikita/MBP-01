@@ -77,7 +77,7 @@ class BackgroundUploadingUseCasesTest {
 
         useCases.update()
 
-        coVerifyOrder {
+        coVerifySequence {
             outer.setUpdateStatus(UpdateStatus.Loading)
             appsForm.apps = listOf()
             outer.setApps(listOf())

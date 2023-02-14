@@ -13,7 +13,6 @@ interface AccelerationOuter {
 
     fun showRamInfo(ramInfo: RamInfoOut)
 
-    fun showAppsList(apps: List<String>)
-    fun showPermissionOnList()
+    fun showAppsState(appsState: AppsState)
 
 }

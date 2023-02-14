@@ -33,11 +33,12 @@ internal class AccelerationUseCasesImpl(
 
     override fun update(){
         accelerationOuter.showRamInfo(ramInfo.provide())
+        accelerationOuter.showAppsState(AppsState.Progress)
         if (permissions.hasPermission){
             val appsList = apps.provide()
-            accelerationOuter.showAppsList(appsList)
+            accelerationOuter.showAppsState(AppsState.AppsList(appsList))
         } else {
-            accelerationOuter.showPermissionOnList()
+            accelerationOuter.showAppsState(AppsState.Permission)
         }
     }
 

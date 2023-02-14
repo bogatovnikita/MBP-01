@@ -77,7 +77,8 @@ class AccelerationUseCasesTest {
             usaCase = { update() },
             outs = {
                 showRamInfo(ramInfoOut)
-                showAppsList(appsList)
+                showAppsState(AppsState.Progress)
+                showAppsState(AppsState.AppsList(appsList))
             }
         )
 
@@ -85,7 +86,8 @@ class AccelerationUseCasesTest {
             useCase = { update() },
             outs = {
                 showRamInfo(ramInfoOut)
-                showPermissionOnList()
+                showAppsState(AppsState.Progress)
+                showAppsState(AppsState.Permission)
             }
         )
 

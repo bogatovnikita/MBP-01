@@ -12,7 +12,7 @@ class AccelerationUseCasesTest {
     private val accelerator: Accelerator = spyk()
     private val ramInfo: RamInfo = spyk()
     private val apps: Apps = spyk()
-    private val useCases = AccelerationUseCases(
+    private val useCases = AccelerationUseCasesImpl(
         accelerationOuter = accelerationOuter,
         permissions = permissions,
         runner = accelerator,
@@ -91,6 +91,13 @@ class AccelerationUseCasesTest {
 
     }
 
+    @Test
+    fun testComplete(){
+        useCases.complete()
+
+        coVerify(exactly = 1) { accelerationOuter.complete() }
+    }
+
 
 
 
@@ -103,7 +110,7 @@ class AccelerationUseCasesTest {
 
 
     private fun ifHasNotPermission(
-        useCase: AccelerationUseCases.() -> Unit,
+        useCase: AccelerationUseCasesImpl.() -> Unit,
         outs: AccelerationOuter.() -> Unit
     ){
         coEvery { permissions.hasPermission } returns false
@@ -114,7 +121,7 @@ class AccelerationUseCasesTest {
     }
 
     private fun ifHasPermission(
-        usaCase: AccelerationUseCases.() -> Unit,
+        usaCase: AccelerationUseCasesImpl.() -> Unit,
         outs: AccelerationOuter.() -> Unit
     ){
         coEvery { permissions.hasPermission } returns true

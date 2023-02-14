@@ -9,7 +9,7 @@ class BackgroundUploadingUseCasesTest {
     private val appsForm: AppsForm = spyk()
     private val outer: BackgroundUploadingOuter = spyk()
     private val apps: Apps = spyk()
-    private val useCases = BackgroundUploadingUseCases(
+    private val useCases = BackgroundUploadingUseCasesImpl(
         outer = outer,
         appsForm = appsForm,
         apps = apps
@@ -98,5 +98,12 @@ class BackgroundUploadingUseCasesTest {
             apps.stop(selectedApps)
             outer.showInter()
         }
+    }
+
+    @Test
+    fun testComplete(){
+        useCases.complete()
+
+        coVerify( exactly = 1 ) { outer.complete() }
     }
 }

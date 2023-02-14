@@ -1,45 +1,12 @@
 package yin_kio.acceleration.domain.bg_uploading
 
-import yin_kio.acceleration.domain.gateways.Apps
+interface BackgroundUploadingUseCases {
+    fun close()
 
-class BackgroundUploadingUseCases(
-    private val outer: BackgroundUploadingOuter,
-    private val appsForm: AppsForm,
-    private val apps: Apps
-) {
+    fun switchSelectAllApps()
+    fun switchSelectApp(packageName: String)
+    fun update()
+    fun stopSelectedApps()
 
-    fun close(){
-        outer.close()
-    }
-
-    fun switchSelectAllApps(){
-        appsForm.switchSelectAll()
-        outer.setSelectionStatus(appsForm.selectionStatus)
-        outer.updateApps()
-    }
-
-    fun switchSelectApp(packageName: String){
-        appsForm.switchSelectApp(packageName)
-        val isSelected = appsForm.isAppSelected(packageName)
-        outer.setAppSelected(packageName, isSelected)
-        outer.setSelectionStatus(appsForm.selectionStatus)
-    }
-
-    fun update(){
-        outer.setUpdateStatus(UpdateStatus.Loading)
-        val appsList = apps.provide()
-        appsForm.apps = appsList
-        outer.setApps(appsList)
-        outer.setUpdateStatus(UpdateStatus.Complete)
-    }
-
-    fun stopSelectedApps(){
-        val selectedApps = appsForm.selectedApps
-
-        outer.showStopProgress()
-        apps.stop(selectedApps)
-        outer.showInter()
-    }
-
-
+    fun complete()
 }

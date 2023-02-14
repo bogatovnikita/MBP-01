@@ -4,6 +4,7 @@ import io.mockk.coVerifyOrder
 import io.mockk.spyk
 import org.junit.jupiter.api.Test
 import yin_kio.acceleration.domain.bg_uploading.*
+import yin_kio.acceleration.domain.gateways.Apps
 
 class BackgroundUploadingUseCasesTest {
 

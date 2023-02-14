@@ -3,6 +3,7 @@ import io.mockk.coVerify
 import io.mockk.spyk
 import org.junit.jupiter.api.Test
 import yin_kio.acceleration.domain.acceleration.*
+import yin_kio.acceleration.domain.gateways.Apps
 
 class AccelerationUseCasesTest {
 
@@ -10,11 +11,13 @@ class AccelerationUseCasesTest {
     private val permissions: Permissions = spyk()
     private val accelerator: Accelerator = spyk()
     private val ramInfo: RamInfo = spyk()
+    private val apps: Apps = spyk()
     private val useCases = AccelerationUseCases(
         accelerationOuter = accelerationOuter,
         permissions = permissions,
         runner = accelerator,
-        ramInfo = ramInfo
+        ramInfo = ramInfo,
+        apps = apps
     )
 
     @Test
@@ -65,10 +68,11 @@ class AccelerationUseCasesTest {
     @Test
     fun testUpdate(){
         val ramInfoOut = RamInfoOut()
+        val appsList = listOf("app1", "app2")
 
         coEvery { ramInfo.provide() } returns  ramInfoOut
+        coEvery { apps.provide() } returns appsList
 
-        val appsList = listOf<String>()
         ifHasPermission(
             usaCase = { update() },
             outs = {

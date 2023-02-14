@@ -47,19 +47,16 @@ class FirstScreenTimeViewModel @Inject constructor(
             updateState {
                 it.copy(
                     listDataScreenTime = mapToAppScreenTime(result).reversed(),
-                    isLoading = true, listIsEmpty = false
+                    isLoading = true
                 )
             }
         } else {
             updateState {
                 it.copy(
                     listDataScreenTime = mapToAppScreenTime(result),
-                    isLoading = true, listIsEmpty = false
+                    isLoading = true
                 )
             }
-        }
-        if (_screenState.value.listDataScreenTime.isEmpty()) {
-            updateState { it.copy(listIsEmpty = true) }
         }
         val size = _screenState.value.listDataScreenTime.filter { it.isItSystemApp }.size
         updateState { it.copy(systemCheckedCount = size) }

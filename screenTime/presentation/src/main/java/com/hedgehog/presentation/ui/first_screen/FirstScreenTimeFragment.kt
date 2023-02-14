@@ -135,7 +135,7 @@ class FirstScreenTimeFragment :
             adapter.submitList(state.listDataScreenTime)
             binding.reverseStatistics.isSelected =
                 viewModel.screenState.value.reverseListAppScreenTime
-            if (state.listIsEmpty) {
+            if (state.listDataScreenTime.isEmpty()) {
                 stateListIsEmpty()
             } else {
                 stateListIsNotEmpty()
@@ -154,7 +154,6 @@ class FirstScreenTimeFragment :
     }
 
     private fun stateListIsEmpty() {
-        initDate()
         binding.reverseStatistics.isClickable = false
         binding.reverseStatistics.isEnabled = false
 
@@ -194,6 +193,7 @@ class FirstScreenTimeFragment :
             it.isSelected = viewModel.screenState.value.reverseListAppScreenTime
         }
         binding.backgroundArrowLeft.setOnClickListener {
+            if (!viewModel.screenState.value.isLoading) return@setOnClickListener
             choiceLeftArrow()
         }
         binding.backgroundArrowRight.setOnClickListener {
@@ -202,10 +202,12 @@ class FirstScreenTimeFragment :
         }
         binding.dayButton.setOnClickListener {
             if (viewModel.screenState.value.choiceDay) return@setOnClickListener
+            if (!viewModel.screenState.value.isLoading) return@setOnClickListener
             choiceDay()
         }
         binding.weekButton.setOnClickListener {
             if (viewModel.screenState.value.choiceWeek) return@setOnClickListener
+            if (!viewModel.screenState.value.isLoading) return@setOnClickListener
             choiceWeek()
         }
     }

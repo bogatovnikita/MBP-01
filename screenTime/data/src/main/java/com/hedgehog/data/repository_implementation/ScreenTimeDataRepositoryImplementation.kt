@@ -18,6 +18,9 @@ import javax.inject.Inject
 class ScreenTimeDataRepositoryImplementation @Inject constructor(@ApplicationContext val context: Context) :
     ScreenTimeDataRepository {
 
+    private val sortedEvents = mutableMapOf<String, MutableList<UsageEvents.Event>>()
+    private lateinit var usageEventsGeneral: UsageStatsManager
+
     private var appScreenList: MutableList<AppScreenTime> = mutableListOf()
     private lateinit var beginTime: Calendar
     private lateinit var endTime: Calendar
@@ -25,12 +28,11 @@ class ScreenTimeDataRepositoryImplementation @Inject constructor(@ApplicationCon
     override fun getScreenTimeData(calendarScreenTime: CalendarScreenTime): Flow<CaseResult<List<AppScreenTime>, String>> =
         flow {
             initBeginEndTime(calendarScreenTime)
+            usageEventsGeneral =
+                context.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
             appScreenList.clear()
-            searchStatics()
-            appScreenList.apply {
-                sortBy { it.totalTime }
-                reverse()
-            }
+            checkStatics()
+            appScreenList.apply { sortBy { it.totalTime }; reverse() }
             emit(CaseResult.Success(appScreenList))
         }
 
@@ -58,13 +60,18 @@ class ScreenTimeDataRepositoryImplementation @Inject constructor(@ApplicationCon
         }
     }
 
-    private fun searchStatics() {
-        val sortedEvents = mutableMapOf<String, MutableList<UsageEvents.Event>>()
-        val usageEventsGeneral =
-            context.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
+    private fun checkStatics() {
         val usageEvents =
             usageEventsGeneral.queryEvents(beginTime.timeInMillis, endTime.timeInMillis)
 
+        if (usageEvents.hasNextEvent()) {
+            getStatUseEvents(usageEvents)
+        } else {
+            searchStatisticsFromUsageStats()
+        }
+    }
+
+    private fun getStatUseEvents(usageEvents: UsageEvents) {
         while (usageEvents.hasNextEvent()) {
             val event = UsageEvents.Event()
             usageEvents.getNextEvent(event)
@@ -94,6 +101,24 @@ class ScreenTimeDataRepositoryImplementation @Inject constructor(@ApplicationCon
             }
         }
         sortedEvents.clear()
+    }
+
+    private fun searchStatisticsFromUsageStats() {
+        usageEventsGeneral.queryAndAggregateUsageStats(
+            beginTime.timeInMillis,
+            endTime.timeInMillis
+        ).values.filter {
+            it.totalTimeInForeground > 1000 && context.isPackageExist(it.packageName) && context.isCheckAppPackage(
+                it.packageName
+            )
+        }.forEach {
+            appScreenList.add(
+                mapToAppScreenTime(
+                    it.packageName,
+                    it.totalTimeInForeground
+                )
+            )
+        }
     }
 
     private fun mapTimeToString(time: Long): String {

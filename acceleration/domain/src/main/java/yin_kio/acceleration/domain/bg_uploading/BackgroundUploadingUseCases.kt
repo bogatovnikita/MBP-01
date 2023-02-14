@@ -11,7 +11,7 @@ class BackgroundUploadingUseCases(
 
     fun switchSelectAllApps(){
         appsForm.switchSelectAll()
-        outer.setButtonEnabled(appsForm.hasSelected)
+        outer.setSelectionStatus(appsForm.selectionStatus)
         outer.updateApps()
     }
 
@@ -19,8 +19,7 @@ class BackgroundUploadingUseCases(
         appsForm.switchSelectApp(packageName)
         val isSelected = appsForm.isAppSelected(packageName)
         outer.setAppSelected(packageName, isSelected)
-        outer.setButtonEnabled(appsForm.hasSelected)
-        outer.setAllSelected(appsForm.isAllSelected)
+        outer.setSelectionStatus(appsForm.selectionStatus)
     }
 
 

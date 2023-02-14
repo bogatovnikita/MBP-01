@@ -4,6 +4,7 @@ interface AppsForm {
 
     val hasSelected: Boolean
     val isAllSelected: Boolean
+    val selectionStatus: SelectionStatus
 
 
     fun switchSelectAll()

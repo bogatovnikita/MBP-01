@@ -5,8 +5,9 @@ interface BackgroundUploadingOuter {
     fun close()
 
     fun updateApps()
-    fun setButtonEnabled(isEnabled: Boolean)
+
     fun setAppSelected(packageName: String, isSelected: Boolean)
-    fun setAllSelected(isAllSelected: Boolean)
+
+    fun setSelectionStatus(selectionStatus: SelectionStatus)
 
 }

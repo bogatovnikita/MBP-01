@@ -1,7 +1,10 @@
 package com.entertainment.event.ssearch.presentation.ui.notification_manager
 
+import android.Manifest
+import android.os.Build
 import android.os.Bundle
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -24,6 +27,11 @@ class NotificationSettingsFragment : Fragment(R.layout.fragment_notification_set
 
     private val binding: FragmentNotificationSettingsBinding by viewBinding()
     private val viewModel: NotificationSettingsViewModel by activityViewModels()
+
+    private val startActivityForNotificationPermission =
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
+            navigate(NotificationStateEvent.OpenDialogClearing)
+        }
 
     private val adapter: AppRecyclerViewAdapter = AppRecyclerViewAdapter(
         object : AppRecyclerViewAdapter.OnItemAppClickListener {
@@ -56,6 +64,7 @@ class NotificationSettingsFragment : Fragment(R.layout.fragment_notification_set
                 renderState(state)
                 navigate(state.event)
                 showAds(state.event)
+                requestPermForNotification(state.event)
             }
         }
     }
@@ -77,8 +86,9 @@ class NotificationSettingsFragment : Fragment(R.layout.fragment_notification_set
             binding.tvModeDisturbOn.isVisible = isNeedShowTimetableInfo && isAutoModeEnable
             binding.tvModeDisturbOff.isVisible = isNeedShowTimetableInfo && !isAutoModeEnable
             binding.tvDayOfWeek.text = if (selectedDays.isNotEmpty()) {
-                val days = selectedDays.map { "${getString(it)}, " }.reduce { acc, day -> acc + day }
-                    .removeSuffix(", ")
+                val days =
+                    selectedDays.map { "${getString(it)}, " }.reduce { acc, day -> acc + day }
+                        .removeSuffix(", ")
                 getString(R.string.notification_manager_every_week, days)
             } else {
                 getString(R.string.notification_manager_only_today)
@@ -98,7 +108,7 @@ class NotificationSettingsFragment : Fragment(R.layout.fragment_notification_set
 
     private fun navigate(event: NotificationStateEvent) {
         val navId = when (event) {
-            is NotificationStateEvent.OpenPermissionDialog -> R.id.action_to_dialogNotificationPermissionFragment
+            is NotificationStateEvent.OpenServicePermissionDialog -> R.id.action_to_dialogNotificationPermissionFragment
             is NotificationStateEvent.OpenDialogClearing -> R.id.action_to_dialogClearingFragment
             is NotificationStateEvent.OpenDialogCompleteClean -> R.id.action_to_dialogCompleteClearFragment
             is NotificationStateEvent.OpenMissedNotification -> R.id.action_to_missedNotificationsFragment
@@ -108,6 +118,15 @@ class NotificationSettingsFragment : Fragment(R.layout.fragment_notification_set
         if (navId == NOT_NAVIGATE || findNavController().currentDestination?.id == navId) return
         findNavController().navigate(navId)
         viewModel.obtainEvent(NotificationStateEvent.Default)
+    }
+
+    private fun requestPermForNotification(state: NotificationStateEvent) {
+        if (state != NotificationStateEvent.OpenNotificationPermissionDialog) return
+        if (Build.VERSION.SDK_INT >= 33) {
+            startActivityForNotificationPermission.launch(arrayOf(Manifest.permission.POST_NOTIFICATIONS))
+        } else {
+            viewModel.obtainEvent(NotificationStateEvent.OpenDialogClearing)
+        }
     }
 
     private fun showAds(event: NotificationStateEvent) {

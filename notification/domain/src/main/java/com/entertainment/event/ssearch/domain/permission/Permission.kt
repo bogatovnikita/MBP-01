@@ -4,4 +4,6 @@ interface Permission {
 
     fun hasServicePermission(): Boolean
 
+    fun hasNotificationPermission(): Boolean
+
 }

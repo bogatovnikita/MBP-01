@@ -1,5 +1,6 @@
 package com.entertainment.event.ssearch.presentation.ui.notification_manager
 
+import android.os.Build
 import androidx.lifecycle.viewModelScope
 import com.entertainment.event.ssearch.domain.use_cases.DNDSettingsUseCase
 import com.entertainment.event.ssearch.domain.use_cases.NotificationSettingsUseCases
@@ -103,15 +104,17 @@ class NotificationSettingsViewModel @Inject constructor(
         if (useCases.hasServicePermission()) {
             setEvent(event)
         } else {
-            setEvent(NotificationStateEvent.OpenPermissionDialog)
+            setEvent(NotificationStateEvent.OpenServicePermissionDialog)
         }
     }
 
     private fun openDialogClearingOrPermission() {
-        if (useCases.hasServicePermission()) {
-            setEvent(NotificationStateEvent.OpenDialogClearing)
+        if (!useCases.hasServicePermission()) {
+            setEvent(NotificationStateEvent.OpenServicePermissionDialog)
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && !useCases.hasNotificationPermission()) {
+            setEvent(NotificationStateEvent.OpenNotificationPermissionDialog)
         } else {
-            setEvent(NotificationStateEvent.OpenPermissionDialog)
+            setEvent(NotificationStateEvent.OpenDialogClearing)
         }
     }
 
@@ -134,7 +137,7 @@ class NotificationSettingsViewModel @Inject constructor(
                     )
                 }
             } else {
-                setEvent(NotificationStateEvent.OpenPermissionDialog)
+                setEvent(NotificationStateEvent.OpenServicePermissionDialog)
                 updateState {
                     it.copy(
                         modeDND = !isSwitched,
@@ -151,7 +154,7 @@ class NotificationSettingsViewModel @Inject constructor(
                 checkIsAllAppsLimited()
             }
         } else {
-            setEvent(NotificationStateEvent.OpenPermissionDialog)
+            setEvent(NotificationStateEvent.OpenServicePermissionDialog)
         }
     }
 
@@ -173,7 +176,7 @@ class NotificationSettingsViewModel @Inject constructor(
                 }
                 useCases.switchModeDisturbForAllApps(isSwitched)
             } else {
-                setEvent(NotificationStateEvent.OpenPermissionDialog)
+                setEvent(NotificationStateEvent.OpenServicePermissionDialog)
                 updateState {
                     it.copy(
                         isAllAppsLimited = !isSwitched,

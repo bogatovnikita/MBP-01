@@ -125,8 +125,10 @@ class ScreenTimeDataRepositoryImplementation @Inject constructor(@ApplicationCon
         val hour = (time / (1000 * 60 * 60))
         val minutes = ((time / (1000 * 60)) % 60)
         val second = time / 1000
-        return if (hour == 0L && minutes == 0L) {
+        return if (hour == 0L && minutes == 0L && second != 0L) {
             context.getString(R.string.D_second, second)
+        } else if (hour == 0L && minutes == 0L && second == 0L) {
+            context.getString(R.string.D_second, 1)
         } else {
             context.getString(R.string.D_hour_D_minutes, hour, minutes)
         }

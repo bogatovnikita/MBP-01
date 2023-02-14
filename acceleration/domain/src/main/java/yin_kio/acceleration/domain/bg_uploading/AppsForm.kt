@@ -6,6 +6,7 @@ interface AppsForm {
     val isAllSelected: Boolean
     val selectionStatus: SelectionStatus
     var apps: List<String>
+    val selectedApps: Collection<String>
 
 
     fun switchSelectAll()

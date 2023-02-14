@@ -3,19 +3,18 @@ import io.mockk.coVerify
 import io.mockk.coVerifyOrder
 import io.mockk.spyk
 import org.junit.jupiter.api.Test
-import yin_kio.acceleration.domain.bg_uploading.AppsForm
-import yin_kio.acceleration.domain.bg_uploading.BackgroundUploadingOuter
-import yin_kio.acceleration.domain.bg_uploading.BackgroundUploadingUseCases
-import yin_kio.acceleration.domain.bg_uploading.SelectionStatus
+import yin_kio.acceleration.domain.bg_uploading.*
 
 class BackgroundUploadingUseCasesTest {
 
 
     private val appsForm: AppsForm = spyk()
     private val outer: BackgroundUploadingOuter = spyk()
+    private val apps: Apps = spyk()
     private val useCases = BackgroundUploadingUseCases(
         outer = outer,
-        appsForm = appsForm
+        appsForm = appsForm,
+        apps = apps
     )
 
     @Test
@@ -73,4 +72,18 @@ class BackgroundUploadingUseCasesTest {
         }
     }
 
+
+    @Test
+    fun testUpdate(){
+        coEvery { apps.provide() } returns listOf()
+
+        useCases.update()
+
+        coVerifyOrder {
+            outer.setUpdateStatus(UpdateStatus.Loading)
+            appsForm.apps = listOf()
+            outer.setApps(listOf())
+            outer.setUpdateStatus(UpdateStatus.Complete)
+        }
+    }
 }

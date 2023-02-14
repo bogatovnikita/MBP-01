@@ -10,4 +10,8 @@ interface BackgroundUploadingOuter {
 
     fun setSelectionStatus(selectionStatus: SelectionStatus)
 
+    fun setUpdateStatus(updateStatus: UpdateStatus)
+
+    fun setApps(apps: List<String>)
+
 }

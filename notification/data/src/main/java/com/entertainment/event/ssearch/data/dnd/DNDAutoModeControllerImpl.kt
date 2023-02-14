@@ -41,7 +41,7 @@ class DNDAutoModeControllerImpl @Inject constructor(
             if (action == DND_OFF) getRequestCodeEndAlarm() else getRequestCodeStartAlarm()
         val pending =
             pendingIntent(action, requestCode[day]!!, hours, minutes, day)
-        setScheduleAlarm(hours, minutes, day, requestCode[day]!!, alarmManager, pending, true)
+        setScheduleAlarm(hours, minutes, day, alarmManager, pending, true)
     }
 
     private fun setNewAlarms(
@@ -57,7 +57,7 @@ class DNDAutoModeControllerImpl @Inject constructor(
                 if (action == DND_OFF) getRequestCodeEndAlarm() else getRequestCodeStartAlarm()
             val pending =
                 pendingIntent(action, requestCode[day]!!, hours, minutes, day)
-            setScheduleAlarm(hours, minutes, day, requestCode[day]!!, alarmMgr, pending, false)
+            setScheduleAlarm(hours, minutes, day, alarmMgr, pending, false)
         }
     }
 
@@ -72,7 +72,6 @@ class DNDAutoModeControllerImpl @Inject constructor(
             val pending =
                 pendingIntent(action, requestCode[day]!!, hours, minutes, day)
             alarmMgr.cancel(pending)
-//            Log.e("!!!", "delete request: ${requestCode[day]!!}----------------------------------$day")
         }
     }
 
@@ -83,7 +82,6 @@ class DNDAutoModeControllerImpl @Inject constructor(
         hours: Int,
         minutes: Int,
         dayOfWeek: Int,
-        request: Int,
         alarmMgr: AlarmManager,
         alarmIntent: PendingIntent?,
         isRollOnNextWeek: Boolean,
@@ -109,7 +107,9 @@ class DNDAutoModeControllerImpl @Inject constructor(
             return
         }
 
-        datetimeToAlarm.roll(Calendar.WEEK_OF_YEAR, 1)
+        if (Calendar.getInstance(Locale.getDefault()).timeInMillis > datetimeToAlarm.timeInMillis) {
+            datetimeToAlarm.roll(Calendar.WEEK_OF_YEAR, 1)
+        }
         alarmMgr.setAlarmClock(
             AlarmManager.AlarmClockInfo(
                 datetimeToAlarm.timeInMillis,

@@ -14,4 +14,8 @@ interface DNDSettings {
 
     suspend fun isAutoModeDNDEnabled(): Boolean
 
+    suspend fun setOnlyToday(isSwitched: Boolean)
+
+    suspend fun isOnlyToday(): Boolean
+
 }

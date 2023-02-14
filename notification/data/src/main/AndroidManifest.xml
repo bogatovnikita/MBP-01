@@ -6,5 +6,6 @@
 
     <application>
         <receiver android:name="com.entertainment.event.ssearch.data.dnd.DNDReceiver" />
+        <receiver android:name="com.entertainment.event.ssearch.data.background.NotificationCleanBroadcastReceiver" />
     </application>
 </manifest>

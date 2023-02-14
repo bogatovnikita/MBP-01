@@ -38,14 +38,30 @@ class NotificationSettingsViewModel @Inject constructor(
         }
     }
 
+    private fun checkIsAllAppsLimited() {
+        viewModelScope.launch(Dispatchers.IO) {
+            useCases.checkAllAppsLimited().collect{ isLimited ->
+                updateState {
+                    it.copy(
+                        isAllAppsLimited = !isLimited
+                    )
+                }
+            }
+        }
+    }
+
     private fun updateTimetableState() {
         viewModelScope.launch {
+            val isAutoModeSwitched = useCasesDND.isAutoModeSwitched()
+            val selectedDays = useCasesDND.getSelectedDays().map(::toResId)
+            val isNeedShowTimetableInfo = isAutoModeSwitched || selectedDays.isNotEmpty() || isAutoModeSwitched && useCasesDND.isOnlyToday()
             updateState {
                 it.copy(
-                    isAutoModeEnable = useCasesDND.isAutoModeSwitched(),
+                    isAutoModeEnable = isAutoModeSwitched,
                     timeStart = useCasesDND.getStartTime(),
                     timeEnd = useCasesDND.getEndTime(),
-                    selectedDays = useCasesDND.getSelectedDays().map(::toResId),
+                    selectedDays = selectedDays,
+                    isNeedShowTimetableInfo = isNeedShowTimetableInfo,
                 )
             }
         }
@@ -132,6 +148,7 @@ class NotificationSettingsViewModel @Inject constructor(
         if (useCases.hasServicePermission()) {
             viewModelScope.launch(Dispatchers.Default) {
                 useCases.switchAppModeDisturb(packageName, isSwitched)
+                checkIsAllAppsLimited()
             }
         } else {
             setEvent(NotificationStateEvent.OpenPermissionDialog)

@@ -89,8 +89,8 @@ class NotificationService : NotificationListenerService(), LifecycleOwner {
     private fun saveNotification() {
         dispatcher.lifecycle.coroutineScope.launch {
             activeNotifications.forEach { notification ->
-                val isSwitched = apps.readApp(notification.packageName)?.isSwitched ?: false
-                if (isSwitched) {
+                val isDisabled = !(apps.readApp(notification.packageName)?.isSwitched ?: true)
+                if (isDisabled) {
                     notifications.insert(notification.mapToNotificationDb())
                     cancelNotification(notification.key)
                 }

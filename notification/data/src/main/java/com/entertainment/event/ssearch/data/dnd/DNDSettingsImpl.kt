@@ -19,18 +19,24 @@ class DNDSettingsImpl @Inject constructor(
     override suspend fun setLimitAllApps(isSwitched: Boolean) =
         prefs.edit().putBoolean(LIMIT_ALL_APP, isSwitched).apply()
 
-    override suspend fun isAllAppsLimited(): Boolean = prefs.getBoolean(LIMIT_ALL_APP, false)
+    override suspend fun isAllAppsLimited(): Boolean = prefs.getBoolean(LIMIT_ALL_APP, true)
 
     override suspend fun setAutoModeDND(isSwitched: Boolean) =
         prefs.edit().putBoolean(AUTO_MODE_DND, isSwitched).apply()
 
     override suspend fun isAutoModeDNDEnabled(): Boolean = prefs.getBoolean(AUTO_MODE_DND, false)
 
+    override suspend fun setOnlyToday(isSwitched: Boolean) =
+        prefs.edit().putBoolean(ONLY_TODAY, isSwitched).apply()
+
+    override suspend fun isOnlyToday(): Boolean = prefs.getBoolean(ONLY_TODAY, false)
+
     companion object {
         const val NOTIFICATION_SETTINGS = "NOTIFICATION_SETTINGS"
         const val DISTURB_MODE = "DISTURB_MODE"
         const val LIMIT_ALL_APP = "LIMIT_ALL_APP"
         const val AUTO_MODE_DND = "AUTO_MODE_DND"
+        private const val ONLY_TODAY = "ONLY_TODAY"
     }
 
 }

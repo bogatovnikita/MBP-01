@@ -71,12 +71,11 @@ class NotificationSettingsFragment : Fragment(R.layout.fragment_notification_set
 
     private fun renderTimetableState(state: NotificationSettingsState) {
         with(state) {
-            val isNeedShow = selectedDays.isNotEmpty() || isAutoModeEnable
-            binding.tvAddTimetable.isVisible = !isNeedShow
-            binding.groupTimetable.isVisible = isNeedShow
+            binding.tvAddTimetable.isVisible = !isNeedShowTimetableInfo
+            binding.groupTimetable.isVisible = isNeedShowTimetableInfo
             binding.tvTimeDisturb.text = "${timeStart.toTime()}-${timeEnd.toTime()}"
-            binding.tvModeDisturbOn.isVisible = isNeedShow && isAutoModeEnable
-            binding.tvModeDisturbOff.isVisible = isNeedShow && !isAutoModeEnable
+            binding.tvModeDisturbOn.isVisible = isNeedShowTimetableInfo && isAutoModeEnable
+            binding.tvModeDisturbOff.isVisible = isNeedShowTimetableInfo && !isAutoModeEnable
             binding.tvDayOfWeek.text = if (selectedDays.isNotEmpty()) {
                 val days = selectedDays.map { "${getString(it)}, " }.reduce { acc, day -> acc + day }
                     .removeSuffix(", ")

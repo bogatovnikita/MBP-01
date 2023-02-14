@@ -1,6 +1,6 @@
-package yin_kio.acceleration.domain.bg_uploading
+package yin_kio.acceleration.domain.bg_uploading.entities
 
-interface AppsForm {
+internal interface AppsForm {
 
     val hasSelected: Boolean
     val isAllSelected: Boolean

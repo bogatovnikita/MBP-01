@@ -1,6 +1,6 @@
-package yin_kio.acceleration.domain.bg_uploading
+package yin_kio.acceleration.domain.bg_uploading.entities
 
-class AppsFormImpl : AppsForm {
+internal class AppsFormImpl : AppsForm {
 
     private var _apps: List<String> = listOf()
     private val _selectedApps: MutableSet<String> = mutableSetOf()

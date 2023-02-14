@@ -3,9 +3,9 @@ import io.mockk.coVerifySequence
 import io.mockk.mockk
 import io.mockk.spyk
 import org.junit.jupiter.api.Test
-import yin_kio.acceleration.domain.acceleration.AccelerationOuter
-import yin_kio.acceleration.domain.acceleration.AcceleratorImpl
-import yin_kio.acceleration.domain.bg_uploading.AppsForm
+import yin_kio.acceleration.domain.acceleration.ui_out.AccelerationOuter
+import yin_kio.acceleration.domain.acceleration.use_cases.AcceleratorImpl
+import yin_kio.acceleration.domain.bg_uploading.entities.AppsForm
 import yin_kio.acceleration.domain.gateways.Apps
 
 class AcceleratorTest {

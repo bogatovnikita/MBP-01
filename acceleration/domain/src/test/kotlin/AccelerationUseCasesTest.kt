@@ -2,7 +2,13 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.spyk
 import org.junit.jupiter.api.Test
-import yin_kio.acceleration.domain.acceleration.*
+import yin_kio.acceleration.domain.acceleration.gateways.Permissions
+import yin_kio.acceleration.domain.acceleration.gateways.RamInfo
+import yin_kio.acceleration.domain.acceleration.use_cases.AccelerationUseCasesImpl
+import yin_kio.acceleration.domain.acceleration.use_cases.Accelerator
+import yin_kio.acceleration.domain.acceleration.ui_out.AccelerationOuter
+import yin_kio.acceleration.domain.acceleration.ui_out.AppsState
+import yin_kio.acceleration.domain.acceleration.ui_out.RamInfoOut
 import yin_kio.acceleration.domain.gateways.Apps
 
 class AccelerationUseCasesTest {

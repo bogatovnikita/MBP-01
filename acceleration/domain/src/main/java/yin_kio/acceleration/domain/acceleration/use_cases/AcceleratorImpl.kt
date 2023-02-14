@@ -1,9 +1,10 @@
-package yin_kio.acceleration.domain.acceleration
+package yin_kio.acceleration.domain.acceleration.use_cases
 
-import yin_kio.acceleration.domain.bg_uploading.AppsForm
+import yin_kio.acceleration.domain.acceleration.ui_out.AccelerationOuter
+import yin_kio.acceleration.domain.bg_uploading.entities.AppsForm
 import yin_kio.acceleration.domain.gateways.Apps
 
-class AcceleratorImpl(
+internal class AcceleratorImpl(
     private val accelerationOuter: AccelerationOuter,
     private val appsForm: AppsForm,
     private val apps: Apps

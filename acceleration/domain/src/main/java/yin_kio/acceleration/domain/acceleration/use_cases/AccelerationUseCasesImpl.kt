@@ -1,5 +1,9 @@
-package yin_kio.acceleration.domain.acceleration
+package yin_kio.acceleration.domain.acceleration.use_cases
 
+import yin_kio.acceleration.domain.acceleration.gateways.Permissions
+import yin_kio.acceleration.domain.acceleration.gateways.RamInfo
+import yin_kio.acceleration.domain.acceleration.ui_out.AccelerationOuter
+import yin_kio.acceleration.domain.acceleration.ui_out.AppsState
 import yin_kio.acceleration.domain.gateways.Apps
 
 internal class AccelerationUseCasesImpl(

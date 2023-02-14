@@ -1,6 +1,10 @@
 import io.mockk.*
 import org.junit.jupiter.api.Test
-import yin_kio.acceleration.domain.bg_uploading.*
+import yin_kio.acceleration.domain.bg_uploading.entities.AppsForm
+import yin_kio.acceleration.domain.bg_uploading.entities.SelectionStatus
+import yin_kio.acceleration.domain.bg_uploading.ui_out.BackgroundUploadingOuter
+import yin_kio.acceleration.domain.bg_uploading.ui_out.UpdateStatus
+import yin_kio.acceleration.domain.bg_uploading.use_cases.BackgroundUploadingUseCasesImpl
 import yin_kio.acceleration.domain.gateways.Apps
 
 class BackgroundUploadingUseCasesTest {

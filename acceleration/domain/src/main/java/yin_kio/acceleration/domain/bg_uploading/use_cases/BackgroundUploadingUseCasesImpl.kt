@@ -1,5 +1,8 @@
-package yin_kio.acceleration.domain.bg_uploading
+package yin_kio.acceleration.domain.bg_uploading.use_cases
 
+import yin_kio.acceleration.domain.bg_uploading.entities.AppsForm
+import yin_kio.acceleration.domain.bg_uploading.ui_out.BackgroundUploadingOuter
+import yin_kio.acceleration.domain.bg_uploading.ui_out.UpdateStatus
 import yin_kio.acceleration.domain.gateways.Apps
 
 internal class BackgroundUploadingUseCasesImpl(

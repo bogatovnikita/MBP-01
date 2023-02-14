@@ -1,4 +1,4 @@
-package yin_kio.acceleration.domain.acceleration
+package yin_kio.acceleration.domain.acceleration.ui_out
 
 interface AccelerationOuter {
 
@@ -6,7 +6,6 @@ interface AccelerationOuter {
 
     fun showAccelerateProgress()
     fun showInter()
-    fun complete()
 
     fun showPermission()
     fun showSelectableAcceleration()
@@ -14,5 +13,8 @@ interface AccelerationOuter {
     fun showRamInfo(ramInfo: RamInfoOut)
 
     fun showAppsState(appsState: AppsState)
+
+
+    fun complete()
 
 }

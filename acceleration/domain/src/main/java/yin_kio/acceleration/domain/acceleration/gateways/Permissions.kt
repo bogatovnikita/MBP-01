@@ -1,4 +1,4 @@
-package yin_kio.acceleration.domain.acceleration
+package yin_kio.acceleration.domain.acceleration.gateways
 
 interface Permissions {
 

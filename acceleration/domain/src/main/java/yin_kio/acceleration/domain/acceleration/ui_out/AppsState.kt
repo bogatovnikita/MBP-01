@@ -1,4 +1,4 @@
-package yin_kio.acceleration.domain.acceleration
+package yin_kio.acceleration.domain.acceleration.ui_out
 
 sealed interface AppsState{
 

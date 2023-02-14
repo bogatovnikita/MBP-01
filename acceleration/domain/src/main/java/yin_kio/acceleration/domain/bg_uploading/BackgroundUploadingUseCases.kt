@@ -33,5 +33,13 @@ class BackgroundUploadingUseCases(
         outer.setUpdateStatus(UpdateStatus.Complete)
     }
 
+    fun stopSelectedApps(){
+        val selectedApps = appsForm.selectedApps
+
+        outer.showStopProgress()
+        apps.stop(selectedApps)
+        outer.showInter()
+    }
+
 
 }

@@ -1,7 +1,4 @@
-import io.mockk.coEvery
-import io.mockk.coVerify
-import io.mockk.coVerifyOrder
-import io.mockk.spyk
+import io.mockk.*
 import org.junit.jupiter.api.Test
 import yin_kio.acceleration.domain.bg_uploading.*
 import yin_kio.acceleration.domain.gateways.Apps
@@ -85,6 +82,21 @@ class BackgroundUploadingUseCasesTest {
             appsForm.apps = listOf()
             outer.setApps(listOf())
             outer.setUpdateStatus(UpdateStatus.Complete)
+        }
+    }
+
+    @Test
+    fun testStopSelectedApps(){
+        val selectedApps = listOf("app1", "app2")
+
+        coEvery { appsForm.selectedApps } returns selectedApps
+
+        useCases.stopSelectedApps()
+
+        coVerifySequence {
+            outer.showStopProgress()
+            apps.stop(selectedApps)
+            outer.showInter()
         }
     }
 }

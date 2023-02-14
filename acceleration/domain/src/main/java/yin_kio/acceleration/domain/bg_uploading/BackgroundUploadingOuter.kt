@@ -14,4 +14,10 @@ interface BackgroundUploadingOuter {
 
     fun setApps(apps: List<String>)
 
+    fun showStopProgress()
+
+    fun showInter()
+
+    fun complete()
+
 }

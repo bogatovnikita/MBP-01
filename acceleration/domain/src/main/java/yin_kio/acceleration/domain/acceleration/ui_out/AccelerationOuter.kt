@@ -14,6 +14,8 @@ interface AccelerationOuter {
 
     fun showAppsState(appsState: AppsState)
 
+    fun givePermission()
+
 
     fun complete()
 

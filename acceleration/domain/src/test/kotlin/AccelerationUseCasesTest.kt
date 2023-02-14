@@ -107,7 +107,12 @@ class AccelerationUseCasesTest {
     }
 
 
+    @Test
+    fun testGivePermission(){
+        useCases.givePermission()
 
+        coVerify(exactly = 1) { accelerationOuter.givePermission() }
+    }
 
 
 

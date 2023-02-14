@@ -6,6 +6,7 @@ interface AccelerationUseCases {
     fun accelerate()
     fun uploadBackgroundProcess()
     fun update()
+    fun givePermission()
 
     fun complete()
 }

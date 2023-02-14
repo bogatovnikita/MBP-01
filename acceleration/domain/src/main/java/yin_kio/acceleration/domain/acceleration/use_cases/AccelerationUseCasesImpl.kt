@@ -50,4 +50,7 @@ internal class AccelerationUseCasesImpl(
         accelerationOuter.complete()
     }
 
+    override fun givePermission() {
+        accelerationOuter.givePermission()
+    }
 }

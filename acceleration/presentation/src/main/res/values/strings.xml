@@ -14,6 +14,9 @@
     <string name="allow_access_description">Нажав “Выгрузить фоновые процессы” вы сможете вручную выбрать приложения, у которых хотите остановить фоновую активность</string>
     <string name="allow"><u>Разрешить</u></string>
     <string name="device_scanning">Сканируем устройство...</string>
-
+    <string name="we_need_permission">Нам требуется разрешение</string>
+    <string name="we_need_permission_description">Нам нужно разрешение для отслеживания используемых приложений, чтобы мы могли находить и отключать фоновые процессы и ускорять работу вашего телефона.</string>
+    <string name="allow_access_usage_history">Доступ к истории использования</string>
+    <string name="close">Закрыть</string>
 
 </resources>

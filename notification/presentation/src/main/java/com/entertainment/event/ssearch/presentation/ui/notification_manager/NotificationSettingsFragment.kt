@@ -30,7 +30,11 @@ class NotificationSettingsFragment : Fragment(R.layout.fragment_notification_set
 
     private val startActivityForNotificationPermission =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
-            navigate(NotificationStateEvent.OpenDialogClearing)
+            if(viewModel.screenState.value.event == NotificationStateEvent.OpenNotificationPermissionDialog) {
+                navigate(NotificationStateEvent.OpenDialogClearing)
+            } else {
+                viewModel.obtainEvent(NotificationStateEvent.Default)
+            }
         }
 
     private val adapter: AppRecyclerViewAdapter = AppRecyclerViewAdapter(
@@ -121,11 +125,13 @@ class NotificationSettingsFragment : Fragment(R.layout.fragment_notification_set
     }
 
     private fun requestPermForNotification(state: NotificationStateEvent) {
-        if (state != NotificationStateEvent.OpenNotificationPermissionDialog) return
-        if (Build.VERSION.SDK_INT >= 33) {
-            startActivityForNotificationPermission.launch(arrayOf(Manifest.permission.POST_NOTIFICATIONS))
-        } else {
-            viewModel.obtainEvent(NotificationStateEvent.OpenDialogClearing)
+        if (state is NotificationStateEvent.OpenNotificationPermissionDialog || state is NotificationStateEvent.LimitApps)  {
+            if (Build.VERSION.SDK_INT >= 33) {
+                startActivityForNotificationPermission.launch(arrayOf(Manifest.permission.POST_NOTIFICATIONS))
+            } else {
+                if (state is NotificationStateEvent.LimitApps) return
+                viewModel.obtainEvent(NotificationStateEvent.OpenDialogClearing)
+            }
         }
     }
 

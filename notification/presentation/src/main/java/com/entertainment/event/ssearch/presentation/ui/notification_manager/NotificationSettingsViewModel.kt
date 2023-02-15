@@ -168,10 +168,10 @@ class NotificationSettingsViewModel @Inject constructor(
     private fun setToAllAppsModeDisturb(isSwitched: Boolean) {
         viewModelScope.launch(Dispatchers.IO) {
             if (useCases.hasServicePermission()) {
+                setEvent(NotificationStateEvent.LimitApps(isSwitched))
                 updateState {
                     it.copy(
-                        isAllAppsLimited = isSwitched,
-                        event = NotificationStateEvent.Default
+                        isAllAppsLimited = isSwitched
                     )
                 }
                 useCases.switchModeDisturbForAllApps(isSwitched)

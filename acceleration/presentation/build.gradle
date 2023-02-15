@@ -32,6 +32,8 @@ android {
 
 dependencies {
 
+    implementation project(':storage_info_view')
+
     implementation presentation.values()
     testImplementation presentation_test.values()
     androidTestImplementation presentation_android_test.values()

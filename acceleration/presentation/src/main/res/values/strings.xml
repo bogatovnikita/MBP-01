@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="acceleration_title">Ускорение</string>
+    <string name="ram_title">Оперативная память</string>
+    <string name="ram_total_title">Общий объём оперативной памяти</string>
+    <string name="accelerate_phone">Ускорить телефон</string>
+    <string name="apps_that_load_phone">Приложения, которые нагружают оперативную память</string>
+    <string name="apps_that_load_phone_description">Нажав “Выгрузить фоновые процессы” вы сможете вручную выбрать приложения, у которых хотите остановить фоновую активность</string>
+    <string name="upload_bg_processes">Выгрузить фоновые процессы</string>
+
+
+</resources>

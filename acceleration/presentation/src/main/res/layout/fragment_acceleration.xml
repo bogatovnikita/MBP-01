@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        style="@style/Toolbar"
+        android:gravity="center|start">
+
+        <ImageView
+            android:id="@+id/back"
+            style="@style/BackButton"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/acceleration_title"
+            android:textAppearance="@style/Text.Header_2"/>
+
+    </LinearLayout>
+
+
+    <yin_kio.storage_info_view.StorageInfoView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:title="@string/ram_title"
+        app:total_storage_title="@string/ram_total_title"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="16dp"/>
+
+    <TextView style="@style/MainButton"
+        android:background="@drawable/bg_accelerate"
+        android:text="@string/accelerate_phone"
+        android:layout_marginVertical="16dp"/>
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/apps_that_load_phone"
+        android:textAppearance="@style/Text.Header_3"
+        android:textColor="@color/green"
+        android:layout_marginHorizontal="16dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/apps_that_load_phone_description"
+        android:textAppearance="@style/Text.Subtitle_1"
+        android:textColor="@color/gray"
+        android:layout_marginTop="4dp"
+        android:layout_marginHorizontal="16dp"/>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="100dp"
+            android:clipToPadding="false"
+            tools:listitem="@layout/list_item_app"/>
+
+
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_button_plate"
+            android:paddingTop="12dp"
+            android:layout_gravity="bottom">
+
+
+
+        </FrameLayout>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white">
+        <TextView style="@style/MainButton"
+            android:layout_marginTop="0dp"
+            android:text="@string/upload_bg_processes"/>
+
+    </FrameLayout>
+
+
+
+
+
+
+
+
+</LinearLayout>

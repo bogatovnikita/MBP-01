@@ -124,45 +124,34 @@ class AppInfoRepositoryImplementation @Inject constructor(
     }
 
     private fun dayAppInfo(packageName: String, calendarScreenTime: CalendarScreenTime) {
-        initDayBeginEndTime(calendarScreenTime)
-        for (i in 2..8) {
+        initDayBeginEndTime()
+        for (i in 0..8) {
             calculateDayTime(i)
             searchStatics(packageName, calendarScreenTime)
         }
     }
 
-    private fun initDayBeginEndTime(calendarScreenTime: CalendarScreenTime) {
+    private fun initDayBeginEndTime() {
         dayBeginTime = Calendar.getInstance()
-        dayBeginTime.set(Calendar.DAY_OF_WEEK, dayBeginTime.firstDayOfWeek)
         dayBeginTime.set(Calendar.HOUR_OF_DAY, 0)
         dayBeginTime.set(Calendar.MINUTE, 0)
         dayBeginTime.set(Calendar.SECOND, 0)
         dayBeginTime.set(Calendar.MILLISECOND, 0)
 
         dayEndTime = Calendar.getInstance()
-        dayEndTime.set(Calendar.DAY_OF_WEEK, dayBeginTime.firstDayOfWeek)
         dayEndTime.set(Calendar.HOUR_OF_DAY, 0)
         dayEndTime.set(Calendar.MINUTE, 0)
         dayEndTime.set(Calendar.SECOND, -1)
         dayEndTime.set(Calendar.MILLISECOND, 0)
 
-        dayBeginTime.add(Calendar.WEEK_OF_YEAR, -calendarScreenTime.beginTime)
-        dayEndTime.add(Calendar.WEEK_OF_YEAR, -calendarScreenTime.endTime)
+        dayBeginTime.add(Calendar.DATE, -8)
+        dayEndTime.add(Calendar.DATE, -7)
     }
 
     private fun calculateDayTime(day: Int) {
-        dayBeginTime.set(Calendar.DAY_OF_WEEK, day)
-        if (day != 2) {
-            dayEndTime.set(Calendar.DAY_OF_WEEK, day)
-        } else {
-            dayEndTime = dayBeginTime.clone() as Calendar
-            dayEndTime.set(Calendar.DAY_OF_WEEK, day + 1)
-            dayEndTime.set(Calendar.SECOND, -1)
-        }
-    }
-
-    private fun mapTimeToMinutes(totalTimeInForeground: Long): Int {
-        return (totalTimeInForeground / 60000).toInt()
+        if (day == 0) return
+        dayBeginTime.add(Calendar.DATE, +1)
+        dayEndTime.add(Calendar.DATE, +1)
     }
 
     private fun getAppLabel(packageName: String) = try {
@@ -224,15 +213,15 @@ class AppInfoRepositoryImplementation @Inject constructor(
                         UsageEvents.Event.ACTIVITY_PAUSED -> closeTime = usageEvents.timeStamp
                     }
                     if (startTime != 0L && closeTime != 0L) {
-                        Log.e("pie", "hourBeginTime: ${hourBeginTime.time}")
-                        Log.e("pie", "hourEndTime: ${hourEndTime.time}")
-                        Log.e(
-                            "pie",
-                            "startTime = ${startTime - 1_675_378_000_000} // closeTime = ${closeTime - 1_675_378_000_000}"
-                        )
+//                        Log.e("pie", "hourBeginTime: ${hourBeginTime.time}")
+//                        Log.e("pie", "hourEndTime: ${hourEndTime.time}")
+//                        Log.e(
+//                            "pie",
+//                            "startTime = ${startTime - 1_675_378_000_000} // closeTime = ${closeTime - 1_675_378_000_000}"
+//                        )
                         totalTime += closeTime - startTime
-                        Log.e("pie", "total = $totalTime")
-                        Log.e("pie", "_____________________________________________")
+//                        Log.e("pie", "total = $totalTime")
+//                        Log.e("pie", "_____________________________________________")
                         startTime = 0L
                         closeTime = 0L
                     }

@@ -142,6 +142,13 @@
         android:visibility="visible"
         app:constraint_referenced_ids="arrow_left,background_arrow_left,date_tv,arrow_right,background_arrow_right" />
 
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group_arrows"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        app:constraint_referenced_ids="arrow_left,background_arrow_left,arrow_right,background_arrow_right" />
+
     <ImageView
         android:id="@+id/arrow_left"
         android:layout_width="wrap_content"

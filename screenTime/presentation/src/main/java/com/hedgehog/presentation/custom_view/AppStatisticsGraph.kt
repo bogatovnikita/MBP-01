@@ -6,6 +6,8 @@ import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.View
 import com.hedgehog.presentation.R
+import java.text.SimpleDateFormat
+import java.util.*
 import kotlin.properties.Delegates
 
 class AppStatisticsGraph(
@@ -26,10 +28,11 @@ class AppStatisticsGraph(
 
     var progressesHeights: List<Int> = emptyList()
         set(value) {
-            if (value.size != 24) throw Exception("Value size must be 24")
             field = value
             invalidate()
         }
+
+    private var typeWeek = false
 
     private val chartRect = RectF(0f, 0f, 0f, 0f)
     private var cellWidth = 0f
@@ -40,9 +43,19 @@ class AppStatisticsGraph(
 
     private var backgroundScreenColor by Delegates.notNull<Int>()
     private var lineColor by Delegates.notNull<Int>()
-    private val verticalLinesTexts = listOf("00", "03", "06", "09", "12", "15", "18", "21", "00")
+    private val verticalLinesTextsForHours =
+        listOf("00", "03", "06", "09", "12", "15", "18", "21", "00")
 
-    private val horizontalLinesTexts = listOf(
+    private val verticalLinesTextsForWeek = mutableListOf<String>()
+
+    private val horizontalLinesTextsForHour = listOf(
+        resources.getString(R.string.min_60),
+        resources.getString(R.string.min_30),
+        resources.getString(R.string.min_0)
+    )
+
+    private val horizontalLinesTextsForWeek = listOf(
+        resources.getString(R.string.min_90),
         resources.getString(R.string.min_60),
         resources.getString(R.string.min_30),
         resources.getString(R.string.min_0)
@@ -57,6 +70,7 @@ class AppStatisticsGraph(
     init {
         initAttributes(attributesSet, defStyleAttr, defStyleRes)
         initPaints()
+        checkDays()
     }
 
     private fun initAttributes(attributesSet: AttributeSet?, defStyleAttr: Int, defStyleRes: Int) {
@@ -76,6 +90,8 @@ class AppStatisticsGraph(
             R.styleable.AppStatisticsGraph_brush_color,
             resources.getColor(R.color.grey_medium_dark)
         )
+
+        typeWeek = typedArray.getBoolean(R.styleable.AppStatisticsGraph_day_type, false)
 
         typedArray.recycle()
     }
@@ -136,11 +152,16 @@ class AppStatisticsGraph(
         chartRect.top = (height * 0.1).toFloat()
         chartRect.bottom = (height * 0.8).toFloat()
 
-        cellWidth = (width - (chartRect.left + (width - chartRect.right))) / 8
-        cellHeight = (height - (chartRect.top + (height - chartRect.bottom))) / 2
+        if (typeWeek) {
+            cellWidth = (width - (chartRect.left + (width - chartRect.right))) / 9
+            cellHeight = (height - (chartRect.top + (height - chartRect.bottom))) / 3
+        } else {
+            cellWidth = (width - (chartRect.left + (width - chartRect.right))) / 8
+            cellHeight = (height - (chartRect.top + (height - chartRect.bottom))) / 2
 
-        marginWidthSmallCell = cellWidth * 0.1f
-        widthSmallCellSize = cellWidth / 3 - marginWidthSmallCell
+            marginWidthSmallCell = cellWidth * 0.1f
+            widthSmallCellSize = cellWidth / 3 - marginWidthSmallCell
+        }
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -164,32 +185,66 @@ class AppStatisticsGraph(
     }
 
     private fun drawGrid(canvas: Canvas) {
-        drawLines(
-            canvas,
-            lineDrawWay = LineDrawWay.Horizontally,
-            linesCount = 2,
-            spaceBetween = cellHeight,
-            linesStartPoint = chartRect.top,
-            lineLength = chartRect.width(),
-            edgeStartPoint = chartRect.left,
-            paint = straightLinePaint
-        )
+        if (typeWeek) {
+            drawLines(
+                canvas,
+                lineDrawWay = LineDrawWay.Horizontally,
+                linesCount = 4,
+                spaceBetween = cellHeight,
+                linesStartPoint = chartRect.top,
+                lineLength = chartRect.width(),
+                edgeStartPoint = chartRect.left,
+                paint = straightLinePaint,
+                typeWeek = true
+            )
 
-        drawLines(
-            canvas,
-            lineDrawWay = LineDrawWay.Vertically,
-            linesCount = 8,
-            spaceBetween = cellWidth,
-            linesStartPoint = chartRect.left,
-            lineLength = chartRect.height(),
-            edgeStartPoint = chartRect.top,
-            paint = brokenLinePaint
-        )
+            drawLines(
+                canvas,
+                lineDrawWay = LineDrawWay.Vertically,
+                linesCount = 9,
+                spaceBetween = cellWidth,
+                linesStartPoint = chartRect.left,
+                lineLength = chartRect.height(),
+                edgeStartPoint = chartRect.top,
+                paint = brokenLinePaint,
+                typeWeek = true
+            )
+
+        } else {
+            drawLines(
+                canvas,
+                lineDrawWay = LineDrawWay.Horizontally,
+                linesCount = 2,
+                spaceBetween = cellHeight,
+                linesStartPoint = chartRect.top,
+                lineLength = chartRect.width(),
+                edgeStartPoint = chartRect.left,
+                paint = straightLinePaint,
+                typeWeek = false
+            )
+
+            drawLines(
+                canvas,
+                lineDrawWay = LineDrawWay.Vertically,
+                linesCount = 8,
+                spaceBetween = cellWidth,
+                linesStartPoint = chartRect.left,
+                lineLength = chartRect.height(),
+                edgeStartPoint = chartRect.top,
+                paint = brokenLinePaint,
+                typeWeek = false
+            )
+        }
     }
 
     private fun drawText(canvas: Canvas) {
-        drawHorizontalText(canvas, horizontalLinesTexts, cellHeight)
-        drawVerticalText(canvas, verticalLinesTexts, cellWidth)
+        if (typeWeek) {
+            drawHorizontalText(canvas, horizontalLinesTextsForWeek, cellHeight)
+            drawVerticalText(canvas, verticalLinesTextsForWeek, cellWidth)
+        } else {
+            drawHorizontalText(canvas, horizontalLinesTextsForHour, cellHeight)
+            drawVerticalText(canvas, verticalLinesTextsForHours, cellWidth)
+        }
     }
 
     private fun drawHorizontalText(
@@ -215,7 +270,7 @@ class AppStatisticsGraph(
         for (i in textItems.indices) {
             canvas.drawText(
                 textItems[i],
-                chartRect.left + (spaceBetweenLines * i) - 15f,
+                chartRect.left + (spaceBetweenLines * i) + cellWidth / 3,
                 chartRect.bottom + 40f,
                 textPaint
             )
@@ -230,75 +285,156 @@ class AppStatisticsGraph(
         linesStartPoint: Float,
         edgeStartPoint: Float,
         lineLength: Float,
-        paint: Paint
+        paint: Paint,
+        typeWeek: Boolean
     ) {
-        for (i in 0..linesCount) {
-            val stepValue = linesStartPoint + spaceBetween * i
-            when (lineDrawWay) {
-                LineDrawWay.Vertically -> {
-                    canvas.drawLine(
-                        stepValue,
-                        edgeStartPoint,
-                        stepValue,
-                        lineLength + edgeStartPoint,
-                        paint
-                    )
+        if (typeWeek) {
+            for (i in 0..linesCount) {
+                val stepValue = linesStartPoint + spaceBetween * i
+                when (lineDrawWay) {
+                    LineDrawWay.Vertically -> {
+                        canvas.drawLine(
+                            stepValue,
+                            edgeStartPoint,
+                            stepValue,
+                            lineLength + edgeStartPoint,
+                            paint
+                        )
+                    }
+                    LineDrawWay.Horizontally -> {
+                        canvas.drawLine(
+                            edgeStartPoint,
+                            stepValue,
+                            lineLength + edgeStartPoint,
+                            stepValue,
+                            paint
+                        )
+                    }
                 }
-                LineDrawWay.Horizontally -> {
-                    canvas.drawLine(
-                        edgeStartPoint,
-                        stepValue,
-                        lineLength + edgeStartPoint,
-                        stepValue,
-                        paint
-                    )
+            }
+
+        } else {
+            for (i in 0..linesCount) {
+                val stepValue = linesStartPoint + spaceBetween * i
+                when (lineDrawWay) {
+                    LineDrawWay.Vertically -> {
+                        canvas.drawLine(
+                            stepValue,
+                            edgeStartPoint,
+                            stepValue,
+                            lineLength + edgeStartPoint,
+                            paint
+                        )
+                    }
+                    LineDrawWay.Horizontally -> {
+                        canvas.drawLine(
+                            edgeStartPoint,
+                            stepValue,
+                            lineLength + edgeStartPoint,
+                            stepValue,
+                            paint
+                        )
+                    }
                 }
             }
         }
     }
 
     private fun drawProgress(canvas: Canvas) {
-        val progressesCount = 24
-        val progressMargin = 5f
-        val progressContainerWidth = chartRect.width() / progressesCount
-        val progressWidth = progressContainerWidth - progressMargin * 2
+        if (typeWeek) {
+            val progressesCount = 9
+            val progressContainerWidth = chartRect.width() / progressesCount
+            val progressMargin = progressContainerWidth / 4
+            val progressWidth = progressContainerWidth - progressMargin * 2
 
-        canvas.clipRect(
-            chartRect.left,
-            chartRect.height() + chartRect.top,
-            chartRect.right,
-            chartRect.height() + 5f + chartRect.top,
-            Region.Op.DIFFERENCE
-        )
-
-        progressesHeights.forEachIndexed { index, i ->
-            val left = index * (progressContainerWidth) + chartRect.left + progressMargin
-            val top = chartRect.bottom
-            val right =
-                index * (progressContainerWidth) + progressWidth + chartRect.left + progressMargin
-            val bottom =
-                (i.toFloat() / 60) * -chartRect.height() + chartRect.height() + chartRect.top
-
-            progressPaint.shader = LinearGradient(
-                0f,
-                top,
-                0f,
-                bottom,
-                resources.getColor(R.color.white),
-                resources.getColor(R.color.green),
-                Shader.TileMode.CLAMP
+            canvas.clipRect(
+                chartRect.left,
+                chartRect.height() + chartRect.top,
+                chartRect.right,
+                chartRect.height() + 5f + chartRect.top,
+                Region.Op.DIFFERENCE
             )
 
-            canvas.drawRoundRect(
-                left,
-                top + 5f,
-                right,
-                bottom,
-                5f,
-                5f,
-                progressPaint
+            progressesHeights.forEachIndexed { index, i ->
+                val left = index * (progressContainerWidth) + chartRect.left + progressMargin
+                val top = chartRect.bottom
+                val right =
+                    index * (progressContainerWidth) + progressWidth + chartRect.left + progressMargin
+                val bottom =
+                    (i.toFloat() / 90) * -chartRect.height() + chartRect.height() + chartRect.top
+
+                progressPaint.shader = LinearGradient(
+                    0f,
+                    top,
+                    0f,
+                    bottom,
+                    resources.getColor(R.color.white),
+                    resources.getColor(R.color.green),
+                    Shader.TileMode.CLAMP
+                )
+
+                canvas.drawRoundRect(
+                    left,
+                    top + 5f,
+                    right,
+                    bottom,
+                    5f,
+                    5f,
+                    progressPaint
+                )
+            }
+
+        } else {
+            val progressesCount = 24
+            val progressMargin = 5f
+            val progressContainerWidth = chartRect.width() / progressesCount
+            val progressWidth = progressContainerWidth - progressMargin * 2
+
+            canvas.clipRect(
+                chartRect.left,
+                chartRect.height() + chartRect.top,
+                chartRect.right,
+                chartRect.height() + 5f + chartRect.top,
+                Region.Op.DIFFERENCE
             )
+
+            progressesHeights.forEachIndexed { index, i ->
+                val left = index * (progressContainerWidth) + chartRect.left + progressMargin
+                val top = chartRect.bottom
+                val right =
+                    index * (progressContainerWidth) + progressWidth + chartRect.left + progressMargin
+                val bottom =
+                    (i.toFloat() / 60) * -chartRect.height() + chartRect.height() + chartRect.top
+
+                progressPaint.shader = LinearGradient(
+                    0f,
+                    top,
+                    0f,
+                    bottom,
+                    resources.getColor(R.color.white),
+                    resources.getColor(R.color.green),
+                    Shader.TileMode.CLAMP
+                )
+
+                canvas.drawRoundRect(
+                    left,
+                    top + 5f,
+                    right,
+                    bottom,
+                    5f,
+                    5f,
+                    progressPaint
+                )
+            }
         }
+    }
+
+    private fun checkDays() {
+        for (i in 0..8) {
+            val t = Calendar.getInstance().timeInMillis - (86_400_000L * i)
+            verticalLinesTextsForWeek.add(SimpleDateFormat("EE").format(t))
+        }
+        verticalLinesTextsForWeek.reverse()
     }
 
     private enum class LineDrawWay {

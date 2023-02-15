@@ -80,17 +80,12 @@ class SecondScreenTimeFragment :
             viewModel.choiceWeek()
             showAppsByPeriod(Period.Week)
 
+            binding.groupArrows.visibility = View.GONE
+
             viewModel.calendar = Calendar.getInstance()
             viewModel.secondCalendar = Calendar.getInstance()
 
-            viewModel.calendar.set(Calendar.DAY_OF_WEEK, viewModel.calendar.firstDayOfWeek)
-            viewModel.secondCalendar.set(
-                Calendar.DAY_OF_WEEK,
-                viewModel.secondCalendar.firstDayOfWeek
-            )
-            viewModel.secondCalendar.set(Calendar.HOUR_OF_DAY, -1)
-            viewModel.calendar.add(Calendar.WEEK_OF_YEAR, -args.calendarScreenTime.beginTime)
-            viewModel.secondCalendar.add(Calendar.WEEK_OF_YEAR, -args.calendarScreenTime.endTime)
+            viewModel.calendar.add(Calendar.DATE, -FirstScreenTimeFragment.LIMIT_STATISTICS_FOR_DAY)
         }
     }
 
@@ -226,7 +221,6 @@ class SecondScreenTimeFragment :
 
     private fun choiceLeftArrow() {
         if (viewModel.screenState.value.choiceDay && viewModel.beginTime == FirstScreenTimeFragment.LIMIT_STATISTICS_FOR_DAY) return
-//        if (viewModel.screenState.value.choiceWeek && viewModel.beginTime == FirstScreenTimeFragment.LIMIT_STATISTICS_FOR_WEEK) return
         viewModel.beginTime += 1
         viewModel.endTime += 1
         if (viewModel.screenState.value.choiceDay) {
@@ -255,6 +249,8 @@ class SecondScreenTimeFragment :
     private fun choiceDay() {
         viewModel.choiceDay()
 
+        binding.groupArrows.visibility = View.VISIBLE
+
         showAppsByPeriod(Period.Day)
 
         viewModel.beginTime = 0
@@ -267,17 +263,17 @@ class SecondScreenTimeFragment :
     private fun choiceWeek() {
         viewModel.choiceWeek()
 
+        binding.groupArrows.visibility = View.GONE
+
         showAppsByPeriod(Period.Week)
 
         viewModel.beginTime = 0
         viewModel.endTime = -1
         viewModel.calendar = Calendar.getInstance()
         viewModel.secondCalendar = Calendar.getInstance()
-        viewModel.calendar.set(Calendar.DAY_OF_WEEK, viewModel.calendar.firstDayOfWeek)
-        viewModel.secondCalendar.set(Calendar.DAY_OF_WEEK, viewModel.secondCalendar.firstDayOfWeek)
-        viewModel.secondCalendar.set(Calendar.HOUR_OF_DAY, -1)
-        viewModel.calendar.add(Calendar.WEEK_OF_YEAR, 0)
-        viewModel.secondCalendar.add(Calendar.WEEK_OF_YEAR, +1)
+
+        viewModel.calendar.add(Calendar.DATE, -FirstScreenTimeFragment.LIMIT_STATISTICS_FOR_DAY)
+
         updateScreenTime(Calendar.WEEK_OF_YEAR, viewModel.beginTime, viewModel.endTime)
     }
 

@@ -4,7 +4,6 @@ import android.app.usage.UsageEvents
 import android.app.usage.UsageStatsManager
 import android.content.Context
 import android.content.pm.ApplicationInfo
-import android.util.Log
 import com.hedgehog.data.R
 import com.hedgehog.domain.models.AppScreenTime
 import com.hedgehog.domain.models.CalendarScreenTime
@@ -54,10 +53,8 @@ class ScreenTimeDataRepositoryImplementation @Inject constructor(@ApplicationCon
             beginTime.add(calendarScreenTime.dataType, -calendarScreenTime.beginTime)
             endTime.add(calendarScreenTime.dataType, -calendarScreenTime.endTime)
         } else {
-            beginTime.set(Calendar.DAY_OF_WEEK, beginTime.firstDayOfWeek)
-            beginTime.add(Calendar.WEEK_OF_YEAR, -calendarScreenTime.beginTime)
-            endTime.set(Calendar.DAY_OF_WEEK, beginTime.firstDayOfWeek)
-            endTime.add(Calendar.WEEK_OF_YEAR, -calendarScreenTime.endTime)
+            beginTime.add(Calendar.DATE, -8)
+            endTime.add(Calendar.DATE, +1)
         }
     }
 
@@ -65,14 +62,6 @@ class ScreenTimeDataRepositoryImplementation @Inject constructor(@ApplicationCon
         val usageEvents =
             usageEventsGeneral.queryEvents(beginTime.timeInMillis, endTime.timeInMillis)
 
-        if (usageEvents.hasNextEvent()) {
-            getStatUseEvents(usageEvents)
-        } else {
-            searchStatisticsFromUsageStats()
-        }
-    }
-
-    private fun getStatUseEvents(usageEvents: UsageEvents) {
         while (usageEvents.hasNextEvent()) {
             val event = UsageEvents.Event()
             usageEvents.getNextEvent(event)
@@ -102,32 +91,6 @@ class ScreenTimeDataRepositoryImplementation @Inject constructor(@ApplicationCon
             }
         }
         sortedEvents.clear()
-    }
-
-    private fun searchStatisticsFromUsageStats() {
-        Log.e("pie", "beginTime = ${beginTime.time} ")
-        Log.e("pie", "endTime = ${endTime.time} ")
-        Log.e("pie", "______________________________________________________________: ")
-        usageEventsGeneral.queryUsageStats(
-            UsageStatsManager.INTERVAL_BEST,
-            beginTime.timeInMillis,
-            endTime.timeInMillis
-        ).filter {
-            it.totalTimeInForeground > 1000 && context.isPackageExist(it.packageName) && context.isCheckAppPackage(
-                it.packageName
-            )
-        }.forEach {
-            Log.e(
-                "pie",
-                "N = ${it.packageName}||T = ${it.totalTimeInForeground}||L = ${it.lastTimeStamp}||F = ${it.firstTimeStamp}",
-            )
-            appScreenList.add(
-                mapToAppScreenTime(
-                    it.packageName,
-                    it.totalTimeInForeground
-                )
-            )
-        }
     }
 
     private fun mapTimeToString(time: Long): String {

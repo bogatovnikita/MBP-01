@@ -226,7 +226,7 @@ class SecondScreenTimeFragment :
 
     private fun choiceLeftArrow() {
         if (viewModel.screenState.value.choiceDay && viewModel.beginTime == FirstScreenTimeFragment.LIMIT_STATISTICS_FOR_DAY) return
-        if (viewModel.screenState.value.choiceWeek && viewModel.beginTime == FirstScreenTimeFragment.LIMIT_STATISTICS_FOR_WEEK) return
+//        if (viewModel.screenState.value.choiceWeek && viewModel.beginTime == FirstScreenTimeFragment.LIMIT_STATISTICS_FOR_WEEK) return
         viewModel.beginTime += 1
         viewModel.endTime += 1
         if (viewModel.screenState.value.choiceDay) {

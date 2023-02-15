@@ -264,34 +264,23 @@ class FirstScreenTimeFragment :
 
     private fun choiceLeftArrow() {
         if (viewModel.screenState.value.choiceDay && viewModel.beginTime == LIMIT_STATISTICS_FOR_DAY) return
-        if (viewModel.screenState.value.choiceWeek && viewModel.beginTime == LIMIT_STATISTICS_FOR_WEEK) return
         viewModel.beginTime += 1
         viewModel.endTime += 1
-        if (viewModel.screenState.value.choiceDay) {
-            updateScreenTime(Calendar.DATE, viewModel.beginTime, viewModel.endTime)
-            viewModel.calendar.add(Calendar.DATE, -1)
-        } else {
-            viewModel.calendar.add(Calendar.WEEK_OF_YEAR, -1)
-            viewModel.secondCalendar.add(Calendar.WEEK_OF_YEAR, -1)
-            updateScreenTime(Calendar.WEEK_OF_YEAR, viewModel.beginTime, viewModel.endTime)
-        }
+        updateScreenTime(Calendar.DATE, viewModel.beginTime, viewModel.endTime)
+        viewModel.calendar.add(Calendar.DATE, -1)
     }
 
     private fun choiceRightArrow() {
         viewModel.beginTime -= 1
         viewModel.endTime -= 1
-        if (viewModel.screenState.value.choiceDay) {
-            viewModel.calendar.add(Calendar.DATE, +1)
-            updateScreenTime(Calendar.DATE, viewModel.beginTime, viewModel.endTime)
-        } else {
-            viewModel.calendar.add(Calendar.WEEK_OF_YEAR, +1)
-            viewModel.secondCalendar.add(Calendar.WEEK_OF_YEAR, +1)
-            updateScreenTime(Calendar.WEEK_OF_YEAR, viewModel.beginTime, viewModel.endTime)
-        }
+        viewModel.calendar.add(Calendar.DATE, +1)
+        updateScreenTime(Calendar.DATE, viewModel.beginTime, viewModel.endTime)
     }
 
     private fun choiceDay() {
         viewModel.choiceDay()
+
+        binding.arrowsGroups.visibility = View.VISIBLE
 
         showAppsByPeriod(Period.Day)
 
@@ -308,17 +297,17 @@ class FirstScreenTimeFragment :
     private fun choiceWeek() {
         viewModel.choiceWeek()
 
+        binding.arrowsGroups.visibility = View.GONE
+
         showAppsByPeriod(Period.Week)
 
         viewModel.beginTime = 0
         viewModel.endTime = -1
         viewModel.calendar = Calendar.getInstance()
         viewModel.secondCalendar = Calendar.getInstance()
-        viewModel.calendar.set(Calendar.DAY_OF_WEEK, viewModel.calendar.firstDayOfWeek)
-        viewModel.secondCalendar.set(Calendar.DAY_OF_WEEK, viewModel.secondCalendar.firstDayOfWeek)
-        viewModel.secondCalendar.set(Calendar.HOUR_OF_DAY, -1)
-        viewModel.calendar.add(Calendar.WEEK_OF_YEAR, 0)
-        viewModel.secondCalendar.add(Calendar.WEEK_OF_YEAR, +1)
+
+        viewModel.calendar.add(Calendar.DATE, -LIMIT_STATISTICS_FOR_DAY)
+
         updateScreenTime(Calendar.WEEK_OF_YEAR, viewModel.beginTime, viewModel.endTime)
         if (viewModel.screenState.value.selectionMode) {
             selectedMode(binding.selectedMode)
@@ -390,7 +379,6 @@ class FirstScreenTimeFragment :
     }
 
     companion object {
-        const val LIMIT_STATISTICS_FOR_DAY = 30
-        const val LIMIT_STATISTICS_FOR_WEEK = 3
+        const val LIMIT_STATISTICS_FOR_DAY = 8
     }
 }

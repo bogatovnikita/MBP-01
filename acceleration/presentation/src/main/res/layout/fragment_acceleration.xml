@@ -74,6 +74,7 @@
 
         <LinearLayout
             android:id="@+id/list_permission"
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -82,8 +83,35 @@
             android:paddingBottom="16dp"
             android:paddingHorizontal="16dp"
             android:layout_marginHorizontal="16dp"
-            android:layout_marginTop="8dp">
-            <include layout="@layout/layout_list_permission"/>
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="12dp">
+            <include layout="@layout/layout_list_permission" />
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_gravity="center">
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                app:lottie_rawRes="@raw/round_progress"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/device_scanning"
+                android:gravity="center"
+                android:textAppearance="@style/Text.Subtitle_1.2"/>
+
         </LinearLayout>
 
 

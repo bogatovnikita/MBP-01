@@ -224,7 +224,15 @@ class AppInfoRepositoryImplementation @Inject constructor(
                         UsageEvents.Event.ACTIVITY_PAUSED -> closeTime = usageEvents.timeStamp
                     }
                     if (startTime != 0L && closeTime != 0L) {
+                        Log.e("pie", "hourBeginTime: ${hourBeginTime.time}")
+                        Log.e("pie", "hourEndTime: ${hourEndTime.time}")
+                        Log.e(
+                            "pie",
+                            "startTime = ${startTime - 1_675_378_000_000} // closeTime = ${closeTime - 1_675_378_000_000}"
+                        )
                         totalTime += closeTime - startTime
+                        Log.e("pie", "total = $totalTime")
+                        Log.e("pie", "_____________________________________________")
                         startTime = 0L
                         closeTime = 0L
                     }
@@ -316,7 +324,7 @@ class AppInfoRepositoryImplementation @Inject constructor(
             if (it == 0L) {
                 newList.add(0)
             } else {
-                newList.add(((it / 60_000) % 60).toInt())
+                newList.add((it / 60_000).toInt())
             }
         }
         return newList

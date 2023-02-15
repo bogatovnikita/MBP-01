@@ -4,6 +4,7 @@ import android.app.usage.UsageEvents
 import android.app.usage.UsageStatsManager
 import android.content.Context
 import android.content.pm.ApplicationInfo
+import android.util.Log
 import com.hedgehog.data.R
 import com.hedgehog.domain.models.AppScreenTime
 import com.hedgehog.domain.models.CalendarScreenTime
@@ -104,14 +105,22 @@ class ScreenTimeDataRepositoryImplementation @Inject constructor(@ApplicationCon
     }
 
     private fun searchStatisticsFromUsageStats() {
-        usageEventsGeneral.queryAndAggregateUsageStats(
+        Log.e("pie", "beginTime = ${beginTime.time} ")
+        Log.e("pie", "endTime = ${endTime.time} ")
+        Log.e("pie", "______________________________________________________________: ")
+        usageEventsGeneral.queryUsageStats(
+            UsageStatsManager.INTERVAL_BEST,
             beginTime.timeInMillis,
             endTime.timeInMillis
-        ).values.filter {
+        ).filter {
             it.totalTimeInForeground > 1000 && context.isPackageExist(it.packageName) && context.isCheckAppPackage(
                 it.packageName
             )
         }.forEach {
+            Log.e(
+                "pie",
+                "N = ${it.packageName}||T = ${it.totalTimeInForeground}||L = ${it.lastTimeStamp}||F = ${it.firstTimeStamp}",
+            )
             appScreenList.add(
                 mapToAppScreenTime(
                     it.packageName,

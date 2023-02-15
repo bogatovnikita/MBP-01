@@ -18,5 +18,8 @@
     <string name="we_need_permission_description">Нам нужно разрешение для отслеживания используемых приложений, чтобы мы могли находить и отключать фоновые процессы и ускорять работу вашего телефона.</string>
     <string name="allow_access_usage_history">Доступ к истории использования</string>
     <string name="close">Закрыть</string>
+    <string name="select_apps_for_stopping">Выберете приложения, фоновые процессы которых вы хотите остановить</string>
+    <string name="select_all">Выбрать все</string>
+    <string name="stop_selected_apps">Остановить выбранные приложения</string>
 
 </resources>

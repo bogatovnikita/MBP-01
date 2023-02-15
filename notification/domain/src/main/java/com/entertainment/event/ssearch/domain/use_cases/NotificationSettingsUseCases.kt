@@ -47,6 +47,8 @@ class NotificationSettingsUseCases @Inject constructor(
         serviceController.cleanAllNotification()
     }
 
+    fun setRestartServiceWorker() = serviceController.setRestartServiceWorker()
+
     suspend fun isAllAppsLimited(): Boolean = dndSettings.isAllAppsLimited()
 
     suspend fun setGeneralDisturbMode(isSwitched: Boolean) {

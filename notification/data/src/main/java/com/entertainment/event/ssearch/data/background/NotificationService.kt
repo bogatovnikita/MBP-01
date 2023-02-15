@@ -73,7 +73,13 @@ class NotificationService : NotificationListenerService(), LifecycleOwner {
 
     override fun onDestroy() {
         dispatcher.onServicePreSuperOnDestroy()
+        restartService()
         super.onDestroy()
+    }
+
+    private fun restartService() {
+        val broadcastIntent = Intent(this, RestartServiceReceiver::class.java)
+        sendBroadcast(broadcastIntent)
     }
 
     override fun onNotificationPosted(sbn: StatusBarNotification?, rankingMap: RankingMap?) {

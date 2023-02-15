@@ -20,6 +20,10 @@ class NotificationSettingsViewModel @Inject constructor(
     private val useCasesDND: DNDSettingsUseCase,
 ) : BaseViewModel<NotificationSettingsState>(NotificationSettingsState()) {
 
+    init {
+        useCases.setRestartServiceWorker()
+    }
+
     fun obtainEvent(event: NotificationStateEvent) {
         when (event) {
             is NotificationStateEvent.ClearAllNotification -> openDialogClearingOrPermission()

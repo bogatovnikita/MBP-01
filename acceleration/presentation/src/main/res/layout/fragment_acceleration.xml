@@ -63,12 +63,28 @@
         android:layout_weight="1">
 
         <androidx.recyclerview.widget.RecyclerView
+            android:visibility="gone"
+            android:id="@+id/recycler"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingBottom="100dp"
             android:clipToPadding="false"
             tools:listitem="@layout/list_item_app"/>
 
+
+        <LinearLayout
+            android:id="@+id/list_permission"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/bg_list_permission"
+            android:paddingTop="12dp"
+            android:paddingBottom="16dp"
+            android:paddingHorizontal="16dp"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="8dp">
+            <include layout="@layout/layout_list_permission"/>
+        </LinearLayout>
 
 
         <FrameLayout

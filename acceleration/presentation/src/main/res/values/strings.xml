@@ -10,6 +10,9 @@
     <string name="upload_bg_processes">Выгрузить фоновые процессы</string>
     <string name="acceleration_progress_title">Ускоряем ваш телефон</string>
     <string name="acceleration_progress_description">Убираем фоновые процессы</string>
+    <string name="allow_access">Предоставьте доступ</string>
+    <string name="allow_access_description">Нажав “Выгрузить фоновые процессы” вы сможете вручную выбрать приложения, у которых хотите остановить фоновую активность</string>
+    <string name="allow"><u>Разрешить</u></string>
 
 
 </resources>

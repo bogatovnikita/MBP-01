@@ -28,11 +28,20 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+
+    buildFeatures{
+        viewBinding true
+    }
 }
 
 dependencies {
 
+    implementation project(':acceleration:data')
+    implementation project(':acceleration:domain')
+
     implementation project(':storage_info_view')
+
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4"
 
     implementation presentation.values()
     testImplementation presentation_test.values()

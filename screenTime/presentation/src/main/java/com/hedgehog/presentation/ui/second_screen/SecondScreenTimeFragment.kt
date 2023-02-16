@@ -282,7 +282,10 @@ class SecondScreenTimeFragment :
         if (state.isLoading) {
             binding.groupLoadingData.isVisible = state.isLoading
             binding.loader.isVisible = !state.isLoading
-//            binding.customViewGraph.progressesHeights = state.appInfo.listTime
+            binding.customViewGraph.apply {
+                progressesHeights = state.appInfo.listTime
+                typeWeek = !state.choiceDay
+            }
             initScreen(state)
             if (state.appInfo.listTime.isEmpty()) {
                 stateListIsEmpty()

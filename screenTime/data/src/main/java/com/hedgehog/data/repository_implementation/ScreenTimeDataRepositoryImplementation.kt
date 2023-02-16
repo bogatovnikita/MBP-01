@@ -53,7 +53,7 @@ class ScreenTimeDataRepositoryImplementation @Inject constructor(@ApplicationCon
             beginTime.add(calendarScreenTime.dataType, -calendarScreenTime.beginTime)
             endTime.add(calendarScreenTime.dataType, -calendarScreenTime.endTime)
         } else {
-            beginTime.add(Calendar.DATE, -8)
+            beginTime.add(Calendar.DATE, -7)
             endTime.add(Calendar.DATE, +1)
         }
     }

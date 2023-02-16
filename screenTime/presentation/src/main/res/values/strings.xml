@@ -27,5 +27,6 @@
     <string name="min_60">60 min</string>
     <string name="min_30">30 min</string>
     <string name="min_0">0 min</string>
+    <string name="average_text">average</string>
 
 </resources>

@@ -125,7 +125,7 @@ class AppInfoRepositoryImplementation @Inject constructor(
 
     private fun dayAppInfo(packageName: String, calendarScreenTime: CalendarScreenTime) {
         initDayBeginEndTime()
-        for (i in 0..8) {
+        for (i in 0..7) {
             calculateDayTime(i)
             searchStatics(packageName, calendarScreenTime)
         }

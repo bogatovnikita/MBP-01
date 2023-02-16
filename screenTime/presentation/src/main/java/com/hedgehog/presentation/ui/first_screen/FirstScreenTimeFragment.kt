@@ -379,6 +379,6 @@ class FirstScreenTimeFragment :
     }
 
     companion object {
-        const val LIMIT_STATISTICS_FOR_DAY = 8
+        const val LIMIT_STATISTICS_FOR_DAY = 7
     }
 }

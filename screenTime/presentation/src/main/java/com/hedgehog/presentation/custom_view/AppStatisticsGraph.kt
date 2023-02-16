@@ -29,10 +29,20 @@ class AppStatisticsGraph(
     var progressesHeights: List<Int> = emptyList()
         set(value) {
             field = value
+            setChange()
+            requestLayout()
             invalidate()
         }
 
-    private var typeWeek = false
+    var typeWeek = true
+        set(value) {
+            field = value
+            setChange()
+            requestLayout()
+            invalidate()
+        }
+
+    private var averageValue = 0
 
     private val chartRect = RectF(0f, 0f, 0f, 0f)
     private var cellWidth = 0f
@@ -65,6 +75,8 @@ class AppStatisticsGraph(
     private lateinit var brokenLinePaint: Paint
     private lateinit var straightLinePaint: Paint
     private lateinit var textPaint: Paint
+    private lateinit var averageValuePaint: Paint
+    private lateinit var averageTextPaint: Paint
     private val progressPaint = progressPaint()
 
     init {
@@ -90,9 +102,6 @@ class AppStatisticsGraph(
             R.styleable.AppStatisticsGraph_brush_color,
             resources.getColor(R.color.grey_medium_dark)
         )
-
-        typeWeek = typedArray.getBoolean(R.styleable.AppStatisticsGraph_day_type, false)
-
         typedArray.recycle()
     }
 
@@ -101,7 +110,27 @@ class AppStatisticsGraph(
         brokenLinePaint = brokenLinePaint()
         straightLinePaint = straightLinePaint()
         textPaint = textPaint()
+        averageValuePaint = averageValuePaint()
+        averageTextPaint = averageTextPaint()
     }
+
+    private fun averageValuePaint(): Paint {
+        return Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            strokeWidth = 4f
+            color = resources.getColor(R.color.green)
+            style = Paint.Style.STROKE
+            pathEffect = DashPathEffect(floatArrayOf(10f, 10f, 10f, 10f), 0f)
+        }
+    }
+
+    private fun averageTextPaint(): Paint {
+        return Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            color = resources.getColor(R.color.green)
+            style = Paint.Style.FILL
+            textSize = 10.sp
+        }
+    }
+
 
     private fun progressPaint(): Paint {
         return Paint(Paint.ANTI_ALIAS_FLAG).apply {
@@ -152,8 +181,12 @@ class AppStatisticsGraph(
         chartRect.top = (height * 0.1).toFloat()
         chartRect.bottom = (height * 0.8).toFloat()
 
+        setChange()
+    }
+
+    private fun setChange() {
         if (typeWeek) {
-            cellWidth = (width - (chartRect.left + (width - chartRect.right))) / 9
+            cellWidth = (width - (chartRect.left + (width - chartRect.right))) / 8
             cellHeight = (height - (chartRect.top + (height - chartRect.bottom))) / 3
         } else {
             cellWidth = (width - (chartRect.left + (width - chartRect.right))) / 8
@@ -170,6 +203,7 @@ class AppStatisticsGraph(
         drawGrid(canvas)
         drawText(canvas)
         drawProgress(canvas)
+        drawAverageLine(canvas)
     }
 
     private fun drawBackground(canvas: Canvas) {
@@ -185,7 +219,9 @@ class AppStatisticsGraph(
     }
 
     private fun drawGrid(canvas: Canvas) {
+        getAverageValue()
         if (typeWeek) {
+            setChange()
             drawLines(
                 canvas,
                 lineDrawWay = LineDrawWay.Horizontally,
@@ -194,22 +230,8 @@ class AppStatisticsGraph(
                 linesStartPoint = chartRect.top,
                 lineLength = chartRect.width(),
                 edgeStartPoint = chartRect.left,
-                paint = straightLinePaint,
-                typeWeek = true
+                paint = straightLinePaint
             )
-
-            drawLines(
-                canvas,
-                lineDrawWay = LineDrawWay.Vertically,
-                linesCount = 9,
-                spaceBetween = cellWidth,
-                linesStartPoint = chartRect.left,
-                lineLength = chartRect.height(),
-                edgeStartPoint = chartRect.top,
-                paint = brokenLinePaint,
-                typeWeek = true
-            )
-
         } else {
             drawLines(
                 canvas,
@@ -219,22 +241,19 @@ class AppStatisticsGraph(
                 linesStartPoint = chartRect.top,
                 lineLength = chartRect.width(),
                 edgeStartPoint = chartRect.left,
-                paint = straightLinePaint,
-                typeWeek = false
-            )
-
-            drawLines(
-                canvas,
-                lineDrawWay = LineDrawWay.Vertically,
-                linesCount = 8,
-                spaceBetween = cellWidth,
-                linesStartPoint = chartRect.left,
-                lineLength = chartRect.height(),
-                edgeStartPoint = chartRect.top,
-                paint = brokenLinePaint,
-                typeWeek = false
+                paint = straightLinePaint
             )
         }
+        drawLines(
+            canvas,
+            lineDrawWay = LineDrawWay.Vertically,
+            linesCount = 8,
+            spaceBetween = cellWidth,
+            linesStartPoint = chartRect.left,
+            lineLength = chartRect.height(),
+            edgeStartPoint = chartRect.top,
+            paint = brokenLinePaint
+        )
     }
 
     private fun drawText(canvas: Canvas) {
@@ -252,13 +271,31 @@ class AppStatisticsGraph(
         textItems: List<String>,
         spaceBetweenLines: Float
     ) {
-        for (i in textItems.indices) {
-            canvas.drawText(
-                textItems[i],
-                chartRect.right + 20f,
-                chartRect.top + (spaceBetweenLines * i),
-                textPaint
-            )
+        if (typeWeek) {
+            for (i in textItems.indices) {
+                if (averageValue in 1..4 && i == 3) continue
+                if (averageValue in 26..34 && i == 2) continue
+                if (averageValue in 56..64 && i == 1) continue
+                if (averageValue > 85 && i == 0) continue
+                canvas.drawText(
+                    textItems[i],
+                    chartRect.right + 20f,
+                    chartRect.top + (spaceBetweenLines * i) + 5f,
+                    textPaint
+                )
+            }
+        } else {
+            for (i in textItems.indices) {
+                if (averageValue in 1..4 && i == 2) continue
+                if (averageValue in 26..34 && i == 1) continue
+                if (averageValue in 56..64 && i == 0) continue
+                canvas.drawText(
+                    textItems[i],
+                    chartRect.right + 20f,
+                    chartRect.top + (spaceBetweenLines * i) + 5f,
+                    textPaint
+                )
+            }
         }
     }
 
@@ -267,13 +304,24 @@ class AppStatisticsGraph(
         textItems: List<String>,
         spaceBetweenLines: Float
     ) {
-        for (i in textItems.indices) {
-            canvas.drawText(
-                textItems[i],
-                chartRect.left + (spaceBetweenLines * i) + cellWidth / 3,
-                chartRect.bottom + 40f,
-                textPaint
-            )
+        if (typeWeek) {
+            for (i in textItems.indices) {
+                canvas.drawText(
+                    textItems[i],
+                    chartRect.left + (spaceBetweenLines * i) + cellWidth / 3,
+                    chartRect.bottom + 40f,
+                    textPaint
+                )
+            }
+        } else {
+            for (i in textItems.indices) {
+                canvas.drawText(
+                    textItems[i],
+                    chartRect.left + (spaceBetweenLines * i) - 10f,
+                    chartRect.bottom + 40f,
+                    textPaint
+                )
+            }
         }
     }
 
@@ -285,56 +333,28 @@ class AppStatisticsGraph(
         linesStartPoint: Float,
         edgeStartPoint: Float,
         lineLength: Float,
-        paint: Paint,
-        typeWeek: Boolean
+        paint: Paint
     ) {
-        if (typeWeek) {
-            for (i in 0..linesCount) {
-                val stepValue = linesStartPoint + spaceBetween * i
-                when (lineDrawWay) {
-                    LineDrawWay.Vertically -> {
-                        canvas.drawLine(
-                            stepValue,
-                            edgeStartPoint,
-                            stepValue,
-                            lineLength + edgeStartPoint,
-                            paint
-                        )
-                    }
-                    LineDrawWay.Horizontally -> {
-                        canvas.drawLine(
-                            edgeStartPoint,
-                            stepValue,
-                            lineLength + edgeStartPoint,
-                            stepValue,
-                            paint
-                        )
-                    }
+        for (i in 0..linesCount) {
+            val stepValue = linesStartPoint + spaceBetween * i
+            when (lineDrawWay) {
+                LineDrawWay.Vertically -> {
+                    canvas.drawLine(
+                        stepValue,
+                        edgeStartPoint,
+                        stepValue,
+                        lineLength + edgeStartPoint,
+                        paint
+                    )
                 }
-            }
-
-        } else {
-            for (i in 0..linesCount) {
-                val stepValue = linesStartPoint + spaceBetween * i
-                when (lineDrawWay) {
-                    LineDrawWay.Vertically -> {
-                        canvas.drawLine(
-                            stepValue,
-                            edgeStartPoint,
-                            stepValue,
-                            lineLength + edgeStartPoint,
-                            paint
-                        )
-                    }
-                    LineDrawWay.Horizontally -> {
-                        canvas.drawLine(
-                            edgeStartPoint,
-                            stepValue,
-                            lineLength + edgeStartPoint,
-                            stepValue,
-                            paint
-                        )
-                    }
+                LineDrawWay.Horizontally -> {
+                    canvas.drawLine(
+                        edgeStartPoint,
+                        stepValue,
+                        lineLength + edgeStartPoint,
+                        stepValue,
+                        paint
+                    )
                 }
             }
         }
@@ -342,7 +362,7 @@ class AppStatisticsGraph(
 
     private fun drawProgress(canvas: Canvas) {
         if (typeWeek) {
-            val progressesCount = 9
+            val progressesCount = 8
             val progressContainerWidth = chartRect.width() / progressesCount
             val progressMargin = progressContainerWidth / 4
             val progressWidth = progressContainerWidth - progressMargin * 2
@@ -429,12 +449,38 @@ class AppStatisticsGraph(
         }
     }
 
+    private fun drawAverageLine(canvas: Canvas) {
+        if (averageValue == 0) return
+
+        val percent = averageValue.toFloat() / 100f
+        val size = (height - (chartRect.top + (height - chartRect.bottom))) * percent
+        canvas.drawLine(
+            chartRect.left,
+            chartRect.bottom - size,
+            chartRect.right,
+            chartRect.bottom - size,
+            averageValuePaint
+        )
+        canvas.drawText(
+            resources.getString(R.string.average_text),
+            chartRect.right + 20f,
+            chartRect.bottom - size,
+            averageTextPaint
+        )
+    }
+
     private fun checkDays() {
-        for (i in 0..8) {
+        for (i in 0..7) {
             val t = Calendar.getInstance().timeInMillis - (86_400_000L * i)
             verticalLinesTextsForWeek.add(SimpleDateFormat("EE").format(t))
         }
         verticalLinesTextsForWeek.reverse()
+    }
+
+    private fun getAverageValue() {
+        if (progressesHeights.isNotEmpty()) {
+            averageValue = progressesHeights.sum() / progressesHeights.size
+        }
     }
 
     private enum class LineDrawWay {

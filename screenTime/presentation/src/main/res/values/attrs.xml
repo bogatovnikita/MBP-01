@@ -3,6 +3,5 @@
     <declare-styleable name="AppStatisticsGraph">
         <attr name="background_color" format="color" />
         <attr name="brush_color" format="color" />
-        <attr name="day_type" format="boolean" />
     </declare-styleable>
 </resources>

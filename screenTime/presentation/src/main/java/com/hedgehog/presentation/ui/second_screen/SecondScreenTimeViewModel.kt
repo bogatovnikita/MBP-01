@@ -62,7 +62,8 @@ class SecondScreenTimeViewModel @Inject constructor(
         updateState {
             it.copy(
                 choiceDay = true,
-                choiceWeek = false
+                choiceWeek = false,
+                isLoading = false
             )
         }
     }
@@ -71,7 +72,8 @@ class SecondScreenTimeViewModel @Inject constructor(
         updateState {
             it.copy(
                 choiceDay = false,
-                choiceWeek = true
+                choiceWeek = true,
+                isLoading = false
             )
         }
     }

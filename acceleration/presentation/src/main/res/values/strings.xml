@@ -21,5 +21,6 @@
     <string name="select_apps_for_stopping">Выберете приложения, фоновые процессы которых вы хотите остановить</string>
     <string name="select_all">Выбрать все</string>
     <string name="stop_selected_apps">Остановить выбранные приложения</string>
+    <string name="uploading_bg_processes">Выгружаем фоновые процессы</string>
 
 </resources>

@@ -11,7 +11,7 @@ class AndroidApps(
     private val context: Context
 ) : Apps{
 
-    override fun provide(): List<String> {
+    override suspend fun provide(): List<String> {
         val stats = getStats()
 
         return stats.map { it.packageName }
@@ -33,7 +33,7 @@ class AndroidApps(
         ) ?: listOf()
     }
 
-    override fun stop(apps: Collection<String>) {
+    override suspend fun stop(apps: Collection<String>) {
         val activityManager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
         apps.forEach { packageName ->
             runCatching {

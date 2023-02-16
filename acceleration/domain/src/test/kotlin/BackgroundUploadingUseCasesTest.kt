@@ -1,33 +1,49 @@
 import io.mockk.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import yin_kio.acceleration.domain.bg_uploading.entities.AppsForm
 import yin_kio.acceleration.domain.bg_uploading.entities.SelectionStatus
 import yin_kio.acceleration.domain.bg_uploading.ui_out.BackgroundUploadingOuter
 import yin_kio.acceleration.domain.bg_uploading.ui_out.UpdateStatus
+import yin_kio.acceleration.domain.bg_uploading.use_cases.BackgroundUploadingUseCases
 import yin_kio.acceleration.domain.bg_uploading.use_cases.BackgroundUploadingUseCasesImpl
 import yin_kio.acceleration.domain.gateways.Apps
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class BackgroundUploadingUseCasesTest {
 
 
     private val appsForm: AppsForm = spyk()
     private val outer: BackgroundUploadingOuter = spyk()
     private val apps: Apps = spyk()
-    private val useCases = BackgroundUploadingUseCasesImpl(
-        outer = outer,
-        appsForm = appsForm,
-        apps = apps
-    )
+    private lateinit var useCases: BackgroundUploadingUseCases
+
+
+    private fun setupTest(testBlock: TestScope.() -> Unit) = runTest{
+        useCases = BackgroundUploadingUseCasesImpl(
+            outer = outer,
+            appsForm = appsForm,
+            apps = apps,
+            coroutineScope = this,
+            dispatcher = coroutineContext
+        )
+
+        testBlock()
+    }
+
 
     @Test
-    fun testClose(){
+    fun testClose() = setupTest{
         useCases.close()
 
         coVerify { outer.close() }
     }
 
     @Test
-    fun testSwitchSelectAllApps(){
+    fun testSwitchSelectAllApps() = setupTest{
         verifyUpdateOrderOfterSelectAll(true, SelectionStatus.AllSelected)
         verifyUpdateOrderOfterSelectAll(false, SelectionStatus.NoSelected)
     }
@@ -47,7 +63,7 @@ class BackgroundUploadingUseCasesTest {
 
 
     @Test
-    fun testSwitchSelectApp(){
+    fun testSwitchSelectApp() = setupTest{
         verifyUpdateOrderAfterSelectOne(true, true, SelectionStatus.AllSelected)
         verifyUpdateOrderAfterSelectOne(true, false, SelectionStatus.HasSelected)
         verifyUpdateOrderAfterSelectOne(false, false, SelectionStatus.NoSelected)
@@ -76,10 +92,11 @@ class BackgroundUploadingUseCasesTest {
 
 
     @Test
-    fun testUpdate(){
+    fun testUpdate() = setupTest{
         coEvery { apps.provide() } returns listOf()
 
         useCases.update()
+        wait()
 
         coVerifySequence {
             outer.setUpdateStatus(UpdateStatus.Loading)
@@ -90,12 +107,13 @@ class BackgroundUploadingUseCasesTest {
     }
 
     @Test
-    fun testStopSelectedApps(){
+    fun testStopSelectedApps() = setupTest{
         val selectedApps = listOf("app1", "app2")
 
         coEvery { appsForm.selectedApps } returns selectedApps
 
         useCases.stopSelectedApps()
+        wait()
 
         coVerifySequence {
             outer.showStopProgress()
@@ -105,9 +123,15 @@ class BackgroundUploadingUseCasesTest {
     }
 
     @Test
-    fun testComplete(){
+    fun testComplete() = setupTest{
         useCases.complete()
+        wait()
 
         coVerify( exactly = 1 ) { outer.complete() }
+    }
+
+
+    private fun TestScope.wait() {
+        advanceUntilIdle()
     }
 }

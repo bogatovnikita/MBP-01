@@ -1,5 +1,7 @@
 package yin_kio.acceleration.domain
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import yin_kio.acceleration.domain.acceleration.gateways.Permissions
 import yin_kio.acceleration.domain.acceleration.gateways.RamInfo
 import yin_kio.acceleration.domain.acceleration.ui_out.AccelerationOuter
@@ -15,7 +17,8 @@ object AccelerationDomainFactory {
         outer: AccelerationOuter,
         permissions: Permissions,
         apps: Apps,
-        ramInfo: RamInfo
+        ramInfo: RamInfo,
+        coroutineScope: CoroutineScope
     ) : AccelerationUseCases{
 
         val appsForm = AppsFormImpl()
@@ -31,7 +34,9 @@ object AccelerationDomainFactory {
             permissions = permissions,
             runner = accelerator,
             ramInfo = ramInfo,
-            apps = apps
+            apps = apps,
+            coroutineScope = coroutineScope,
+            dispatcher = Dispatchers.IO
         )
     }
 }

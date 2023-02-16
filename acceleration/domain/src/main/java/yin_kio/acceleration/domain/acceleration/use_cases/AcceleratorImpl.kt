@@ -7,10 +7,10 @@ import yin_kio.acceleration.domain.gateways.Apps
 internal class AcceleratorImpl(
     private val accelerationOuter: AccelerationOuter,
     private val appsForm: AppsForm,
-    private val apps: Apps
+    private val apps: Apps,
 ) : Accelerator {
 
-    override fun accelerate(){
+    override suspend fun accelerate(){
         accelerationOuter.showAccelerateProgress()
         apps.stop(appsForm.selectedApps)
         accelerationOuter.showInter()

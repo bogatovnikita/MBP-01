@@ -10,7 +10,7 @@
     <string name="notification_manager_desc_clear_notifications">Единоразово удалите все уведомления из шторки</string>
     <string name="notification_manager_clear_notofications">Удалить все уведомления</string>
     <string name="notification_manager_applications_limitations">Допуск уведомлений</string>
-    <string name="notification_manager_desc_app_limitations">Отключите уведомления приложений от которых не хотите получать уведомления в шторку и они не будут вас беспокоить, просмотреть их можно во вкладке “Пропущенные уведмления”</string>
+    <string name="notification_manager_desc_app_limitations">Отключите допуск у выбранных приложений, чтобы уведомления от них приходили во вкладку “Пропущенные уведомления”, а не в панель уведомлений на вашем телефоне</string>
     <string name="notification_manager_limit_all_apps">Все приложения</string>
     <string name="notification_maneger_count_notifications">Пропущенно уведомлений: %s</string>
     <string name="notification_manager_notifications_cleared">Уведомления удалены</string>

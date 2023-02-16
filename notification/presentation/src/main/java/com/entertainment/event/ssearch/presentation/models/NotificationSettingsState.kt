@@ -18,7 +18,9 @@ sealed class NotificationStateEvent() {
 
     object Default: NotificationStateEvent()
 
-    object OpenPermissionDialog: NotificationStateEvent()
+    object OpenServicePermissionDialog: NotificationStateEvent()
+
+    object OpenNotificationPermissionDialog: NotificationStateEvent()
 
     object ClearAllNotification: NotificationStateEvent()
 

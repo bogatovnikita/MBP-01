@@ -1,0 +1,37 @@
+package yin_kio.acceleration.domain
+
+import yin_kio.acceleration.domain.acceleration.gateways.Permissions
+import yin_kio.acceleration.domain.acceleration.gateways.RamInfo
+import yin_kio.acceleration.domain.acceleration.ui_out.AccelerationOuter
+import yin_kio.acceleration.domain.acceleration.use_cases.AccelerationUseCases
+import yin_kio.acceleration.domain.acceleration.use_cases.AccelerationUseCasesImpl
+import yin_kio.acceleration.domain.acceleration.use_cases.AcceleratorImpl
+import yin_kio.acceleration.domain.bg_uploading.entities.AppsFormImpl
+import yin_kio.acceleration.domain.gateways.Apps
+
+object AccelerationDomainFactory {
+
+    fun createAccelerationUseCases(
+        outer: AccelerationOuter,
+        permissions: Permissions,
+        apps: Apps,
+        ramInfo: RamInfo
+    ) : AccelerationUseCases{
+
+        val appsForm = AppsFormImpl()
+
+        val accelerator = AcceleratorImpl(
+            accelerationOuter = outer,
+            appsForm = appsForm,
+            apps = apps
+        )
+
+        return AccelerationUseCasesImpl(
+            accelerationOuter = outer,
+            permissions = permissions,
+            runner = accelerator,
+            ramInfo = ramInfo,
+            apps = apps
+        )
+    }
+}

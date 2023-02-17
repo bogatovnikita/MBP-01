@@ -3,6 +3,7 @@ package yin_kio.acceleration.presentation.acceleration
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -25,32 +26,17 @@ class AccelerationFragment : Fragment(R.layout.fragment_acceleration) {
         coroutineScope = viewModelScope,
     ) }
     private val permissionRequester: PermissionRequesterImpl by lifecycleAware { PermissionRequesterImpl() }
-    private val viewModel by lifecycleAware {
+    private val viewModel by lifecycleAware { createAccelerationViewModel() }
+
+    private fun ViewModel.createAccelerationViewModel(): AccelerationViewModel {
         val context = requireActivity().applicationContext
 
-        val presenter = AccelerationPresenterImpl(context)
-
-        val outer = AccelerationOuterImpl(
+        return AccelerationViewModelFactory(
+            context = context,
             navigator = navigator,
-            presenter = presenter,
-            permissionRequester = permissionRequester
-        )
-
-        val useCases = AccelerationDomainFactory.createAccelerationUseCases(
-            outer = outer,
-            permissions = AccelerationPermissions(context),
-            apps = AndroidApps(context),
-            ramInfo = RamInfoProvider(context),
-            coroutineScope = viewModelScope,
-            ads = OlejaAds(context)
-        )
-
-        val vm = AccelerationViewModel(
-            useCases = useCases
-        )
-
-        outer.viewModel = vm
-        vm
+            permissionRequester = permissionRequester,
+            coroutineScope = viewModelScope
+        ).create()
     }
 
 

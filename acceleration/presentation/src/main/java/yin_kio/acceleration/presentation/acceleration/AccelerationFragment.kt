@@ -1,4 +1,4 @@
-package yin_kio.acceleration.presentation
+package yin_kio.acceleration.presentation.acceleration
 
 import android.os.Bundle
 import android.view.View
@@ -12,7 +12,8 @@ import yin_kio.acceleration.data.AndroidApps
 import yin_kio.acceleration.data.OlejaAds
 import yin_kio.acceleration.data.RamInfoProvider
 import yin_kio.acceleration.domain.AccelerationDomainFactory
-import yin_kio.acceleration.domain.acceleration.ui_out.AccelerationNavigator
+import yin_kio.acceleration.presentation.inter.OlejaInter
+import yin_kio.acceleration.presentation.R
 import yin_kio.acceleration.presentation.databinding.FragmentAccelerationBinding
 
 class AccelerationFragment : Fragment(R.layout.fragment_acceleration) {

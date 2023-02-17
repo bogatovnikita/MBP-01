@@ -1,4 +1,4 @@
-package yin_kio.acceleration.presentation
+package yin_kio.acceleration.presentation.inter
 
 import android.app.Activity
 import android.util.Log

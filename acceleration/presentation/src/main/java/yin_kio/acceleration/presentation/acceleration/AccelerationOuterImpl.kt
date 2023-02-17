@@ -1,4 +1,4 @@
-package yin_kio.acceleration.presentation
+package yin_kio.acceleration.presentation.acceleration
 
 import yin_kio.acceleration.domain.acceleration.ui_out.AccelerationNavigator
 import yin_kio.acceleration.domain.acceleration.ui_out.AccelerationOuter

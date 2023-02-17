@@ -1,9 +1,11 @@
-package yin_kio.acceleration.presentation
+package yin_kio.acceleration.presentation.acceleration
 
 import androidx.navigation.NavController
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import yin_kio.acceleration.domain.acceleration.ui_out.AccelerationNavigator
+import yin_kio.acceleration.presentation.inter.Inter
+import yin_kio.acceleration.presentation.R
 
 class AccelerationNavigatorImpl(
     private val coroutineScope: CoroutineScope,
@@ -29,7 +31,7 @@ class AccelerationNavigatorImpl(
         inter?.show()
     }
 
-    override fun showSelectableAcceleration() {
+    override fun showSelectableAcceleration() = onMain {
         navController?.navigate(R.id.toSelectableAcceleration)
     }
 

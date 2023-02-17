@@ -5,6 +5,7 @@ import io.mockk.coVerify
 import io.mockk.spyk
 import org.junit.Test
 import yin_kio.acceleration.domain.acceleration.ui_out.AccelerationNavigator
+import yin_kio.acceleration.domain.acceleration.ui_out.AppsState
 import yin_kio.acceleration.domain.acceleration.ui_out.RamInfoOut
 import yin_kio.acceleration.presentation.acceleration.AccelerationOuterImpl
 import yin_kio.acceleration.presentation.acceleration.AccelerationPresenter
@@ -33,6 +34,15 @@ class AccelerationOuterTest {
         outer.showRamInfo(ramInfoOut)
 
         coVerify { viewModel.setRamInfo(ramInfo) }
+    }
+
+    @Test
+    fun testShowAppsState(){
+        val appsState = AppsState.Progress
+
+        outer.showAppsState(appsState)
+
+        coVerify { viewModel.setAppsState(appsState) }
     }
 
 }

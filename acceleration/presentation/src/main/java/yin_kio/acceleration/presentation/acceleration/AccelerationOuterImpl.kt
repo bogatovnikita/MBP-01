@@ -18,7 +18,7 @@ class AccelerationOuterImpl(
     }
 
     override fun showAppsState(appsState: AppsState) {
-        TODO("Not yet implemented")
+        viewModel.setAppsState(appsState)
     }
 
     override fun givePermission() {

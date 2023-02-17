@@ -1,12 +1,14 @@
 package com.hedgehog.data.repository_implementation
 
+import android.app.usage.StorageStatsManager
 import android.app.usage.UsageEvents
 import android.app.usage.UsageStatsManager
 import android.content.Context
 import android.content.pm.ApplicationInfo
 import android.content.pm.IPackageStatsObserver
 import android.content.pm.PackageStats
-import android.util.Log
+import android.os.Build
+import android.text.format.Formatter
 import com.hedgehog.data.R
 import com.hedgehog.domain.models.AppInfo
 import com.hedgehog.domain.models.CalendarScreenTime
@@ -24,6 +26,7 @@ class AppInfoRepositoryImplementation @Inject constructor(
 ) : AppInfoRepository {
 
     private lateinit var usageEventsGeneral: UsageStatsManager
+    private lateinit var storageStatsManager: StorageStatsManager
     private val sortedEvents = mutableMapOf<String, MutableList<UsageEvents.Event>>()
 
     private lateinit var hourBeginTime: Calendar
@@ -70,7 +73,7 @@ class AppInfoRepositoryImplementation @Inject constructor(
             icon = getAppIcon(packageName),
             listTime = mapLongToTime(listHour),
             lastLaunch = mapTimeToLastLaunch(packageName),
-            data = "0",
+            data = getBatteryCharge(packageName),
             totalTimeUsage = mapTimeToTotalTimeUsage(listHourForMilliseconds.sum()),
             isSystemApp = checkIsSystemApp(packageName)
         )
@@ -117,7 +120,7 @@ class AppInfoRepositoryImplementation @Inject constructor(
             icon = getAppIcon(packageName),
             listTime = mapLongToTime(listDay),
             lastLaunch = mapTimeToLastLaunch(packageName),
-            data = "0",
+            data = getBatteryCharge(packageName),
             totalTimeUsage = mapTimeToTotalTimeUsage(listDayForMilliseconds.sum()),
             isSystemApp = checkIsSystemApp(packageName)
         )
@@ -167,15 +170,36 @@ class AppInfoRepositoryImplementation @Inject constructor(
         null
     }
 
-    private fun getBatteryCharge(packageName: String) {
-        getPackageSizeInfo.invoke(
-            context.packageManager,
-            packageName,
-            object : IPackageStatsObserver.Stub() {
-                override fun onGetStatsCompleted(pStats: PackageStats?, succeeded: Boolean) {
-                    Log.e("pie", "onGetStatsCompleted: pStats=${pStats?.codeSize}")
-                }
-            })
+    private fun getBatteryCharge(packageName: String): String {
+        var cacheSize = 0L
+        try {
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
+                val appInfo = context.packageManager.getApplicationInfo(packageName, 0)
+                storageStatsManager =
+                    context.getSystemService(Context.STORAGE_STATS_SERVICE) as StorageStatsManager
+                val storage = storageStatsManager.queryStatsForUid(appInfo.storageUuid, appInfo.uid)
+                cacheSize =
+                    storage.cacheBytes + storage.dataBytes
+                return Formatter.formatFileSize(context, cacheSize)
+            } else {
+                getPackageSizeInfo().invoke(
+                    context.packageManager,
+                    packageName,
+                    object : IPackageStatsObserver.Stub() {
+                        override fun onGetStatsCompleted(
+                            pStats: PackageStats?,
+                            succeeded: Boolean
+                        ) {
+                            pStats ?: return
+                            cacheSize = pStats.cacheSize
+                        }
+                    })
+                return Formatter.formatFileSize(context, cacheSize)
+            }
+
+        } catch (e: Exception) {
+            return context.getString(R.string.is_unknown)
+        }
     }
 
     private fun searchStatics(thisPackageName: String, calendarScreenTime: CalendarScreenTime) {
@@ -329,7 +353,9 @@ class AppInfoRepositoryImplementation @Inject constructor(
         true
     }
 
-    var getPackageSizeInfo: Method = context.packageManager.javaClass.getMethod(
-        "getPackageSizeInfo", String::class.java, IPackageStatsObserver::class.java
-    )
+    fun getPackageSizeInfo(): Method {
+        return context.packageManager.javaClass.getMethod(
+            "getPackageSizeInfo", String::class.java, IPackageStatsObserver::class.java
+        )
+    }
 }

@@ -247,6 +247,7 @@ class FirstScreenTimeFragment :
                 intent.data = Uri.parse("package:" + appScreenTime.packageName)
                 startActivity(intent)
             }
+            viewModel.cleanToggleCheckBox()
         } else {
             showToast(R.string.select_the_app_to_delete)
         }

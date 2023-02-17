@@ -1,6 +1,8 @@
 package yin_kio.acceleration.presentation
 
+import android.app.Activity
 import androidx.navigation.NavController
+import com.example.ads.showInter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import yin_kio.acceleration.domain.acceleration.ui_out.AccelerationNavigator
@@ -10,12 +12,13 @@ class NavigatorImpl(
 ) : AccelerationNavigator {
 
     var navController: NavController? = null
+    var activity: Activity? = null
 
     override fun close() = onMain {
         navController!!.navigateUp()
     }
 
-    override fun showAccelerateProgress() {
+    override fun showAccelerateProgress() = onMain {
         navController?.navigate(R.id.toAccelerationDialog)
     }
 
@@ -24,8 +27,8 @@ class NavigatorImpl(
         navController?.navigate(R.id.toAccelerationPermission)
     }
 
-    override fun showInter() {
-        TODO("Not yet implemented")
+    override fun showInter() = onMain {
+        activity?.showInter()
     }
 
     override fun showSelectableAcceleration() {

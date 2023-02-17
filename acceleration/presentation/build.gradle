@@ -38,6 +38,7 @@ dependencies {
 
     implementation project(':acceleration:data')
     implementation project(':acceleration:domain')
+    implementation project(':general:permissions')
 
     implementation project(':storage_info_view')
 

@@ -33,13 +33,11 @@ class AppInfoRepositoryImplementation @Inject constructor(
     private lateinit var hourEndTime: Calendar
 
     private var listHour: MutableList<Long> = mutableListOf()
-    private var listHourForMilliseconds: MutableList<Long> = mutableListOf()
 
     private lateinit var dayBeginTime: Calendar
     private lateinit var dayEndTime: Calendar
 
     private var listDay: MutableList<Long> = mutableListOf()
-    private var listDayForMilliseconds: MutableList<Long> = mutableListOf()
 
     override fun getAppInfo(
         packageName: String,
@@ -58,9 +56,7 @@ class AppInfoRepositoryImplementation @Inject constructor(
 
     private fun clearAllList() {
         listHour.clear()
-        listHourForMilliseconds.clear()
         listDay.clear()
-        listDayForMilliseconds.clear()
     }
 
     private fun createAppInfoForDay(
@@ -74,7 +70,7 @@ class AppInfoRepositoryImplementation @Inject constructor(
             listTime = mapLongToTime(listHour),
             lastLaunch = mapTimeToLastLaunch(packageName),
             data = getBatteryCharge(packageName),
-            totalTimeUsage = mapTimeToTotalTimeUsage(listHourForMilliseconds.sum()),
+            totalTimeUsage = mapTimeToTotalTimeUsage(listHour.sum()),
             isSystemApp = checkIsSystemApp(packageName)
         )
     }
@@ -90,7 +86,7 @@ class AppInfoRepositoryImplementation @Inject constructor(
     private fun calculationHourTime(hour: Int) {
         if (hour == 0) return
         hourBeginTime.set(Calendar.HOUR_OF_DAY, hour)
-        hourEndTime.set(Calendar.HOUR_OF_DAY, hour + 1)
+        hourEndTime.set(Calendar.HOUR_OF_DAY, hour)
     }
 
     private fun initHourBeginEndTime(calendarScreenTime: CalendarScreenTime) {
@@ -103,7 +99,7 @@ class AppInfoRepositoryImplementation @Inject constructor(
         hourEndTime = Calendar.getInstance()
         hourEndTime.set(Calendar.HOUR_OF_DAY, 1)
         hourEndTime.set(Calendar.MINUTE, 0)
-        hourEndTime.set(Calendar.SECOND, 0)
+        hourEndTime.set(Calendar.SECOND, -1)
         hourEndTime.set(Calendar.MILLISECOND, 0)
 
         hourBeginTime.add(calendarScreenTime.dataType, -calendarScreenTime.beginTime)
@@ -121,7 +117,7 @@ class AppInfoRepositoryImplementation @Inject constructor(
             listTime = mapLongToTime(listDay),
             lastLaunch = mapTimeToLastLaunch(packageName),
             data = getBatteryCharge(packageName),
-            totalTimeUsage = mapTimeToTotalTimeUsage(listDayForMilliseconds.sum()),
+            totalTimeUsage = mapTimeToTotalTimeUsage(listDay.sum()),
             isSystemApp = checkIsSystemApp(packageName)
         )
     }
@@ -198,6 +194,7 @@ class AppInfoRepositoryImplementation @Inject constructor(
             }
 
         } catch (e: Exception) {
+            e.printStackTrace()
             return context.getString(R.string.is_unknown)
         }
     }
@@ -220,42 +217,33 @@ class AppInfoRepositoryImplementation @Inject constructor(
         if (!sortedEvents.keys.contains(thisPackageName)) {
             if (calendarScreenTime.dataType == Calendar.DATE) {
                 listHour.add(0)
-                listHourForMilliseconds.add(0)
             } else {
                 listDay.add(0)
-                listDayForMilliseconds.add(0)
             }
         } else {
-            sortedEvents.forEach { (packageName, events) ->
-                var startTime = 0L
-                var closeTime = 0L
+            sortedEvents.filter { it.key == thisPackageName }.forEach { (packageName, events) ->
+                var startTime = hourBeginTime.timeInMillis
+                var closeTime = hourEndTime.timeInMillis
                 var totalTime = 0L
-                if (thisPackageName != packageName) return@forEach
-                events.forEach { usageEvents ->
+                events.forEachIndexed { index, usageEvents ->
                     when (usageEvents.eventType) {
                         UsageEvents.Event.ACTIVITY_RESUMED -> startTime = usageEvents.timeStamp
                         UsageEvents.Event.ACTIVITY_PAUSED -> closeTime = usageEvents.timeStamp
                     }
-                    if (startTime != 0L && closeTime != 0L) {
-//                        Log.e("pie", "hourBeginTime: ${hourBeginTime.time}")
-//                        Log.e("pie", "hourEndTime: ${hourEndTime.time}")
-//                        Log.e(
-//                            "pie",
-//                            "startTime = ${startTime - 1_675_378_000_000} // closeTime = ${closeTime - 1_675_378_000_000}"
-//                        )
+                    if (index == events.lastIndex && usageEvents.eventType == UsageEvents.Event.ACTIVITY_RESUMED) {
+                        totalTime += hourEndTime.timeInMillis - startTime
+                    }
+
+                    if (startTime != 0L && closeTime != 0L && closeTime != hourEndTime.timeInMillis) {
                         totalTime += closeTime - startTime
-//                        Log.e("pie", "total = $totalTime")
-//                        Log.e("pie", "_____________________________________________")
                         startTime = 0L
                         closeTime = 0L
                     }
                 }
                 if (calendarScreenTime.dataType == Calendar.DATE) {
                     listHour.add(totalTime)
-                    listHourForMilliseconds.add(totalTime)
                 } else {
                     listDay.add(totalTime)
-                    listDayForMilliseconds.add(totalTime)
                 }
                 totalTime = 0L
             }

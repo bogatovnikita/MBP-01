@@ -18,10 +18,12 @@ class AccelerationOuterTest {
     private val navigator: AccelerationNavigator = spyk()
     private val viewModel: MutableAccelerationViewModel = spyk()
     private val presenter: AccelerationPresenter = spyk()
+    private val permissionRequester: PermissionRequester = spyk()
     private val outer = AccelerationOuterImpl(
         navigator = navigator,
         viewModel = viewModel,
-        presenter = presenter
+        presenter = presenter,
+        permissionRequester = permissionRequester
     )
 
     @Test
@@ -43,6 +45,13 @@ class AccelerationOuterTest {
         outer.showAppsState(appsState)
 
         coVerify { viewModel.setAppsState(appsState) }
+    }
+
+    @Test
+    fun testGivePermission(){
+        outer.givePermission()
+
+        coVerify { permissionRequester.requestPackageUsageStats() }
     }
 
 }

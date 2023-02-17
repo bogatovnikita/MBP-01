@@ -29,7 +29,8 @@ class AccelerationFragment : Fragment(R.layout.fragment_acceleration) {
             outer = AccelerationOuterImpl(
                 navigator = navigator,
                 viewModel = TODO(),
-                presenter = TODO()
+                presenter = TODO(),
+                permissionRequester = TODO()
             ),
             permissions = AccelerationPermissions(context),
             apps = AndroidApps(context),

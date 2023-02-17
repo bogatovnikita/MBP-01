@@ -27,7 +27,9 @@ class AccelerationFragment : Fragment(R.layout.fragment_acceleration) {
         val context = requireActivity().applicationContext
         AccelerationDomainFactory.createAccelerationUseCases(
             outer = AccelerationOuterImpl(
-                navigator = navigator
+                navigator = navigator,
+                viewModel = TODO(),
+                presenter = TODO()
             ),
             permissions = AccelerationPermissions(context),
             apps = AndroidApps(context),

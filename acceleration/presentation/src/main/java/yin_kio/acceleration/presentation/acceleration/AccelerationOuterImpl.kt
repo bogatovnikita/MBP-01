@@ -6,13 +6,15 @@ import yin_kio.acceleration.domain.acceleration.ui_out.AppsState
 import yin_kio.acceleration.domain.acceleration.ui_out.RamInfoOut
 
 class AccelerationOuterImpl(
-    private val navigator: AccelerationNavigator
+    private val navigator: AccelerationNavigator,
+    private val viewModel: AccelerationViewModel,
+    private val presenter: AccelerationPresenter
 ) : AccelerationOuter, AccelerationNavigator by navigator {
 
 
 
-    override fun showRamInfo(ramInfo: RamInfoOut) {
-        TODO("Not yet implemented")
+    override fun showRamInfo(ramInfoOut: RamInfoOut) {
+        viewModel.setRamInfo(presenter.presentRamInfoOut(ramInfoOut))
     }
 
     override fun showAppsState(appsState: AppsState) {

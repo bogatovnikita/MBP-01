@@ -12,13 +12,16 @@ import yin_kio.acceleration.data.AndroidApps
 import yin_kio.acceleration.data.OlejaAds
 import yin_kio.acceleration.data.RamInfoProvider
 import yin_kio.acceleration.domain.AccelerationDomainFactory
+import yin_kio.acceleration.domain.acceleration.ui_out.AccelerationNavigator
 import yin_kio.acceleration.presentation.databinding.FragmentAccelerationBinding
 
 class AccelerationFragment : Fragment(R.layout.fragment_acceleration) {
 
     private val binding: FragmentAccelerationBinding by viewBinding()
 
-    private val navigator by lifecycleAware { NavigatorImpl(viewModelScope) }
+    private val navigator: AccelerationNavigatorImpl by lifecycleAware { AccelerationNavigatorImpl(
+        coroutineScope = viewModelScope,
+    ) }
     private val useCases by lifecycleAware {
         val context = requireActivity().applicationContext
         AccelerationDomainFactory.createAccelerationUseCases(
@@ -43,13 +46,19 @@ class AccelerationFragment : Fragment(R.layout.fragment_acceleration) {
     override fun onResume() {
         super.onResume()
         navigator.navController = findNavController()
-        navigator.activity = requireActivity()
+        navigator.inter = OlejaInter(
+            activity = requireActivity(),
+            onClose = { useCases.close() }
+        )
+
     }
 
     override fun onPause() {
         super.onPause()
-        navigator.activity = null
+        // Ручное занулиение полей необходимо, так как активити и навконтроллер могут существовать
+        // меьше, чем вьюмодель.
         navigator.navController = null
+        navigator.inter = null
     }
 
 

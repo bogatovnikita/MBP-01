@@ -1,18 +1,16 @@
 package yin_kio.acceleration.presentation
 
-import android.app.Activity
 import androidx.navigation.NavController
-import com.example.ads.showInter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import yin_kio.acceleration.domain.acceleration.ui_out.AccelerationNavigator
 
-class NavigatorImpl(
-    private val coroutineScope: CoroutineScope
+class AccelerationNavigatorImpl(
+    private val coroutineScope: CoroutineScope,
+    var inter: Inter? = null // Выделение интерфейса для интера помогает упростить тестирование
 ) : AccelerationNavigator {
 
     var navController: NavController? = null
-    var activity: Activity? = null
 
     override fun close() = onMain {
         navController!!.navigateUp()
@@ -28,15 +26,15 @@ class NavigatorImpl(
     }
 
     override fun showInter() = onMain {
-        activity?.showInter()
+        inter?.show()
     }
 
     override fun showSelectableAcceleration() {
         navController?.navigate(R.id.toSelectableAcceleration)
     }
 
-    override fun complete() {
-        TODO("Not yet implemented")
+    override fun complete() = onMain {
+        TODO("There is must be navigation to advices")
     }
 
     private fun onMain(action: () -> Unit){

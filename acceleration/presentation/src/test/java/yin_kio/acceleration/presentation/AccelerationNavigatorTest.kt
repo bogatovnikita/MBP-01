@@ -5,8 +5,6 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import io.mockk.spyk
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
@@ -14,21 +12,24 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.RuntimeEnvironment
 import yin_kio.acceleration.domain.acceleration.ui_out.AccelerationNavigator
 
 @RunWith(RobolectricTestRunner::class)
 @OptIn(ExperimentalCoroutinesApi::class)
 class AccelerationNavigatorTest {
 
-    private val context = RuntimeEnvironment.getApplication()
+
+    private val inter: Inter = spyk()
     private val navController: NavController = mockk()
-    private lateinit var navigator: NavigatorImpl
+    private lateinit var navigator: AccelerationNavigatorImpl
 
 
 
     private fun setupTest(testBlock: TestScope.() -> Unit) = runTest{
-        navigator = NavigatorImpl(this)
+        navigator = AccelerationNavigatorImpl(
+            coroutineScope = this,
+            inter = inter
+        )
         navigator.navController = navController
 
         testBlock()
@@ -66,6 +67,14 @@ class AccelerationNavigatorTest {
             navAction = { showSelectableAcceleration() },
             destination = R.id.toSelectableAcceleration
         )
+    }
+
+    @Test
+    fun testShowInter() = setupTest {
+        navigator.showInter()
+        advanceUntilIdle()
+
+        coVerify { inter.show() }
     }
 
     private fun TestScope.verifyNavigate(

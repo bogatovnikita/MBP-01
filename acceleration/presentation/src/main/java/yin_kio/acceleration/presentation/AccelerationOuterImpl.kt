@@ -9,9 +9,7 @@ class AccelerationOuterImpl(
     private val navigator: AccelerationNavigator
 ) : AccelerationOuter, AccelerationNavigator by navigator {
 
-    override fun showSelectableAcceleration() {
-        TODO("Not yet implemented")
-    }
+
 
     override fun showRamInfo(ramInfo: RamInfoOut) {
         TODO("Not yet implemented")
@@ -22,10 +20,6 @@ class AccelerationOuterImpl(
     }
 
     override fun givePermission() {
-        TODO("Not yet implemented")
-    }
-
-    override fun complete() {
         TODO("Not yet implemented")
     }
 }

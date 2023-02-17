@@ -14,7 +14,9 @@ class AccelerationPermissionDialog : DialogFragment(R.layout.dialog_accelerate_p
 
     // Здесь идёт прямая зависимость от use cases, так как не требуется сохранения состояния
     private val useCases by lifecycleAware {
-        PermissionDialogUseCasesImpl()
+        PermissionDialogUseCasesImpl(
+            permissionRequester = TODO()
+        )
     }
 
 
@@ -25,13 +27,11 @@ class AccelerationPermissionDialog : DialogFragment(R.layout.dialog_accelerate_p
 
     override fun onResume() {
         super.onResume()
-        useCases.activity = requireActivity()
         useCases.navController = findNavController()
     }
 
     override fun onPause() {
         super.onPause()
-        useCases.activity = null
         useCases.navController = null
     }
 

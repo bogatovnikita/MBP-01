@@ -13,6 +13,7 @@ class AccelerationDomainFactoryTest {
                 mockk(),
                 mockk(),
                 mockk(),
+                mockk(),
                 mockk()
             )
         }

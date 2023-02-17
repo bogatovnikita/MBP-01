@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test
 import yin_kio.acceleration.domain.acceleration.ui_out.AccelerationOuter
 import yin_kio.acceleration.domain.acceleration.use_cases.AcceleratorImpl
 import yin_kio.acceleration.domain.bg_uploading.entities.AppsForm
+import yin_kio.acceleration.domain.gateways.Ads
 import yin_kio.acceleration.domain.gateways.Apps
 
 
@@ -17,10 +18,12 @@ class AcceleratorTest {
     private val accelerationOuter: AccelerationOuter = spyk()
     private val apps: Apps = spyk()
     private val appsForm: AppsForm = mockk()
+    private val ads: Ads = spyk()
     private val runner = AcceleratorImpl(
         accelerationOuter = accelerationOuter,
         apps = apps,
-        appsForm = appsForm
+        appsForm = appsForm,
+        ads = ads
     )
 
 
@@ -32,6 +35,7 @@ class AcceleratorTest {
         runner.accelerate()
 
         coVerifySequence {
+            ads.preloadAd()
             accelerationOuter.showAccelerateProgress()
             apps.stop(expectedOut)
             accelerationOuter.showInter()

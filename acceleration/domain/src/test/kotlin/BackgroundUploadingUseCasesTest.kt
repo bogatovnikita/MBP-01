@@ -10,6 +10,7 @@ import yin_kio.acceleration.domain.bg_uploading.ui_out.BackgroundUploadingOuter
 import yin_kio.acceleration.domain.bg_uploading.ui_out.UpdateStatus
 import yin_kio.acceleration.domain.bg_uploading.use_cases.BackgroundUploadingUseCases
 import yin_kio.acceleration.domain.bg_uploading.use_cases.BackgroundUploadingUseCasesImpl
+import yin_kio.acceleration.domain.gateways.Ads
 import yin_kio.acceleration.domain.gateways.Apps
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -19,6 +20,7 @@ class BackgroundUploadingUseCasesTest {
     private val appsForm: AppsForm = spyk()
     private val outer: BackgroundUploadingOuter = spyk()
     private val apps: Apps = spyk()
+    private val ads: Ads = spyk()
     private lateinit var useCases: BackgroundUploadingUseCases
 
 
@@ -28,7 +30,8 @@ class BackgroundUploadingUseCasesTest {
             appsForm = appsForm,
             apps = apps,
             coroutineScope = this,
-            dispatcher = coroutineContext
+            dispatcher = coroutineContext,
+            ads = ads
         )
 
         testBlock()
@@ -116,6 +119,7 @@ class BackgroundUploadingUseCasesTest {
         wait()
 
         coVerifySequence {
+            ads.preloadAd()
             outer.showStopProgress()
             apps.stop(selectedApps)
             outer.showInter()

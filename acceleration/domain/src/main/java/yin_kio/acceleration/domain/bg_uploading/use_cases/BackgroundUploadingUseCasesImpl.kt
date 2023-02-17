@@ -1,10 +1,12 @@
 package yin_kio.acceleration.domain.bg_uploading.use_cases
 
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import yin_kio.acceleration.domain.bg_uploading.entities.AppsForm
 import yin_kio.acceleration.domain.bg_uploading.ui_out.BackgroundUploadingOuter
 import yin_kio.acceleration.domain.bg_uploading.ui_out.UpdateStatus
+import yin_kio.acceleration.domain.gateways.Ads
 import yin_kio.acceleration.domain.gateways.Apps
 import kotlin.coroutines.CoroutineContext
 
@@ -12,6 +14,7 @@ internal class BackgroundUploadingUseCasesImpl(
     private val outer: BackgroundUploadingOuter,
     private val appsForm: AppsForm,
     private val apps: Apps,
+    private val ads: Ads,
     private val coroutineScope: CoroutineScope,
     private val dispatcher: CoroutineContext
 ) : BackgroundUploadingUseCases {
@@ -42,10 +45,12 @@ internal class BackgroundUploadingUseCasesImpl(
     }
 
     override fun stopSelectedApps() = async{
+        ads.preloadAd()
         val selectedApps = appsForm.selectedApps
 
         outer.showStopProgress()
         apps.stop(selectedApps)
+        delay(8000)
         outer.showInter()
     }
 

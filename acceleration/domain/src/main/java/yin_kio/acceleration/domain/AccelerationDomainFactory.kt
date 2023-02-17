@@ -9,6 +9,7 @@ import yin_kio.acceleration.domain.acceleration.use_cases.AccelerationUseCases
 import yin_kio.acceleration.domain.acceleration.use_cases.AccelerationUseCasesImpl
 import yin_kio.acceleration.domain.acceleration.use_cases.AcceleratorImpl
 import yin_kio.acceleration.domain.bg_uploading.entities.AppsFormImpl
+import yin_kio.acceleration.domain.gateways.Ads
 import yin_kio.acceleration.domain.gateways.Apps
 
 object AccelerationDomainFactory {
@@ -18,7 +19,8 @@ object AccelerationDomainFactory {
         permissions: Permissions,
         apps: Apps,
         ramInfo: RamInfo,
-        coroutineScope: CoroutineScope
+        coroutineScope: CoroutineScope,
+        ads: Ads
     ) : AccelerationUseCases{
 
         val appsForm = AppsFormImpl()
@@ -26,7 +28,8 @@ object AccelerationDomainFactory {
         val accelerator = AcceleratorImpl(
             accelerationOuter = outer,
             appsForm = appsForm,
-            apps = apps
+            apps = apps,
+            ads = ads
         )
 
         return AccelerationUseCasesImpl(

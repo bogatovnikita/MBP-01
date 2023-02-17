@@ -7,7 +7,7 @@ import yin_kio.acceleration.domain.acceleration.ui_out.RamInfoOut
 
 class AccelerationOuterImpl(
     private val navigator: AccelerationNavigator,
-    private val viewModel: AccelerationViewModel,
+    private val viewModel: MutableAccelerationViewModel,
     private val presenter: AccelerationPresenter
 ) : AccelerationOuter, AccelerationNavigator by navigator {
 

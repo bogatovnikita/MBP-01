@@ -1,6 +1,6 @@
 package yin_kio.acceleration.presentation.acceleration
 
-interface AccelerationViewModel {
+interface MutableAccelerationViewModel {
 
     fun setRamInfo(ramInfo: RamInfo)
 

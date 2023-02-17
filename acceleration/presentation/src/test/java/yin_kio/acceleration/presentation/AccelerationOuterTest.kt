@@ -8,14 +8,14 @@ import yin_kio.acceleration.domain.acceleration.ui_out.AccelerationNavigator
 import yin_kio.acceleration.domain.acceleration.ui_out.RamInfoOut
 import yin_kio.acceleration.presentation.acceleration.AccelerationOuterImpl
 import yin_kio.acceleration.presentation.acceleration.AccelerationPresenter
-import yin_kio.acceleration.presentation.acceleration.AccelerationViewModel
+import yin_kio.acceleration.presentation.acceleration.MutableAccelerationViewModel
 import yin_kio.acceleration.presentation.acceleration.RamInfo
 
 
 class AccelerationOuterTest {
 
     private val navigator: AccelerationNavigator = spyk()
-    private val viewModel: AccelerationViewModel = spyk()
+    private val viewModel: MutableAccelerationViewModel = spyk()
     private val presenter: AccelerationPresenter = spyk()
     private val outer = AccelerationOuterImpl(
         navigator = navigator,

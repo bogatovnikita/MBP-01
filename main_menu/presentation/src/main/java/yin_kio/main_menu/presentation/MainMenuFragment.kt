@@ -6,8 +6,10 @@ import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
+import dagger.hilt.android.AndroidEntryPoint
 import yin_kio.main_menu.presentation.databinding.FragmentMainMenuBinding
 
+@AndroidEntryPoint
 class MainMenuFragment : Fragment(R.layout.fragment_main_menu) {
 
     private val binding: FragmentMainMenuBinding by viewBinding()
@@ -30,6 +32,7 @@ class MainMenuFragment : Fragment(R.layout.fragment_main_menu) {
             duplicates.setOnClickListener { openDuplicates() }
             garbageClean.setOnClickListener { openGarbageClean() }
             toMemory.setOnClickListener { openMemory() }
+            toNotification.setOnClickListener { openNotificationManager() }
         }
     }
 
@@ -57,6 +60,11 @@ class MainMenuFragment : Fragment(R.layout.fragment_main_menu) {
         return Bundle().apply {
             putInt(ArgNames.COMPLETE_DESTINATION_ID, R.id.toAdvices)
         }
+    }
+
+    private fun openNotificationManager() {
+        onBackPressedCallback.isEnabled = true
+        findNavController().navigate(R.id.toNotification)
     }
 
 

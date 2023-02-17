@@ -42,6 +42,7 @@ dependencies {
     implementation project(':filemanager:di')
     implementation project(':duplicates:presentation')
     implementation project(':duplicates:di')
+    implementation project(':notification:presentation')
 
     implementation presentation.values()
     testImplementation presentation_test.values()

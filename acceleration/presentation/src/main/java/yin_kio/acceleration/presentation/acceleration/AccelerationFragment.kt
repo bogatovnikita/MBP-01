@@ -67,6 +67,7 @@ class AccelerationFragment : Fragment(R.layout.fragment_acceleration) {
             activity = requireActivity(),
             onClose = { viewModel.close() }
         )
+        permissionRequester.activity = requireActivity()
 
     }
 
@@ -76,6 +77,7 @@ class AccelerationFragment : Fragment(R.layout.fragment_acceleration) {
         // меьше, чем вьюмодель.
         navigator.navController = null
         navigator.inter = null
+        permissionRequester.activity = null
     }
 
 

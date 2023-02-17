@@ -12,6 +12,7 @@ import yin_kio.acceleration.data.AndroidApps
 import yin_kio.acceleration.data.OlejaAds
 import yin_kio.acceleration.data.RamInfoProvider
 import yin_kio.acceleration.domain.AccelerationDomainFactory
+import yin_kio.acceleration.presentation.PermissionRequesterImpl
 import yin_kio.acceleration.presentation.inter.OlejaInter
 import yin_kio.acceleration.presentation.R
 import yin_kio.acceleration.presentation.databinding.FragmentAccelerationBinding
@@ -23,28 +24,40 @@ class AccelerationFragment : Fragment(R.layout.fragment_acceleration) {
     private val navigator: AccelerationNavigatorImpl by lifecycleAware { AccelerationNavigatorImpl(
         coroutineScope = viewModelScope,
     ) }
-    private val useCases by lifecycleAware {
+    private val permissionRequester: PermissionRequesterImpl by lifecycleAware { PermissionRequesterImpl() }
+    private val viewModel by lifecycleAware {
         val context = requireActivity().applicationContext
-        AccelerationDomainFactory.createAccelerationUseCases(
-            outer = AccelerationOuterImpl(
-                navigator = navigator,
-                viewModel = TODO(),
-                presenter = TODO(),
-                permissionRequester = TODO()
-            ),
+
+        val presenter = AccelerationPresenterImpl(context)
+
+        val outer = AccelerationOuterImpl(
+            navigator = navigator,
+            presenter = presenter,
+            permissionRequester = permissionRequester
+        )
+
+        val useCases = AccelerationDomainFactory.createAccelerationUseCases(
+            outer = outer,
             permissions = AccelerationPermissions(context),
             apps = AndroidApps(context),
             ramInfo = RamInfoProvider(context),
             coroutineScope = viewModelScope,
             ads = OlejaAds(context)
         )
+
+        val vm = AccelerationViewModel(
+            useCases = useCases
+        )
+
+        outer.viewModel = vm
+        vm
     }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        binding.back.setOnClickListener { useCases.close() }
-        binding.accelerate.setOnClickListener { useCases.accelerate() }
-        binding.stopSelected.setOnClickListener { useCases.uploadBackgroundProcess() }
+        binding.back.setOnClickListener { viewModel.close() }
+        binding.accelerate.setOnClickListener { viewModel.accelerate() }
+        binding.stopSelected.setOnClickListener { viewModel.uploadBackgroundProcess() }
     }
 
     override fun onResume() {
@@ -52,7 +65,7 @@ class AccelerationFragment : Fragment(R.layout.fragment_acceleration) {
         navigator.navController = findNavController()
         navigator.inter = OlejaInter(
             activity = requireActivity(),
-            onClose = { useCases.close() }
+            onClose = { viewModel.close() }
         )
 
     }

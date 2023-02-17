@@ -8,19 +8,21 @@ import yin_kio.acceleration.presentation.PermissionRequester
 
 class AccelerationOuterImpl(
     private val navigator: AccelerationNavigator,
-    private val viewModel: MutableAccelerationViewModel,
     private val presenter: AccelerationPresenter,
     private val permissionRequester: PermissionRequester
 ) : AccelerationOuter, AccelerationNavigator by navigator {
 
 
+    var viewModel: MutableAccelerationViewModel? = null
+
+
 
     override fun showRamInfo(ramInfoOut: RamInfoOut) {
-        viewModel.setRamInfo(presenter.presentRamInfoOut(ramInfoOut))
+        viewModel?.setRamInfo(presenter.presentRamInfoOut(ramInfoOut))
     }
 
     override fun showAppsState(appsState: AppsState) {
-        viewModel.setAppsState(appsState)
+        viewModel?.setAppsState(appsState)
     }
 
     override fun givePermission() {

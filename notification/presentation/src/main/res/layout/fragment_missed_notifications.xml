@@ -117,7 +117,7 @@
         app:layout_constraintEnd_toEndOf="@+id/btn_missed_notifications"
         app:layout_constraintTop_toBottomOf="@+id/btn_missed_notifications"/>
 
-    <androidx.recyclerview.widget.RecyclerView
+    <com.aitsuki.swipe.SwipeMenuRecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"

@@ -34,7 +34,7 @@ class AppStatisticsGraph(
             invalidate()
         }
 
-    var typeWeek = true
+    var typeWeek = false
         set(value) {
             field = value
             setChange()

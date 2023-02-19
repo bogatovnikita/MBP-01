@@ -72,6 +72,9 @@ class FirstScreenTimeFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        if (viewModel.screenState.value.choiceWeek) {
+            binding.arrowsGroups.visibility = View.GONE
+        }
         initRecyclerView()
         initObserver()
         initClickListeners()

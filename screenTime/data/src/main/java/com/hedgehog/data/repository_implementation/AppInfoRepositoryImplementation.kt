@@ -240,7 +240,11 @@ class AppInfoRepositoryImplementation @Inject constructor(
                         closeTime = 0L
                     }
                 }
-                listHour.add(totalTime)
+                if (totalTime > 3_600_000) {
+                    listHour.add(3_600_000)
+                } else {
+                    listHour.add(totalTime)
+                }
                 totalTime = 0L
             }
             sortedEvents.clear()
@@ -278,7 +282,11 @@ class AppInfoRepositoryImplementation @Inject constructor(
                         closeTime = 0L
                     }
                 }
-                listDay.add(totalTime)
+                if (totalTime > 86_400_000) {
+                    listDay.add(86_400_000)
+                } else {
+                    listDay.add(totalTime)
+                }
                 totalTime = 0L
             }
             sortedEvents.clear()

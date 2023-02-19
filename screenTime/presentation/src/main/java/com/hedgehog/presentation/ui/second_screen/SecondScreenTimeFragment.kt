@@ -200,7 +200,7 @@ class SecondScreenTimeFragment :
 
     private fun showTutorial() {
         lifecycleScope.launch {
-            delay(1000)
+            delay(500)
             binding.tutorialGroup.visibility = View.VISIBLE
             sharedPrefs.edit().putBoolean(FIRST_LAUNCH, false).apply()
         }

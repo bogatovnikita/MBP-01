@@ -4,14 +4,25 @@ import android.app.usage.StorageStatsManager
 import android.app.usage.UsageEvents
 import android.app.usage.UsageStatsManager
 import android.content.Context
-import android.content.pm.ApplicationInfo
 import android.content.pm.IPackageStatsObserver
 import android.content.pm.PackageStats
 import android.os.Build
 import android.text.format.Formatter
 import com.hedgehog.data.R
+import com.hedgehog.data.extensions.checkIsSystemApp
+import com.hedgehog.data.extensions.getAppIcon
+import com.hedgehog.data.extensions.getAppLabel
+import com.hedgehog.data.utils.InitCalendars
+import com.hedgehog.data.utils.InitCalendars.Companion.HOURS_IN_DAY
+import com.hedgehog.data.utils.InitCalendars.Companion.ONE_DAY
+import com.hedgehog.data.utils.InitCalendars.Companion.ONE_DAY_MILLISECONDS
+import com.hedgehog.data.utils.InitCalendars.Companion.ONE_HOUR
+import com.hedgehog.data.utils.InitCalendars.Companion.ONE_HOUR_MILLISECONDS
+import com.hedgehog.data.utils.InitCalendars.Companion.ONE_WEEK
+import com.hedgehog.data.utils.InitCalendars.Companion.SIX_DAYS
 import com.hedgehog.domain.models.AppInfo
 import com.hedgehog.domain.models.CalendarScreenTime
+import com.hedgehog.domain.models.Period
 import com.hedgehog.domain.repository.AppInfoRepository
 import com.hedgehog.domain.wrapper.CaseResult
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -21,7 +32,7 @@ import java.lang.reflect.Method
 import java.util.*
 import javax.inject.Inject
 
-class AppInfoRepositoryImplementation @Inject constructor(
+class DetailsScreenTimeRepoImpl @Inject constructor(
     @ApplicationContext val context: Context
 ) : AppInfoRepository {
 
@@ -50,9 +61,17 @@ class AppInfoRepositoryImplementation @Inject constructor(
             context.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
 
         if (calendarScreenTime.dataType == Calendar.DATE) {
-            emit(CaseResult.Success(createAppInfoForDay(packageName, calendarScreenTime)))
+            emit(
+                CaseResult.Success(
+                    createAppInfo(packageName, calendarScreenTime, Period.Day, listHour)
+                )
+            )
         } else {
-            emit(CaseResult.Success(createAppInfoForWeek(packageName)))
+            emit(
+                CaseResult.Success(
+                    createAppInfo(packageName, calendarScreenTime, Period.Week, listDay)
+                )
+            )
         }
     }
 
@@ -61,28 +80,43 @@ class AppInfoRepositoryImplementation @Inject constructor(
         listDay.clear()
     }
 
-    private fun createAppInfoForDay(
+    private fun createAppInfo(
         packageName: String,
-        calendarScreenTime: CalendarScreenTime
+        calendarScreenTime: CalendarScreenTime,
+        period: Period,
+        list: MutableList<Long>
     ): AppInfo {
-        hourAppInfo(packageName, calendarScreenTime)
+        when (period) {
+            Period.Day -> hourAppInfo(packageName, calendarScreenTime)
+            Period.Week -> dayAppInfo(packageName)
+        }
         return AppInfo(
-            nameApp = getAppLabel(packageName).toString(),
-            icon = getAppIcon(packageName),
-            listTime = mapLongToTime(listHour),
+            nameApp = context.getAppLabel(packageName).toString(),
+            icon = context.getAppIcon(packageName),
+            listTime = mapLongToTime(list),
             lastLaunch = mapTimeToLastLaunch(packageName),
-            data = getBatteryCharge(packageName),
-            totalTimeUsage = mapTimeToTotalTimeUsage(listHour.sum()),
-            isSystemApp = checkIsSystemApp(packageName)
+            data = getUsedData(packageName),
+            totalTimeUsage = mapTimeToTotalTimeUsage(list.sum()),
+            isSystemApp = context.checkIsSystemApp(packageName)
         )
     }
 
     private fun hourAppInfo(packageName: String, calendarScreenTime: CalendarScreenTime) {
         initHourBeginEndTime(calendarScreenTime)
-        for (i in 0..23) {
+        for (i in 0..HOURS_IN_DAY) {
             calculationHourTime(i)
             searchStaticsForHours(packageName)
         }
+    }
+
+    private fun initHourBeginEndTime(calendarScreenTime: CalendarScreenTime) {
+        hourBeginTime = InitCalendars().initBeginTime()
+        hourEndTime = InitCalendars().initEndTime()
+
+        hourEndTime.set(Calendar.HOUR_OF_DAY, ONE_HOUR)
+
+        hourBeginTime.add(calendarScreenTime.dataType, -calendarScreenTime.beginTime)
+        hourEndTime.add(calendarScreenTime.dataType, -calendarScreenTime.beginTime)
     }
 
     private fun calculationHourTime(hour: Int) {
@@ -91,83 +125,120 @@ class AppInfoRepositoryImplementation @Inject constructor(
         hourEndTime.set(Calendar.HOUR_OF_DAY, hour)
     }
 
-    private fun initHourBeginEndTime(calendarScreenTime: CalendarScreenTime) {
-        hourBeginTime = Calendar.getInstance()
-        hourBeginTime.set(Calendar.HOUR_OF_DAY, 0)
-        hourBeginTime.set(Calendar.MINUTE, 0)
-        hourBeginTime.set(Calendar.SECOND, 0)
-        hourBeginTime.set(Calendar.MILLISECOND, 0)
-
-        hourEndTime = Calendar.getInstance()
-        hourEndTime.set(Calendar.HOUR_OF_DAY, 1)
-        hourEndTime.set(Calendar.MINUTE, 0)
-        hourEndTime.set(Calendar.SECOND, -1)
-        hourEndTime.set(Calendar.MILLISECOND, 0)
-
-        hourBeginTime.add(calendarScreenTime.dataType, -calendarScreenTime.beginTime)
-        hourEndTime.add(calendarScreenTime.dataType, -calendarScreenTime.beginTime)
-    }
-
-    private fun createAppInfoForWeek(
-        packageName: String
-    ): AppInfo {
-        dayAppInfo(packageName)
-        return AppInfo(
-            nameApp = getAppLabel(packageName).toString(),
-            icon = getAppIcon(packageName),
-            listTime = mapLongToTime(listDay),
-            lastLaunch = mapTimeToLastLaunch(packageName),
-            data = getBatteryCharge(packageName),
-            totalTimeUsage = mapTimeToTotalTimeUsage(listDay.sum()),
-            isSystemApp = checkIsSystemApp(packageName)
-        )
-    }
-
     private fun dayAppInfo(packageName: String) {
         initDayBeginEndTime()
-        for (i in 0..7) {
+        for (i in 0..ONE_WEEK) {
             calculateDayTime(i)
             searchStaticsForDays(packageName)
         }
     }
 
     private fun initDayBeginEndTime() {
-        dayBeginTime = Calendar.getInstance()
-        dayBeginTime.set(Calendar.HOUR_OF_DAY, 0)
-        dayBeginTime.set(Calendar.MINUTE, 0)
-        dayBeginTime.set(Calendar.SECOND, 0)
-        dayBeginTime.set(Calendar.MILLISECOND, 0)
+        dayBeginTime = InitCalendars().initBeginTime()
+        dayEndTime = InitCalendars().initEndTime()
 
-        dayEndTime = Calendar.getInstance()
-        dayEndTime.set(Calendar.HOUR_OF_DAY, 0)
-        dayEndTime.set(Calendar.MINUTE, 0)
-        dayEndTime.set(Calendar.SECOND, -1)
-        dayEndTime.set(Calendar.MILLISECOND, 0)
-
-        dayBeginTime.add(Calendar.DATE, -7)
-        dayEndTime.add(Calendar.DATE, -6)
+        dayBeginTime.add(Calendar.DATE, -ONE_WEEK)
+        dayEndTime.add(Calendar.DATE, -SIX_DAYS)
     }
 
     private fun calculateDayTime(day: Int) {
         if (day == 0) return
-        dayBeginTime.add(Calendar.DATE, +1)
-        dayEndTime.add(Calendar.DATE, +1)
+        dayBeginTime.add(Calendar.DATE, +ONE_DAY)
+        dayEndTime.add(Calendar.DATE, +ONE_DAY)
     }
 
-    private fun getAppLabel(packageName: String) = try {
-        context.packageManager.getApplicationInfo(packageName, 0)
-            .loadLabel(context.packageManager)
-    } catch (e: Exception) {
-        packageName
+    private fun searchStaticsForHours(thisPackageName: String) {
+        val usageEvents =
+            usageEventsGeneral.queryEvents(hourBeginTime.timeInMillis, hourEndTime.timeInMillis)
+
+        getAllEvents(usageEvents)
+
+        if (!sortedEvents.keys.contains(thisPackageName) && !isEndOnResume) {
+            listHour.add(0)
+
+        } else if (isEndOnResume && !sortedEvents.keys.contains(thisPackageName)) {
+            listHour.add(ONE_HOUR_MILLISECONDS)
+
+        } else {
+            sortedEvents.filter { it.key == thisPackageName }.forEach { (packageName, events) ->
+                var startTime = hourBeginTime.timeInMillis
+                var closeTime = hourEndTime.timeInMillis
+                var totalTime = 0L
+                events.forEachIndexed { index, usageEvents ->
+                    when (usageEvents.eventType) {
+                        UsageEvents.Event.ACTIVITY_RESUMED -> startTime = usageEvents.timeStamp
+                        UsageEvents.Event.ACTIVITY_PAUSED -> closeTime = usageEvents.timeStamp
+                    }
+                    if (index == events.lastIndex && usageEvents.eventType == UsageEvents.Event.ACTIVITY_RESUMED) {
+                        totalTime += hourEndTime.timeInMillis - startTime
+                        isEndOnResume = true
+                    } else {
+                        isEndOnResume = false
+                    }
+                    if (startTime != 0L && closeTime != 0L && closeTime != hourEndTime.timeInMillis) {
+                        totalTime += closeTime - startTime
+                        startTime = 0L
+                        closeTime = 0L
+                    }
+                }
+                if (totalTime > ONE_HOUR_MILLISECONDS) {
+                    listHour.add(ONE_HOUR_MILLISECONDS)
+                } else {
+                    listHour.add(totalTime)
+                }
+                totalTime = 0L
+            }
+            sortedEvents.clear()
+        }
     }
 
-    private fun getAppIcon(packageName: String) = try {
-        context.packageManager.getApplicationIcon(packageName)
-    } catch (e: Exception) {
-        null
+    private fun getAllEvents(usageEvents: UsageEvents) {
+        while (usageEvents.hasNextEvent()) {
+            val event = UsageEvents.Event()
+            usageEvents.getNextEvent(event)
+            val packageEvents = sortedEvents[event.packageName] ?: mutableListOf()
+            packageEvents.add(event)
+            sortedEvents[event.packageName] = packageEvents
+        }
     }
 
-    private fun getBatteryCharge(packageName: String): String {
+    private fun searchStaticsForDays(thisPackageName: String) {
+        val usageEvents =
+            usageEventsGeneral.queryEvents(dayBeginTime.timeInMillis, dayEndTime.timeInMillis)
+
+        getAllEvents(usageEvents)
+
+        if (!sortedEvents.keys.contains(thisPackageName)) {
+            listDay.add(0)
+        } else {
+            sortedEvents.forEach { (packageName, events) ->
+                var startTime = 0L
+                var closeTime = 0L
+                var totalTime = 0L
+                if (thisPackageName != packageName) return@forEach
+                events.forEach { usageEvents ->
+                    when (usageEvents.eventType) {
+                        UsageEvents.Event.ACTIVITY_RESUMED -> startTime = usageEvents.timeStamp
+                        UsageEvents.Event.ACTIVITY_PAUSED -> closeTime = usageEvents.timeStamp
+                    }
+                    if (startTime != 0L && closeTime != 0L) {
+                        totalTime += closeTime - startTime
+                        startTime = 0L
+                        closeTime = 0L
+                    }
+                }
+                if (totalTime > ONE_DAY_MILLISECONDS) {
+                    listDay.add(ONE_DAY_MILLISECONDS)
+                } else {
+                    listDay.add(totalTime)
+                }
+                totalTime = 0L
+            }
+            sortedEvents.clear()
+        }
+    }
+
+    private fun getUsedData(packageName: String): String {
         var cacheSize = 0L
         try {
             if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
@@ -200,99 +271,6 @@ class AppInfoRepositoryImplementation @Inject constructor(
         }
     }
 
-    private fun searchStaticsForHours(thisPackageName: String) {
-        val usageEvents =
-            usageEventsGeneral.queryEvents(hourBeginTime.timeInMillis, hourEndTime.timeInMillis)
-
-        while (usageEvents.hasNextEvent()) {
-            val event = UsageEvents.Event()
-            usageEvents.getNextEvent(event)
-            val packageEvents = sortedEvents[event.packageName] ?: mutableListOf()
-            packageEvents.add(event)
-            sortedEvents[event.packageName] = packageEvents
-        }
-
-        if (!sortedEvents.keys.contains(thisPackageName) && !isEndOnResume) {
-            listHour.add(0)
-
-        } else if (isEndOnResume && !sortedEvents.keys.contains(thisPackageName)) {
-            listHour.add(60)
-
-        } else {
-            sortedEvents.filter { it.key == thisPackageName }.forEach { (packageName, events) ->
-                var startTime = hourBeginTime.timeInMillis
-                var closeTime = hourEndTime.timeInMillis
-                var totalTime = 0L
-                events.forEachIndexed { index, usageEvents ->
-                    when (usageEvents.eventType) {
-                        UsageEvents.Event.ACTIVITY_RESUMED -> startTime = usageEvents.timeStamp
-                        UsageEvents.Event.ACTIVITY_PAUSED -> closeTime = usageEvents.timeStamp
-                    }
-                    if (index == events.lastIndex && usageEvents.eventType == UsageEvents.Event.ACTIVITY_RESUMED) {
-                        totalTime += hourEndTime.timeInMillis - startTime
-                        isEndOnResume = true
-                    } else {
-                        isEndOnResume = false
-                    }
-                    if (startTime != 0L && closeTime != 0L && closeTime != hourEndTime.timeInMillis) {
-                        totalTime += closeTime - startTime
-                        startTime = 0L
-                        closeTime = 0L
-                    }
-                }
-                if (totalTime > 3_600_000) {
-                    listHour.add(3_600_000)
-                } else {
-                    listHour.add(totalTime)
-                }
-                totalTime = 0L
-            }
-            sortedEvents.clear()
-        }
-    }
-
-    private fun searchStaticsForDays(thisPackageName: String) {
-        val usageEvents =
-            usageEventsGeneral.queryEvents(dayBeginTime.timeInMillis, dayEndTime.timeInMillis)
-
-        while (usageEvents.hasNextEvent()) {
-            val event = UsageEvents.Event()
-            usageEvents.getNextEvent(event)
-            val packageEvents = sortedEvents[event.packageName] ?: mutableListOf()
-            packageEvents.add(event)
-            sortedEvents[event.packageName] = packageEvents
-        }
-
-        if (!sortedEvents.keys.contains(thisPackageName)) {
-            listDay.add(0)
-        } else {
-            sortedEvents.forEach { (packageName, events) ->
-                var startTime = 0L
-                var closeTime = 0L
-                var totalTime = 0L
-                if (thisPackageName != packageName) return@forEach
-                events.forEach { usageEvents ->
-                    when (usageEvents.eventType) {
-                        UsageEvents.Event.ACTIVITY_RESUMED -> startTime = usageEvents.timeStamp
-                        UsageEvents.Event.ACTIVITY_PAUSED -> closeTime = usageEvents.timeStamp
-                    }
-                    if (startTime != 0L && closeTime != 0L) {
-                        totalTime += closeTime - startTime
-                        startTime = 0L
-                        closeTime = 0L
-                    }
-                }
-                if (totalTime > 86_400_000) {
-                    listDay.add(86_400_000)
-                } else {
-                    listDay.add(totalTime)
-                }
-                totalTime = 0L
-            }
-            sortedEvents.clear()
-        }
-    }
-
     private fun mapTimeToLastLaunch(thisPackageName: String): String {
         val listLastLaunchApp = mutableListOf<Long>()
         val totalEndLastLaunchTime = Calendar.getInstance()
@@ -304,13 +282,7 @@ class AppInfoRepositoryImplementation @Inject constructor(
                 totalBeginLastLaunchTime.timeInMillis,
                 totalEndLastLaunchTime.timeInMillis
             )
-        while (usageEvents.hasNextEvent()) {
-            val event = UsageEvents.Event()
-            usageEvents.getNextEvent(event)
-            val packageEvents = sortedEvents[event.packageName] ?: mutableListOf()
-            packageEvents.add(event)
-            sortedEvents[event.packageName] = packageEvents
-        }
+        getAllEvents(usageEvents)
 
         sortedEvents.forEach { (packageName, events) ->
             if (thisPackageName != packageName) return@forEach
@@ -370,16 +342,6 @@ class AppInfoRepositoryImplementation @Inject constructor(
             }
         }
         return newList
-    }
-
-    private fun checkIsSystemApp(packageName: String) = try {
-        context.packageManager.getApplicationInfo(
-            packageName, 0
-        ).flags and ApplicationInfo.FLAG_SYSTEM != 0 || context.packageManager.getApplicationInfo(
-            packageName, 0
-        ).flags and ApplicationInfo.FLAG_UPDATED_SYSTEM_APP != 0
-    } catch (e: Exception) {
-        true
     }
 
     fun getPackageSizeInfo(): Method {

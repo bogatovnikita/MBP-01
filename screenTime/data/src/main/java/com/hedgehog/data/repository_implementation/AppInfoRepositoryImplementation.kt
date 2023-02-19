@@ -39,6 +39,8 @@ class AppInfoRepositoryImplementation @Inject constructor(
 
     private var listDay: MutableList<Long> = mutableListOf()
 
+    private var isEndOnResume = false
+
     override fun getAppInfo(
         packageName: String,
         calendarScreenTime: CalendarScreenTime
@@ -50,7 +52,7 @@ class AppInfoRepositoryImplementation @Inject constructor(
         if (calendarScreenTime.dataType == Calendar.DATE) {
             emit(CaseResult.Success(createAppInfoForDay(packageName, calendarScreenTime)))
         } else {
-            emit(CaseResult.Success(createAppInfoForWeek(packageName, calendarScreenTime)))
+            emit(CaseResult.Success(createAppInfoForWeek(packageName)))
         }
     }
 
@@ -79,7 +81,7 @@ class AppInfoRepositoryImplementation @Inject constructor(
         initHourBeginEndTime(calendarScreenTime)
         for (i in 0..23) {
             calculationHourTime(i)
-            searchStatics(packageName, calendarScreenTime)
+            searchStaticsForHours(packageName)
         }
     }
 
@@ -107,10 +109,9 @@ class AppInfoRepositoryImplementation @Inject constructor(
     }
 
     private fun createAppInfoForWeek(
-        packageName: String,
-        calendarScreenTime: CalendarScreenTime
+        packageName: String
     ): AppInfo {
-        dayAppInfo(packageName, calendarScreenTime)
+        dayAppInfo(packageName)
         return AppInfo(
             nameApp = getAppLabel(packageName).toString(),
             icon = getAppIcon(packageName),
@@ -122,11 +123,11 @@ class AppInfoRepositoryImplementation @Inject constructor(
         )
     }
 
-    private fun dayAppInfo(packageName: String, calendarScreenTime: CalendarScreenTime) {
+    private fun dayAppInfo(packageName: String) {
         initDayBeginEndTime()
         for (i in 0..7) {
             calculateDayTime(i)
-            searchStatics(packageName, calendarScreenTime)
+            searchStaticsForDays(packageName)
         }
     }
 
@@ -143,8 +144,8 @@ class AppInfoRepositoryImplementation @Inject constructor(
         dayEndTime.set(Calendar.SECOND, -1)
         dayEndTime.set(Calendar.MILLISECOND, 0)
 
-        dayBeginTime.add(Calendar.DATE, -8)
-        dayEndTime.add(Calendar.DATE, -7)
+        dayBeginTime.add(Calendar.DATE, -7)
+        dayEndTime.add(Calendar.DATE, -6)
     }
 
     private fun calculateDayTime(day: Int) {
@@ -199,12 +200,9 @@ class AppInfoRepositoryImplementation @Inject constructor(
         }
     }
 
-    private fun searchStatics(thisPackageName: String, calendarScreenTime: CalendarScreenTime) {
-        val usageEvents = if (calendarScreenTime.dataType == Calendar.DATE) {
+    private fun searchStaticsForHours(thisPackageName: String) {
+        val usageEvents =
             usageEventsGeneral.queryEvents(hourBeginTime.timeInMillis, hourEndTime.timeInMillis)
-        } else {
-            usageEventsGeneral.queryEvents(dayBeginTime.timeInMillis, dayEndTime.timeInMillis)
-        }
 
         while (usageEvents.hasNextEvent()) {
             val event = UsageEvents.Event()
@@ -214,12 +212,12 @@ class AppInfoRepositoryImplementation @Inject constructor(
             sortedEvents[event.packageName] = packageEvents
         }
 
-        if (!sortedEvents.keys.contains(thisPackageName)) {
-            if (calendarScreenTime.dataType == Calendar.DATE) {
-                listHour.add(0)
-            } else {
-                listDay.add(0)
-            }
+        if (!sortedEvents.keys.contains(thisPackageName) && !isEndOnResume) {
+            listHour.add(0)
+
+        } else if (isEndOnResume && !sortedEvents.keys.contains(thisPackageName)) {
+            listHour.add(60)
+
         } else {
             sortedEvents.filter { it.key == thisPackageName }.forEach { (packageName, events) ->
                 var startTime = hourBeginTime.timeInMillis
@@ -232,19 +230,55 @@ class AppInfoRepositoryImplementation @Inject constructor(
                     }
                     if (index == events.lastIndex && usageEvents.eventType == UsageEvents.Event.ACTIVITY_RESUMED) {
                         totalTime += hourEndTime.timeInMillis - startTime
+                        isEndOnResume = true
+                    } else {
+                        isEndOnResume = false
                     }
-
                     if (startTime != 0L && closeTime != 0L && closeTime != hourEndTime.timeInMillis) {
                         totalTime += closeTime - startTime
                         startTime = 0L
                         closeTime = 0L
                     }
                 }
-                if (calendarScreenTime.dataType == Calendar.DATE) {
-                    listHour.add(totalTime)
-                } else {
-                    listDay.add(totalTime)
+                listHour.add(totalTime)
+                totalTime = 0L
+            }
+            sortedEvents.clear()
+        }
+    }
+
+    private fun searchStaticsForDays(thisPackageName: String) {
+        val usageEvents =
+            usageEventsGeneral.queryEvents(dayBeginTime.timeInMillis, dayEndTime.timeInMillis)
+
+        while (usageEvents.hasNextEvent()) {
+            val event = UsageEvents.Event()
+            usageEvents.getNextEvent(event)
+            val packageEvents = sortedEvents[event.packageName] ?: mutableListOf()
+            packageEvents.add(event)
+            sortedEvents[event.packageName] = packageEvents
+        }
+
+        if (!sortedEvents.keys.contains(thisPackageName)) {
+            listDay.add(0)
+        } else {
+            sortedEvents.forEach { (packageName, events) ->
+                var startTime = 0L
+                var closeTime = 0L
+                var totalTime = 0L
+                if (thisPackageName != packageName) return@forEach
+                events.forEach { usageEvents ->
+                    when (usageEvents.eventType) {
+                        UsageEvents.Event.ACTIVITY_RESUMED -> startTime = usageEvents.timeStamp
+                        UsageEvents.Event.ACTIVITY_PAUSED -> closeTime = usageEvents.timeStamp
+                    }
+                    if (startTime != 0L && closeTime != 0L) {
+                        totalTime += closeTime - startTime
+                        startTime = 0L
+                        closeTime = 0L
+                    }
                 }
+                listDay.add(totalTime)
                 totalTime = 0L
             }
             sortedEvents.clear()
@@ -278,7 +312,6 @@ class AppInfoRepositoryImplementation @Inject constructor(
                 }
             }
         }
-
         sortedEvents.clear()
         return try {
             val date = System.currentTimeMillis() - listLastLaunchApp.last()

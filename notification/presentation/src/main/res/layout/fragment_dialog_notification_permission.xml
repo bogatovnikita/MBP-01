@@ -15,25 +15,27 @@
         android:layout_marginTop="@dimen/_20sdp"
         android:fontFamily="@font/golos_text_bold"
         android:gravity="center_horizontal"
-        android:text="Нам требуется разрешение"
+        android:text="@string/notification_manager_need_permission"
         android:textColor="@color/green"
-        android:textSize="@dimen/_10ssp"
+        android:textSize="@dimen/_11ssp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_body"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/_29sdp"
-        android:layout_marginTop="@dimen/_20sdp"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="@dimen/_19sdp"
         android:fontFamily="@font/golos_text_regular"
-        android:text="Нам нужен доступ к просмотру\nваших уведомлений, чтобы вы могли\nвыбирать от каких приложений вы\nне хотите получать уведомления"
+        android:text="@string/notification_manager_body_permission"
         android:textColor="@color/dark_blue"
-        android:textSize="@dimen/_10ssp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:autoSizeMaxTextSize="@dimen/_30ssp"
+        app:autoSizeMinTextSize="@dimen/_10ssp"
+        app:autoSizeTextType="uniform"
+        app:layout_constraintEnd_toEndOf="@+id/btn_allow_notifications"
+        app:layout_constraintStart_toStartOf="@+id/btn_close"
         app:layout_constraintTop_toBottomOf="@+id/tv_title" />
 
     <androidx.appcompat.widget.AppCompatButton
@@ -45,7 +47,7 @@
         android:layout_marginEnd="@dimen/_3sdp"
         android:background="@drawable/bg_button_green_stroke"
         android:fontFamily="@font/golos_text_bold"
-        android:text="Закрыть"
+        android:text="@string/notification_manager_close"
         android:textAllCaps="false"
         android:textColor="@color/dark_blue"
         android:textSize="@dimen/_10ssp"
@@ -62,7 +64,7 @@
         android:layout_marginEnd="@dimen/_12sdp"
         android:background="@drawable/bg_button_full_green"
         android:fontFamily="@font/golos_text_bold"
-        android:text="Разрешить"
+        android:text="@string/notification_manager_allow_permission"
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:textSize="@dimen/_10ssp"
@@ -74,7 +76,7 @@
         android:id="@+id/bottom_space"
         android:layout_width="0dp"
         android:layout_height="@dimen/_20sdp"
-        app:layout_constraintEnd_toEndOf="@+id/btn_missed_notifications"
+        app:layout_constraintEnd_toEndOf="@+id/btn_allow_notifications"
         app:layout_constraintStart_toStartOf="@+id/btn_close"
         app:layout_constraintTop_toBottomOf="@+id/btn_close" />
 

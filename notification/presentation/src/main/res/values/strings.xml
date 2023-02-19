@@ -40,4 +40,8 @@
     <string name="notification_manager_since">С</string>
     <string name="notification_manager_before">До</string>
     <string name="notification_manager_wrong_format">Установите корректное время</string>
+    <string name="notification_manager_need_permission">Нам требуется разрешение</string>
+    <string name="notification_manager_body_permission">Нам нужен доступ к просмотру ваших уведомлений, чтобы вы могли выбирать от каких приложений вы не хотите получать уведомления</string>
+    <string name="notification_manager_close">Закрыть</string>
+    <string name="notification_manager_allow_permission">Разрешить</string>
 </resources>

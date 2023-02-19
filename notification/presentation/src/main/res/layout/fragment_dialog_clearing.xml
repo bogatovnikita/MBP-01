@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/bg_dialog"
-    android:paddingHorizontal="@dimen/_34sdp"
+    android:paddingEnd="@dimen/_34sdp"
+    android:paddingStart="@dimen/_16sdp"
     android:paddingVertical="@dimen/_9sdp"
     tools:context=".ui.dialogs.DialogClearingFragment">
 

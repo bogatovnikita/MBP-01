@@ -9,8 +9,8 @@
         android:id="@+id/group_loading_data"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="visible"
-        app:constraint_referenced_ids="delete_app,data_tv,stop_app,time_data_tv,res_consumption,custom_view,last_launch_tv,total_usage_time_tv,info_app_button,time_total_usage_time_tv,time_last_launch_tv" />
+        android:visibility="gone"
+        app:constraint_referenced_ids="delete_app,data_tv,stop_app,custom_view_graph,background_icon,time_data_tv,res_consumption,custom_view,last_launch_tv,total_usage_time_tv,info_app_button,time_total_usage_time_tv,time_last_launch_tv" />
 
     <ImageView
         android:id="@+id/back_arrow"
@@ -376,7 +376,7 @@
         android:id="@+id/loader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

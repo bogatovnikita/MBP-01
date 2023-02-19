@@ -150,6 +150,7 @@ class SecondScreenTimeFragment :
             }
         }
         binding.backgroundArrowLeft.setOnClickListener {
+            if (!viewModel.screenState.value.isLoading) return@setOnClickListener
             if (sharedPrefs.getBoolean(FIRST_LAUNCH, true)) {
                 showTutorial()
             } else {
@@ -157,6 +158,7 @@ class SecondScreenTimeFragment :
             }
         }
         binding.backgroundArrowRight.setOnClickListener {
+            if (!viewModel.screenState.value.isLoading) return@setOnClickListener
             if (sharedPrefs.getBoolean(FIRST_LAUNCH, true)) {
                 showTutorial()
             } else {

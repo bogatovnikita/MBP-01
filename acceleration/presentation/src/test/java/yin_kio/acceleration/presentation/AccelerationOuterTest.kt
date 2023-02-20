@@ -21,10 +21,13 @@ class AccelerationOuterTest {
     private val permissionRequester: PermissionRequester = spyk()
     private val outer = AccelerationOuterImpl(
         navigator = navigator,
-        viewModel = viewModel,
         presenter = presenter,
         permissionRequester = permissionRequester
     )
+
+    init {
+        outer.viewModel = viewModel
+    }
 
     @Test
     fun testShowRamInfo(){

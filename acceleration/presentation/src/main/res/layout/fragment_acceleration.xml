@@ -88,12 +88,34 @@
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="12dp">
-            <include layout="@layout/layout_list_permission" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/Text.Header_4"
+                android:text="@string/allow_access"
+                android:layout_marginBottom="8dp"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/Text.Subtitle_1"
+                android:text="@string/allow_access_description"
+                android:textColor="@color/gray"
+                android:layout_marginBottom="12dp"/>
+            <TextView
+                android:id="@+id/allow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/Text.Header_5"
+                android:text="@string/allow"
+                android:textAllCaps="true"
+                android:textColor="@color/green"
+                android:gravity="end" />
         </LinearLayout>
 
 
 
         <LinearLayout
+            android:id="@+id/list_loader"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"

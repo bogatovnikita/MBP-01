@@ -2,6 +2,7 @@ package yin_kio.acceleration.presentation.acceleration.screen
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.lifecycleScope
@@ -9,12 +10,12 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import jamycake.lifecycle_aware.lifecycleAware
-import kotlinx.coroutines.flow.collect
+import yin_kio.acceleration.domain.acceleration.ui_out.AppsState
 import yin_kio.acceleration.presentation.PermissionRequesterImpl
-import yin_kio.acceleration.presentation.inter.OlejaInter
 import yin_kio.acceleration.presentation.R
 import yin_kio.acceleration.presentation.acceleration.AccelerationNavigatorImpl
 import yin_kio.acceleration.presentation.databinding.FragmentAccelerationBinding
+import yin_kio.acceleration.presentation.inter.OlejaInter
 
 class AccelerationFragment : Fragment(R.layout.fragment_acceleration) {
 
@@ -37,8 +38,15 @@ class AccelerationFragment : Fragment(R.layout.fragment_acceleration) {
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.flow.collect {
                 showRamInfo(it)
+                showApps(it)
             }
         }
+    }
+
+    private fun showApps(it: ScreenState) {
+        binding.recycler.isVisible = it.appsState is AppsState.AppsList
+        binding.listPermission.isVisible = it.appsState is AppsState.Permission
+        binding.listLoader.isVisible = it.appsState is AppsState.Progress
     }
 
     private fun showRamInfo(it: ScreenState) {
@@ -55,6 +63,7 @@ class AccelerationFragment : Fragment(R.layout.fragment_acceleration) {
             back.setOnClickListener { viewModel.close() }
             accelerate.setOnClickListener { viewModel.accelerate() }
             stopSelected.setOnClickListener { viewModel.uploadBackgroundProcess() }
+            allow.setOnClickListener { viewModel.givePermission() }
         }
     }
 

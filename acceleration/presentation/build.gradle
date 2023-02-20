@@ -39,6 +39,7 @@ dependencies {
     implementation project(':acceleration:data')
     implementation project(':acceleration:domain')
     implementation project(':general:permissions')
+    implementation project(':rect_progress_bar')
 
     implementation project(':storage_info_view')
 

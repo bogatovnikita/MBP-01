@@ -27,6 +27,7 @@
 
 
     <yin_kio.storage_info_view.StorageInfoView
+        android:id="@+id/ram_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:title="@string/ram_title"

@@ -16,6 +16,11 @@ class AccelerationViewModel(
 
     override val flow: Flow<ScreenState> = _flow.asStateFlow()
 
+
+    init {
+        update()
+    }
+
     override fun setRamInfo(ramInfo: RamInfo) {
         _flow.value = _flow.value.copy(ramInfo = ramInfo)
     }

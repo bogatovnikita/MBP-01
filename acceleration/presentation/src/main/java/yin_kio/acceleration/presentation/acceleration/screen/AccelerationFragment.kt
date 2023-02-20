@@ -4,10 +4,12 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import jamycake.lifecycle_aware.lifecycleAware
+import kotlinx.coroutines.flow.collect
 import yin_kio.acceleration.presentation.PermissionRequesterImpl
 import yin_kio.acceleration.presentation.inter.OlejaInter
 import yin_kio.acceleration.presentation.R
@@ -24,23 +26,52 @@ class AccelerationFragment : Fragment(R.layout.fragment_acceleration) {
     private val permissionRequester: PermissionRequesterImpl by lifecycleAware { PermissionRequesterImpl() }
     private val viewModel by lifecycleAware { createAccelerationViewModel() }
 
-    private fun ViewModel.createAccelerationViewModel(): AccelerationViewModel {
-        val context = requireActivity().applicationContext
-
-        return AccelerationViewModelFactory(
-            context = context,
-            navigator = navigator,
-            permissionRequester = permissionRequester,
-            coroutineScope = viewModelScope
-        ).create()
-    }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        binding.back.setOnClickListener { viewModel.close() }
-        binding.accelerate.setOnClickListener { viewModel.accelerate() }
-        binding.stopSelected.setOnClickListener { viewModel.uploadBackgroundProcess() }
+        setupObserver()
+        setupListeners()
     }
+
+    private fun setupObserver() {
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            viewModel.flow.collect {
+                showRamInfo(it)
+            }
+        }
+    }
+
+    private fun showRamInfo(it: ScreenState) {
+        binding.ramInfo.binding.apply {
+            progressBar.progress = it.ramInfo.progress
+            available.text = it.ramInfo.available
+            total.text = it.ramInfo.total
+            occupied.text = it.ramInfo.occupied
+        }
+    }
+
+    private fun setupListeners() {
+        binding.apply {
+            back.setOnClickListener { viewModel.close() }
+            accelerate.setOnClickListener { viewModel.accelerate() }
+            stopSelected.setOnClickListener { viewModel.uploadBackgroundProcess() }
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     override fun onResume() {
         super.onResume()
@@ -62,6 +93,17 @@ class AccelerationFragment : Fragment(R.layout.fragment_acceleration) {
         permissionRequester.activity = null
     }
 
+
+    private fun ViewModel.createAccelerationViewModel(): AccelerationViewModel {
+        val context = requireActivity().applicationContext
+
+        return AccelerationViewModelFactory(
+            context = context,
+            navigator = navigator,
+            permissionRequester = permissionRequester,
+            coroutineScope = viewModelScope
+        ).create()
+    }
 
 
 }

@@ -33,6 +33,7 @@ class MainMenuFragment : Fragment(R.layout.fragment_main_menu) {
             garbageClean.setOnClickListener { openGarbageClean() }
             toMemory.setOnClickListener { openMemory() }
             toNotification.setOnClickListener { openNotificationManager() }
+            toTimeScreen.setOnClickListener { openScreenTimeManager() }
         }
     }
 
@@ -54,6 +55,11 @@ class MainMenuFragment : Fragment(R.layout.fragment_main_menu) {
     private fun openGarbageClean() {
         onBackPressedCallback.isEnabled = true
         findNavController().navigate(R.id.toGarbageClean, completeDestination())
+    }
+
+    private fun openScreenTimeManager() {
+        onBackPressedCallback.isEnabled = true
+        findNavController().navigate(R.id.to_screen_time_graph)
     }
 
     private fun completeDestination() : Bundle {

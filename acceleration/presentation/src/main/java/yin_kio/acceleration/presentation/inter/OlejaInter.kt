@@ -12,7 +12,6 @@ class OlejaInter(
 
 
     override fun show() {
-        Log.d("!!!", "${activity}")
         activity?.showInter( onClosed = onClose )
     }
 }

@@ -1,5 +1,6 @@
 package yin_kio.acceleration.presentation.acceleration
 
+import android.os.Bundle
 import androidx.navigation.NavController
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -9,6 +10,8 @@ import yin_kio.acceleration.presentation.R
 
 class AccelerationNavigatorImpl(
     private val coroutineScope: CoroutineScope,
+    private val completeDestination: Int,
+    private val completeArgs: Bundle,
     var inter: Inter? = null // Выделение интерфейса для интера помогает упростить тестирование
 ) : AccelerationNavigator {
 
@@ -36,7 +39,8 @@ class AccelerationNavigatorImpl(
     }
 
     override fun complete() = onMain {
-        TODO("There is must be navigation to advices")
+        navController?.popBackStack(R.id.accelerationFragment, true)
+        navController?.navigate(completeDestination, completeArgs)
     }
 
     private fun onMain(action: () -> Unit){

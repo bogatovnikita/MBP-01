@@ -19,5 +19,8 @@
     <string name="select_all">Выбрать все</string>
     <string name="stop_selected_apps">Остановить выбранные приложения</string>
     <string name="uploading_bg_processes">Выгружаем фоновые процессы</string>
+    
+    <string name="your_phone_is_fast">Ваш телефон быстр, как стрела</string>
+    <string name="your_phone_is_fast_description">Мы освободили оперативную память, для более быстрой работы вашего устройства</string>
 
 </resources>

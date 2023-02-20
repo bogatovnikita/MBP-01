@@ -44,6 +44,7 @@ dependencies {
     implementation project(':duplicates:di')
     implementation project(':notification:presentation')
     implementation project(':screenTime:presentation')
+    implementation project(':acceleration:presentation')
 
     implementation presentation.values()
     testImplementation presentation_test.values()

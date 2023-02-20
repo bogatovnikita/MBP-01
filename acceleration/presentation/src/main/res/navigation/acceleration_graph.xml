@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/acceleration_graph"
+    app:startDestination="@id/accelerationFragment">
+
+    <fragment
+        android:id="@+id/accelerationFragment"
+        android:name="yin_kio.acceleration.presentation.acceleration.AccelerationFragment"
+        android:label="AccelerationFragment" >
+        <action
+            android:id="@+id/toAccelerationDialog"
+            app:destination="@id/accelerationDialog" />
+        <action
+            android:id="@+id/toAccelerationPermission"
+            app:destination="@id/accelerationPermissionDialog" />
+        <action
+            android:id="@+id/toSelectableAcceleration"
+            app:destination="@id/selectableAccelerationFragment" />
+    </fragment>
+    <dialog
+        android:id="@+id/accelerationDialog"
+        android:name="yin_kio.acceleration.presentation.acceleration.AccelerationDialog"
+        android:label="AccelerationDialog" />
+    <dialog
+        android:id="@+id/accelerationPermissionDialog"
+        android:name="yin_kio.acceleration.presentation.AccelerationPermissionDialog"
+        android:label="AccelerationPermissionDialog" />
+    <fragment
+        android:id="@+id/selectableAccelerationFragment"
+        android:name="yin_kio.acceleration.presentation.selectable_acceleration.SelectableAccelerationFragment"
+        android:label="SelectableAccelerationFragment" />
+</navigation>

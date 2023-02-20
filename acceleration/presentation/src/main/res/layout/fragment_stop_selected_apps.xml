@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        style="@style/Toolbar"
+        android:gravity="center|start">
+
+        <ImageView
+            android:id="@+id/back"
+            style="@style/BackButton"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/acceleration_title"
+            android:textAppearance="@style/Text.Header_2"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/apps_that_load_phone"
+        android:textAppearance="@style/Text.Header_3"
+        android:textColor="@color/green"
+        android:layout_marginHorizontal="16dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/select_apps_for_stopping"
+        android:textColor="@color/gray"
+        android:layout_marginHorizontal="16dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="end"
+        android:layout_marginHorizontal="16dp">
+
+        <TextView
+            android:id="@+id/checkbox_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/select_all"
+            android:textAppearance="@style/Text.Subtitle_1"
+            android:layout_marginEnd="8dp"/>
+
+        <CheckBox
+            android:id="@+id/checkbox"
+            style="@style/CheckBox"/>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/progress_plate"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginBottom="16dp"
+        android:paddingTop="80dp"
+        android:orientation="vertical"
+        android:gravity="top|center"
+        android:layout_gravity="center">
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            app:lottie_rawRes="@raw/round_progress"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/device_scanning"
+            android:gravity="center"
+            android:textAppearance="@style/Text.Subtitle_1.2"/>
+
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:visibility="visible"
+        android:id="@+id/recycler"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        tools:listitem="@layout/list_item_app_selectable"/>
+
+    <TextView
+        android:id="@+id/stop"
+        android:text="@string/stop_selected_apps"
+        style="@style/MainButton"/>
+
+
+
+</LinearLayout>

@@ -1,10 +1,22 @@
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.spyk
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
-import yin_kio.acceleration.domain.acceleration.*
+import yin_kio.acceleration.domain.acceleration.gateways.Permissions
+import yin_kio.acceleration.domain.acceleration.gateways.RamInfo
+import yin_kio.acceleration.domain.acceleration.use_cases.AccelerationUseCasesImpl
+import yin_kio.acceleration.domain.acceleration.use_cases.Accelerator
+import yin_kio.acceleration.domain.acceleration.ui_out.AccelerationOuter
+import yin_kio.acceleration.domain.acceleration.ui_out.AppsState
+import yin_kio.acceleration.domain.acceleration.ui_out.RamInfoOut
+import yin_kio.acceleration.domain.acceleration.use_cases.AccelerationUseCases
 import yin_kio.acceleration.domain.gateways.Apps
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class AccelerationUseCasesTest {
 
     private val accelerationOuter: AccelerationOuter = spyk()
@@ -12,38 +24,50 @@ class AccelerationUseCasesTest {
     private val accelerator: Accelerator = spyk()
     private val ramInfo: RamInfo = spyk()
     private val apps: Apps = spyk()
-    private val useCases = AccelerationUseCases(
-        accelerationOuter = accelerationOuter,
-        permissions = permissions,
-        runner = accelerator,
-        ramInfo = ramInfo,
-        apps = apps
-    )
+    private lateinit var useCases: AccelerationUseCases
+
+
+    private fun setupTest(testBlock: TestScope.() -> Unit) = runTest{
+        useCases = AccelerationUseCasesImpl(
+            accelerationOuter = accelerationOuter,
+            permissions = permissions,
+            runner = accelerator,
+            ramInfo = ramInfo,
+            apps = apps,
+            coroutineScope = this,
+            dispatcher = coroutineContext
+        )
+
+        testBlock()
+    }
 
     @Test
-    fun testClose(){
+    fun testClose() = setupTest {
         useCases.close()
+        wait()
 
         coVerify { accelerationOuter.close() }
     }
 
+
     @Test
-    fun testAccelerate(){
+    fun testAccelerate() = setupTest {
         verifyRunAccelerate()
         verifyShowPermission{ useCases.accelerate() }
 
     }
 
-    private fun verifyRunAccelerate() {
+    private fun TestScope.verifyRunAccelerate() {
         coEvery { permissions.hasPermission } returns true
 
         useCases.accelerate()
+        wait()
 
         coVerify { accelerator.accelerate() }
     }
 
     @Test
-    fun testUploadBackgroundProcess(){
+    fun testUploadBackgroundProcess() = setupTest {
         ifHasNotPermission(
             useCase = { uploadBackgroundProcess() },
             outs = { showPermission() }
@@ -54,19 +78,20 @@ class AccelerationUseCasesTest {
         )
     }
 
-    private fun verifyShowPermission(
+    private fun TestScope.verifyShowPermission(
         action: () -> Unit
     ) {
         coEvery { permissions.hasPermission } returns false
 
         action()
+        wait()
 
         coVerify { accelerationOuter.showPermission() }
     }
 
 
     @Test
-    fun testUpdate(){
+    fun testUpdate() = setupTest {
         val ramInfoOut = RamInfoOut()
         val appsList = listOf("app1", "app2")
 
@@ -77,7 +102,8 @@ class AccelerationUseCasesTest {
             usaCase = { update() },
             outs = {
                 showRamInfo(ramInfoOut)
-                showAppsList(appsList)
+                showAppsState(AppsState.Progress)
+                showAppsState(AppsState.AppsList(appsList))
             }
         )
 
@@ -85,10 +111,28 @@ class AccelerationUseCasesTest {
             useCase = { update() },
             outs = {
                 showRamInfo(ramInfoOut)
-                showPermissionOnList()
+                showAppsState(AppsState.Progress)
+                showAppsState(AppsState.Permission)
             }
         )
 
+    }
+
+    @Test
+    fun testComplete() = setupTest {
+        useCases.complete()
+        wait()
+
+        coVerify(exactly = 1) { accelerationOuter.complete() }
+    }
+
+
+    @Test
+    fun testGivePermission() = setupTest {
+        useCases.givePermission()
+        wait()
+
+        coVerify(exactly = 1) { accelerationOuter.givePermission() }
     }
 
 
@@ -99,29 +143,33 @@ class AccelerationUseCasesTest {
 
 
 
-
-
-
-    private fun ifHasNotPermission(
+    private fun TestScope.ifHasNotPermission(
         useCase: AccelerationUseCases.() -> Unit,
         outs: AccelerationOuter.() -> Unit
     ){
         coEvery { permissions.hasPermission } returns false
 
         useCases.useCase()
+        wait()
 
         coVerify { accelerationOuter.outs() }
     }
 
-    private fun ifHasPermission(
+    private fun TestScope.ifHasPermission(
         usaCase: AccelerationUseCases.() -> Unit,
         outs: AccelerationOuter.() -> Unit
     ){
         coEvery { permissions.hasPermission } returns true
 
         useCases.usaCase()
+        wait()
 
         coVerify { accelerationOuter.outs() }
+    }
+
+
+    private fun TestScope.wait() {
+        advanceUntilIdle()
     }
 
 

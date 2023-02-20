@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="acceleration_title">Ускорение</string>
+    <string name="ram_title">Оперативная память</string>
+    <string name="ram_total_title">Общий объём оперативной памяти</string>
+    <string name="accelerate_phone">Ускорить телефон</string>
+    <string name="apps_that_load_phone">Приложения, которые нагружают оперативную память</string>
+    <string name="apps_that_load_phone_description">Нажав “Выгрузить фоновые процессы” вы сможете вручную выбрать приложения, у которых хотите остановить фоновую активность</string>
+    <string name="upload_bg_processes">Выгрузить фоновые процессы</string>
+    <string name="acceleration_progress_title">Ускоряем ваш телефон</string>
+    <string name="acceleration_progress_description">Убираем фоновые процессы</string>
+    <string name="allow_access">Предоставьте доступ</string>
+    <string name="allow_access_description">Нажав “Выгрузить фоновые процессы” вы сможете вручную выбрать приложения, у которых хотите остановить фоновую активность</string>
+    <string name="allow"><u>Разрешить</u></string>
+    <string name="device_scanning">Сканируем устройство...</string>
+    <string name="we_need_permission">Нам требуется разрешение</string>
+    <string name="we_need_permission_description">Нам нужно разрешение для отслеживания используемых приложений, чтобы мы могли находить и отключать фоновые процессы и ускорять работу вашего телефона.</string>
+    <string name="allow_access_usage_history">Доступ к истории использования</string>
+    <string name="close">Закрыть</string>
+    <string name="select_apps_for_stopping">Выберете приложения, фоновые процессы которых вы хотите остановить</string>
+    <string name="select_all">Выбрать все</string>
+    <string name="stop_selected_apps">Остановить выбранные приложения</string>
+    <string name="uploading_bg_processes">Выгружаем фоновые процессы</string>
+
+</resources>

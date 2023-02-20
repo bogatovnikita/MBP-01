@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.LinearLayout
+import androidx.core.view.isVisible
 import com.entertainment.event.ssearch.presentation.databinding.ButtonClearAllBinding
 
 class ClearAllButton @JvmOverloads constructor(
@@ -17,15 +18,8 @@ class ClearAllButton @JvmOverloads constructor(
     private val _binding: ButtonClearAllBinding =
         ButtonClearAllBinding.inflate(LayoutInflater.from(context), this)
 
-    init {
-        initListener()
-    }
-
-    private fun initListener() {
-    }
-
     private fun setVisibility() {
-        _binding.tvClearAll.visibility = if (isExpanded) VISIBLE else GONE
+        _binding.tvClearAll.isVisible = isExpanded
     }
 
     fun setCanDeleteListener(block: (isCanDelete: Boolean) -> Unit) {

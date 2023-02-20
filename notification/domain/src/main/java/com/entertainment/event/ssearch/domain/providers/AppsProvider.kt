@@ -1,11 +1,11 @@
 package com.entertainment.event.ssearch.domain.providers
 
-import android.content.pm.PackageInfo
+import com.entertainment.event.ssearch.domain.models.App
 
 interface AppsProvider {
 
-    suspend fun getInstalledPackages() : List<PackageInfo>
+    suspend fun getInstalledApp() : List<App>
 
-    suspend fun getSystemPackages() : List<PackageInfo>
+    suspend fun getSystemApp() : List<App>
 
 }

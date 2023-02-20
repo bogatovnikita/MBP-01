@@ -30,7 +30,7 @@ class NotificationServiceController @Inject constructor(
 
     override fun cleanAllNotification() = context.sendBroadcast(Intent(ACTION_CLEAR_NOTIFICATIONS))
 
-    override fun setRestartServiceWorker() { // TODO возможно, имя, где будет упоминаться PeriodicWorker будет более говорящим
+    override fun setRestartServiceWorker() {
         val UNIQUE_WORK_NAME = "StartMyServiceViaWorker"
         val workManager: WorkManager = WorkManager.getInstance(context)
         val request: PeriodicWorkRequest = PeriodicWorkRequest.Builder(

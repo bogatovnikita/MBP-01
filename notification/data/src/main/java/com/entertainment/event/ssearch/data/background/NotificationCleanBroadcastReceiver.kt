@@ -16,6 +16,7 @@ class NotificationCleanBroadcastReceiver : BroadcastReceiver() {
         val action = intent?.action ?: return
 
         //TODO зачем кладется в стейт рандомное число
+        //TODO ответ: не нашел лучше способа генерить всегда уникальные события
         if (action == ACTION_CLEAR_NOTIFICATIONS) {
             _clearAll.value = Math.random().toString()
         }

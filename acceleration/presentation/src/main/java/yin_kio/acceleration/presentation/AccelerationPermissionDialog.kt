@@ -6,11 +6,11 @@ import androidx.fragment.app.DialogFragment
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import jamycake.lifecycle_aware.lifecycleAware
-import yin_kio.acceleration.presentation.databinding.DialogAcceleratePermissionBinding
+import yin_kio.package_usage_dialog.databinding.DialogPackageUsageBinding
 
-class AccelerationPermissionDialog : DialogFragment(R.layout.dialog_accelerate_permission) {
+class AccelerationPermissionDialog : DialogFragment(yin_kio.package_usage_dialog.R.layout.dialog_package_usage) {
 
-    private val binding: DialogAcceleratePermissionBinding by viewBinding()
+    private val binding: DialogPackageUsageBinding by viewBinding()
 
     // Здесь идёт прямая зависимость от use cases, так как не требуется сохранения состояния
     private val useCases by lifecycleAware {

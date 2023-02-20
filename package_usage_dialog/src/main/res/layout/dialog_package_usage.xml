@@ -66,7 +66,7 @@
 
         <TextView
             android:id="@+id/allow"
-            android:text="@string/allow"
+            android:text="@string/allow_not_underscored"
             style="@style/Button.Small.fill_active_green"/>
 
     </LinearLayout>

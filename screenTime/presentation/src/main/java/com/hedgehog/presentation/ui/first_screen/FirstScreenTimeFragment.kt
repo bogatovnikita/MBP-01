@@ -179,6 +179,9 @@ class FirstScreenTimeFragment :
     }
 
     private fun initClickListeners() {
+        binding.backArrow.setOnClickListener {
+            findNavController().navigateUp()
+        }
         binding.checkbox.setOnClickListener {
             clickCheckbox()
         }

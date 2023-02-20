@@ -35,6 +35,9 @@
         <action
             android:id="@+id/toNotification"
             app:destination="@id/notification_graph" />
+        <action
+            android:id="@+id/to_screen_time_graph"
+            app:destination="@id/screen_time_graph" />
     </fragment>
     <fragment
         android:id="@+id/advicesFragment"
@@ -66,4 +69,5 @@
         android:name="yin_kio.memory.presentation.MemoryFragment"
         android:label="MemoryFragment" />
     <include app:graph="@navigation/notification_graph" />
+    <include app:graph="@navigation/screen_time_graph" />
 </navigation>

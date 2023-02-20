@@ -32,6 +32,10 @@ class MainMenuFragment : Fragment(R.layout.fragment_main_menu) {
             duplicates.setOnClickListener { openDuplicates() }
             garbageClean.setOnClickListener { openGarbageClean() }
             toMemory.setOnClickListener { openMemory() }
+            acceleration.setOnClickListener {
+                onBackPressedCallback.isEnabled = true
+                findNavController().navigate(R.id.toAcceleration)
+            }
             toNotification.setOnClickListener { openNotificationManager() }
             toTimeScreen.setOnClickListener { openScreenTimeManager() }
         }

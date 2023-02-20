@@ -6,19 +6,30 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 
-fun <T : Any> Fragment.lifecycleAware(
-    onCleared: ViewModel.() -> Unit = {},
-    creator: ViewModel.() -> T) : Lazy<T>{
-    return LifeCycleAwareContainer(onCleared, creator, this)
+inline fun <reified T : Any> Fragment.lifecycleAware(
+    noinline onCleared: ViewModel.() -> Unit = {},
+    noinline creator: ViewModel.() -> T) : Lazy<T>{
+    return LifeCycleAwareContainer(
+        key = T::class.java.name,
+        onCleared = onCleared,
+        creator = creator,
+        viewModelStoreOwner =  this
+    )
 }
 
-fun <T : Any> AppCompatActivity.lifecycleAware(
-    onCleared: ViewModel.() -> Unit = {},
-    creator: ViewModel.() -> T) : Lazy<T>{
-    return LifeCycleAwareContainer(onCleared, creator, this)
+inline fun <reified T : Any> AppCompatActivity.lifecycleAware(
+    noinline onCleared: ViewModel.() -> Unit = {},
+    noinline creator: ViewModel.() -> T) : Lazy<T>{
+    return LifeCycleAwareContainer(
+        key = T::class.java.name,
+        onCleared = onCleared,
+        creator = creator,
+        viewModelStoreOwner =  this
+    )
 }
 
-private class LifeCycleAwareContainer <T : Any>(
+class LifeCycleAwareContainer <T : Any>(
+    private val key: String,
     private val onCleared: ViewModel.() -> Unit,
     private val creator: ViewModel.() -> T,
     private val viewModelStoreOwner: ViewModelStoreOwner
@@ -28,10 +39,11 @@ private class LifeCycleAwareContainer <T : Any>(
     @Suppress("unchecked_cast")
     override val value: T
         get() {
+
             if (cached == null){
                 cached = ViewModelProvider(viewModelStoreOwner,
                     LifecycleAware.Factory(onCleared, creator)
-                )[creator::class.java.name, LifecycleAware::class.java]
+                )[key, LifecycleAware::class.java]
                 .created as T
             }
 

@@ -36,6 +36,9 @@
             android:id="@+id/toNotification"
             app:destination="@id/notification_graph" />
         <action
+            android:id="@+id/toAcceleration"
+            app:destination="@id/acceleration_graph" />
+        <action
             android:id="@+id/to_screen_time_graph"
             app:destination="@id/screen_time_graph" />
     </fragment>
@@ -68,6 +71,10 @@
         android:id="@+id/memoryFragment"
         android:name="yin_kio.memory.presentation.MemoryFragment"
         android:label="MemoryFragment" />
+
     <include app:graph="@navigation/notification_graph" />
+
+    <include app:graph="@navigation/acceleration_graph"/>
+
     <include app:graph="@navigation/screen_time_graph" />
 </navigation>

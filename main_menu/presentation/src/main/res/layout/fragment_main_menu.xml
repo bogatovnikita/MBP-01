@@ -35,6 +35,12 @@
         android:text="To notification manager" />
 
     <Button
+        android:id="@+id/acceleration"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="acceleration" />
+
+    <Button
         android:id="@+id/to_time_screen"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

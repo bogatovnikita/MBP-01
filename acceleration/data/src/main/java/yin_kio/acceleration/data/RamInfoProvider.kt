@@ -2,8 +2,8 @@ package yin_kio.acceleration.data
 
 import android.app.ActivityManager
 import android.content.Context
-import yin_kio.acceleration.domain.acceleration.RamInfo
-import yin_kio.acceleration.domain.acceleration.RamInfoOut
+import yin_kio.acceleration.domain.acceleration.gateways.RamInfo
+import yin_kio.acceleration.domain.acceleration.ui_out.RamInfoOut
 
 
 // Дублируется в yin_kio.memory.data

@@ -40,6 +40,7 @@ dependencies {
     implementation project(':screenTime:domain')
     implementation project(':screenTime:data')
     implementation project(':general:resources')
+    implementation project(':package_usage_dialog')
 
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.5.1'

@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="D_hour_D_minutes">%d hour %d min</string>
-    <string name="D_second">%d second</string>
+    <string name="D_hour_D_minutes">%d ч %d мин</string>
+    <string name="D_minutes">%d мин</string>
+    <string name="D_second">%d сек</string>
 
-    <string name="D_day_D_hour_ago">%d day %d hour ago</string>
-    <string name="D_hour_D_minutes_ago">%d hour %d min ago</string>
-    <string name="D_minute_D_second_ago">%d min %d sec ago</string>
-    <string name="D_second_ago">%d second ago</string>
-    <string name="is_unknown">Is unknown</string>
+    <string name="D_day_D_hour_ago">%d д %d ч ago</string>
+    <string name="D_hour_D_minutes_ago">%d ч %d мин ago</string>
+    <string name="D_minute_D_second_ago">%d мин %d сек ago</string>
+    <string name="D_second_ago">%d секунд ago</string>
+    <string name="is_unknown">Неизвестно</string>
 </resources>

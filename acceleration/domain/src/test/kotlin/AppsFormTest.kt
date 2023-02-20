@@ -1,7 +1,7 @@
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
-import yin_kio.acceleration.domain.bg_uploading.entities.AppsFormImpl
-import yin_kio.acceleration.domain.bg_uploading.entities.SelectionStatus
+import yin_kio.acceleration.domain.selectable_acceleration.entities.AppsFormImpl
+import yin_kio.acceleration.domain.selectable_acceleration.entities.SelectionStatus
 
 class AppsFormTest {
 

@@ -8,7 +8,7 @@ import yin_kio.acceleration.domain.acceleration.ui_out.AccelerationOuter
 import yin_kio.acceleration.domain.acceleration.use_cases.AccelerationUseCases
 import yin_kio.acceleration.domain.acceleration.use_cases.AccelerationUseCasesImpl
 import yin_kio.acceleration.domain.acceleration.use_cases.AcceleratorImpl
-import yin_kio.acceleration.domain.bg_uploading.entities.AppsFormImpl
+import yin_kio.acceleration.domain.selectable_acceleration.entities.AppsFormImpl
 import yin_kio.acceleration.domain.gateways.Ads
 import yin_kio.acceleration.domain.gateways.Apps
 

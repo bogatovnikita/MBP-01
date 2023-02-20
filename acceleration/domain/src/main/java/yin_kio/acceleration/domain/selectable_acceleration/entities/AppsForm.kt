@@ -1,4 +1,4 @@
-package yin_kio.acceleration.domain.bg_uploading.entities
+package yin_kio.acceleration.domain.selectable_acceleration.entities
 
 internal interface AppsForm {
 

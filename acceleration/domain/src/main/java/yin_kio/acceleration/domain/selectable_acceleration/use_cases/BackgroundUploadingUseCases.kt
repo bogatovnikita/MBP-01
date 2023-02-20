@@ -1,4 +1,4 @@
-package yin_kio.acceleration.domain.bg_uploading.use_cases
+package yin_kio.acceleration.domain.selectable_acceleration.use_cases
 
 interface BackgroundUploadingUseCases {
     fun close()

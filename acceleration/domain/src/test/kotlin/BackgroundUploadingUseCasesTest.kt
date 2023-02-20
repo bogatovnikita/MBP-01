@@ -4,12 +4,12 @@ import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
-import yin_kio.acceleration.domain.bg_uploading.entities.AppsForm
-import yin_kio.acceleration.domain.bg_uploading.entities.SelectionStatus
-import yin_kio.acceleration.domain.bg_uploading.ui_out.BackgroundUploadingOuter
-import yin_kio.acceleration.domain.bg_uploading.ui_out.UpdateStatus
-import yin_kio.acceleration.domain.bg_uploading.use_cases.BackgroundUploadingUseCases
-import yin_kio.acceleration.domain.bg_uploading.use_cases.BackgroundUploadingUseCasesImpl
+import yin_kio.acceleration.domain.selectable_acceleration.entities.AppsForm
+import yin_kio.acceleration.domain.selectable_acceleration.entities.SelectionStatus
+import yin_kio.acceleration.domain.selectable_acceleration.ui_out.SelectableAccelerationOuter
+import yin_kio.acceleration.domain.selectable_acceleration.ui_out.UpdateStatus
+import yin_kio.acceleration.domain.selectable_acceleration.use_cases.BackgroundUploadingUseCases
+import yin_kio.acceleration.domain.selectable_acceleration.use_cases.BackgroundUploadingUseCasesImpl
 import yin_kio.acceleration.domain.gateways.Ads
 import yin_kio.acceleration.domain.gateways.Apps
 
@@ -18,7 +18,7 @@ class BackgroundUploadingUseCasesTest {
 
 
     private val appsForm: AppsForm = spyk()
-    private val outer: BackgroundUploadingOuter = spyk()
+    private val outer: SelectableAccelerationOuter = spyk()
     private val apps: Apps = spyk()
     private val ads: Ads = spyk()
     private lateinit var useCases: BackgroundUploadingUseCases

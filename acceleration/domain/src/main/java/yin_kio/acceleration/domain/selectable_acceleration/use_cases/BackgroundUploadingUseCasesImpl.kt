@@ -1,17 +1,17 @@
-package yin_kio.acceleration.domain.bg_uploading.use_cases
+package yin_kio.acceleration.domain.selectable_acceleration.use_cases
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import yin_kio.acceleration.domain.bg_uploading.entities.AppsForm
-import yin_kio.acceleration.domain.bg_uploading.ui_out.BackgroundUploadingOuter
-import yin_kio.acceleration.domain.bg_uploading.ui_out.UpdateStatus
+import yin_kio.acceleration.domain.selectable_acceleration.entities.AppsForm
+import yin_kio.acceleration.domain.selectable_acceleration.ui_out.SelectableAccelerationOuter
+import yin_kio.acceleration.domain.selectable_acceleration.ui_out.UpdateStatus
 import yin_kio.acceleration.domain.gateways.Ads
 import yin_kio.acceleration.domain.gateways.Apps
 import kotlin.coroutines.CoroutineContext
 
 internal class BackgroundUploadingUseCasesImpl(
-    private val outer: BackgroundUploadingOuter,
+    private val outer: SelectableAccelerationOuter,
     private val appsForm: AppsForm,
     private val apps: Apps,
     private val ads: Ads,

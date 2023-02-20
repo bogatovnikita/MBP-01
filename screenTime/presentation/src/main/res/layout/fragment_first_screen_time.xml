@@ -89,6 +89,12 @@
         app:layout_constraintTop_toBottomOf="@id/guideline_bottom_bar" />
 
     <androidx.constraintlayout.widget.Group
+        android:id="@+id/arrows_groups"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="background_arrow_left,arrow_left,background_arrow_right,arrow_right" />
+
+    <androidx.constraintlayout.widget.Group
         android:id="@+id/group_choice_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -245,9 +251,9 @@
         android:layout_marginEnd="@dimen/_4sdp"
         android:layout_marginBottom="@dimen/_8sdp"
         android:background="@drawable/background_not_transparent_button"
+        android:padding="@dimen/_4sdp"
         android:text="@string/stop_app"
         android:textAllCaps="false"
-        android:padding="@dimen/_4sdp"
         android:textAppearance="@style/Text.Subtitle_1.2"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"

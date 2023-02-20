@@ -9,8 +9,8 @@
         android:id="@+id/group_loading_data"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="visible"
-        app:constraint_referenced_ids="delete_app,data_tv,stop_app,time_data_tv,res_consumption,custom_view,last_launch_tv,total_usage_time_tv,info_app_button,time_total_usage_time_tv,time_last_launch_tv" />
+        android:visibility="gone"
+        app:constraint_referenced_ids="delete_app,data_tv,stop_app,custom_view_graph,background_icon,time_data_tv,res_consumption,custom_view,last_launch_tv,total_usage_time_tv,info_app_button,time_total_usage_time_tv,time_last_launch_tv" />
 
     <ImageView
         android:id="@+id/back_arrow"
@@ -142,6 +142,13 @@
         android:visibility="visible"
         app:constraint_referenced_ids="arrow_left,background_arrow_left,date_tv,arrow_right,background_arrow_right" />
 
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group_arrows"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        app:constraint_referenced_ids="arrow_left,background_arrow_left,arrow_right,background_arrow_right" />
+
     <ImageView
         android:id="@+id/arrow_left"
         android:layout_width="wrap_content"
@@ -201,15 +208,23 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.25" />
 
-    <ImageView
-        android:id="@+id/custom_view"
+    <com.hedgehog.presentation.custom_view.AppStatisticsGraph
+        android:id="@+id/custom_view_graph"
         android:layout_width="0dp"
-        android:visibility="invisible"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_test_custom_view"
+        android:layout_height="0dp"
+        android:layout_marginHorizontal="@dimen/_16sdp"
+        android:fontFamily="@font/golos_text_regular"
+        app:layout_constraintBottom_toTopOf="@id/guideline_custom_view_end"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/guideline_custom_view" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_custom_view_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.5" />
 
     <TextView
         android:id="@+id/last_launch_tv"
@@ -223,7 +238,7 @@
         app:layout_constraintEnd_toStartOf="@id/time_last_launch_tv"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/custom_view" />
+        app:layout_constraintTop_toBottomOf="@id/guideline_custom_view_end" />
 
     <TextView
         android:id="@+id/time_last_launch_tv"
@@ -235,7 +250,7 @@
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/last_launch_tv"
-        app:layout_constraintTop_toBottomOf="@id/custom_view"
+        app:layout_constraintTop_toBottomOf="@id/guideline_custom_view_end"
         tools:text="20 мин. назад" />
 
     <TextView
@@ -361,7 +376,7 @@
         android:id="@+id/loader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

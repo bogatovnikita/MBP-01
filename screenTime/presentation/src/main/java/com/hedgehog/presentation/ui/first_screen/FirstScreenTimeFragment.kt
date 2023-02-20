@@ -2,6 +2,7 @@ package com.hedgehog.presentation.ui.first_screen
 
 import android.Manifest
 import android.app.ActivityManager
+import android.app.AlertDialog
 import android.app.AppOpsManager
 import android.content.Context
 import android.content.Intent
@@ -10,7 +11,9 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Process
 import android.provider.Settings
+import android.view.LayoutInflater
 import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
@@ -29,6 +32,7 @@ import com.hedgehog.presentation.ui.adapters.ScreenTimeAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import yin_kio.package_usage_dialog.R.layout
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -66,8 +70,32 @@ class FirstScreenTimeFragment :
                 showAppsByPeriod(Period.Week)
             }
         } else {
+            packageUsageDialog()
+
+        }
+    }
+
+    private fun packageUsageDialog() {
+        val builder = AlertDialog.Builder(requireContext())
+        val dialogLayout = LayoutInflater.from(requireContext())
+            .inflate(layout.dialog_package_usage, null)
+        builder.setView(dialogLayout)
+        val dialog = builder.create()
+        dialog.setCancelable(false)
+        dialog.show()
+
+        val btnNo = dialog.findViewById<TextView>(yin_kio.package_usage_dialog.R.id.close)
+        btnNo.setOnClickListener {
+            dialog.dismiss()
+            findNavController().navigateUp()
+        }
+
+        val btnYes = dialog.findViewById<TextView>(yin_kio.package_usage_dialog.R.id.allow)
+        btnYes.setOnClickListener {
+            dialog.dismiss()
             startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS))
         }
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

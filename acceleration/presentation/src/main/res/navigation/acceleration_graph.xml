@@ -29,5 +29,13 @@
     <fragment
         android:id="@+id/selectableAccelerationFragment"
         android:name="yin_kio.acceleration.presentation.selectable_acceleration.SelectableAccelerationFragment"
-        android:label="SelectableAccelerationFragment" />
+        android:label="SelectableAccelerationFragment" >
+        <action
+            android:id="@+id/toStopProgress"
+            app:destination="@id/selectableAccelerationDialog" />
+    </fragment>
+    <dialog
+        android:id="@+id/selectableAccelerationDialog"
+        android:name="yin_kio.acceleration.presentation.selectable_acceleration.SelectableAccelerationDialog"
+        android:label="SelectableAccelerationDialog" />
 </navigation>

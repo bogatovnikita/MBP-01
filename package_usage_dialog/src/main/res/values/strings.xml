@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="we_need_permission">Нам требуется разрешение</string>
+    <string name="we_need_permission_description">Нам нужно разрешение для отслеживания используемых приложений, чтобы мы могли находить и отключать фоновые процессы и ускорять работу вашего телефона.</string>
+    <string name="allow_access_usage_history">Доступ к истории использования</string>
+    <string name="close">Закрыть</string>
+    <string name="allow_not_underscored">Разрешить</string>
+</resources>

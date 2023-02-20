@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace 'yin_kio.acceleration.presentation'
+    namespace 'yin_kio.package_usage_dialog'
     compileSdk 33
 
     defaultConfig {
@@ -36,17 +36,9 @@ android {
 
 dependencies {
 
-    implementation project(':acceleration:data')
-    implementation project(':acceleration:domain')
-    implementation project(':general:permissions')
-    implementation project(':rect_progress_bar')
-    implementation project(':package_usage_dialog')
+    implementation 'androidx.core:core-ktx:1.7.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.8.0'
 
-    implementation project(':storage_info_view')
-
-    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4"
-
-    implementation presentation.values()
-    testImplementation presentation_test.values()
-    androidTestImplementation presentation_android_test.values()
+    implementation project(':general:resources')
 }

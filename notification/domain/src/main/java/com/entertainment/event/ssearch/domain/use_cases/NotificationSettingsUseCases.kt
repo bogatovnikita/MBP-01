@@ -41,9 +41,13 @@ class NotificationSettingsUseCases @Inject constructor(
 
     fun hasServicePermission() = permission.hasServicePermission()
 
+    fun hasNotificationPermission() = permission.hasNotificationPermission()
+
     fun clearAllNotification() {
         serviceController.cleanAllNotification()
     }
+
+    fun setRestartServiceWorker() = serviceController.setRestartServiceWorker()
 
     suspend fun isAllAppsLimited(): Boolean = dndSettings.isAllAppsLimited()
 

@@ -6,4 +6,6 @@ interface ServiceController {
 
     fun cleanAllNotification()
 
+    fun setRestartServiceWorker()
+
 }

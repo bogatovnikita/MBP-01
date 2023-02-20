@@ -1,0 +1,40 @@
+buildscript {
+    ext {
+
+        versions = [
+                vbProperty         : '1.5.6',
+                hilt               : '2.44.2',
+                navigation         : '2.5.3',
+                adaptive_dimentions: '1.1.0',
+                junit              : '4.13.2',
+                android_junit      : '1.1.5',
+                espresso           : '3.5.1',
+                core_ktx           : '1.7.0',
+                appcompat          : '1.6.0',
+                material           : '1.8.0'
+        ]
+
+        advice_info_presentation = [
+                'vb'              : "com.github.kirich1409:viewbindingpropertydelegate:${versions.vbProperty}",
+                'hilt'            : "com.google.dagger:hilt-android:${versions.hilt}",
+                'hilt_compiler'   : "com.google.dagger:hilt-compiler:${versions.hilt}",
+                'sdp'             : "com.intuit.sdp:sdp-android:${versions.adaptive_dimentions}",
+                'ssp'             : "com.intuit.ssp:ssp-android:${versions.adaptive_dimentions}",
+                'nav_fragment_ktx': "androidx.navigation:navigation-fragment-ktx:${versions.navigation}",
+                'nav_ui_ktx'      : "androidx.navigation:navigation-ui-ktx:${versions.navigation}",
+                'core_ktx'        : "androidx.core:core-ktx:${versions.core_ktx}",
+                'appcompat'       : "androidx.appcompat:appcompat:${versions.appcompat}",
+                'material'        : "com.google.android.material:material:${versions.material}"
+        ]
+
+        advice_info_presentation_test = [
+                'junit': "junit:junit:${versions.junit}"
+        ]
+
+        advice_info_presentation_android_test = [
+                'junit'   : "androidx.test.ext:junit:${versions.android_junit}",
+                'espresso': "androidx.test.espresso:espresso-core:${versions.espresso}"
+        ]
+
+    }
+}

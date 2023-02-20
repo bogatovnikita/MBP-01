@@ -1,5 +1,6 @@
 package yin_kio.acceleration.presentation
 
+import android.os.Bundle
 import androidx.navigation.NavController
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -30,7 +31,9 @@ class AccelerationNavigatorTest {
     private fun setupTest(testBlock: TestScope.() -> Unit) = runTest{
         navigator = AccelerationNavigatorImpl(
             coroutineScope = this,
-            inter = inter
+            inter = inter,
+            completeDestination = 0,
+            completeArgs = Bundle()
         )
         navigator.navController = navController
 

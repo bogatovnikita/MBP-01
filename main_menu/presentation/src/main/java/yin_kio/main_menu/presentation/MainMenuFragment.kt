@@ -32,13 +32,15 @@ class MainMenuFragment : Fragment(R.layout.fragment_main_menu) {
             duplicates.setOnClickListener { openDuplicates() }
             garbageClean.setOnClickListener { openGarbageClean() }
             toMemory.setOnClickListener { openMemory() }
-            acceleration.setOnClickListener {
-                onBackPressedCallback.isEnabled = true
-                findNavController().navigate(R.id.toAcceleration)
-            }
+            acceleration.setOnClickListener { openAcceleration() }
             toNotification.setOnClickListener { openNotificationManager() }
             toTimeScreen.setOnClickListener { openScreenTimeManager() }
         }
+    }
+
+    private fun openAcceleration() {
+        onBackPressedCallback.isEnabled = true
+        findNavController().navigate(R.id.toAcceleration, completeDestination())
     }
 
     private fun openMemory() {
@@ -68,7 +70,7 @@ class MainMenuFragment : Fragment(R.layout.fragment_main_menu) {
 
     private fun completeDestination() : Bundle {
         return Bundle().apply {
-            putInt(ArgNames.COMPLETE_DESTINATION_ID, R.id.toAdvices)
+            putInt(ArgNames.COMPLETE_DESTINATION_ID, R.id.advicesFragment)
         }
     }
 

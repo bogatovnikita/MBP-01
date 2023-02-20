@@ -13,7 +13,7 @@ class AppsWithNotifications @Inject constructor(
 
     override suspend fun readAppsWithNotifications(): Flow<List<AppWithNotifications>> =
         db.readAppsWithNotifications().map { listAppWithNotificationsDb ->
-            listAppWithNotificationsDb.mapToAppAppWithNotifications()
+            listAppWithNotificationsDb.mapToAppWithNotifications()
         }
 
 }

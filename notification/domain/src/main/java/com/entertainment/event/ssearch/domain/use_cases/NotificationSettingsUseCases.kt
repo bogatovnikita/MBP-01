@@ -1,8 +1,6 @@
 package com.entertainment.event.ssearch.domain.use_cases
 
-import android.app.Application
 import com.entertainment.event.ssearch.domain.dnd.DNDController
-import com.entertainment.event.ssearch.domain.mappers.mapToApp
 import com.entertainment.event.ssearch.domain.models.AppWithNotifications
 import com.entertainment.event.ssearch.domain.permission.Permission
 import com.entertainment.event.ssearch.domain.providers.AppsProvider
@@ -17,7 +15,6 @@ import javax.inject.Inject
 
 class NotificationSettingsUseCases @Inject constructor(
     private val apps: AppRepository,
-    private val context: Application,
     private val permission: Permission,
     private val dndSettings: DNDSettings,
     private val appsProvide: AppsProvider,
@@ -84,10 +81,10 @@ class NotificationSettingsUseCases @Inject constructor(
     }
 
     private suspend fun addNewApps() {
-        val listApps = appsProvide.getSystemPackages() + appsProvide.getInstalledPackages()
+        val listApps = appsProvide.getInstalledApp()
         listApps.forEach { app ->
             if (apps.readApp(app.packageName) == null) {
-                apps.insertApp(app.mapToApp(context))
+                apps.insertApp(app)
             }
         }
     }
@@ -111,7 +108,7 @@ class NotificationSettingsUseCases @Inject constructor(
     private suspend fun getOnlyApps(): Flow<List<AppWithNotifications>> {
         return if (apps.getApps().isEmpty()) {
             val phoneApps = getPhoneApps()
-            apps.insertAll(phoneApps.mapToApp(context))
+            apps.insertAll(phoneApps)
             appsWithNotifications.readAppsWithNotifications()
         } else {
             appsWithNotifications.readAppsWithNotifications()
@@ -125,6 +122,6 @@ class NotificationSettingsUseCases @Inject constructor(
     }
 
     private suspend fun getPhoneApps() =
-        appsProvide.getSystemPackages() + appsProvide.getInstalledPackages()
+        appsProvide.getInstalledApp()
 
 }

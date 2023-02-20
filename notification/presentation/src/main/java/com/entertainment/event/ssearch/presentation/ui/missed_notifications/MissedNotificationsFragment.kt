@@ -67,7 +67,7 @@ class MissedNotificationsFragment : Fragment(R.layout.fragment_missed_notificati
                 viewModel.obtainEvent(MissedNotificationEvent.DeleteAll(isCanDelete))
             }
             binding.root.setOnClickListener {
-                binding.btnCleanAll.hideButton() // TODO есть стандартное расширение isVisible
+                binding.btnCleanAll.hideButton()
             }
             binding.btnMissedNotifications.setOnClickListener {
                 binding.btnCleanAll.hideButton()
@@ -78,8 +78,7 @@ class MissedNotificationsFragment : Fragment(R.layout.fragment_missed_notificati
             binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                     super.onScrollStateChanged(recyclerView, newState)
-                    binding.btnCleanAll.hideButton() // TODO Высокая связность между вьюшками: этот слушатель зависит от кнопки, как и другие.
-                    // TODO в качестве посредника лучше использовать вьюмодель, это снизит связность
+                    binding.btnCleanAll.hideButton()
                 }
             })
         }

@@ -18,7 +18,7 @@ import androidx.lifecycle.coroutineScope
 import com.entertainment.event.ssearch.data.background.NotificationCleanBroadcastReceiver.Companion.START_OBSERVE
 import com.entertainment.event.ssearch.data.repositories.Apps
 import com.entertainment.event.ssearch.data.repositories.Notifications
-import com.entertainment.event.ssearch.data.repositories.mapToNotificationDb
+import com.entertainment.event.ssearch.data.repositories.mapToNotification
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -97,7 +97,7 @@ class NotificationService : NotificationListenerService(), LifecycleOwner {
             activeNotifications.forEach { notification ->
                 val isDisabled = !(apps.readApp(notification.packageName)?.isSwitched ?: true)
                 if (isDisabled) {
-                    notifications.insert(notification.mapToNotificationDb())
+                    notifications.insert(notification.mapToNotification())
                     cancelNotification(notification.key)
                 }
             }

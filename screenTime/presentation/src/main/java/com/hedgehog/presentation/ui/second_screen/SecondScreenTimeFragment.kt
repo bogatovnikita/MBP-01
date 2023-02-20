@@ -31,7 +31,6 @@ import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.*
 
-
 @AndroidEntryPoint
 class SecondScreenTimeFragment :
     BaseFragment<FragmentSecondScreenTimeBinding>(FragmentSecondScreenTimeBinding::inflate) {
@@ -81,17 +80,12 @@ class SecondScreenTimeFragment :
             viewModel.choiceWeek()
             showAppsByPeriod(Period.Week)
 
+            binding.groupArrows.visibility = View.GONE
+
             viewModel.calendar = Calendar.getInstance()
             viewModel.secondCalendar = Calendar.getInstance()
 
-            viewModel.calendar.set(Calendar.DAY_OF_WEEK, viewModel.calendar.firstDayOfWeek)
-            viewModel.secondCalendar.set(
-                Calendar.DAY_OF_WEEK,
-                viewModel.secondCalendar.firstDayOfWeek
-            )
-            viewModel.secondCalendar.set(Calendar.HOUR_OF_DAY, -1)
-            viewModel.calendar.add(Calendar.WEEK_OF_YEAR, -args.calendarScreenTime.beginTime)
-            viewModel.secondCalendar.add(Calendar.WEEK_OF_YEAR, -args.calendarScreenTime.endTime)
+            viewModel.calendar.add(Calendar.DATE, -FirstScreenTimeFragment.LIMIT_STATISTICS_FOR_DAY)
         }
     }
 
@@ -156,6 +150,7 @@ class SecondScreenTimeFragment :
             }
         }
         binding.backgroundArrowLeft.setOnClickListener {
+            if (!viewModel.screenState.value.isLoading) return@setOnClickListener
             if (sharedPrefs.getBoolean(FIRST_LAUNCH, true)) {
                 showTutorial()
             } else {
@@ -163,6 +158,7 @@ class SecondScreenTimeFragment :
             }
         }
         binding.backgroundArrowRight.setOnClickListener {
+            if (!viewModel.screenState.value.isLoading) return@setOnClickListener
             if (sharedPrefs.getBoolean(FIRST_LAUNCH, true)) {
                 showTutorial()
             } else {
@@ -204,7 +200,7 @@ class SecondScreenTimeFragment :
 
     private fun showTutorial() {
         lifecycleScope.launch {
-            delay(1000)
+            delay(500)
             binding.tutorialGroup.visibility = View.VISIBLE
             sharedPrefs.edit().putBoolean(FIRST_LAUNCH, false).apply()
         }
@@ -227,7 +223,6 @@ class SecondScreenTimeFragment :
 
     private fun choiceLeftArrow() {
         if (viewModel.screenState.value.choiceDay && viewModel.beginTime == FirstScreenTimeFragment.LIMIT_STATISTICS_FOR_DAY) return
-        if (viewModel.screenState.value.choiceWeek && viewModel.beginTime == FirstScreenTimeFragment.LIMIT_STATISTICS_FOR_WEEK) return
         viewModel.beginTime += 1
         viewModel.endTime += 1
         if (viewModel.screenState.value.choiceDay) {
@@ -256,6 +251,8 @@ class SecondScreenTimeFragment :
     private fun choiceDay() {
         viewModel.choiceDay()
 
+        binding.groupArrows.visibility = View.VISIBLE
+
         showAppsByPeriod(Period.Day)
 
         viewModel.beginTime = 0
@@ -268,17 +265,17 @@ class SecondScreenTimeFragment :
     private fun choiceWeek() {
         viewModel.choiceWeek()
 
+        binding.groupArrows.visibility = View.GONE
+
         showAppsByPeriod(Period.Week)
 
         viewModel.beginTime = 0
         viewModel.endTime = -1
         viewModel.calendar = Calendar.getInstance()
         viewModel.secondCalendar = Calendar.getInstance()
-        viewModel.calendar.set(Calendar.DAY_OF_WEEK, viewModel.calendar.firstDayOfWeek)
-        viewModel.secondCalendar.set(Calendar.DAY_OF_WEEK, viewModel.secondCalendar.firstDayOfWeek)
-        viewModel.secondCalendar.set(Calendar.HOUR_OF_DAY, -1)
-        viewModel.calendar.add(Calendar.WEEK_OF_YEAR, 0)
-        viewModel.secondCalendar.add(Calendar.WEEK_OF_YEAR, +1)
+
+        viewModel.calendar.add(Calendar.DATE, -FirstScreenTimeFragment.LIMIT_STATISTICS_FOR_DAY)
+
         updateScreenTime(Calendar.WEEK_OF_YEAR, viewModel.beginTime, viewModel.endTime)
     }
 
@@ -287,6 +284,10 @@ class SecondScreenTimeFragment :
         if (state.isLoading) {
             binding.groupLoadingData.isVisible = state.isLoading
             binding.loader.isVisible = !state.isLoading
+            binding.customViewGraph.apply {
+                progressesHeights = state.appInfo.listTime
+                typeWeek = !state.choiceDay
+            }
             initScreen(state)
             if (state.appInfo.listTime.isEmpty()) {
                 stateListIsEmpty()

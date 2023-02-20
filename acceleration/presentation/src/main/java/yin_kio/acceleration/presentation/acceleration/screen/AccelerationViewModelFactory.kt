@@ -1,7 +1,6 @@
-package yin_kio.acceleration.presentation.acceleration
+package yin_kio.acceleration.presentation.acceleration.screen
 
 import android.content.Context
-import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineScope
 import yin_kio.acceleration.data.AccelerationPermissions
 import yin_kio.acceleration.data.AndroidApps
@@ -18,7 +17,7 @@ class AccelerationViewModelFactory(
     private val coroutineScope: CoroutineScope
 ) {
 
-    fun create() : AccelerationViewModel{
+    fun create() : AccelerationViewModel {
 
         val presenter = AccelerationPresenterImpl(context)
 

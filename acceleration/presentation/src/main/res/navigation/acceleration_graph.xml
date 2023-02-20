@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/accelerationFragment"
-        android:name="yin_kio.acceleration.presentation.acceleration.AccelerationFragment"
+        android:name="yin_kio.acceleration.presentation.acceleration.screen.AccelerationFragment"
         android:label="AccelerationFragment" >
         <action
             android:id="@+id/toAccelerationDialog"

@@ -1,4 +1,4 @@
-package yin_kio.acceleration.presentation.acceleration
+package yin_kio.acceleration.presentation.acceleration.screen
 
 import android.os.Bundle
 import android.view.View
@@ -8,14 +8,10 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import jamycake.lifecycle_aware.lifecycleAware
-import yin_kio.acceleration.data.AccelerationPermissions
-import yin_kio.acceleration.data.AndroidApps
-import yin_kio.acceleration.data.OlejaAds
-import yin_kio.acceleration.data.RamInfoProvider
-import yin_kio.acceleration.domain.AccelerationDomainFactory
 import yin_kio.acceleration.presentation.PermissionRequesterImpl
 import yin_kio.acceleration.presentation.inter.OlejaInter
 import yin_kio.acceleration.presentation.R
+import yin_kio.acceleration.presentation.acceleration.AccelerationNavigatorImpl
 import yin_kio.acceleration.presentation.databinding.FragmentAccelerationBinding
 
 class AccelerationFragment : Fragment(R.layout.fragment_acceleration) {

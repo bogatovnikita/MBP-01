@@ -14,7 +14,7 @@ buildscript {
                 material           : '1.8.0'
         ]
 
-        advice_info_presentation = [
+        device_info_presentation = [
                 'vb'              : "com.github.kirich1409:viewbindingpropertydelegate:${versions.vbProperty}",
                 'hilt'            : "com.google.dagger:hilt-android:${versions.hilt}",
                 'hilt_compiler'   : "com.google.dagger:hilt-compiler:${versions.hilt}",
@@ -27,11 +27,11 @@ buildscript {
                 'material'        : "com.google.android.material:material:${versions.material}"
         ]
 
-        advice_info_presentation_test = [
+        device_info_presentation_test = [
                 'junit': "junit:junit:${versions.junit}"
         ]
 
-        advice_info_presentation_android_test = [
+        device_info_presentation_android_test = [
                 'junit'   : "androidx.test.ext:junit:${versions.android_junit}",
                 'espresso': "androidx.test.espresso:espresso-core:${versions.espresso}"
         ]

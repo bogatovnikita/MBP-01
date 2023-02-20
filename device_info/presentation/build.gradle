@@ -35,6 +35,8 @@ android {
 
 dependencies {
 
-    implementation advice_info_presentation.values()
+    //Hilt
+    api "com.google.dagger:hilt-android:2.44.2"
+    kapt "com.google.dagger:hilt-compiler:2.44.2"
 
 }

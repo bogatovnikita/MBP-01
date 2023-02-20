@@ -14,6 +14,7 @@ import yin_kio.acceleration.domain.acceleration.ui_out.AppsState
 import yin_kio.acceleration.presentation.PermissionRequesterImpl
 import yin_kio.acceleration.presentation.R
 import yin_kio.acceleration.presentation.acceleration.AccelerationNavigatorImpl
+import yin_kio.acceleration.presentation.acceleration.screen.app_item.AppsAdapter
 import yin_kio.acceleration.presentation.databinding.FragmentAccelerationBinding
 import yin_kio.acceleration.presentation.inter.OlejaInter
 
@@ -26,10 +27,16 @@ class AccelerationFragment : Fragment(R.layout.fragment_acceleration) {
     ) }
     private val permissionRequester: PermissionRequesterImpl by lifecycleAware { PermissionRequesterImpl() }
     private val viewModel by lifecycleAware { createAccelerationViewModel() }
+    private val adapter by lazy { AppsAdapter(
+        coroutineScope = viewLifecycleOwner.lifecycleScope,
+        application = requireActivity().application
+    ) }
 
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        binding.recycler.adapter = adapter
+
         setupObserver()
         setupListeners()
     }
@@ -38,12 +45,21 @@ class AccelerationFragment : Fragment(R.layout.fragment_acceleration) {
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.flow.collect {
                 showRamInfo(it)
-                showApps(it)
+                showAppsLoaderOrPermission(it)
+                passAppsToRecycler(it.appsState)
             }
         }
     }
 
-    private fun showApps(it: ScreenState) {
+    private fun passAppsToRecycler(
+        appsState: AppsState
+    ) {
+        if (appsState is AppsState.AppsList) {
+            adapter.submitList(appsState.apps)
+        }
+    }
+
+    private fun showAppsLoaderOrPermission(it: ScreenState) {
         binding.recycler.isVisible = it.appsState is AppsState.AppsList
         binding.listPermission.isVisible = it.appsState is AppsState.Permission
         binding.listLoader.isVisible = it.appsState is AppsState.Progress

@@ -26,7 +26,6 @@ internal class BackgroundUploadingUseCasesImpl(
     override fun switchSelectAllApps(){
         appsForm.switchSelectAll()
         outer.setSelectionStatus(appsForm.selectionStatus)
-        outer.updateApps()
     }
 
     override fun switchSelectApp(packageName: String){

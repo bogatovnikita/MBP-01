@@ -60,7 +60,6 @@ class BackgroundUploadingUseCasesTest {
         coVerifyOrder {
             appsForm.switchSelectAll()
             outer.setSelectionStatus(selectionStatus)
-            outer.updateApps()
         }
     }
 

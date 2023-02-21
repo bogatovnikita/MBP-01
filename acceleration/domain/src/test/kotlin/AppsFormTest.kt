@@ -18,17 +18,24 @@ class AppsFormTest {
 
     @Test
     fun testSwitchSelectAll(){
-        val expected = listOf("app1", "app2")
-
-        appsForm.apps = expected
+        val input = listOf("app1", "app2")
+        appsForm.apps = input
 
         appsForm.switchSelectAll()
 
-        assertTrue(appsForm.isAllSelected)
-        assertTrue(appsForm.hasSelected)
-        assertTrue(appsForm.selectedApps.containsAll(expected))
+        assertTrue(isAllSelectedAndOther(input))
         assertEquals(SelectionStatus.AllSelected, appsForm.selectionStatus)
+
+        appsForm.switchSelectAll()
+
+        assertFalse(isAllSelectedAndOther(input))
+        assertEquals(SelectionStatus.NoSelected, appsForm.selectionStatus)
     }
+
+    private fun isAllSelectedAndOther(input: List<String>) =
+        (appsForm.isAllSelected
+                && appsForm.hasSelected
+                && appsForm.selectedApps.containsAll(input))
 
     @Test
     fun testSwitchSelectApp(){

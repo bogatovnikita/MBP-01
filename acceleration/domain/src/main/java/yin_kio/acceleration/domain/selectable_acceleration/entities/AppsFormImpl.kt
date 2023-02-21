@@ -25,7 +25,11 @@ internal class AppsFormImpl : AppsForm {
         get() = _selectedApps
 
     override fun switchSelectAll() {
-        _selectedApps.addAll(apps)
+        if (isAllSelected){
+            _selectedApps.clear()
+        } else {
+            _selectedApps.addAll(apps)
+        }
     }
 
     override fun switchSelectApp(packageName: String) {

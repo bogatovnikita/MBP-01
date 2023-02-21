@@ -1,5 +1,6 @@
 package yin_kio.acceleration.presentation.selectable_acceleration.adapter
 
+import android.util.Log
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,13 +19,16 @@ class AppItemViewModel(
     private val _flow = MutableStateFlow(AppItem())
     val flow = _flow.asStateFlow()
 
-    fun update(packageName: String){
+    fun update(packageName: String = _flow.value.packageName){
+
         coroutineScope.launch(Dispatchers.IO) {
             _flow.value = _flow.value.copy(
+                packageName = packageName,
                 icon = appInfoProvider.getIcon(packageName),
                 name = appInfoProvider.getName(packageName),
                 isSelected = appsFormState.isAppSelected(packageName)
             )
+            Log.d("!!!", "packageName: ${_flow.value.packageName}")
         }
     }
 

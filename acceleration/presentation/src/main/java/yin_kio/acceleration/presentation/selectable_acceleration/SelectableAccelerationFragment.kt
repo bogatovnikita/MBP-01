@@ -36,17 +36,20 @@ class SelectableAccelerationFragment : Fragment(R.layout.fragment_stop_selected_
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.recycler.adapter = adapter
 
+        binding.checkbox.setOnClickListener { viewModel.switchSelectAllApps() }
+        binding.checkboxText.setOnClickListener{ viewModel.switchSelectAllApps() }
+
         setupObserver()
     }
 
     private fun setupObserver() {
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.flow.collect {
+                binding.recycler.updateAll()
                 showRecyclerContent(it)
                 showIsAllSelected(it)
                 showButtonBg(it)
                 showRecyclerOrProgress(it)
-
             }
         }
     }

@@ -26,4 +26,12 @@ class AppItemRecycler : RecyclerView {
             }
         }
     }
+
+    fun updateAll(){
+        children.forEach {
+            val viewHolder = getChildViewHolder(it) as AppItemHolder
+            val viewModel = viewHolder.viewModel
+            viewModel.update()
+        }
+    }
 }

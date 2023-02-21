@@ -1,6 +1,6 @@
 package yin_kio.acceleration.domain.selectable_acceleration.use_cases
 
-interface BackgroundUploadingUseCases {
+interface SelectableAccelerationUseCases {
     fun close()
 
     fun switchSelectAllApps()

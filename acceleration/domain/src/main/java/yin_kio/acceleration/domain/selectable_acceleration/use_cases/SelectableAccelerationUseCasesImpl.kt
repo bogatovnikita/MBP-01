@@ -10,14 +10,14 @@ import yin_kio.acceleration.domain.gateways.Ads
 import yin_kio.acceleration.domain.gateways.Apps
 import kotlin.coroutines.CoroutineContext
 
-internal class BackgroundUploadingUseCasesImpl(
+internal class SelectableAccelerationUseCasesImpl(
     private val outer: SelectableAccelerationOuter,
     private val appsForm: AppsForm,
     private val apps: Apps,
     private val ads: Ads,
     private val coroutineScope: CoroutineScope,
     private val dispatcher: CoroutineContext
-) : BackgroundUploadingUseCases {
+) : SelectableAccelerationUseCases {
 
     override fun close(){
         outer.close()

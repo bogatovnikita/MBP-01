@@ -8,24 +8,24 @@ import yin_kio.acceleration.domain.selectable_acceleration.entities.AppsForm
 import yin_kio.acceleration.domain.selectable_acceleration.entities.SelectionStatus
 import yin_kio.acceleration.domain.selectable_acceleration.ui_out.SelectableAccelerationOuter
 import yin_kio.acceleration.domain.selectable_acceleration.ui_out.UpdateStatus
-import yin_kio.acceleration.domain.selectable_acceleration.use_cases.BackgroundUploadingUseCases
-import yin_kio.acceleration.domain.selectable_acceleration.use_cases.BackgroundUploadingUseCasesImpl
+import yin_kio.acceleration.domain.selectable_acceleration.use_cases.SelectableAccelerationUseCases
+import yin_kio.acceleration.domain.selectable_acceleration.use_cases.SelectableAccelerationUseCasesImpl
 import yin_kio.acceleration.domain.gateways.Ads
 import yin_kio.acceleration.domain.gateways.Apps
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class BackgroundUploadingUseCasesTest {
+class SelectableAccelerationUseCasesTest {
 
 
     private val appsForm: AppsForm = spyk()
     private val outer: SelectableAccelerationOuter = spyk()
     private val apps: Apps = spyk()
     private val ads: Ads = spyk()
-    private lateinit var useCases: BackgroundUploadingUseCases
+    private lateinit var useCases: SelectableAccelerationUseCases
 
 
     private fun setupTest(testBlock: TestScope.() -> Unit) = runTest{
-        useCases = BackgroundUploadingUseCasesImpl(
+        useCases = SelectableAccelerationUseCasesImpl(
             outer = outer,
             appsForm = appsForm,
             apps = apps,

@@ -1,12 +1,14 @@
 package yin_kio.acceleration.presentation.selectable_acceleration
 
-class SelectableAccelerationViewModel {
 
-    fun setAppSelected(packageName: String, isSelected: Boolean){}
-    fun setButtonBgRes(resId: Int){}
-    fun setAllSelected(isAllSelected: Boolean){}
-    fun setProgressVisible(isVisible: Boolean){}
-    fun setListVisible(isVisible: Boolean){}
-    fun setApps(apps: List<String>){}
+
+class SelectableAccelerationViewModel : MutableSelectableAccelerationViewModel {
+
+    override fun setAppSelected(packageName: String, isSelected: Boolean){}
+    override fun setButtonBgRes(resId: Int){}
+    override fun setAllSelected(isAllSelected: Boolean){}
+    override fun setProgressVisible(isVisible: Boolean){}
+    override fun setListVisible(isVisible: Boolean){}
+    override fun setApps(apps: List<String>){}
 
 }

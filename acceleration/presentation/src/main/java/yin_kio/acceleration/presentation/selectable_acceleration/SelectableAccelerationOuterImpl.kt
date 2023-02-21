@@ -11,7 +11,7 @@ class SelectableAccelerationOuterImpl(
 ) : SelectableAccelerationOuter,
     SelectableAccelerationNavigator by navigator
 {
-    var viewModel: SelectableAccelerationViewModel? = null
+    var viewModel: MutableSelectableAccelerationViewModel? = null
 
     override fun setAppSelected(packageName: String, isSelected: Boolean) {
         viewModel?.setAppSelected(packageName, isSelected)

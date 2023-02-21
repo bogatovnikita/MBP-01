@@ -4,15 +4,13 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import io.mockk.spyk
-import junit.framework.TestCase.assertTrue
 import org.junit.Test
 import yin_kio.acceleration.domain.selectable_acceleration.entities.SelectionStatus
 import yin_kio.acceleration.domain.selectable_acceleration.ui_out.SelectableAccelerationNavigator
-import yin_kio.acceleration.domain.selectable_acceleration.ui_out.SelectableAccelerationOuter
 import yin_kio.acceleration.domain.selectable_acceleration.ui_out.UpdateStatus
+import yin_kio.acceleration.presentation.selectable_acceleration.MutableSelectableAccelerationViewModel
 import yin_kio.acceleration.presentation.selectable_acceleration.SelectableAccelerationOuterImpl
 import yin_kio.acceleration.presentation.selectable_acceleration.SelectableAccelerationPresenter
-import yin_kio.acceleration.presentation.selectable_acceleration.SelectableAccelerationViewModel
 
 class SelectableAccelerationOuterTest  {
 
@@ -22,7 +20,7 @@ class SelectableAccelerationOuterTest  {
         navigator = navigator,
         presenter = presenter
     )
-    private val viewModel: SelectableAccelerationViewModel = spyk()
+    private val viewModel: MutableSelectableAccelerationViewModel = spyk()
 
     init {
         outer.viewModel = viewModel

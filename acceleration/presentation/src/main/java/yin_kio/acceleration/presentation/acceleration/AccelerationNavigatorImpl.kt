@@ -35,7 +35,10 @@ class AccelerationNavigatorImpl(
     }
 
     override fun showSelectableAcceleration() = onMain {
-        navController?.navigate(R.id.toSelectableAcceleration)
+        navController?.navigate(
+            R.id.toSelectableAcceleration,
+            Bundle().apply { putInt("completeId", completeDestination) }
+        )
     }
 
     override fun complete() = onMain {

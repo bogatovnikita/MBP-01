@@ -1,8 +1,11 @@
 package yin_kio.acceleration.presentation.selectable_acceleration
 
 import android.os.Bundle
+import android.view.View
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -23,13 +26,23 @@ class SelectableAccelerationFragment : Fragment(R.layout.fragment_stop_selected_
     private val viewModel by lifecycleAware { createViewModel(viewModelScope) }
 
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            viewModel.flow.collect{
 
+                binding.checkbox.isChecked = it.isAllSelected
+                binding.stop.setBackgroundResource(it.buttonBgRes)
 
+                showRecyclerOrProgress(it)
 
+            }
+        }
+    }
 
-
-
-
+    private fun showRecyclerOrProgress(it: ScreenState) {
+        binding.progressPlate.isVisible = it.isProgressVisible
+        binding.recycler.isVisible = it.isListVisible
+    }
 
 
     override fun onResume() {

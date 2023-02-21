@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="battery_saving">Экономия батареи</string>
+    <string name="battery_charge_level">Уровень заряда аккумулятора</string>
+    <string name="consumption_for_the_last_hour">Расход за последний час</string>
+    <string name="calculate">Вычисляем…</string>
+    <string name="view_screen_time_statistics">Посмотреть статистику экранного времени</string>
+    <string name="we_recommend_extending_the_operation_of_the_phone">Рекомендуем продлить работу телефона</string>
+    <string name="our_app_will_help_to_reduce_the_battery_load_so_that_your_phone_works_longer">Наше приложение поможет снизить нагрузку батареи, чтобы ваш телефон работал дольше</string>
+    <string name="extend_phone_operation">Продлить работу телефона</string>
+</resources>

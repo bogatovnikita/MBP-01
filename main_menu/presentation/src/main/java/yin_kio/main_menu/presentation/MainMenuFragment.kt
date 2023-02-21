@@ -35,6 +35,7 @@ class MainMenuFragment : Fragment(R.layout.fragment_main_menu) {
             acceleration.setOnClickListener { openAcceleration() }
             toNotification.setOnClickListener { openNotificationManager() }
             toTimeScreen.setOnClickListener { openScreenTimeManager() }
+            toBatterySaving.setOnClickListener { openBatterySaving() }
         }
     }
 
@@ -53,7 +54,7 @@ class MainMenuFragment : Fragment(R.layout.fragment_main_menu) {
         findNavController().navigate(R.id.toFileManager)
     }
 
-    private fun openDuplicates(){
+    private fun openDuplicates() {
         onBackPressedCallback.isEnabled = true
         findNavController().navigate(R.id.toDuplicates, completeDestination())
     }
@@ -68,7 +69,12 @@ class MainMenuFragment : Fragment(R.layout.fragment_main_menu) {
         findNavController().navigate(R.id.to_screen_time_graph)
     }
 
-    private fun completeDestination() : Bundle {
+    private fun openBatterySaving() {
+        onBackPressedCallback.isEnabled = true
+        findNavController().navigate(R.id.to_batterySavingFragment)
+    }
+
+    private fun completeDestination(): Bundle {
         return Bundle().apply {
             putInt(ArgNames.COMPLETE_DESTINATION_ID, R.id.advicesFragment)
         }

@@ -23,4 +23,7 @@
     <string name="your_phone_is_fast">Ваш телефон быстр, как стрела</string>
     <string name="your_phone_is_fast_description">Мы освободили оперативную память, для более быстрой работы вашего устройства</string>
 
+    <string name="stop_selected_apps_dialog_title">Работа вашего телефона ускорена!</string>
+    <string name="stop_selected_apps_dialog_description">Мы выгрузили фоновые процессы и нагрузка на ваше устройство снизилась</string>
+
 </resources>

@@ -3,10 +3,14 @@ package yin_kio.acceleration.presentation.selectable_acceleration
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import yin_kio.acceleration.domain.selectable_acceleration.use_cases.SelectableAccelerationUseCases
 
 
-class SelectableAccelerationViewModel : MutableSelectableAccelerationViewModel,
-        ObservableViewModel
+class SelectableAccelerationViewModel(
+    private val useCases: SelectableAccelerationUseCases
+) : MutableSelectableAccelerationViewModel,
+        ObservableViewModel,
+        SelectableAccelerationUseCases by useCases
 {
 
     private val _flow = MutableStateFlow(ScreenState())

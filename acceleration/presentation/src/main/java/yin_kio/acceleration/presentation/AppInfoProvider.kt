@@ -1,4 +1,4 @@
-package yin_kio.acceleration.presentation.acceleration.screen.app_item
+package yin_kio.acceleration.presentation
 
 import android.content.Context
 import android.content.pm.PackageInfo

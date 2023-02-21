@@ -8,6 +8,7 @@ import yin_kio.acceleration.domain.selectable_acceleration.ui_out.SelectableAcce
 import yin_kio.acceleration.domain.selectable_acceleration.ui_out.UpdateStatus
 import yin_kio.acceleration.domain.gateways.Ads
 import yin_kio.acceleration.domain.gateways.Apps
+import yin_kio.acceleration.domain.selectable_acceleration.ui_out.AppsFormState
 import kotlin.coroutines.CoroutineContext
 
 internal class SelectableAccelerationUseCasesImpl(
@@ -17,7 +18,7 @@ internal class SelectableAccelerationUseCasesImpl(
     private val ads: Ads,
     private val coroutineScope: CoroutineScope,
     private val dispatcher: CoroutineContext
-) : SelectableAccelerationUseCases {
+) : SelectableAccelerationUseCases, AppsFormState {
 
     override fun close(){
         outer.close()
@@ -65,5 +66,7 @@ internal class SelectableAccelerationUseCasesImpl(
         coroutineScope.launch(context = dispatcher,block = action)
     }
 
-
+    override fun isAppSelected(packageName: String): Boolean {
+        return appsForm.isAppSelected(packageName)
+    }
 }

@@ -16,6 +16,10 @@ class SelectableAccelerationViewModel(
     private val _flow = MutableStateFlow(ScreenState())
     override val flow: Flow<ScreenState> = _flow.asStateFlow()
 
+    init {
+        updateList()
+    }
+
     override fun setAppSelected(packageName: String, isSelected: Boolean){}
     override fun setButtonBgRes(resId: Int){
         _flow.value = _flow.value.copy(buttonBgRes = resId)

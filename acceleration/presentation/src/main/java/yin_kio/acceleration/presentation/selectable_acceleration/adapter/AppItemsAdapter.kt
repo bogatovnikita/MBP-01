@@ -1,31 +1,28 @@
-package yin_kio.acceleration.presentation.acceleration.screen.app_item
+package yin_kio.acceleration.presentation.selectable_acceleration.adapter
 
-import android.app.Application
-import android.util.Log
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import kotlinx.coroutines.CoroutineScope
+import yin_kio.acceleration.domain.selectable_acceleration.ui_out.AppsFormState
 import yin_kio.acceleration.presentation.AppInfoProvider
 
-class AppsAdapter(
+class AppItemsAdapter(
     private val coroutineScope: CoroutineScope,
-    private val application: Application
+    private val appsFormState: AppsFormState
 ) : ListAdapter<String, AppItemHolder>(itemCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AppItemHolder {
-        Log.d("!!!", "onCreateViewHolder")
-
-        val appInfoProvider = AppInfoProvider(application)
         val viewModel = AppItemViewModel(
-            appInfoProvider = appInfoProvider,
-            coroutineScope = coroutineScope
+            appInfoProvider = AppInfoProvider(parent.context),
+            coroutineScope= coroutineScope,
+            appsFormState = appsFormState,
         )
 
         return AppItemHolder.from(
             parent = parent,
             viewModel = viewModel,
-            coroutineScope = coroutineScope
+            coroutineScope = coroutineScope,
         )
     }
 
@@ -33,8 +30,8 @@ class AppsAdapter(
         holder.bind(getItem(position))
     }
 
-
     companion object{
+
         private fun itemCallback() = object : DiffUtil.ItemCallback<String>() {
             override fun areItemsTheSame(oldItem: String, newItem: String): Boolean {
                 return oldItem == newItem
@@ -44,6 +41,8 @@ class AppsAdapter(
                 return oldItem == newItem
             }
         }
+
     }
+
 }
 

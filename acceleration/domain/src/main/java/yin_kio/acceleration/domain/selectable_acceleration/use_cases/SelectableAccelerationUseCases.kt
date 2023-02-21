@@ -1,6 +1,10 @@
 package yin_kio.acceleration.domain.selectable_acceleration.use_cases
 
-interface SelectableAccelerationUseCases {
+import yin_kio.acceleration.domain.selectable_acceleration.ui_out.AppsFormState
+
+interface SelectableAccelerationUseCases : AppsFormState {
+
+
     fun close()
 
     fun switchSelectAllApps()

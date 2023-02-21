@@ -17,6 +17,7 @@ import yin_kio.acceleration.domain.AccelerationDomainFactory
 import yin_kio.acceleration.presentation.R
 import yin_kio.acceleration.presentation.databinding.FragmentStopSelectedAppsBinding
 import yin_kio.acceleration.presentation.inter.OlejaInter
+import yin_kio.acceleration.presentation.selectable_acceleration.adapter.AppItemsAdapter
 
 class SelectableAccelerationFragment : Fragment(R.layout.fragment_stop_selected_apps) {
 
@@ -24,18 +25,43 @@ class SelectableAccelerationFragment : Fragment(R.layout.fragment_stop_selected_
     private val inter: OlejaInter by lifecycleAware { OlejaInter{ navigator.complete() } }
     private val navigator by lifecycleAware { createNavigator() }
     private val viewModel by lifecycleAware { createViewModel(viewModelScope) }
+    private val adapter by lazy { AppItemsAdapter(
+            coroutineScope = viewLifecycleOwner.lifecycleScope,
+            appsFormState = viewModel
+        )
+    }
+
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        binding.recycler.adapter = adapter
+
+        setupObserver()
+    }
+
+    private fun setupObserver() {
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            viewModel.flow.collect{
-
-                binding.checkbox.isChecked = it.isAllSelected
-                binding.stop.setBackgroundResource(it.buttonBgRes)
-
+            viewModel.flow.collect {
+                showRecyclerContent(it)
+                showIsAllSelected(it)
+                showButtonBg(it)
                 showRecyclerOrProgress(it)
 
             }
+        }
+    }
+
+    private fun showButtonBg(it: ScreenState) {
+        binding.stop.setBackgroundResource(it.buttonBgRes)
+    }
+
+    private fun showIsAllSelected(it: ScreenState) {
+        binding.checkbox.isChecked = it.isAllSelected
+    }
+
+    private fun showRecyclerContent(it: ScreenState) {
+        if (it.isListVisible) {
+            adapter.submitList(it.apps)
         }
     }
 

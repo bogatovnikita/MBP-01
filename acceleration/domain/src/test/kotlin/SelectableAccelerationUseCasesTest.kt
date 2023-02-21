@@ -97,7 +97,7 @@ class SelectableAccelerationUseCasesTest {
     fun testUpdate() = setupTest{
         coEvery { apps.provide() } returns listOf()
 
-        useCases.update()
+        useCases.updateList()
         wait()
 
         coVerifySequence {

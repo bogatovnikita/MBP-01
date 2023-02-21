@@ -35,7 +35,7 @@ internal class SelectableAccelerationUseCasesImpl(
         outer.setSelectionStatus(appsForm.selectionStatus)
     }
 
-    override fun update() = async{
+    override fun updateList() = async{
         outer.setUpdateStatus(UpdateStatus.Loading)
         val appsList = apps.provide()
         appsForm.apps = appsList

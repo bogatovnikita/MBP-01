@@ -7,5 +7,6 @@ class SelectableAccelerationViewModel {
     fun setAllSelected(isAllSelected: Boolean){}
     fun setProgressVisible(isVisible: Boolean){}
     fun setListVisible(isVisible: Boolean){}
+    fun setApps(apps: List<String>){}
 
 }

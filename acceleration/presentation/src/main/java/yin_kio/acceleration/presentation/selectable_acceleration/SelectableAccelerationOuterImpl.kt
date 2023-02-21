@@ -28,6 +28,6 @@ class SelectableAccelerationOuterImpl(
     }
 
     override fun setApps(apps: List<String>) {
-        TODO("Not yet implemented")
+        viewModel?.setApps(apps)
     }
 }

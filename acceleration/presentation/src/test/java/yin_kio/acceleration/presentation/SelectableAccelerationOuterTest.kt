@@ -83,4 +83,15 @@ class SelectableAccelerationOuterTest  {
         }
     }
 
+    @Test
+    fun testSetApps(){
+        val apps = emptyList<String>()
+
+        outer.setApps(apps)
+
+        coVerify {
+            viewModel.setApps(apps)
+        }
+    }
+
 }

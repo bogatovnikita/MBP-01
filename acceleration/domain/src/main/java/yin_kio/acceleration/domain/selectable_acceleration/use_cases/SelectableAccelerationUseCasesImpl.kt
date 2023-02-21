@@ -57,6 +57,10 @@ internal class SelectableAccelerationUseCasesImpl(
         outer.complete()
     }
 
+    override fun updateListItem(packageName: String) = async {
+        outer.setAppSelected(packageName, appsForm.isAppSelected(packageName))
+    }
+
     private fun async(action: suspend CoroutineScope.() -> Unit){
         coroutineScope.launch(context = dispatcher,block = action)
     }

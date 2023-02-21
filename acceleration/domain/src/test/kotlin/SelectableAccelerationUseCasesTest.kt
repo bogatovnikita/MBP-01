@@ -134,6 +134,22 @@ class SelectableAccelerationUseCasesTest {
     }
 
 
+    @Test
+    fun testUpdateListItem() = setupTest {
+        assertAppSelected(true)
+        assertAppSelected(false)
+    }
+
+    private fun TestScope.assertAppSelected(isSelected: Boolean) {
+        val packageName = "some_name"
+        coEvery { appsForm.isAppSelected(packageName) } returns isSelected
+
+        useCases.updateListItem(packageName)
+        wait()
+
+        coVerify { outer.setAppSelected(packageName, isSelected) }
+    }
+
     private fun TestScope.wait() {
         advanceUntilIdle()
     }

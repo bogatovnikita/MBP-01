@@ -6,6 +6,7 @@ interface SelectableAccelerationUseCases {
     fun switchSelectAllApps()
     fun switchSelectApp(packageName: String)
     fun updateList()
+    fun updateListItem(packageName: String)
     fun stopSelectedApps()
 
     fun complete()

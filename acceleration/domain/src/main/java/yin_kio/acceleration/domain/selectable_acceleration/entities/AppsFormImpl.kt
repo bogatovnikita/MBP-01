@@ -33,7 +33,11 @@ internal class AppsFormImpl : AppsForm {
     }
 
     override fun switchSelectApp(packageName: String) {
-        _selectedApps.add(packageName)
+        if (_selectedApps.contains(packageName)){
+            _selectedApps.remove(packageName)
+        } else {
+            _selectedApps.add(packageName)
+        }
     }
 
     override fun isAppSelected(packageName: String): Boolean {

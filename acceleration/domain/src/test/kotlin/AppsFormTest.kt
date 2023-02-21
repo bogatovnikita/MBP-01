@@ -34,8 +34,8 @@ class AppsFormTest {
 
     private fun isAllSelectedAndOther(input: List<String>) =
         (appsForm.isAllSelected
-                && appsForm.hasSelected
-                && appsForm.selectedApps.containsAll(input))
+                || appsForm.hasSelected
+                || appsForm.selectedApps.containsAll(input))
 
     @Test
     fun testSwitchSelectApp(){
@@ -45,12 +45,32 @@ class AppsFormTest {
         appsForm.apps = allApps
 
         appsForm.switchSelectApp(selected)
+        assertHasSelected(selected)
 
-        assertFalse(appsForm.isAllSelected)
-        assertTrue(appsForm.hasSelected)
-        assertTrue(appsForm.selectedApps.contains(selected))
-        assertEquals(SelectionStatus.HasSelected, appsForm.selectionStatus)
-        assertTrue(appsForm.isAppSelected(selected))
+        appsForm.switchSelectApp(selected)
+        assertHasNotSelected(selected)
+
     }
+
+    private fun assertHasNotSelected(selected: String) {
+        assertFalse(appsForm.isAllSelected)
+        assertFalse(
+            appsForm.hasSelected
+                    || appsForm.selectedApps.contains(selected)
+                    || appsForm.isAppSelected(selected)
+        )
+        assertEquals(SelectionStatus.NoSelected, appsForm.selectionStatus)
+    }
+
+    private fun assertHasSelected(selected: String) {
+        assertFalse(appsForm.isAllSelected)
+        assertTrue(
+            appsForm.hasSelected
+                    || appsForm.selectedApps.contains(selected)
+                    || appsForm.isAppSelected(selected)
+        )
+        assertEquals(SelectionStatus.HasSelected, appsForm.selectionStatus)
+    }
+
 
 }

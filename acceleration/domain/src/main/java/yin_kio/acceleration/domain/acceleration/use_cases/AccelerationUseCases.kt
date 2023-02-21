@@ -4,7 +4,7 @@ interface AccelerationUseCases {
     fun close()
 
     fun accelerate()
-    fun uploadBackgroundProcess()
+    fun uploadBackgroundProcess() // Может показаться, что этот метод дублируется, в пакете SelectableAcceleration, но это не так.
     fun update()
     fun givePermission()
 

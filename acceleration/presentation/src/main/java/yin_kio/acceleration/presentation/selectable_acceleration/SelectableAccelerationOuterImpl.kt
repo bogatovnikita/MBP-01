@@ -23,7 +23,8 @@ class SelectableAccelerationOuterImpl(
     }
 
     override fun setUpdateStatus(updateStatus: UpdateStatus) {
-        TODO("Not yet implemented")
+        viewModel?.setProgressVisible(updateStatus == UpdateStatus.Loading)
+        viewModel?.setListVisible(updateStatus == UpdateStatus.Complete)
     }
 
     override fun setApps(apps: List<String>) {

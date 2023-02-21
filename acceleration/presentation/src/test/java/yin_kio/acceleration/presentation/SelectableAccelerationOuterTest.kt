@@ -9,6 +9,7 @@ import org.junit.Test
 import yin_kio.acceleration.domain.selectable_acceleration.entities.SelectionStatus
 import yin_kio.acceleration.domain.selectable_acceleration.ui_out.SelectableAccelerationNavigator
 import yin_kio.acceleration.domain.selectable_acceleration.ui_out.SelectableAccelerationOuter
+import yin_kio.acceleration.domain.selectable_acceleration.ui_out.UpdateStatus
 import yin_kio.acceleration.presentation.selectable_acceleration.SelectableAccelerationOuterImpl
 import yin_kio.acceleration.presentation.selectable_acceleration.SelectableAccelerationPresenter
 import yin_kio.acceleration.presentation.selectable_acceleration.SelectableAccelerationViewModel
@@ -60,6 +61,25 @@ class SelectableAccelerationOuterTest  {
         coVerify {
             viewModel.setButtonBgRes(someRes)
             viewModel.setAllSelected(isAllSelected)
+        }
+    }
+
+    @Test
+    fun testSetUpdateStatus(){
+        assertUpdateStatusOuts(UpdateStatus.Loading, isProgressVisible = true, isListVisible = false)
+        assertUpdateStatusOuts(UpdateStatus.Complete, isProgressVisible = false, isListVisible = true)
+    }
+
+    private fun assertUpdateStatusOuts(
+        updateStatus: UpdateStatus,
+        isProgressVisible: Boolean,
+        isListVisible: Boolean
+    ) {
+        outer.setUpdateStatus(updateStatus)
+
+        coVerify {
+            viewModel.setProgressVisible(isProgressVisible)
+            viewModel.setListVisible(isListVisible)
         }
     }
 

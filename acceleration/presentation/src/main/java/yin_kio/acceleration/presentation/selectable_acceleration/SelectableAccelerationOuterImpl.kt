@@ -6,7 +6,8 @@ import yin_kio.acceleration.domain.selectable_acceleration.ui_out.SelectableAcce
 import yin_kio.acceleration.domain.selectable_acceleration.ui_out.UpdateStatus
 
 class SelectableAccelerationOuterImpl(
-    private val navigator: SelectableAccelerationNavigator
+    private val navigator: SelectableAccelerationNavigator,
+    private val presenter: SelectableAccelerationPresenter
 ) : SelectableAccelerationOuter,
     SelectableAccelerationNavigator by navigator
 {
@@ -17,7 +18,8 @@ class SelectableAccelerationOuterImpl(
     }
 
     override fun setSelectionStatus(selectionStatus: SelectionStatus) {
-        TODO("Not yet implemented")
+        viewModel?.setAllSelected(presenter.presentAllSelected(selectionStatus))
+        viewModel?.setButtonBgRes(presenter.presentButtonBg(selectionStatus))
     }
 
     override fun setUpdateStatus(updateStatus: UpdateStatus) {

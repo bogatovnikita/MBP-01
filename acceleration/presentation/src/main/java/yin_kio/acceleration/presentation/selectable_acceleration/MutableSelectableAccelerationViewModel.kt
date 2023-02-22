@@ -7,4 +7,5 @@ interface MutableSelectableAccelerationViewModel {
     fun setProgressVisible(isVisible: Boolean)
     fun setListVisible(isVisible: Boolean)
     fun setApps(apps: List<String>)
+    fun updateApps()
 }

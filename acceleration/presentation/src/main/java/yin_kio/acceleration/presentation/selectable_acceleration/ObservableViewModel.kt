@@ -5,5 +5,6 @@ import kotlinx.coroutines.flow.Flow
 interface ObservableViewModel {
 
     val flow: Flow<ScreenState>
+    val commandsFlow: Flow<Any>
 
 }

@@ -1,13 +1,14 @@
 package yin_kio.acceleration.presentation.selectable_acceleration
 
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import yin_kio.acceleration.domain.selectable_acceleration.use_cases.SelectableAccelerationUseCases
 
 
 class SelectableAccelerationViewModel(
-    private val useCases: SelectableAccelerationUseCases
+    private val useCases: SelectableAccelerationUseCases,
+    private val coroutineScope: CoroutineScope
 ) : MutableSelectableAccelerationViewModel,
         ObservableViewModel,
         SelectableAccelerationUseCases by useCases
@@ -15,6 +16,9 @@ class SelectableAccelerationViewModel(
 
     private val _flow = MutableStateFlow(ScreenState())
     override val flow: Flow<ScreenState> = _flow.asStateFlow()
+
+    private val _commandsFlow = MutableSharedFlow<Any>()
+    override val commandsFlow = _commandsFlow.asSharedFlow()
 
     init {
         updateList()
@@ -37,4 +41,9 @@ class SelectableAccelerationViewModel(
         _flow.value = _flow.value.copy(apps = apps)
     }
 
+    override fun updateApps() {
+        coroutineScope.launch {
+            _commandsFlow.emit(Any())
+        }
+    }
 }

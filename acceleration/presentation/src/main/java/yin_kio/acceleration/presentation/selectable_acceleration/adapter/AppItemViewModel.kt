@@ -1,6 +1,5 @@
 package yin_kio.acceleration.presentation.selectable_acceleration.adapter
 
-import android.util.Log
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,7 +27,6 @@ class AppItemViewModel(
                 name = appInfoProvider.getName(packageName),
                 isSelected = appsFormState.isAppSelected(packageName)
             )
-            Log.d("!!!", "packageName: ${_flow.value.packageName}")
         }
     }
 

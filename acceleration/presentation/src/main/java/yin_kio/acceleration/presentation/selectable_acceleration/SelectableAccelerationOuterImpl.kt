@@ -20,6 +20,7 @@ class SelectableAccelerationOuterImpl(
     override fun setSelectionStatus(selectionStatus: SelectionStatus) {
         viewModel?.setAllSelected(presenter.presentAllSelected(selectionStatus))
         viewModel?.setButtonBgRes(presenter.presentButtonBg(selectionStatus))
+        viewModel?.updateApps()
     }
 
     override fun setUpdateStatus(updateStatus: UpdateStatus) {

@@ -1,6 +1,8 @@
 package yin_kio.acceleration.presentation.selectable_acceleration
 
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -42,14 +44,21 @@ class SelectableAccelerationFragment : Fragment(R.layout.fragment_stop_selected_
         setupObserver()
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun setupObserver() {
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.flow.collect {
-                binding.recycler.updateAll()
                 showRecyclerContent(it)
                 showIsAllSelected(it)
                 showButtonBg(it)
                 showRecyclerOrProgress(it)
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            viewModel.commandsFlow.collect{
+                Log.d("!!!", "command")
+                adapter.notifyDataSetChanged()
             }
         }
     }
@@ -133,7 +142,8 @@ class SelectableAccelerationFragment : Fragment(R.layout.fragment_stop_selected_
 
 
         val viewModel = SelectableAccelerationViewModel(
-            useCases = useCases
+            useCases = useCases,
+            coroutineScope = coroutineScope
         )
 
         outer.viewModel = viewModel

@@ -1,7 +1,6 @@
 package yin_kio.acceleration.presentation.acceleration.screen.app_item
 
 import android.app.Application
-import android.util.Log
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -14,7 +13,6 @@ class AppsAdapter(
 ) : ListAdapter<String, AppItemHolder>(itemCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AppItemHolder {
-        Log.d("!!!", "onCreateViewHolder")
 
         val appInfoProvider = AppInfoProvider(application)
         val viewModel = AppItemViewModel(

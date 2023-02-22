@@ -59,6 +59,7 @@ class SelectableAccelerationOuterTest  {
         coVerify {
             viewModel.setButtonBgRes(someRes)
             viewModel.setAllSelected(isAllSelected)
+            viewModel.updateApps()
         }
     }
 

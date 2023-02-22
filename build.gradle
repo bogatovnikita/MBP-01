@@ -17,7 +17,7 @@ plugins {
 }
 
 apply from: 'dependencies.gradle'
-apply from: 'advice_info.gradle'
+apply from: 'device_info.gradle'
 
 task clean(type: Delete) {
     delete rootProject.buildDir

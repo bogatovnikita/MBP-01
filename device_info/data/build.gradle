@@ -33,6 +33,6 @@ android {
 
 dependencies {
 
-    implementation device_info_presentation.values()
+    implementation device_info_data.values()
     
 }

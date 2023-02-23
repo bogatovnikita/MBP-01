@@ -8,4 +8,6 @@
     <string name="we_recommend_extending_the_operation_of_the_phone">Рекомендуем продлить работу телефона</string>
     <string name="our_app_will_help_to_reduce_the_battery_load_so_that_your_phone_works_longer">Наше приложение поможет снизить нагрузку батареи, чтобы ваш телефон работал дольше</string>
     <string name="extend_phone_operation">Продлить работу телефона</string>
+    <string name="D_percent">%d %%</string>
+
 </resources>

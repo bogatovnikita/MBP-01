@@ -21,19 +21,19 @@ abstract class BatteryChargeDatabase : RoomDatabase() {
 
         const val DB_BATTERY = "DB_BATTERY"
 
-        private var notificationDatabase: BatteryChargeDatabase? = null
+        private var batteryDatabase: BatteryChargeDatabase? = null
 
         fun create(context: Context): BatteryChargeDatabase {
 
-            return if (notificationDatabase == null) {
-                notificationDatabase = Room.databaseBuilder(
+            return if (batteryDatabase == null) {
+                batteryDatabase = Room.databaseBuilder(
                     context,
                     BatteryChargeDatabase::class.java,
                     DB_BATTERY
                 ).build()
-                notificationDatabase!!
+                batteryDatabase!!
             } else {
-                notificationDatabase!!
+                batteryDatabase!!
             }
 
         }

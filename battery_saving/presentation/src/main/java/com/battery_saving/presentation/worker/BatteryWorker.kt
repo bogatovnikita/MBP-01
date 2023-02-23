@@ -1,7 +1,6 @@
 package com.battery_saving.presentation.worker
 
 import android.content.Context
-import android.os.BatteryManager
 import android.util.Log
 import androidx.hilt.work.HiltWorker
 import androidx.work.Worker
@@ -17,11 +16,6 @@ class BatteryWorker @AssistedInject constructor(
     @Assisted workerParams: WorkerParameters,
     private val database: BatteryChargeDAO
 ) : Worker(context, workerParams) {
-    private val percent: BatteryManager
-
-    init {
-        percent = context.getSystemService(Context.BATTERY_SERVICE) as BatteryManager
-    }
 
     override fun doWork(): Result {
         database.setBatteryChargeStatics(

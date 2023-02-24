@@ -47,12 +47,11 @@ class SelectableAccelerationUseCasesTest {
 
     @Test
     fun testSwitchSelectAllApps() = setupTest{
-        verifyUpdateOrderOfterSelectAll(true, SelectionStatus.AllSelected)
-        verifyUpdateOrderOfterSelectAll(false, SelectionStatus.NoSelected)
+        verifyUpdateOrderOfterSelectAll(SelectionStatus.AllSelected)
+        verifyUpdateOrderOfterSelectAll(SelectionStatus.NoSelected)
     }
 
-    private fun verifyUpdateOrderOfterSelectAll(hasSelected: Boolean, selectionStatus: SelectionStatus) {
-        coEvery { appsForm.hasSelected } returns hasSelected
+    private fun verifyUpdateOrderOfterSelectAll(selectionStatus: SelectionStatus) {
         coEvery { appsForm.selectionStatus } returns selectionStatus
 
         useCases.switchSelectAllApps()
@@ -66,21 +65,18 @@ class SelectableAccelerationUseCasesTest {
 
     @Test
     fun testSwitchSelectApp() = setupTest{
-        verifyUpdateOrderAfterSelectOne(true, true, SelectionStatus.AllSelected)
-        verifyUpdateOrderAfterSelectOne(true, false, SelectionStatus.HasSelected)
-        verifyUpdateOrderAfterSelectOne(false, false, SelectionStatus.NoSelected)
+        verifyUpdateOrderAfterSelectOne(true, SelectionStatus.AllSelected)
+        verifyUpdateOrderAfterSelectOne(true, SelectionStatus.HasSelected)
+        verifyUpdateOrderAfterSelectOne(false, SelectionStatus.NoSelected)
     }
 
     private fun verifyUpdateOrderAfterSelectOne(
         hasSelected: Boolean,
-        isAllSelected: Boolean,
         selectionStatus: SelectionStatus
     ) {
         val packageName = "some_name"
 
         coEvery { appsForm.isAppSelected(packageName) } returns hasSelected
-        coEvery { appsForm.hasSelected } returns hasSelected
-        coEvery { appsForm.isAllSelected } returns isAllSelected
         coEvery { appsForm.selectionStatus } returns selectionStatus
 
         useCases.switchSelectApp(packageName)

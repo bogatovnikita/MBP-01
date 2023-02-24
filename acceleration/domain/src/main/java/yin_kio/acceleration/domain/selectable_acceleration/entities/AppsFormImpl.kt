@@ -5,9 +5,9 @@ internal class AppsFormImpl : AppsForm {
     private var _apps: List<String> = listOf()
     private val _selectedApps: MutableSet<String> = mutableSetOf()
 
-    override val hasSelected: Boolean
+    private val hasSelected: Boolean
         get() = _selectedApps.isNotEmpty()
-    override val isAllSelected: Boolean
+    private val isAllSelected: Boolean
         get() = _selectedApps.size == _apps.size
     override val selectionStatus: SelectionStatus
         get() = selectionStatus()

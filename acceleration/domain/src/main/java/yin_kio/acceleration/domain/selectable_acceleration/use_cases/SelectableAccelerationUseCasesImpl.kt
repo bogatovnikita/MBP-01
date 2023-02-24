@@ -9,6 +9,7 @@ import yin_kio.acceleration.domain.selectable_acceleration.ui_out.UpdateStatus
 import yin_kio.acceleration.domain.gateways.Ads
 import yin_kio.acceleration.domain.gateways.Apps
 import yin_kio.acceleration.domain.selectable_acceleration.ui_out.AppsFormState
+import yin_kio.acceleration.domain.selectable_acceleration.ui_out.SelectableItem
 import kotlin.coroutines.CoroutineContext
 
 internal class SelectableAccelerationUseCasesImpl(
@@ -29,10 +30,10 @@ internal class SelectableAccelerationUseCasesImpl(
         outer.setSelectionStatus(appsForm.selectionStatus)
     }
 
-    override fun switchSelectApp(packageName: String){
+    override fun switchSelectApp(packageName: String, selectable: SelectableItem){
         appsForm.switchSelectApp(packageName)
         val isSelected = appsForm.isAppSelected(packageName)
-        outer.setAppSelected(packageName, isSelected)
+        selectable.setSelected(isSelected)
         outer.setSelectionStatus(appsForm.selectionStatus)
     }
 
@@ -56,10 +57,6 @@ internal class SelectableAccelerationUseCasesImpl(
 
     override fun complete(){
         outer.complete()
-    }
-
-    override fun updateListItem(packageName: String) = async {
-        outer.setAppSelected(packageName, appsForm.isAppSelected(packageName))
     }
 
     private fun async(action: suspend CoroutineScope.() -> Unit){

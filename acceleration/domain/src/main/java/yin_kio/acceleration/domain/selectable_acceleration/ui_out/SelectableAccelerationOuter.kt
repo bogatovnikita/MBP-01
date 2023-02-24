@@ -4,8 +4,6 @@ import yin_kio.acceleration.domain.selectable_acceleration.entities.SelectionSta
 
 interface SelectableAccelerationOuter : SelectableAccelerationNavigator {
 
-    fun setAppSelected(packageName: String, isSelected: Boolean)
-
     fun setSelectionStatus(selectionStatus: SelectionStatus)
 
     fun setUpdateStatus(updateStatus: UpdateStatus)

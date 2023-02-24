@@ -12,6 +12,7 @@ import yin_kio.acceleration.domain.selectable_acceleration.use_cases.SelectableA
 import yin_kio.acceleration.domain.selectable_acceleration.use_cases.SelectableAccelerationUseCasesImpl
 import yin_kio.acceleration.domain.gateways.Ads
 import yin_kio.acceleration.domain.gateways.Apps
+import yin_kio.acceleration.domain.selectable_acceleration.ui_out.SelectableItem
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class SelectableAccelerationUseCasesTest {
@@ -75,15 +76,16 @@ class SelectableAccelerationUseCasesTest {
         selectionStatus: SelectionStatus
     ) {
         val packageName = "some_name"
+        val selectable: SelectableItem = spyk()
 
         coEvery { appsForm.isAppSelected(packageName) } returns hasSelected
         coEvery { appsForm.selectionStatus } returns selectionStatus
 
-        useCases.switchSelectApp(packageName)
+        useCases.switchSelectApp(packageName, selectable)
 
         coVerifyOrder {
             appsForm.switchSelectApp(packageName)
-            outer.setAppSelected(packageName, hasSelected)
+            selectable.setSelected(hasSelected)
             outer.setSelectionStatus(selectionStatus)
         }
     }
@@ -127,23 +129,6 @@ class SelectableAccelerationUseCasesTest {
         wait()
 
         coVerify( exactly = 1 ) { outer.complete() }
-    }
-
-
-    @Test
-    fun testUpdateListItem() = setupTest {
-        assertAppSelected(true)
-        assertAppSelected(false)
-    }
-
-    private fun TestScope.assertAppSelected(isSelected: Boolean) {
-        val packageName = "some_name"
-        coEvery { appsForm.isAppSelected(packageName) } returns isSelected
-
-        useCases.updateListItem(packageName)
-        wait()
-
-        coVerify { outer.setAppSelected(packageName, isSelected) }
     }
 
     private fun TestScope.wait() {

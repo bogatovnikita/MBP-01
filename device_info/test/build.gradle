@@ -34,11 +34,15 @@ android {
     buildFeatures{
         viewBinding = true
     }
+    packagingOptions {
+        exclude 'META-INF/gradle/incremental.annotation.processors'
+    }
 }
 
 dependencies {
 
     implementation project(':device_info:presentation')
+    kapt "com.google.dagger:hilt-compiler:2.44.2"
     implementation device_info_presentation.values()
 
 }

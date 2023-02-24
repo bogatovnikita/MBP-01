@@ -1,5 +1,6 @@
 package yin_kio.acceleration.domain.selectable_acceleration.ui_out
 
+import yin_kio.acceleration.domain.selectable_acceleration.entities.App
 import yin_kio.acceleration.domain.selectable_acceleration.entities.SelectionStatus
 
 interface SelectableAccelerationOuter : SelectableAccelerationNavigator {
@@ -8,6 +9,6 @@ interface SelectableAccelerationOuter : SelectableAccelerationNavigator {
 
     fun setUpdateStatus(updateStatus: UpdateStatus)
 
-    fun setApps(apps: List<String>)
+    fun setApps(apps: List<App>)
 
 }

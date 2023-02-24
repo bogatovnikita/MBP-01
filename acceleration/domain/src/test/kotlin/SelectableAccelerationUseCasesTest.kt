@@ -4,15 +4,15 @@ import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
+import yin_kio.acceleration.domain.gateways.Ads
+import yin_kio.acceleration.domain.gateways.Apps
 import yin_kio.acceleration.domain.selectable_acceleration.entities.AppsForm
 import yin_kio.acceleration.domain.selectable_acceleration.entities.SelectionStatus
 import yin_kio.acceleration.domain.selectable_acceleration.ui_out.SelectableAccelerationOuter
+import yin_kio.acceleration.domain.selectable_acceleration.ui_out.SelectableItem
 import yin_kio.acceleration.domain.selectable_acceleration.ui_out.UpdateStatus
 import yin_kio.acceleration.domain.selectable_acceleration.use_cases.SelectableAccelerationUseCases
 import yin_kio.acceleration.domain.selectable_acceleration.use_cases.SelectableAccelerationUseCasesImpl
-import yin_kio.acceleration.domain.gateways.Ads
-import yin_kio.acceleration.domain.gateways.Apps
-import yin_kio.acceleration.domain.selectable_acceleration.ui_out.SelectableItem
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class SelectableAccelerationUseCasesTest {
@@ -75,16 +75,16 @@ class SelectableAccelerationUseCasesTest {
         hasSelected: Boolean,
         selectionStatus: SelectionStatus
     ) {
-        val packageName = "some_name"
+        val app = someApp
         val selectable: SelectableItem = spyk()
 
-        coEvery { appsForm.isAppSelected(packageName) } returns hasSelected
+        coEvery { appsForm.isAppSelected(app) } returns hasSelected
         coEvery { appsForm.selectionStatus } returns selectionStatus
 
-        useCases.switchSelectApp(packageName, selectable)
+        useCases.switchSelectApp(app, selectable)
 
         coVerifyOrder {
-            appsForm.switchSelectApp(packageName)
+            appsForm.switchSelectApp(app)
             selectable.setSelected(hasSelected)
             outer.setSelectionStatus(selectionStatus)
         }
@@ -108,7 +108,7 @@ class SelectableAccelerationUseCasesTest {
 
     @Test
     fun testStopSelectedApps() = setupTest{
-        val selectedApps = listOf("app1", "app2")
+        val selectedApps = twoApps
 
         coEvery { appsForm.selectedApps } returns selectedApps
 

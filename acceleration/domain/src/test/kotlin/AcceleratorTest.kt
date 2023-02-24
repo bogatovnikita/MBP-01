@@ -7,9 +7,9 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import yin_kio.acceleration.domain.acceleration.ui_out.AccelerationOuter
 import yin_kio.acceleration.domain.acceleration.use_cases.AcceleratorImpl
-import yin_kio.acceleration.domain.selectable_acceleration.entities.AppsForm
 import yin_kio.acceleration.domain.gateways.Ads
 import yin_kio.acceleration.domain.gateways.Apps
+import yin_kio.acceleration.domain.selectable_acceleration.entities.AppsForm
 
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -29,7 +29,7 @@ class AcceleratorTest {
 
     @Test
     fun testAccelerate() = runTest{
-        val expectedOut = listOf("app1", "app2")
+        val expectedOut = twoApps
         coEvery { appsForm.selectedApps } returns expectedOut
 
         runner.accelerate()

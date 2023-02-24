@@ -2,13 +2,13 @@ package yin_kio.acceleration.domain.selectable_acceleration.entities
 
 internal interface AppsForm {
     val selectionStatus: SelectionStatus
-    var apps: List<String>
-    val selectedApps: Collection<String>
+    var apps: List<App>
+    val selectedApps: Collection<App>
 
 
     fun switchSelectAll()
 
-    fun switchSelectApp(packageName: String)
-    fun isAppSelected(packageName: String) : Boolean
+    fun switchSelectApp(app: App)
+    fun isAppSelected(app: App) : Boolean
 
 }

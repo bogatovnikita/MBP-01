@@ -1,5 +1,6 @@
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
+import yin_kio.acceleration.domain.selectable_acceleration.entities.App
 import yin_kio.acceleration.domain.selectable_acceleration.entities.AppsFormImpl
 import yin_kio.acceleration.domain.selectable_acceleration.entities.SelectionStatus
 
@@ -9,7 +10,7 @@ class AppsFormTest {
 
     @Test
     fun testSetApps(){
-        val expected = listOf("some_app")
+        val expected = oneApp
 
         appsForm.apps = expected
 
@@ -18,7 +19,7 @@ class AppsFormTest {
 
     @Test
     fun testSwitchSelectAll(){
-        val input = listOf("app1", "app2")
+        val input = twoApps
         appsForm.apps = input
 
         appsForm.switchSelectAll()
@@ -32,12 +33,12 @@ class AppsFormTest {
         assertEquals(SelectionStatus.NoSelected, appsForm.selectionStatus)
     }
 
-    private fun isAllSelectedAndOther(input: List<String>) = (appsForm.selectedApps.containsAll(input))
+    private fun isAllSelectedAndOther(input: List<App>) = (appsForm.selectedApps.containsAll(input))
 
     @Test
     fun testSwitchSelectApp(){
-        val selected = "app1"
-        val allApps = listOf(selected, "app2")
+        val selected = twoApps[0]
+        val allApps = twoApps
 
         appsForm.apps = allApps
 
@@ -49,14 +50,14 @@ class AppsFormTest {
 
     }
 
-    private fun assertHasNotSelected(selected: String) {
+    private fun assertHasNotSelected(selected: App) {
         assertFalse(appsForm.selectedApps.contains(selected)
                     || appsForm.isAppSelected(selected)
         )
         assertEquals(SelectionStatus.NoSelected, appsForm.selectionStatus)
     }
 
-    private fun assertHasSelected(selected: String) {
+    private fun assertHasSelected(selected: App) {
         assertTrue(appsForm.selectedApps.contains(selected)
                     || appsForm.isAppSelected(selected)
         )

@@ -8,12 +8,12 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import yin_kio.acceleration.domain.acceleration.gateways.Permissions
 import yin_kio.acceleration.domain.acceleration.gateways.RamInfo
-import yin_kio.acceleration.domain.acceleration.use_cases.AccelerationUseCasesImpl
-import yin_kio.acceleration.domain.acceleration.use_cases.Accelerator
 import yin_kio.acceleration.domain.acceleration.ui_out.AccelerationOuter
 import yin_kio.acceleration.domain.acceleration.ui_out.AppsState
 import yin_kio.acceleration.domain.acceleration.ui_out.RamInfoOut
 import yin_kio.acceleration.domain.acceleration.use_cases.AccelerationUseCases
+import yin_kio.acceleration.domain.acceleration.use_cases.AccelerationUseCasesImpl
+import yin_kio.acceleration.domain.acceleration.use_cases.Accelerator
 import yin_kio.acceleration.domain.gateways.Apps
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -93,7 +93,7 @@ class AccelerationUseCasesTest {
     @Test
     fun testUpdate() = setupTest {
         val ramInfoOut = RamInfoOut()
-        val appsList = listOf("app1", "app2")
+        val appsList = twoApps
 
         coEvery { ramInfo.provide() } returns  ramInfoOut
         coEvery { apps.provide() } returns appsList

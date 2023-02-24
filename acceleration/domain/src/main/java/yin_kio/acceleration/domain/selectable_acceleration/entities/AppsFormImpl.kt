@@ -2,8 +2,8 @@ package yin_kio.acceleration.domain.selectable_acceleration.entities
 
 internal class AppsFormImpl : AppsForm {
 
-    private var _apps: List<String> = listOf()
-    private val _selectedApps: MutableSet<String> = mutableSetOf()
+    private var _apps: List<App> = listOf()
+    private val _selectedApps: MutableSet<App> = mutableSetOf()
 
     private val hasSelected: Boolean
         get() = _selectedApps.isNotEmpty()
@@ -18,10 +18,10 @@ internal class AppsFormImpl : AppsForm {
         else -> SelectionStatus.NoSelected
     }
 
-    override var apps: List<String>
+    override var apps: List<App>
         get() = _apps
         set(value) {_apps = value}
-    override val selectedApps: Collection<String>
+    override val selectedApps: Collection<App>
         get() = _selectedApps
 
     override fun switchSelectAll() {
@@ -32,15 +32,15 @@ internal class AppsFormImpl : AppsForm {
         }
     }
 
-    override fun switchSelectApp(packageName: String) {
-        if (_selectedApps.contains(packageName)){
-            _selectedApps.remove(packageName)
+    override fun switchSelectApp(app: App) {
+        if (_selectedApps.contains(app)){
+            _selectedApps.remove(app)
         } else {
-            _selectedApps.add(packageName)
+            _selectedApps.add(app)
         }
     }
 
-    override fun isAppSelected(packageName: String): Boolean {
-        return _selectedApps.contains(packageName)
+    override fun isAppSelected(app: App): Boolean {
+        return _selectedApps.contains(app)
     }
 }

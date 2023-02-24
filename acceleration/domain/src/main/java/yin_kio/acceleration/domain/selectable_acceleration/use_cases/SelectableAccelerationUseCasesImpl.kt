@@ -31,9 +31,9 @@ internal class SelectableAccelerationUseCasesImpl(
         outer.setSelectionStatus(appsForm.selectionStatus)
     }
 
-    override fun switchSelectApp(packageName: App, selectable: SelectableItem){
-        appsForm.switchSelectApp(packageName)
-        val isSelected = appsForm.isAppSelected(packageName)
+    override fun switchSelectApp(app: App, selectable: SelectableItem){
+        appsForm.switchSelectApp(app)
+        val isSelected = appsForm.isAppSelected(app)
         selectable.setSelected(isSelected)
         outer.setSelectionStatus(appsForm.selectionStatus)
     }
@@ -66,5 +66,9 @@ internal class SelectableAccelerationUseCasesImpl(
 
     override fun isAppSelected(app: App): Boolean {
         return appsForm.isAppSelected(app)
+    }
+
+    override fun updateAppItem(app: App, selectable: SelectableItem) {
+        selectable.setSelected(appsForm.isAppSelected(app))
     }
 }

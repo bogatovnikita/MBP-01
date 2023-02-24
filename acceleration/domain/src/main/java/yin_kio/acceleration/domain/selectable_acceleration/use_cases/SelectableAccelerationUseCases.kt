@@ -10,7 +10,8 @@ interface SelectableAccelerationUseCases : AppsFormState {
     fun close()
 
     fun switchSelectAllApps()
-    fun switchSelectApp(packageName: App, selectable: SelectableItem)
+    fun switchSelectApp(app: App, selectable: SelectableItem)
+    fun updateAppItem(app: App, selectable: SelectableItem)
     fun updateList()
     fun stopSelectedApps()
 

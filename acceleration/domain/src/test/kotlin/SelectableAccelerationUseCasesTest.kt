@@ -6,6 +6,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 import yin_kio.acceleration.domain.gateways.Ads
 import yin_kio.acceleration.domain.gateways.Apps
+import yin_kio.acceleration.domain.selectable_acceleration.entities.App
 import yin_kio.acceleration.domain.selectable_acceleration.entities.AppsForm
 import yin_kio.acceleration.domain.selectable_acceleration.entities.SelectionStatus
 import yin_kio.acceleration.domain.selectable_acceleration.ui_out.SelectableAccelerationOuter
@@ -129,6 +130,21 @@ class SelectableAccelerationUseCasesTest {
         wait()
 
         coVerify( exactly = 1 ) { outer.complete() }
+    }
+
+    @Test
+    fun testUpdateAppItem() = setupTest{
+        assertAppUpdated(true)
+        assertAppUpdated(false)
+    }
+
+    private fun assertAppUpdated(isSelected: Boolean) {
+        coEvery { appsForm.isAppSelected(App()) } returns isSelected
+        val selectable: SelectableItem = spyk()
+
+        useCases.updateAppItem(App(), selectable)
+
+        coVerify { selectable.setSelected(isSelected) }
     }
 
     private fun TestScope.wait() {

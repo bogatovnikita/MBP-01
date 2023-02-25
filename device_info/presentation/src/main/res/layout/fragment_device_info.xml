@@ -31,22 +31,16 @@
         app:layout_constraintStart_toEndOf="@+id/btn_go_back"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <pokercc.android.expandablerecyclerview.StickyHeaderRecyclerViewContainer
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="@dimen/_16sdp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_title">
-
-
-        <pokercc.android.expandablerecyclerview.ExpandableRecyclerView
-            android:id="@+id/recycler_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-
-    </pokercc.android.expandablerecyclerview.StickyHeaderRecyclerViewContainer>
+        app:layout_constraintTop_toBottomOf="@+id/tv_title"
+        tools:listitem="@layout/item_parent_device_info" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

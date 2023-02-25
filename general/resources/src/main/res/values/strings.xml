@@ -1,4 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Бипки</string>
+    <string name="general_info">Общая информация</string>
+    <string name="android">Android</string>
+    <string name="work_time">Время работы</string>
+    <string name="motherboard">Плата</string>
+    <string name="display">Дисплей</string>
+    <string name="screen_resolution">Разрешение</string>
+    <string name="density">Плотность</string>
+    <string name="size">Размер</string>
+    <string name="battery">Аккумулятор</string>
+    <string name="charge_level">Уровень заряда</string>
+    <string name="temperature">Температура</string>
+    <string name="voltage">Напряжение</string>
+    <string name="current_measurement">Измерение тока</string>
+    <string name="battery_capacity">Емкость батареи</string>
+    <string name="technologies">Технологии</string>
+    <string name="battery_status">Состояние батареи</string>
+    <string name="power_supply">Источник питания</string>
 </resources>

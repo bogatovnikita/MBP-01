@@ -1,4 +1,4 @@
-package com.entertainment.event.ssearch.data.device_battery
+package com.entertainment.event.ssearch.data.device_battery_info
 
 import android.app.Application
 import android.content.Context
@@ -6,14 +6,16 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.BatteryManager
 import android.os.BatteryManager.*
-import android.os.Build
-import androidx.core.content.ContextCompat.getSystemService
+import com.entertainment.event.ssearch.domain.device_info.BatteryDeviceInfo
+import com.entertainment.event.ssearch.domain.models.ChildFun
+import com.entertainment.event.ssearch.domain.models.DeviceFunction
+import com.entertainment.event.ssearch.domain.models.ParentFun
 import javax.inject.Inject
 
 
 class BatteryInfoImpl @Inject constructor(
     private val context: Application
-) {
+): BatteryDeviceInfo {
 
     private val batteryStatusIntent: Intent?
         get() {
@@ -21,7 +23,7 @@ class BatteryInfoImpl @Inject constructor(
             return context.registerReceiver(null, batFilter)
         }
 
-    val batteryPercent: Int
+    private val batteryPercent: Int
         get() {
             val intent = batteryStatusIntent
             val rawlevel = intent!!.getIntExtra(EXTRA_LEVEL, -1)
@@ -34,26 +36,26 @@ class BatteryInfoImpl @Inject constructor(
         }
 
 
-    val currentNow: Long
+    private val currentNow: Long
         get() {
             val batteryManager = context.getSystemService(Context.BATTERY_SERVICE) as BatteryManager
             return batteryManager.getLongProperty(BATTERY_PROPERTY_CURRENT_NOW)
         }
 
-    val avgCurrent: Long
+    private val avgCurrent: Long
         get() {
             val batteryManager = context.getSystemService(Context.BATTERY_SERVICE) as BatteryManager
             return batteryManager.getLongProperty(BATTERY_PROPERTY_CURRENT_AVERAGE)
         }
 
-    val isPhoneCharging: Boolean
+    private val isPhoneCharging: Boolean
         get() {
             val intent = batteryStatusIntent
             val plugged = intent!!.getIntExtra(EXTRA_PLUGGED, 0)
             return plugged == BATTERY_PLUGGED_AC || plugged == BATTERY_PLUGGED_USB
         }
 
-    val batteryHealth: String
+    private val batteryHealth: String
         get() {
             var health = BATTERY_HEALTH_UNKNOWN
             val intent = batteryStatusIntent
@@ -76,26 +78,26 @@ class BatteryInfoImpl @Inject constructor(
             return health
         }
 
-    val batteryTechnology: String
+    private val batteryTechnology: String
         get() {
             val intent = batteryStatusIntent
             return intent!!.getStringExtra(EXTRA_TECHNOLOGY)!!
         }
 
-    val batteryTemperature: Float
+    private val batteryTemperature: Float
         get() {
             val intent = batteryStatusIntent
             val temperature = intent!!.getIntExtra(EXTRA_TEMPERATURE, 0)
             return (temperature / 10.0).toFloat()
         }
 
-    val batteryVoltage: Int
+    private val batteryVoltage: Int
         get() {
             val intent = batteryStatusIntent
             return intent!!.getIntExtra(EXTRA_VOLTAGE, 0)
         }
 
-    val chargingSource: String
+    private val chargingSource: String
         get() {
             val intent = batteryStatusIntent
             val plugged = intent!!.getIntExtra(EXTRA_PLUGGED, 0)
@@ -107,7 +109,7 @@ class BatteryInfoImpl @Inject constructor(
             }
         }
 
-    val batteryCapacity: Long
+    private val batteryCapacity: Long
         get() {
             val mBatteryManager =
                 context.getSystemService(Context.BATTERY_SERVICE) as BatteryManager
@@ -116,7 +118,7 @@ class BatteryInfoImpl @Inject constructor(
             return if (chargeCounter == Int.MIN_VALUE || capacity == Int.MIN_VALUE) 0 else (chargeCounter / capacity * 100).toLong()
         }
 
-    fun getBatteryCapacity(): Double {
+    private fun getBatteryCapacity(): Double {
         val powerProfile: Any
         var batteryCapacity = 0.0
         val POWER_PROFILE_CLASS = "com.android.internal.os.PowerProfile"
@@ -149,4 +151,16 @@ class BatteryInfoImpl @Inject constructor(
         private const val BATTERY_HEALTH_UNKNOWN = "Unknown"
         private const val FAILURE = "Unspecified failure"
     }
+
+    override suspend fun getBatteryDeviceInfo(): List<DeviceFunction> = listOf(
+        ParentFun(name = general.R.string.battery),
+        ChildFun(name = general.R.string.charge_level, body = "$batteryPercent %"),
+        ChildFun(name = general.R.string.temperature, body = "$batteryTemperature ℃"),
+        ChildFun(name = general.R.string.voltage, body = "$batteryVoltage mV"),
+        ChildFun(name = general.R.string.current_measurement, body = "$avgCurrent mA"),
+        ChildFun(name = general.R.string.battery_capacity, body = "$batteryCapacity"),
+        ChildFun(name = general.R.string.technologies, body = batteryTechnology),
+        ChildFun(name = general.R.string.battery_status, body = batteryHealth),
+        ChildFun(name = general.R.string.power_supply, body = chargingSource),
+    )
 }

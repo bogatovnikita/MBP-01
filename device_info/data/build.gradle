@@ -33,6 +33,8 @@ android {
 
 dependencies {
 
+    implementation project(':device_info:domain')
+    implementation project(':general:resources')
     implementation device_info_data.values()
     
 }

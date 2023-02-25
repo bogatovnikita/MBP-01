@@ -7,19 +7,19 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.entertainment.event.ssearch.domain.models.ChildFun
+import com.entertainment.event.ssearch.domain.models.DeviceFunction
+import com.entertainment.event.ssearch.domain.models.ParentFun
+import com.entertainment.event.ssearch.domain.utility.CHILD
+import com.entertainment.event.ssearch.domain.utility.PARENT
 import com.entertainment.event.ssearch.presentation.R
 import com.entertainment.event.ssearch.presentation.databinding.ItemChildDeviceInfoBinding
 import com.entertainment.event.ssearch.presentation.databinding.ItemParentDeviceInfoBinding
-import com.entertainment.event.ssearch.presentation.models.ChildFun
-import com.entertainment.event.ssearch.presentation.models.ExpandedAndCollapsedItem
-import com.entertainment.event.ssearch.presentation.models.ParentFun
-import com.entertainment.event.ssearch.presentation.utility.CHILD
-import com.entertainment.event.ssearch.presentation.utility.PARENT
 
 typealias OnParentFunClick = (parentFun: ParentFun) -> Unit
 
 class FunctionRecycleAdapter(private val onParentFunClick: OnParentFunClick) :
-    ListAdapter<ExpandedAndCollapsedItem, RecyclerView.ViewHolder>(
+    ListAdapter<DeviceFunction, RecyclerView.ViewHolder>(
         FunctionDiffUtilCallback()
     ) {
 
@@ -88,15 +88,15 @@ class FunctionRecycleAdapter(private val onParentFunClick: OnParentFunClick) :
 
     }
 
-    class FunctionDiffUtilCallback : DiffUtil.ItemCallback<ExpandedAndCollapsedItem>() {
+    class FunctionDiffUtilCallback : DiffUtil.ItemCallback<DeviceFunction>() {
         override fun areItemsTheSame(
-            oldItem: ExpandedAndCollapsedItem,
-            newItem: ExpandedAndCollapsedItem
+            oldItem: DeviceFunction,
+            newItem: DeviceFunction
         ) = oldItem.id == newItem.id
 
         override fun areContentsTheSame(
-            oldItem: ExpandedAndCollapsedItem,
-            newItem: ExpandedAndCollapsedItem
+            oldItem: DeviceFunction,
+            newItem: DeviceFunction
         ) =
             (oldItem.id == newItem.id && oldItem.name == newItem.name && oldItem.type == newItem.type)
     }

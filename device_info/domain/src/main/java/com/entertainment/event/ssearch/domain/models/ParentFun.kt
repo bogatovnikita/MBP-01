@@ -4,7 +4,7 @@ import com.entertainment.event.ssearch.domain.utility.PARENT
 
 
 data class ParentFun(
-    override val id: Int = Math.random().toInt(),
+    override val id: Int,
     override var type: Int = PARENT,
     override val name: Int,
     var isExpanded: Boolean = false,

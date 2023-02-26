@@ -1,6 +1,7 @@
 package com.entertainment.event.ssearch.presentation.ui.adapter
 
 import android.graphics.drawable.Drawable
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.content.res.AppCompatResources
@@ -44,7 +45,10 @@ class FunctionRecycleAdapter(private val onParentFunClick: OnParentFunClick) :
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = getItem(position)
         when (item.type) {
-            PARENT -> (holder as ParentFunVH).bind(item as ParentFun)
+            PARENT -> {
+                Log.e("!!!", "on: ${(item as ParentFun)}")
+                (holder as ParentFunVH).bind(item as ParentFun)
+            }
             CHILD -> (holder as ChildFunVH).bind(item as ChildFun)
         }
     }
@@ -62,7 +66,8 @@ class FunctionRecycleAdapter(private val onParentFunClick: OnParentFunClick) :
                 tvFunGroup.setText(parentFun.name)
                 btnOpenInfo.setImageDrawable(getExpandedPrCollapsedDrawable(parentFun.isExpanded))
                 parentContainer.setOnClickListener {
-                    onParentFunClick(parentFun)
+                    Log.e("!!!", "re: $parentFun")
+                    onParentFunClick(parentFun.copy())
                 }
             }
         }
@@ -97,7 +102,11 @@ class FunctionRecycleAdapter(private val onParentFunClick: OnParentFunClick) :
         override fun areContentsTheSame(
             oldItem: DeviceFunction,
             newItem: DeviceFunction
-        ) =
-            (oldItem.id == newItem.id && oldItem.name == newItem.name && oldItem.type == newItem.type)
+        ) = if (newItem.type == PARENT) {
+            (oldItem as ParentFun) == (newItem as ParentFun)
+        } else {
+            (oldItem as ChildFun) == (newItem as ChildFun)
+        }
+
     }
 }

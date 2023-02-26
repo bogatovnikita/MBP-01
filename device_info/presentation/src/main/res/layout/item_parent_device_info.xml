@@ -21,7 +21,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_5sdp"
-        android:layout_marginTop="@dimen/_1sdp"
-        android:background="@drawable/ic_collapsed_list" />
+        android:layout_marginTop="@dimen/_1sdp" />
 
 </LinearLayout>

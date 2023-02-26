@@ -153,14 +153,14 @@ class BatteryInfoImpl @Inject constructor(
     }
 
     override suspend fun getBatteryDeviceInfo(): List<DeviceFunction> = listOf(
-        ParentFun(name = general.R.string.battery),
-        ChildFun(name = general.R.string.charge_level, body = "$batteryPercent %"),
-        ChildFun(name = general.R.string.temperature, body = "$batteryTemperature ℃"),
-        ChildFun(name = general.R.string.voltage, body = "$batteryVoltage mV"),
-        ChildFun(name = general.R.string.current_measurement, body = "$avgCurrent mA"),
-        ChildFun(name = general.R.string.battery_capacity, body = "$batteryCapacity"),
-        ChildFun(name = general.R.string.technologies, body = batteryTechnology),
-        ChildFun(name = general.R.string.battery_status, body = batteryHealth),
-        ChildFun(name = general.R.string.power_supply, body = chargingSource),
+        ParentFun(name = general.R.string.battery, id = 0),
+        ChildFun(name = general.R.string.charge_level, body = "$batteryPercent %", id = 1),
+        ChildFun(name = general.R.string.temperature, body = "$batteryTemperature ℃", id = 2),
+        ChildFun(name = general.R.string.voltage, body = "$batteryVoltage mV", id = 3),
+        ChildFun(name = general.R.string.current_measurement, body = "$avgCurrent mA", id = 4),
+        ChildFun(name = general.R.string.battery_capacity, body = "$batteryCapacity", id = 5),
+        ChildFun(name = general.R.string.technologies, body = batteryTechnology, id = 6),
+        ChildFun(name = general.R.string.battery_status, body = batteryHealth, id = 7),
+        ChildFun(name = general.R.string.power_supply, body = chargingSource, id = 8),
     )
 }

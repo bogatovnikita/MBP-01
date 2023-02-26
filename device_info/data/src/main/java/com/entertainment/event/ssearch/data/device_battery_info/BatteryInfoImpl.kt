@@ -6,7 +6,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.BatteryManager
 import android.os.BatteryManager.*
-import com.entertainment.event.ssearch.domain.device_info.BatteryDeviceInfo
+import com.entertainment.event.ssearch.domain.device_info.BatteryInfo
 import com.entertainment.event.ssearch.domain.models.ChildFun
 import com.entertainment.event.ssearch.domain.models.DeviceFunction
 import com.entertainment.event.ssearch.domain.models.ParentFun
@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 class BatteryInfoImpl @Inject constructor(
     private val context: Application
-): BatteryDeviceInfo {
+): BatteryInfo {
 
     private val batteryStatusIntent: Intent?
         get() {

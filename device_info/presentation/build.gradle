@@ -38,7 +38,9 @@ android {
 dependencies {
 
     implementation project(':device_info:domain')
+    implementation project(':device_info:data')
     implementation project(':general:resources')
+    kapt "com.google.dagger:hilt-compiler:2.44.2"
     implementation device_info_presentation.values()
     implementation device_info_presentation_android_test.values()
     implementation device_info_presentation_test.values()

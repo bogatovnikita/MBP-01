@@ -59,7 +59,7 @@ class FunctionRecycleAdapter(private val onParentFunClick: OnParentFunClick) :
 
         fun bind(parentFun: ParentFun) {
             with(binding) {
-                tvFunGroup.text = parentFun.name
+                tvFunGroup.setText(parentFun.name)
                 btnOpenInfo.setImageDrawable(getExpandedPrCollapsedDrawable(parentFun.isExpanded))
                 parentContainer.setOnClickListener {
                     onParentFunClick(parentFun)
@@ -81,7 +81,7 @@ class FunctionRecycleAdapter(private val onParentFunClick: OnParentFunClick) :
 
         fun bind(parentFun: ChildFun) {
             with(binding) {
-                tvFunName.text = parentFun.name
+                tvFunName.setText(parentFun.name)
                 tvFunBody.text = parentFun.body
             }
         }

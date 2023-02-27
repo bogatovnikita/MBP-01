@@ -10,7 +10,7 @@ import yin_kio.acceleration.presentation.R
 
 class AccelerationNavigatorImpl(
     private val coroutineScope: CoroutineScope,
-    private val completeDestination: Int,
+    private val completeId: Bundle,
     private val completeArgs: Bundle,
     var inter: Inter? = null // Выделение интерфейса для интера помогает упростить тестирование
 ) : AccelerationNavigator {
@@ -37,13 +37,13 @@ class AccelerationNavigatorImpl(
     override fun showSelectableAcceleration() = onMain {
         navController?.navigate(
             R.id.toSelectableAcceleration,
-            Bundle().apply { putInt("completeId", completeDestination) }
+            completeId
         )
     }
 
     override fun complete() = onMain {
         navController?.popBackStack(R.id.accelerationFragment, true)
-        navController?.navigate(completeDestination, completeArgs)
+        navController?.navigate(completeId.getInt("completeId"), completeArgs)
     }
 
     private fun onMain(action: () -> Unit){

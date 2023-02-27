@@ -5,6 +5,7 @@ import io.mockk.coVerify
 import io.mockk.mockk
 import io.mockk.spyk
 import org.junit.Test
+import yin_kio.acceleration.domain.selectable_acceleration.entities.App
 import yin_kio.acceleration.domain.selectable_acceleration.entities.SelectionStatus
 import yin_kio.acceleration.domain.selectable_acceleration.ui_out.SelectableAccelerationNavigator
 import yin_kio.acceleration.domain.selectable_acceleration.ui_out.UpdateStatus
@@ -26,18 +27,6 @@ class SelectableAccelerationOuterTest  {
         outer.viewModel = viewModel
     }
 
-    @Test
-    fun testSetAppSelected(){
-        assertSetAppSelected(true)
-        assertSetAppSelected(false)
-    }
-
-    private fun assertSetAppSelected(isSelected: Boolean) {
-        val packageName = "packageName"
-        outer.setAppSelected(packageName, isSelected)
-
-        coVerify { viewModel.setAppSelected(packageName, isSelected) }
-    }
 
     @Test
     fun testSetSelectionStatus(){
@@ -84,7 +73,7 @@ class SelectableAccelerationOuterTest  {
 
     @Test
     fun testSetApps(){
-        val apps = emptyList<String>()
+        val apps = emptyList<App>()
 
         outer.setApps(apps)
 

@@ -2,7 +2,6 @@ package yin_kio.acceleration.presentation.selectable_acceleration
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -19,7 +18,7 @@ import yin_kio.acceleration.domain.AccelerationDomainFactory
 import yin_kio.acceleration.presentation.R
 import yin_kio.acceleration.presentation.databinding.FragmentStopSelectedAppsBinding
 import yin_kio.acceleration.presentation.inter.OlejaInter
-import yin_kio.acceleration.presentation.selectable_acceleration.adapter.AppItemsAdapter
+import yin_kio.acceleration.presentation.selectable_acceleration.adapter.SelectableAppsAdapter
 
 class SelectableAccelerationFragment : Fragment(R.layout.fragment_stop_selected_apps) {
 
@@ -27,9 +26,9 @@ class SelectableAccelerationFragment : Fragment(R.layout.fragment_stop_selected_
     private val inter: OlejaInter by lifecycleAware { OlejaInter{ navigator.complete() } }
     private val navigator by lifecycleAware { createNavigator() }
     private val viewModel by lifecycleAware { createViewModel(viewModelScope) }
-    private val adapter by lazy { AppItemsAdapter(
-            coroutineScope = viewLifecycleOwner.lifecycleScope,
-            appsFormState = viewModel
+    private val adapter by lazy { SelectableAppsAdapter(
+            onItemUpdate = {app, selectable -> viewModel.updateAppItem(app, selectable) },
+            onItemClick =  {app, selectable -> viewModel.switchSelectApp(app, selectable) }
         )
     }
 
@@ -38,14 +37,17 @@ class SelectableAccelerationFragment : Fragment(R.layout.fragment_stop_selected_
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.recycler.adapter = adapter
 
-        binding.checkbox.setOnClickListener { viewModel.switchSelectAllApps() }
-        binding.checkboxText.setOnClickListener{ viewModel.switchSelectAllApps() }
+        setupListeners()
+        setupObservers()
+    }
 
-        setupObserver()
+    private fun setupListeners() {
+        binding.checkbox.setOnClickListener { viewModel.switchSelectAllApps() }
+        binding.checkboxText.setOnClickListener { viewModel.switchSelectAllApps() }
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private fun setupObserver() {
+    private fun setupObservers() {
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.flow.collect {
                 showRecyclerContent(it)
@@ -57,7 +59,6 @@ class SelectableAccelerationFragment : Fragment(R.layout.fragment_stop_selected_
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.commandsFlow.collect{
-                Log.d("!!!", "command")
                 adapter.notifyDataSetChanged()
             }
         }

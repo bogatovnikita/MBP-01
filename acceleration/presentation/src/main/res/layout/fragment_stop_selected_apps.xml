@@ -89,12 +89,14 @@
 
     </LinearLayout>
 
-    <yin_kio.acceleration.presentation.selectable_acceleration.adapter.AppItemRecycler
+    <androidx.recyclerview.widget.RecyclerView
         android:visibility="visible"
         android:id="@+id/recycler"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:paddingBottom="75dp"
+        android:clipToPadding="false"
         tools:listitem="@layout/list_item_app_selectable"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 

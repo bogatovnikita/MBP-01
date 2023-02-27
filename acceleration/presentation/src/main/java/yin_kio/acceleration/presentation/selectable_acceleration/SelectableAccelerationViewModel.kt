@@ -3,6 +3,7 @@ package yin_kio.acceleration.presentation.selectable_acceleration
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import yin_kio.acceleration.domain.selectable_acceleration.entities.App
 import yin_kio.acceleration.domain.selectable_acceleration.use_cases.SelectableAccelerationUseCases
 
 
@@ -24,7 +25,6 @@ class SelectableAccelerationViewModel(
         updateList()
     }
 
-    override fun setAppSelected(packageName: String, isSelected: Boolean){}
     override fun setButtonBgRes(resId: Int){
         _flow.value = _flow.value.copy(buttonBgRes = resId)
     }
@@ -37,7 +37,7 @@ class SelectableAccelerationViewModel(
     override fun setListVisible(isVisible: Boolean){
         _flow.value = _flow.value.copy(isListVisible = isVisible)
     }
-    override fun setApps(apps: List<String>){
+    override fun setApps(apps: List<App>){
         _flow.value = _flow.value.copy(apps = apps)
     }
 

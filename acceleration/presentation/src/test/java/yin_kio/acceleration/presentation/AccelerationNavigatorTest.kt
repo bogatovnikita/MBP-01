@@ -25,6 +25,8 @@ class AccelerationNavigatorTest {
     private val inter: Inter = spyk()
     private val navController: NavController = mockk()
     private lateinit var navigator: AccelerationNavigatorImpl
+    private val completeDestination = 0
+    private val completeId = Bundle().apply { putInt("completeId", completeDestination) }
 
 
 
@@ -32,7 +34,7 @@ class AccelerationNavigatorTest {
         navigator = AccelerationNavigatorImpl(
             coroutineScope = this,
             inter = inter,
-            completeDestination = 0,
+            completeId = completeId,
             completeArgs = Bundle()
         )
         navigator.navController = navController
@@ -70,7 +72,8 @@ class AccelerationNavigatorTest {
     fun testShowSelectableAcceleration() = setupTest {
         verifyNavigate(
             navAction = { showSelectableAcceleration() },
-            destination = R.id.toSelectableAcceleration
+            destination = R.id.toSelectableAcceleration,
+            bundle = completeId
         )
     }
 
@@ -82,9 +85,10 @@ class AccelerationNavigatorTest {
         coVerify { inter.show() }
     }
 
+
     private fun TestScope.verifyNavigate(
         navAction: AccelerationNavigator.() -> Unit,
-        destination: Int
+        destination: Int,
     ) {
         coEvery { navController.navigate(destination)  } returns Unit
 
@@ -92,5 +96,18 @@ class AccelerationNavigatorTest {
         advanceUntilIdle()
 
         coVerify { navController.navigate(destination) }
+    }
+
+    private fun TestScope.verifyNavigate(
+        navAction: AccelerationNavigator.() -> Unit,
+        destination: Int,
+        bundle: Bundle? = null
+    ) {
+        coEvery { navController.navigate(destination, bundle)  } returns Unit
+
+        navigator.navAction()
+        advanceUntilIdle()
+
+        coVerify { navController.navigate(destination, bundle) }
     }
 }

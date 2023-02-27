@@ -14,7 +14,7 @@ class SelectableAccelerationPresenterTest {
     fun testPresentButtonBg(){
         assertBg(general.R.drawable.bg_main_button_enabled, SelectionStatus.AllSelected)
         assertBg(general.R.drawable.bg_main_button_disabled, SelectionStatus.NoSelected)
-        assertBg(general.R.drawable.bg_main_button_disabled, SelectionStatus.HasSelected)
+        assertBg(general.R.drawable.bg_main_button_enabled, SelectionStatus.HasSelected)
     }
 
     private fun assertBg(expected: Int, input: SelectionStatus){

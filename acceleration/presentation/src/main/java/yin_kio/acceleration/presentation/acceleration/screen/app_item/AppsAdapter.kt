@@ -1,30 +1,14 @@
 package yin_kio.acceleration.presentation.acceleration.screen.app_item
 
-import android.app.Application
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import kotlinx.coroutines.CoroutineScope
-import yin_kio.acceleration.presentation.AppInfoProvider
+import yin_kio.acceleration.domain.selectable_acceleration.entities.App
 
-class AppsAdapter(
-    private val coroutineScope: CoroutineScope,
-    private val application: Application
-) : ListAdapter<String, AppItemHolder>(itemCallback()) {
+class AppsAdapter() : ListAdapter<App, AppItemHolder>(itemCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AppItemHolder {
-
-        val appInfoProvider = AppInfoProvider(application)
-        val viewModel = AppItemViewModel(
-            appInfoProvider = appInfoProvider,
-            coroutineScope = coroutineScope
-        )
-
-        return AppItemHolder.from(
-            parent = parent,
-            viewModel = viewModel,
-            coroutineScope = coroutineScope
-        )
+        return AppItemHolder.from(parent)
     }
 
     override fun onBindViewHolder(holder: AppItemHolder, position: Int) {
@@ -33,12 +17,12 @@ class AppsAdapter(
 
 
     companion object{
-        private fun itemCallback() = object : DiffUtil.ItemCallback<String>() {
-            override fun areItemsTheSame(oldItem: String, newItem: String): Boolean {
+        private fun itemCallback() = object : DiffUtil.ItemCallback<App>() {
+            override fun areItemsTheSame(oldItem: App, newItem: App): Boolean {
                 return oldItem == newItem
             }
 
-            override fun areContentsTheSame(oldItem: String, newItem: String): Boolean {
+            override fun areContentsTheSame(oldItem: App, newItem: App): Boolean {
                 return oldItem == newItem
             }
         }

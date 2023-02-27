@@ -26,10 +26,7 @@ class AccelerationFragment : Fragment(R.layout.fragment_acceleration) {
 
     private val permissionRequester: PermissionRequesterImpl by lifecycleAware { PermissionRequesterImpl() }
     private val viewModel by lifecycleAware { createAccelerationViewModel() }
-    private val adapter by lazy { AppsAdapter(
-        coroutineScope = viewLifecycleOwner.lifecycleScope,
-        application = requireActivity().application
-    ) }
+    private val adapter by lazy { AppsAdapter() }
 
 
 
@@ -133,7 +130,7 @@ class AccelerationFragment : Fragment(R.layout.fragment_acceleration) {
 
     private fun ViewModel.createNavigator() = AccelerationNavigatorImpl(
         coroutineScope = viewModelScope,
-        completeDestination = requireArguments().getInt("completeId"),
+        completeId = requireArguments(),
         completeArgs = Bundle().apply {
             putString("dialog_title", getString(R.string.your_phone_is_fast))
             putString("dialog_description", getString(R.string.your_phone_is_fast_description))

@@ -1,5 +1,6 @@
 package yin_kio.acceleration.presentation.selectable_acceleration
 
+import yin_kio.acceleration.domain.selectable_acceleration.entities.App
 import yin_kio.acceleration.domain.selectable_acceleration.entities.SelectionStatus
 import yin_kio.acceleration.domain.selectable_acceleration.ui_out.SelectableAccelerationNavigator
 import yin_kio.acceleration.domain.selectable_acceleration.ui_out.SelectableAccelerationOuter
@@ -13,10 +14,6 @@ class SelectableAccelerationOuterImpl(
 {
     var viewModel: MutableSelectableAccelerationViewModel? = null
 
-    override fun setAppSelected(packageName: String, isSelected: Boolean) {
-        viewModel?.setAppSelected(packageName, isSelected)
-    }
-
     override fun setSelectionStatus(selectionStatus: SelectionStatus) {
         viewModel?.setAllSelected(presenter.presentAllSelected(selectionStatus))
         viewModel?.setButtonBgRes(presenter.presentButtonBg(selectionStatus))
@@ -28,7 +25,7 @@ class SelectableAccelerationOuterImpl(
         viewModel?.setListVisible(updateStatus == UpdateStatus.Complete)
     }
 
-    override fun setApps(apps: List<String>) {
+    override fun setApps(apps: List<App>) {
         viewModel?.setApps(apps)
     }
 }

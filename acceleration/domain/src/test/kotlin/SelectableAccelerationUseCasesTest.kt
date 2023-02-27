@@ -49,36 +49,46 @@ class SelectableAccelerationUseCasesTest {
 
     @Test
     fun testSwitchSelectAllApps() = setupTest{
-        verifyUpdateOrderOfterSelectAll(SelectionStatus.AllSelected)
-        verifyUpdateOrderOfterSelectAll(SelectionStatus.NoSelected)
+        verifyUpdateOrderOfterSelectAll(SelectionStatus.AllSelected, selected = twoApps)
+        verifyUpdateOrderOfterSelectAll(SelectionStatus.NoSelected, selected = noApps)
     }
 
-    private fun verifyUpdateOrderOfterSelectAll(selectionStatus: SelectionStatus) {
+    private fun verifyUpdateOrderOfterSelectAll(selectionStatus: SelectionStatus, selected: List<App>) {
         coEvery { appsForm.selectionStatus } returns selectionStatus
+        coEvery { appsForm.selectedApps } returns selected
 
         useCases.switchSelectAllApps()
 
         coVerifyOrder {
             appsForm.switchSelectAll()
             outer.setSelectionStatus(selectionStatus)
+            outer.setSelectedApps(selected)
         }
     }
 
 
     @Test
     fun testSwitchSelectApp() = setupTest{
-        verifyUpdateOrderAfterSelectOne(true, SelectionStatus.AllSelected)
-        verifyUpdateOrderAfterSelectOne(true, SelectionStatus.HasSelected)
-        verifyUpdateOrderAfterSelectOne(false, SelectionStatus.NoSelected)
+        verifyUpdateOrderAfterSelectOne(true, SelectionStatus.AllSelected,
+            selectedApps = twoApps
+        )
+        verifyUpdateOrderAfterSelectOne(true, SelectionStatus.HasSelected,
+            selectedApps = oneApp
+        )
+        verifyUpdateOrderAfterSelectOne(false, SelectionStatus.NoSelected,
+            selectedApps = emptyList()
+        )
     }
 
     private fun verifyUpdateOrderAfterSelectOne(
         hasSelected: Boolean,
-        selectionStatus: SelectionStatus
+        selectionStatus: SelectionStatus,
+        selectedApps: List<App>
     ) {
         val app = someApp
         val selectable: SelectableItem = spyk()
 
+        coEvery { appsForm.selectedApps } returns selectedApps
         coEvery { appsForm.isAppSelected(app) } returns hasSelected
         coEvery { appsForm.selectionStatus } returns selectionStatus
 
@@ -88,21 +98,24 @@ class SelectableAccelerationUseCasesTest {
             appsForm.switchSelectApp(app)
             selectable.setSelected(hasSelected)
             outer.setSelectionStatus(selectionStatus)
+            outer.setSelectedApps(selectedApps)
         }
     }
 
 
     @Test
     fun testUpdate() = setupTest{
-        coEvery { apps.provide() } returns listOf()
+        val outApps = listOf(someApp)
+        coEvery { apps.provide() } returns outApps
+        coEvery { appsForm.selectedApps } returns outApps
 
         useCases.updateList()
         wait()
 
-        coVerifySequence {
+        coVerifyOrder {
             outer.setUpdateStatus(UpdateStatus.Loading)
-            appsForm.apps = listOf()
-            outer.setApps(listOf())
+            appsForm.apps = outApps
+            outer.setSelectedApps(outApps)
             outer.setUpdateStatus(UpdateStatus.Complete)
         }
     }

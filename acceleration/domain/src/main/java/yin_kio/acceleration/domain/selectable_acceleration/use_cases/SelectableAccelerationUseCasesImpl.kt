@@ -30,6 +30,7 @@ internal class SelectableAccelerationUseCasesImpl(
     override fun switchSelectAllApps(){
         appsForm.switchSelectAll()
         outer.setSelectionStatus(appsForm.selectionStatus)
+        outer.setSelectedApps(appsForm.selectedApps.toList())
     }
 
     override fun switchSelectApp(app: App, selectable: SelectableItem){
@@ -37,6 +38,7 @@ internal class SelectableAccelerationUseCasesImpl(
         val isSelected = appsForm.isAppSelected(app)
         selectable.setSelected(isSelected)
         outer.setSelectionStatus(appsForm.selectionStatus)
+        outer.setSelectedApps(appsForm.selectedApps.toList())
     }
 
     override fun updateList() = async{
@@ -44,6 +46,7 @@ internal class SelectableAccelerationUseCasesImpl(
         val appsList = apps.provide()
         appsForm.apps = appsList
         outer.setApps(appsList)
+        outer.setSelectedApps(appsForm.selectedApps.toList())
         outer.setUpdateStatus(UpdateStatus.Complete)
     }
 

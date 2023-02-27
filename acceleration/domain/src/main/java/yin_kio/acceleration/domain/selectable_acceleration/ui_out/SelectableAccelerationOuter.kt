@@ -11,4 +11,6 @@ interface SelectableAccelerationOuter : SelectableAccelerationNavigator {
 
     fun setApps(apps: List<App>)
 
+    fun setSelectedApps(selectedApps: List<App>)
+
 }

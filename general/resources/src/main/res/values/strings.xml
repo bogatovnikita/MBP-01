@@ -19,4 +19,6 @@
     <string name="technologies">Технологии</string>
     <string name="battery_status">Состояние батареи</string>
     <string name="power_supply">Источник питания</string>
+    <string name="pi">пикселей</string>
+    <string name="in">дюймов</string>
 </resources>

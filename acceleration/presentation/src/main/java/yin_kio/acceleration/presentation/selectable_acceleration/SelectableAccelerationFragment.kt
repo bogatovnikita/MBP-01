@@ -44,6 +44,7 @@ class SelectableAccelerationFragment : Fragment(R.layout.fragment_stop_selected_
     private fun setupListeners() {
         binding.checkbox.setOnClickListener { viewModel.switchSelectAllApps() }
         binding.checkboxText.setOnClickListener { viewModel.switchSelectAllApps() }
+        binding.stop.setOnClickListener { viewModel.stopSelectedApps() }
     }
 
     @SuppressLint("NotifyDataSetChanged")

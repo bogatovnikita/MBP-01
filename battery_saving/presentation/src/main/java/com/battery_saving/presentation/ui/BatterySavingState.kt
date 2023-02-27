@@ -6,5 +6,5 @@ data class BatterySavingState(
     val batteryChargePercent: Int = 0,
     val consumptionPercent: Int = 0,
     val listConsumptionPercent: List<BatteryChargeStatisticsEntity> = listOf(),
-    val calculateConsumption: Boolean = false
+    val isLoading: Boolean = false
 )

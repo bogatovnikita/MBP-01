@@ -33,8 +33,14 @@ class BatterySavingFragment :
     }
 
     private fun renderState(state: BatterySavingState) {
+        if (!state.isLoading) return
         binding.percentChargeLevel.text =
             resources.getString(R.string.D_percent, state.batteryChargePercent)
+
+        binding.consumptionForHourPercent.text = when (state.consumptionPercent) {
+            -1 -> getString(R.string.calculate)
+            else -> getString(R.string.D_percent, state.consumptionPercent)
+        }
     }
 
     private fun initCLickListener() {

@@ -9,6 +9,7 @@ import yin_kio.acceleration.domain.selectable_acceleration.ui_out.UpdateStatus
 import yin_kio.acceleration.domain.gateways.Ads
 import yin_kio.acceleration.domain.gateways.Apps
 import yin_kio.acceleration.domain.selectable_acceleration.entities.App
+import yin_kio.acceleration.domain.selectable_acceleration.entities.SelectionStatus
 import yin_kio.acceleration.domain.selectable_acceleration.ui_out.AppsFormState
 import yin_kio.acceleration.domain.selectable_acceleration.ui_out.SelectableItem
 import kotlin.coroutines.CoroutineContext
@@ -47,13 +48,15 @@ internal class SelectableAccelerationUseCasesImpl(
     }
 
     override fun stopSelectedApps() = async{
-        ads.preloadAd()
-        val selectedApps = appsForm.selectedApps
+        if (appsForm.selectionStatus != SelectionStatus.NoSelected){
+            ads.preloadAd()
+            val selectedApps = appsForm.selectedApps
 
-        outer.showStopProgress()
-        apps.stop(selectedApps)
-        delay(8000)
-        outer.showInter()
+            outer.showStopProgress()
+            apps.stop(selectedApps)
+            delay(8000)
+            outer.showInter()
+        }
     }
 
     override fun complete(){

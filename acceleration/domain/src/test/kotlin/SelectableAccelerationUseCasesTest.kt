@@ -109,8 +109,24 @@ class SelectableAccelerationUseCasesTest {
 
     @Test
     fun testStopSelectedApps() = setupTest{
+        assertNotStopIfHasNotSelected()
+        assertStopIfHasSelected()
+    }
+
+    private fun TestScope.assertNotStopIfHasNotSelected() {
+        coEvery { appsForm.selectedApps } returns emptyList()
+        coEvery { appsForm.selectionStatus } returns SelectionStatus.NoSelected
+
+        useCases.stopSelectedApps()
+        wait()
+
+        coVerify(inverse = true) { apps.stop(appsForm.selectedApps) }
+    }
+
+    private fun TestScope.assertStopIfHasSelected() {
         val selectedApps = twoApps
 
+        coEvery { appsForm.selectionStatus } returns SelectionStatus.HasSelected
         coEvery { appsForm.selectedApps } returns selectedApps
 
         useCases.stopSelectedApps()

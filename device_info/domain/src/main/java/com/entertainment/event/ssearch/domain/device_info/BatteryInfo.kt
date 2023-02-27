@@ -1,8 +1,9 @@
 package com.entertainment.event.ssearch.domain.device_info
 
-import com.entertainment.event.ssearch.domain.models.DeviceFunction
+import com.entertainment.event.ssearch.domain.models.DeviceFunctionGroup
 
 interface BatteryInfo {
 
-    suspend fun getBatteryDeviceInfo(): List<DeviceFunction>
+    suspend fun getBatteryDeviceInfo(): DeviceFunctionGroup
+
 }

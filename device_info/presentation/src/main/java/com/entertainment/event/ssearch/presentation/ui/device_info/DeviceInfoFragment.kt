@@ -34,7 +34,7 @@ class DeviceInfoFragment : Fragment(R.layout.fragment_device_info) {
     private fun initObservable() {
         lifecycleScope.launchWhenResumed {
             viewModel.screenState.collect { state ->
-                adapter.submitList(state.deviceInfo)
+                adapter.submitList(state.showedDeviceInfo)
             }
         }
     }

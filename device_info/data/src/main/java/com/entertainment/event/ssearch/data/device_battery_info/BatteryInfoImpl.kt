@@ -8,14 +8,14 @@ import android.os.BatteryManager
 import android.os.BatteryManager.*
 import com.entertainment.event.ssearch.domain.device_info.BatteryInfo
 import com.entertainment.event.ssearch.domain.models.ChildFun
-import com.entertainment.event.ssearch.domain.models.DeviceFunction
+import com.entertainment.event.ssearch.domain.models.DeviceFunctionGroup
 import com.entertainment.event.ssearch.domain.models.ParentFun
 import javax.inject.Inject
 
 
 class BatteryInfoImpl @Inject constructor(
     private val context: Application
-): BatteryInfo {
+) : BatteryInfo {
 
     private val batteryStatusIntent: Intent?
         get() {
@@ -152,15 +152,16 @@ class BatteryInfoImpl @Inject constructor(
         private const val FAILURE = "Unspecified failure"
     }
 
-    override suspend fun getBatteryDeviceInfo(): List<DeviceFunction> = listOf(
-        ParentFun(name = general.R.string.battery, id = 0),
-        ChildFun(name = general.R.string.charge_level, body = "$batteryPercent %", id = 1),
-        ChildFun(name = general.R.string.temperature, body = "$batteryTemperature ℃", id = 2),
-        ChildFun(name = general.R.string.voltage, body = "$batteryVoltage mV", id = 3),
-        ChildFun(name = general.R.string.current_measurement, body = "$avgCurrent mA", id = 4),
-        ChildFun(name = general.R.string.battery_capacity, body = "$batteryCapacity", id = 5),
-        ChildFun(name = general.R.string.technologies, body = batteryTechnology, id = 6),
-        ChildFun(name = general.R.string.battery_status, body = batteryHealth, id = 7),
-        ChildFun(name = general.R.string.power_supply, body = chargingSource, id = 8),
-    )
+    override suspend fun getBatteryDeviceInfo(): DeviceFunctionGroup = DeviceFunctionGroup(
+        parentFun = ParentFun(name = general.R.string.battery, id = 0),
+        listFun = listOf(
+            ChildFun(name = general.R.string.charge_level, body = "$batteryPercent %", id = 1),
+            ChildFun(name = general.R.string.temperature, body = "$batteryTemperature ℃", id = 2),
+            ChildFun(name = general.R.string.voltage, body = "$batteryVoltage mV", id = 3),
+            ChildFun(name = general.R.string.current_measurement, body = "$avgCurrent mA", id = 4),
+            ChildFun(name = general.R.string.battery_capacity, body = "$batteryCapacity", id = 5),
+            ChildFun(name = general.R.string.technologies, body = batteryTechnology, id = 6),
+            ChildFun(name = general.R.string.battery_status, body = batteryHealth, id = 7),
+            ChildFun(name = general.R.string.power_supply, body = chargingSource, id = 8),
+        ))
 }

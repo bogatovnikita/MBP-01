@@ -1,7 +1,6 @@
 package com.entertainment.event.ssearch.presentation.ui.adapter
 
 import android.graphics.drawable.Drawable
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.content.res.AppCompatResources
@@ -46,7 +45,6 @@ class FunctionRecycleAdapter(private val onParentFunClick: OnParentFunClick) :
         val item = getItem(position)
         when (item.type) {
             PARENT -> {
-                Log.e("!!!", "on: ${(item as ParentFun)}")
                 (holder as ParentFunVH).bind(item as ParentFun)
             }
             CHILD -> (holder as ChildFunVH).bind(item as ChildFun)
@@ -66,7 +64,6 @@ class FunctionRecycleAdapter(private val onParentFunClick: OnParentFunClick) :
                 tvFunGroup.setText(parentFun.name)
                 btnOpenInfo.setImageDrawable(getExpandedPrCollapsedDrawable(parentFun.isExpanded))
                 parentContainer.setOnClickListener {
-                    Log.e("!!!", "re: $parentFun")
                     onParentFunClick(parentFun.copy())
                 }
             }

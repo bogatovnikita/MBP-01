@@ -7,5 +7,6 @@ data class ScreenState(
     val buttonBgRes: Int = general.R.drawable.bg_main_button_disabled,
     val isProgressVisible: Boolean = true,
     val isListVisible: Boolean = false,
-    val apps: List<App> = emptyList()
+    val apps: List<App> = emptyList(),
+    val selectedApps: List<App> = emptyList()
 )

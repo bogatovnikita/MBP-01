@@ -41,6 +41,10 @@ class SelectableAccelerationViewModel(
         _flow.value = _flow.value.copy(apps = apps)
     }
 
+    override fun setSelectedApps(selectedApps: List<App>) {
+        _flow.value = _flow.value.copy(selectedApps = selectedApps)
+    }
+
     override fun updateApps() {
         coroutineScope.launch {
             _commandsFlow.emit(Any())

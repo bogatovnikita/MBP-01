@@ -25,13 +25,19 @@ class SelectableAccelerationFragment : Fragment(R.layout.fragment_stop_selected_
     private val binding: FragmentStopSelectedAppsBinding by viewBinding()
     private val inter: OlejaInter by lifecycleAware { OlejaInter{ navigator.complete() } }
     private val navigator by lifecycleAware { createNavigator() }
-    private val viewModel by lifecycleAware { createViewModel(viewModelScope) }
+    private val viewModel: SelectableAccelerationViewModel by  lifecycleAware(
+        viewModelStoreOwner = { findNavController().currentBackStackEntry!! }
+    ) { createViewModel(viewModelScope) }
     private val adapter by lazy { SelectableAppsAdapter(
             onItemUpdate = {app, selectable -> viewModel.updateAppItem(app, selectable) },
             onItemClick =  {app, selectable -> viewModel.switchSelectApp(app, selectable) }
         )
     }
 
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+    }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

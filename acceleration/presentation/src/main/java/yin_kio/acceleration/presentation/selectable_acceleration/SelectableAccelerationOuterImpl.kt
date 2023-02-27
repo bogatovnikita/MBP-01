@@ -28,4 +28,8 @@ class SelectableAccelerationOuterImpl(
     override fun setApps(apps: List<App>) {
         viewModel?.setApps(apps)
     }
+
+    override fun setSelectedApps(selectedApps: List<App>) {
+        viewModel?.setSelectedApps(selectedApps)
+    }
 }

@@ -47,6 +47,7 @@
             android:text="@string/acceleration_progress_description"
             android:textAppearance="@style/Text.Subtitle_1.2"
             android:textColor="@color/gray"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/title"
             app:layout_constraintStart_toStartOf="@+id/title"

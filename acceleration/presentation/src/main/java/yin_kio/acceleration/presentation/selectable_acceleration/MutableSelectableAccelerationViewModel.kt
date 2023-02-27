@@ -9,4 +9,5 @@ interface MutableSelectableAccelerationViewModel {
     fun setListVisible(isVisible: Boolean)
     fun setApps(apps: List<App>)
     fun updateApps()
+    fun setSelectedApps(selectedApps: List<App>)
 }

@@ -9,12 +9,17 @@ import android.os.Build.VERSION.RELEASE
 import android.os.Build.VERSION.SDK_INT
 import android.util.DisplayMetrics
 import android.view.WindowManager
+import com.entertainment.event.ssearch.domain.device_info.GeneralDeviceInfo
+import com.entertainment.event.ssearch.domain.models.ChildFun
+import com.entertainment.event.ssearch.domain.models.DeviceFunctionGroup
+import com.entertainment.event.ssearch.domain.models.ParentFun
+import general.R
 import java.util.*
 import javax.inject.Inject
 
 class GeneralDeviceInfoImpl @Inject constructor(
     private val context: Application,
-) {
+): GeneralDeviceInfo {
 
     val model = deviceModel
 
@@ -108,16 +113,17 @@ class GeneralDeviceInfoImpl @Inject constructor(
         return context.resources.displayMetrics.widthPixels
     }
 
-    fun getAndroidVersion(): Int = Build.VERSION.SDK_INT
-
-    fun getDeviceName(): String {
-        val manafacture = MANUFACTURER
-        val model = MODEL
-        return if (model.startsWith(manafacture)) {
-            capitalize(model)
-        } else {
-            capitalize(manafacture)
-        }
-    }
+    override fun getGeneralDeviceInfo(): DeviceFunctionGroup = DeviceFunctionGroup(
+        parentFun = ParentFun(name = R.string.general_info, id = 9),
+        listFun = listOf(
+            ChildFun(name = R.string.model, body = deviceModel, id = 10),
+            ChildFun(name = R.string.android, body = osVersion, id =11),
+            ChildFun(name = R.string.work_time, body = time.toString(), id = 12),
+            ChildFun(name = R.string.motherboard, body = hardware ?: "none", id = 13),
+//            ChildFun(name = R.string.display, body = "$batteryCapacity", id = 14),
+            ChildFun(name = R.string.screen_resolution, body = "${getDisplayHeight()} x ${getDisplayWidth()} pi", id = 15),
+//            ChildFun(name = R.string.density, body = batteryHealth, id = 16),
+//            ChildFun(name = R.string.size, body = chargingSource, id = 17),
+        ))
 
 }

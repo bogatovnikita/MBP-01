@@ -1,9 +1,9 @@
 package com.entertainment.event.ssearch.domain.device_info
 
-import com.entertainment.event.ssearch.domain.models.DeviceFunction
+import com.entertainment.event.ssearch.domain.models.DeviceFunctionGroup
 
 interface GeneralDeviceInfo {
 
-    fun getGeneralDeviceInfo(): List<DeviceFunction>
+    fun getGeneralDeviceInfo(): DeviceFunctionGroup
 
 }

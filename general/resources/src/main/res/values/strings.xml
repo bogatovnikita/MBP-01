@@ -2,6 +2,7 @@
 <resources>
     <string name="app_name">Бипки</string>
     <string name="general_info">Общая информация</string>
+    <string name="model">Модель</string>
     <string name="android">Android</string>
     <string name="work_time">Время работы</string>
     <string name="motherboard">Плата</string>

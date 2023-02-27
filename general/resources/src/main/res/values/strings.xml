@@ -10,7 +10,6 @@
     <string name="screen_resolution">Разрешение</string>
     <string name="density">Плотность</string>
     <string name="size">Размер</string>
-    <string name="battery">Аккумулятор</string>
     <string name="charge_level">Уровень заряда</string>
     <string name="temperature">Температура</string>
     <string name="voltage">Напряжение</string>
@@ -21,4 +20,14 @@
     <string name="power_supply">Источник питания</string>
     <string name="pi">пикселей</string>
     <string name="in">дюймов</string>
+    <string name="ac">AC</string>
+    <string name="usb">USB</string>
+    <string name="wireless">Беспроводной</string>
+    <string name="battery">Аккумулятор</string>
+    <string name="cold">Переохлаждена</string>
+    <string name="bad">Плохое</string>
+    <string name="good">Хорошее</string>
+    <string name="over_heat">Перегрета</string>
+    <string name="over_voltage">Перенапряжение</string>
+    <string name="unknown">Нет данных</string>
 </resources>

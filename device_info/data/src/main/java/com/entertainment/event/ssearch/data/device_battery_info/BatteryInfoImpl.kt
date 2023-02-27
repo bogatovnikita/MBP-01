@@ -6,11 +6,14 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.BatteryManager
 import android.os.BatteryManager.*
+import com.entertainment.event.ssearch.data.R
 import com.entertainment.event.ssearch.domain.device_info.BatteryInfo
 import com.entertainment.event.ssearch.domain.models.ChildFun
 import com.entertainment.event.ssearch.domain.models.DeviceFunctionGroup
 import com.entertainment.event.ssearch.domain.models.ParentFun
 import javax.inject.Inject
+import kotlin.math.pow
+import kotlin.math.roundToInt
 
 
 class BatteryInfoImpl @Inject constructor(
@@ -57,23 +60,21 @@ class BatteryInfoImpl @Inject constructor(
 
     private val batteryHealth: String
         get() {
-            var health = BATTERY_HEALTH_UNKNOWN
+            var health = getString(general.R.string.unknown)
             val intent = batteryStatusIntent
             val status = intent!!.getIntExtra(EXTRA_HEALTH, 0)
             when (status) {
-                BATTERY_HEALTH_COLD -> health = COLD
+                BATTERY_HEALTH_COLD -> health = getString(general.R.string.cold)
 
-                BATTERY_HEALTH_DEAD -> health = DEAD
+                BATTERY_HEALTH_DEAD -> health = getString(general.R.string.bad)
 
-                BATTERY_HEALTH_GOOD -> health = GOOD
+                BATTERY_HEALTH_GOOD -> health = getString(general.R.string.good)
 
-                BATTERY_HEALTH_OVERHEAT -> health = OVERHEAT
+                BATTERY_HEALTH_OVERHEAT -> health = getString(general.R.string.over_heat)
 
-                BATTERY_HEALTH_OVER_VOLTAGE -> health = OVER_VOLTAGE
+                BATTERY_HEALTH_OVER_VOLTAGE -> health = getString(general.R.string.over_voltage)
 
-                BatteryManager.BATTERY_HEALTH_UNKNOWN -> health = BATTERY_HEALTH_UNKNOWN
-
-                BATTERY_HEALTH_UNSPECIFIED_FAILURE -> health = FAILURE
+                BATTERY_HEALTH_UNKNOWN -> health = getString(general.R.string.unknown)
             }
             return health
         }
@@ -102,11 +103,10 @@ class BatteryInfoImpl @Inject constructor(
             val intent = batteryStatusIntent
             val plugged = intent!!.getIntExtra(EXTRA_PLUGGED, 0)
             when (plugged) {
-                BATTERY_PLUGGED_AC -> return AC
-                BATTERY_PLUGGED_USB -> return USB
-                BATTERY_PLUGGED_WIRELESS -> return WIRELESS
-                else -> return UNKNOWN
-            }
+                BATTERY_PLUGGED_AC -> return getString(general.R.string.ac)
+                BATTERY_PLUGGED_USB -> return getString(general.R.string.usb)
+                BATTERY_PLUGGED_WIRELESS -> return getString(general.R.string.wireless)
+                else -> return getString(general.R.string.battery)            }
         }
 
     private val batteryCapacity: Long
@@ -118,45 +118,13 @@ class BatteryInfoImpl @Inject constructor(
             return if (chargeCounter == Int.MIN_VALUE || capacity == Int.MIN_VALUE) 0 else (chargeCounter / capacity * 100).toLong()
         }
 
-    private fun getBatteryCapacity(): Double {
-        val powerProfile: Any
-        var batteryCapacity = 0.0
-        val POWER_PROFILE_CLASS = "com.android.internal.os.PowerProfile"
-        try {
-            powerProfile = Class.forName(POWER_PROFILE_CLASS)
-                .getConstructor(Context::class.java)
-                .newInstance(context)
-            batteryCapacity = Class.forName(POWER_PROFILE_CLASS)
-                .getMethod("getBatteryCapacity")
-                .invoke(powerProfile) as Double
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        return batteryCapacity
-    }
-
-
-    companion object {
-
-        private const val AC = "AC"
-        private const val USB = "USB"
-        private const val WIRELESS = "Wireless"
-        private const val UNKNOWN = "Battery"
-
-        private const val COLD = "cold"
-        private const val DEAD = "dead"
-        private const val GOOD = "good"
-        private const val OVERHEAT = "Over Heat"
-        private const val OVER_VOLTAGE = "Over Voltage"
-        private const val BATTERY_HEALTH_UNKNOWN = "Unknown"
-        private const val FAILURE = "Unspecified failure"
-    }
+    private fun getString(id: Int) = context.getString(id)
 
     override suspend fun getBatteryDeviceInfo(): DeviceFunctionGroup = DeviceFunctionGroup(
         parentFun = ParentFun(name = general.R.string.battery, id = 0),
         listFun = listOf(
             ChildFun(name = general.R.string.charge_level, body = "$batteryPercent %", id = 1),
-            ChildFun(name = general.R.string.temperature, body = "$batteryTemperature ℃", id = 2),
+            ChildFun(name = general.R.string.temperature, body = "$batteryTemperature (${round(batteryTemperature.toF())} ℉)", id = 2),
             ChildFun(name = general.R.string.voltage, body = "$batteryVoltage mV", id = 3),
             ChildFun(name = general.R.string.current_measurement, body = "$avgCurrent mA", id = 4),
             ChildFun(name = general.R.string.battery_capacity, body = "$batteryCapacity", id = 5),
@@ -164,4 +132,11 @@ class BatteryInfoImpl @Inject constructor(
             ChildFun(name = general.R.string.battery_status, body = batteryHealth, id = 7),
             ChildFun(name = general.R.string.power_supply, body = chargingSource, id = 8),
         ))
+
+    private fun Float.toF() = this * 1.8 + 32
+
+    private fun round(value: Double, precision: Int = 1): Double {
+        val scale = 10.0.pow(precision.toDouble()).toInt()
+        return (value * scale).roundToInt().toDouble() / scale
+    }
 }

@@ -12,6 +12,10 @@ import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.recycler_adapter.recyclerAdapter
 import jamycake.lifecycle_aware.lifecycleAware
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import yin_kio.acceleration.domain.selectable_acceleration.entities.App
 import yin_kio.acceleration.presentation.R
 import yin_kio.acceleration.presentation.databinding.DialogStopSelectedAppsBinding
@@ -42,13 +46,30 @@ class SelectableAccelerationDialog : DialogFragment(R.layout.dialog_stop_selecte
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.recycler.adapter = adapter
+        setupObserver()
 
+    }
+
+    private fun setupObserver() {
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            viewModel.flow.collect{
-                adapter.submitList(it.selectedApps)
+            viewModel.flow.first { state ->
+                runAnimation(state)
+                true
             }
         }
+    }
 
+    private fun CoroutineScope.runAnimation(state: ScreenState) {
+        val selected = state.selectedApps.toMutableList()
+        adapter.submitList(selected)
+
+        launch {
+            repeat(state.selectedApps.size) {
+                selected.removeAt(0)
+                adapter.notifyItemRemoved(0)
+                delay(8000L / state.selectedApps.size)
+            }
+        }
     }
 
 

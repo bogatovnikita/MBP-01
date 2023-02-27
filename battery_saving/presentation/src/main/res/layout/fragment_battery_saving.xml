@@ -153,6 +153,15 @@
         app:layout_constraintStart_toEndOf="@id/view_screen_statistics"
         app:layout_constraintTop_toTopOf="@id/view_screen_statistics" />
 
+    <View
+        android:id="@+id/background_arrow_right"
+        android:layout_width="@dimen/_30sdp"
+        android:layout_height="@dimen/_30sdp"
+        app:layout_constraintBottom_toBottomOf="@id/arrow_right"
+        app:layout_constraintEnd_toEndOf="@id/arrow_right"
+        app:layout_constraintStart_toStartOf="@id/arrow_right"
+        app:layout_constraintTop_toTopOf="@id/arrow_right" />
+
     <TextView
         android:id="@+id/recommend_extending"
         style="@style/Text.Header_5"

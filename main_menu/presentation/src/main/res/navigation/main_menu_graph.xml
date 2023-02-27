@@ -80,8 +80,16 @@
     <include app:graph="@navigation/acceleration_graph" />
 
     <include app:graph="@navigation/screen_time_graph" />
+
     <fragment
         android:id="@+id/batterySavingFragment"
         android:name="com.battery_saving.presentation.ui.BatterySavingFragment"
-        android:label="BatterySavingFragment" />
+        android:label="BatterySavingFragment">
+        <argument
+            android:name="toScreenTimeId"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_batterySavingFragment_to_screen_time_graph"
+            app:destination="@id/screen_time_graph" />
+    </fragment>
 </navigation>

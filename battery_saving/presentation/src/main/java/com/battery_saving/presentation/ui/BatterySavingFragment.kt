@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.battery_saving.presentation.base.BaseFragment
 import com.hedgehog.battery_saving.presentation.R
 import com.hedgehog.battery_saving.presentation.databinding.FragmentBatterySavingBinding
@@ -20,6 +21,7 @@ class BatterySavingFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initObserver()
+        initCLickListener()
     }
 
     private fun initObserver() {
@@ -33,6 +35,13 @@ class BatterySavingFragment :
     private fun renderState(state: BatterySavingState) {
         binding.percentChargeLevel.text =
             resources.getString(R.string.D_percent, state.batteryChargePercent)
+    }
+
+    private fun initCLickListener() {
+        binding.backgroundArrowRight.setOnClickListener {
+            val args = requireArguments().getInt("toScreenTimeId")
+            findNavController().navigate(args)
+        }
     }
 
     override fun onDestroy() {

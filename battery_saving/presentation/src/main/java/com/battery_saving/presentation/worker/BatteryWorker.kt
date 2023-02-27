@@ -1,23 +1,17 @@
 package com.battery_saving.presentation.worker
 
 import android.content.Context
-import android.util.Log
-import androidx.hilt.work.HiltWorker
 import androidx.work.Worker
 import androidx.work.WorkerParameters
-import com.battery_saving.presentation.room.BatteryChargeDAO
+import com.battery_saving.presentation.room.BatteryChargeDatabase
 import com.battery_saving.presentation.room.entities.BatteryChargeStatisticsEntity
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 
-@HiltWorker
-class BatteryWorker @AssistedInject constructor(
-    @Assisted context: Context,
-    @Assisted workerParams: WorkerParameters,
-    private val database: BatteryChargeDAO
-) : Worker(context, workerParams) {
+class BatteryWorker(
+    private val context: Context, workerParameters: WorkerParameters
+) : Worker(context, workerParameters) {
 
     override fun doWork(): Result {
+        val database = BatteryChargeDatabase.create(context).getBatteryChargeStatisticsDao()
         database.setBatteryChargeStatics(
             BatteryChargeStatisticsEntity(
                 time = System.currentTimeMillis(),

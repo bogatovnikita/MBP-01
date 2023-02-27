@@ -71,7 +71,7 @@ class MainMenuFragment : Fragment(R.layout.fragment_main_menu) {
 
     private fun openBatterySaving() {
         onBackPressedCallback.isEnabled = true
-        findNavController().navigate(R.id.to_batterySavingFragment)
+        findNavController().navigate(MainMenuFragmentDirections.toBatterySavingFragment(R.id.action_batterySavingFragment_to_screen_time_graph))
     }
 
     private fun completeDestination(): Bundle {

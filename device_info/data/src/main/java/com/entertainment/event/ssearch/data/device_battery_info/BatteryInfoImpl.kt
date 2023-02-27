@@ -141,7 +141,7 @@ class BatteryInfoImpl @Inject constructor(
         private const val AC = "AC"
         private const val USB = "USB"
         private const val WIRELESS = "Wireless"
-        private const val UNKNOWN = "Unknown"
+        private const val UNKNOWN = "Battery"
 
         private const val COLD = "cold"
         private const val DEAD = "dead"

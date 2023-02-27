@@ -42,7 +42,7 @@ android {
 dependencies {
 
     implementation project(':device_info:presentation')
-    kapt "com.google.dagger:hilt-compiler:2.44.2"
+    kapt device_info_kapt.values()
     implementation device_info_presentation.values()
 
 }

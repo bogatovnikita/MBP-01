@@ -19,7 +19,6 @@ buildscript {
         device_info_presentation = [
                 'vb'                     : "com.github.kirich1409:viewbindingpropertydelegate:${versions.vbProperty}",
                 'hilt'                   : "com.google.dagger:hilt-android:${versions.hilt}",
-                'hilt_compiler'          : "com.google.dagger:hilt-compiler:${versions.hilt}",
                 'sdp'                    : "com.intuit.sdp:sdp-android:${versions.adaptive_dimentions}",
                 'ssp'                    : "com.intuit.ssp:ssp-android:${versions.adaptive_dimentions}",
                 'nav_fragment_ktx'       : "androidx.navigation:navigation-fragment-ktx:${versions.navigation}",
@@ -29,9 +28,12 @@ buildscript {
                 'material'               : "com.google.android.material:material:${versions.material}"
         ]
 
+        device_info_kapt = [
+                'hilt_compiler'          : "com.google.dagger:hilt-compiler:${versions.hilt}",
+        ]
+
         device_info_data = [
-                'hilt'         : "com.google.dagger:hilt-android:${versions.hilt}",
-                'hilt_compiler': "com.google.dagger:hilt-compiler:${versions.hilt}",
+                'inject'         : "javax.inject:javax.inject:1",
         ]
 
         device_info_presentation_test = [

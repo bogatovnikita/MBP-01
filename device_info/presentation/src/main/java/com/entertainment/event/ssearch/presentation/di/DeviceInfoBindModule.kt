@@ -1,8 +1,10 @@
 package com.entertainment.event.ssearch.presentation.di
 
 import com.entertainment.event.ssearch.data.device_battery_info.BatteryInfoImpl
+import com.entertainment.event.ssearch.data.device_functionality_info.FunctionalityInfoImpl
 import com.entertainment.event.ssearch.data.general_device_info.GeneralDeviceInfoImpl
 import com.entertainment.event.ssearch.domain.device_info.BatteryInfo
+import com.entertainment.event.ssearch.domain.device_info.FunctionalityInfo
 import com.entertainment.event.ssearch.domain.device_info.GeneralDeviceInfo
 import dagger.Binds
 import dagger.Module
@@ -18,5 +20,8 @@ interface DeviceInfoBindModule {
 
     @Binds
     fun bindGeneralDeviceInfoImplToGeneralDeviceInfo(generalDeviceInfo: GeneralDeviceInfoImpl): GeneralDeviceInfo
+
+    @Binds
+    fun bindFunctionalityInfoImplToFunctionalityInfo(functionalityInfo: FunctionalityInfoImpl): FunctionalityInfo
 
 }

@@ -30,4 +30,17 @@
     <string name="over_heat">Перегрета</string>
     <string name="over_voltage">Перенапряжение</string>
     <string name="unknown">Нет данных</string>
+    <string name="supported">поддерживается</string>
+    <string name="not_supported">не поддерживается</string>
+    <string name="functions">Функции</string>
+    <string name="wireless_wifi">Беспроводной wi-fi</string>
+    <string name="wifi_aware">Прямой доступ wi-fi</string>
+    <string name="bluetooth">Блютуз</string>
+    <string name="bluetooth_le">Блютуз LE</string>
+    <string name="gps">GPS отслеживание</string>
+    <string name="nfc">NFC</string>
+    <string name="camera">Камеры</string>
+    <string name="autofocus_camera">Автофокус камеры</string>
+    <string name="external_camera">Внешняя камера</string>
+    <string name="flash_camera">Вспышка</string>
 </resources>

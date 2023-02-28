@@ -1,6 +1,7 @@
 package com.entertainment.event.ssearch.domain.use_cases
 
 import com.entertainment.event.ssearch.domain.device_info.BatteryInfo
+import com.entertainment.event.ssearch.domain.device_info.FunctionalityInfo
 import com.entertainment.event.ssearch.domain.device_info.GeneralDeviceInfo
 import com.entertainment.event.ssearch.domain.models.DeviceFunctionGroup
 import kotlinx.coroutines.flow.Flow
@@ -10,6 +11,7 @@ import javax.inject.Inject
 class DeviceInfoUseCase @Inject constructor(
     private val batteryDeviceInfo: BatteryInfo,
     private val generalDeviceInfo: GeneralDeviceInfo,
+    private val functionalityInfo: FunctionalityInfo,
 ) {
 
     fun stopObserve() = batteryDeviceInfo.stopObserve()
@@ -24,6 +26,7 @@ class DeviceInfoUseCase @Inject constructor(
             val list = listOf(
                 generalDeviceInfo.getGeneralDeviceInfo(),
                 batteryInfo,
+                functionalityInfo.getFunctionalityInfo(),
             )
             emit(list)
         }

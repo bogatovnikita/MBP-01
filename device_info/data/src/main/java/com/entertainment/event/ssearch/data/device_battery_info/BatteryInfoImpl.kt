@@ -6,19 +6,40 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.BatteryManager
 import android.os.BatteryManager.*
-import com.entertainment.event.ssearch.data.R
 import com.entertainment.event.ssearch.domain.device_info.BatteryInfo
 import com.entertainment.event.ssearch.domain.models.ChildFun
 import com.entertainment.event.ssearch.domain.models.DeviceFunctionGroup
 import com.entertainment.event.ssearch.domain.models.ParentFun
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.math.pow
 import kotlin.math.roundToInt
 
 
 class BatteryInfoImpl @Inject constructor(
-    private val context: Application
+    private val context: Application,
+    private val batteryChargeReceiver: BatteryChargeReceiver,
 ) : BatteryInfo {
+
+    private val _batteryDeviceInfo: MutableStateFlow<DeviceFunctionGroup> = MutableStateFlow(getBatteryDeviceInfo())
+    override val batteryDeviceInfo = _batteryDeviceInfo.asStateFlow()
+
+    init {
+        initObserveBatPercent()
+    }
+
+    override fun registerBatteryReceiver() {
+        batteryChargeReceiver.registerReceiver(context)
+    }
+
+    override fun unregisterBatteryReceiver() {
+        batteryChargeReceiver.unregisterReceiver(context)
+    }
 
     private val batteryStatusIntent: Intent?
         get() {
@@ -28,16 +49,16 @@ class BatteryInfoImpl @Inject constructor(
 
     private val batteryPercent: Int
         get() {
-            val intent = batteryStatusIntent
-            val rawlevel = intent!!.getIntExtra(EXTRA_LEVEL, -1)
-            val scale = intent.getIntExtra(EXTRA_SCALE, -1)
-            var level = -1
-            if (rawlevel >= 0 && scale > 0) {
-                level = rawlevel * 100 / scale
-            }
-            return level
+            return batteryChargeReceiver.batteryPercent.value
         }
 
+    private fun initObserveBatPercent() {
+        CoroutineScope(SupervisorJob() + Dispatchers.Default).launch {
+            batteryChargeReceiver.batteryPercent.collect {
+                _batteryDeviceInfo.value = getBatteryDeviceInfo()
+            }
+        }
+    }
 
     private val currentNow: Long
         get() {
@@ -120,7 +141,7 @@ class BatteryInfoImpl @Inject constructor(
 
     private fun getString(id: Int) = context.getString(id)
 
-    override suspend fun getBatteryDeviceInfo(): DeviceFunctionGroup = DeviceFunctionGroup(
+    private fun getBatteryDeviceInfo(): DeviceFunctionGroup = DeviceFunctionGroup(
         parentFun = ParentFun(name = general.R.string.battery, id = 0),
         listFun = listOf(
             ChildFun(name = general.R.string.charge_level, body = "$batteryPercent %", id = 1),

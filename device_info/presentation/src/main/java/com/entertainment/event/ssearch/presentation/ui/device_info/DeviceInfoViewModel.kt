@@ -18,16 +18,18 @@ class DeviceInfoViewModel @Inject constructor(
 
     init {
         getDeviceInfo()
+        deviceInfoUseCase.registerBatteryReceiver()
     }
 
     private fun getDeviceInfo() {
         viewModelScope.launch {
-            val mainList = deviceInfoUseCase.getDeviceInfo()
-            updateState {
-                it.copy(
-                    showedDeviceInfo = preparingList(mainList),
-                    mainDeviceInfo = mainList
-                )
+            deviceInfoUseCase.getDeviceInfo().collect { mainList ->
+                updateState {
+                    it.copy(
+                        showedDeviceInfo = preparingList(mainList),
+                        mainDeviceInfo = mainList
+                    )
+                }
             }
         }
     }
@@ -55,4 +57,8 @@ class DeviceInfoViewModel @Inject constructor(
         }
     }
 
+    override fun onCleared() {
+        super.onCleared()
+        deviceInfoUseCase.unregisterBatteryReceiver()
+    }
 }

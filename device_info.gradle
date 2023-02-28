@@ -2,38 +2,40 @@ buildscript {
     ext {
 
         versions = [
-                vbProperty              : '1.5.6',
-                hilt                    : '2.44.2',
-                navigation              : '2.5.3',
-                adaptive_dimentions     : '1.1.0',
-                viewmodel               : '2.5.1',
-                legacy_support          : '1.0.0',
-                junit                   : '4.13.2',
-                android_junit           : '1.1.5',
-                espresso                : '3.5.1',
-                core_ktx                : '1.7.0',
-                appcompat               : '1.6.0',
-                material                : '1.8.0'
+                vbProperty         : '1.5.6',
+                hilt               : '2.44.2',
+                coroutines_core_jvm: '1.6.4',
+                navigation         : '2.5.3',
+                adaptive_dimentions: '1.1.0',
+                viewmodel          : '2.5.1',
+                legacy_support     : '1.0.0',
+                junit              : '4.13.2',
+                android_junit      : '1.1.5',
+                espresso           : '3.5.1',
+                core_ktx           : '1.7.0',
+                appcompat          : '1.6.0',
+                material           : '1.8.0'
         ]
 
         device_info_presentation = [
-                'vb'                     : "com.github.kirich1409:viewbindingpropertydelegate:${versions.vbProperty}",
-                'hilt'                   : "com.google.dagger:hilt-android:${versions.hilt}",
-                'sdp'                    : "com.intuit.sdp:sdp-android:${versions.adaptive_dimentions}",
-                'ssp'                    : "com.intuit.ssp:ssp-android:${versions.adaptive_dimentions}",
-                'nav_fragment_ktx'       : "androidx.navigation:navigation-fragment-ktx:${versions.navigation}",
-                'nav_ui_ktx'             : "androidx.navigation:navigation-ui-ktx:${versions.navigation}",
-                'core_ktx'               : "androidx.core:core-ktx:${versions.core_ktx}",
-                'appcompat'              : "androidx.appcompat:appcompat:${versions.appcompat}",
-                'material'               : "com.google.android.material:material:${versions.material}"
+                'vb'              : "com.github.kirich1409:viewbindingpropertydelegate:${versions.vbProperty}",
+                'hilt'            : "com.google.dagger:hilt-android:${versions.hilt}",
+                'sdp'             : "com.intuit.sdp:sdp-android:${versions.adaptive_dimentions}",
+                'ssp'             : "com.intuit.ssp:ssp-android:${versions.adaptive_dimentions}",
+                'nav_fragment_ktx': "androidx.navigation:navigation-fragment-ktx:${versions.navigation}",
+                'nav_ui_ktx'      : "androidx.navigation:navigation-ui-ktx:${versions.navigation}",
+                'core_ktx'        : "androidx.core:core-ktx:${versions.core_ktx}",
+                'appcompat'       : "androidx.appcompat:appcompat:${versions.appcompat}",
+                'material'        : "com.google.android.material:material:${versions.material}"
         ]
 
         device_info_kapt = [
-                'hilt_compiler'          : "com.google.dagger:hilt-compiler:${versions.hilt}",
+                'hilt_compiler': "com.google.dagger:hilt-compiler:${versions.hilt}",
         ]
 
         device_info_data = [
-                'inject'         : "javax.inject:javax.inject:1",
+                'inject'             : "javax.inject:javax.inject:1",
+                'coroutines_core_jvm': "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:${versions.coroutines_core_jvm}",
         ]
 
         device_info_presentation_test = [

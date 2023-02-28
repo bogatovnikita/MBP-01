@@ -1,9 +1,14 @@
 package com.entertainment.event.ssearch.domain.device_info
 
 import com.entertainment.event.ssearch.domain.models.DeviceFunctionGroup
+import kotlinx.coroutines.flow.StateFlow
 
 interface BatteryInfo {
 
-    suspend fun getBatteryDeviceInfo(): DeviceFunctionGroup
+    val batteryDeviceInfo: StateFlow<DeviceFunctionGroup>
+
+    fun registerBatteryReceiver()
+
+    fun unregisterBatteryReceiver()
 
 }

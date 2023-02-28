@@ -9,5 +9,9 @@
     <string name="our_app_will_help_to_reduce_the_battery_load_so_that_your_phone_works_longer">Наше приложение поможет снизить нагрузку батареи, чтобы ваш телефон работал дольше</string>
     <string name="extend_phone_operation">Продлить работу телефона</string>
     <string name="D_percent">%d %%</string>
+    <string name="speeding_up_your_phone">Ускоряем ваш телефон</string>
+    <string name="reducing_the_load_on_the_battery">Уменьшаем нагрузку на аккумулятор</string>
+    <string name="checking_the_system">Проверяем систему</string>
+    <string name="freezing_background_processes">Замораживаем фоновые процессы</string>
 
 </resources>

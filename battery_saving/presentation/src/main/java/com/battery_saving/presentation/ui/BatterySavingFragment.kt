@@ -6,6 +6,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.battery_saving.presentation.base.BaseFragment
+import com.battery_saving.presentation.ui.dialog.BatteryScanDialog
 import com.hedgehog.battery_saving.presentation.R
 import com.hedgehog.battery_saving.presentation.databinding.FragmentBatterySavingBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -47,6 +48,14 @@ class BatterySavingFragment :
         binding.backgroundArrowRight.setOnClickListener {
             val args = requireArguments().getInt("toScreenTimeId")
             findNavController().navigate(args)
+        }
+
+        binding.backArrow.setOnClickListener {
+            findNavController().navigateUp()
+        }
+
+        binding.deleteApp.setOnClickListener {
+            BatteryScanDialog().show(childFragmentManager, "")
         }
     }
 

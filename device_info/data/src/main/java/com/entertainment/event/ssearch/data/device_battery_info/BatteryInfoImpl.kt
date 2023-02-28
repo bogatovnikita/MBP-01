@@ -10,12 +10,9 @@ import com.entertainment.event.ssearch.domain.device_info.BatteryInfo
 import com.entertainment.event.ssearch.domain.models.ChildFun
 import com.entertainment.event.ssearch.domain.models.DeviceFunctionGroup
 import com.entertainment.event.ssearch.domain.models.ParentFun
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.math.pow
 import kotlin.math.roundToInt
@@ -26,11 +23,18 @@ class BatteryInfoImpl @Inject constructor(
     private val batteryChargeReceiver: BatteryChargeReceiver,
 ) : BatteryInfo {
 
+    private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
+
     private val _batteryDeviceInfo: MutableStateFlow<DeviceFunctionGroup> = MutableStateFlow(getBatteryDeviceInfo())
     override val batteryDeviceInfo = _batteryDeviceInfo.asStateFlow()
 
     init {
         initObserveBatPercent()
+        initObserveCurrentAndVoltage()
+    }
+
+    override fun stopObserve() {
+        coroutineScope.cancel()
     }
 
     override fun registerBatteryReceiver() {
@@ -53,8 +57,17 @@ class BatteryInfoImpl @Inject constructor(
         }
 
     private fun initObserveBatPercent() {
-        CoroutineScope(SupervisorJob() + Dispatchers.Default).launch {
+        coroutineScope.launch {
             batteryChargeReceiver.batteryPercent.collect {
+                _batteryDeviceInfo.value = getBatteryDeviceInfo()
+            }
+        }
+    }
+
+    private fun initObserveCurrentAndVoltage() {
+        coroutineScope.launch {
+            while (true) {
+                delay(3000)
                 _batteryDeviceInfo.value = getBatteryDeviceInfo()
             }
         }

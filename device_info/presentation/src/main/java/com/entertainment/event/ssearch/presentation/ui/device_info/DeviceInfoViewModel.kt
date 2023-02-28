@@ -72,5 +72,6 @@ class DeviceInfoViewModel @Inject constructor(
     override fun onCleared() {
         super.onCleared()
         deviceInfoUseCase.unregisterBatteryReceiver()
+        deviceInfoUseCase.stopObserve()
     }
 }

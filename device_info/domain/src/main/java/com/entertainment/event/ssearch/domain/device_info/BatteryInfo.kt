@@ -7,6 +7,8 @@ interface BatteryInfo {
 
     val batteryDeviceInfo: StateFlow<DeviceFunctionGroup>
 
+    fun stopObserve()
+
     fun registerBatteryReceiver()
 
     fun unregisterBatteryReceiver()

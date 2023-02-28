@@ -12,6 +12,8 @@ class DeviceInfoUseCase @Inject constructor(
     private val generalDeviceInfo: GeneralDeviceInfo,
 ) {
 
+    fun stopObserve() = batteryDeviceInfo.stopObserve()
+
     fun registerBatteryReceiver() = batteryDeviceInfo.registerBatteryReceiver()
 
     fun unregisterBatteryReceiver() = batteryDeviceInfo.unregisterBatteryReceiver()

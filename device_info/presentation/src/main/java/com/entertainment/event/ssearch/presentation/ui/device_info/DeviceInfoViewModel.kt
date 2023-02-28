@@ -24,12 +24,24 @@ class DeviceInfoViewModel @Inject constructor(
     private fun getDeviceInfo() {
         viewModelScope.launch {
             deviceInfoUseCase.getDeviceInfo().collect { mainList ->
+                val mergedList = mergeLists(mainList)
                 updateState {
                     it.copy(
-                        showedDeviceInfo = preparingList(mainList),
-                        mainDeviceInfo = mainList
+                        showedDeviceInfo = preparingList(mergedList),
+                        mainDeviceInfo = mergedList
                     )
                 }
+            }
+        }
+    }
+
+    private fun mergeLists(newList: List<DeviceFunctionGroup>): List<DeviceFunctionGroup> {
+        val oldList = screenState.value.mainDeviceInfo
+        return if (oldList.isEmpty()) {
+            newList
+        } else {
+            oldList.mapIndexed { index, funGroup ->
+                DeviceFunctionGroup(parentFun = funGroup.parentFun, listFun = newList[index].listFun)
             }
         }
     }

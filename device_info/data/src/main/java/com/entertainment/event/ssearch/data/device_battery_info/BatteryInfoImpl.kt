@@ -60,23 +60,10 @@ class BatteryInfoImpl @Inject constructor(
         }
     }
 
-    private val currentNow: Long
-        get() {
-            val batteryManager = context.getSystemService(Context.BATTERY_SERVICE) as BatteryManager
-            return batteryManager.getLongProperty(BATTERY_PROPERTY_CURRENT_NOW)
-        }
-
     private val avgCurrent: Long
         get() {
             val batteryManager = context.getSystemService(Context.BATTERY_SERVICE) as BatteryManager
             return batteryManager.getLongProperty(BATTERY_PROPERTY_CURRENT_AVERAGE)
-        }
-
-    private val isPhoneCharging: Boolean
-        get() {
-            val intent = batteryStatusIntent
-            val plugged = intent!!.getIntExtra(EXTRA_PLUGGED, 0)
-            return plugged == BATTERY_PLUGGED_AC || plugged == BATTERY_PLUGGED_USB
         }
 
     private val batteryHealth: String
@@ -130,13 +117,22 @@ class BatteryInfoImpl @Inject constructor(
                 else -> return getString(general.R.string.battery)            }
         }
 
-    private val batteryCapacity: Long
+    private val batteryCapacity: Int
         get() {
-            val mBatteryManager =
-                context.getSystemService(Context.BATTERY_SERVICE) as BatteryManager
-            val chargeCounter = mBatteryManager.getIntProperty(BATTERY_PROPERTY_CHARGE_COUNTER)
-            val capacity = mBatteryManager.getIntProperty(BATTERY_PROPERTY_CAPACITY)
-            return if (chargeCounter == Int.MIN_VALUE || capacity == Int.MIN_VALUE) 0 else (chargeCounter / capacity * 100).toLong()
+            val powerProfile: Any
+            var batteryCapacity = 0.0
+            val POWER_PROFILE_CLASS = "com.android.internal.os.PowerProfile"
+            try {
+                powerProfile = Class.forName(POWER_PROFILE_CLASS)
+                    .getConstructor(Context::class.java)
+                    .newInstance(context)
+                batteryCapacity = Class.forName(POWER_PROFILE_CLASS)
+                    .getMethod("getBatteryCapacity")
+                    .invoke(powerProfile) as Double
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+            return batteryCapacity.toInt()
         }
 
     private fun getString(id: Int) = context.getString(id)

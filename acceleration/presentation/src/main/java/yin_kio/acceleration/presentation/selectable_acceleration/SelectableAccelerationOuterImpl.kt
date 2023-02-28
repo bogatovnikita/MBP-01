@@ -2,15 +2,13 @@ package yin_kio.acceleration.presentation.selectable_acceleration
 
 import yin_kio.acceleration.domain.selectable_acceleration.entities.App
 import yin_kio.acceleration.domain.selectable_acceleration.entities.SelectionStatus
-import yin_kio.acceleration.domain.selectable_acceleration.ui_out.SelectableAccelerationNavigator
 import yin_kio.acceleration.domain.selectable_acceleration.ui_out.SelectableAccelerationOuter
 import yin_kio.acceleration.domain.selectable_acceleration.ui_out.UpdateStatus
+import yin_kio.acceleration.presentation.selectable_acceleration.view_model.MutableSelectableAccelerationViewModel
 
 class SelectableAccelerationOuterImpl(
-    private val navigator: SelectableAccelerationNavigator,
     private val presenter: SelectableAccelerationPresenter
-) : SelectableAccelerationOuter,
-    SelectableAccelerationNavigator by navigator
+) : SelectableAccelerationOuter
 {
     var viewModel: MutableSelectableAccelerationViewModel? = null
 

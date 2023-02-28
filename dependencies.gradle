@@ -30,6 +30,11 @@ buildscript {
                 'material'          : "com.google.android.material:material:${versions.material}"
         ]
 
+        navigation = [
+                'nav_fragment_ktx'  : "androidx.navigation:navigation-fragment-ktx:${versions.navigation}",
+                'nav_ui_ktx'        : "androidx.navigation:navigation-ui-ktx:${versions.navigation}"
+        ]
+
         presentation_test = [
                 'mockk': "io.mockk:mockk:${versions.mockk}",
                 'junit': "junit:junit:${versions.junit}",

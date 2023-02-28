@@ -5,6 +5,19 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
+import androidx.navigation.fragment.findNavController
+
+inline fun <reified T : Any> Fragment.currentBackStackEntry(
+    noinline onCleared: ViewModel.() -> Unit = {},
+    noinline creator: LifecycleAware.() -> T = { created as T }
+): Lazy<T> {
+    return LifeCycleAwareContainer(
+        key = T::class.java.name,
+        onCleared = onCleared,
+        creator = creator,
+        viewModelStoreOwner = { findNavController().currentBackStackEntry!! }
+    )
+}
 
 inline fun <reified T : Any> Fragment.lifecycleAware(
     noinline viewModelStoreOwner: () -> ViewModelStoreOwner = { this },

@@ -1,4 +1,4 @@
-package yin_kio.acceleration.presentation.acceleration.screen
+package yin_kio.acceleration.presentation.acceleration.view_model
 
 import yin_kio.acceleration.domain.acceleration.ui_out.AppsState
 

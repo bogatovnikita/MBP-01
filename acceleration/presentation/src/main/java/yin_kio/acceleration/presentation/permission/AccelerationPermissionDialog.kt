@@ -1,4 +1,4 @@
-package yin_kio.acceleration.presentation
+package yin_kio.acceleration.presentation.permission
 
 import android.os.Bundle
 import android.view.View
@@ -15,7 +15,7 @@ class AccelerationPermissionDialog : DialogFragment(yin_kio.package_usage_dialog
     // Здесь идёт прямая зависимость от use cases, так как не требуется сохранения состояния
     private val useCases by lifecycleAware {
         PermissionDialogUseCasesImpl(
-            permissionRequester = TODO()
+            permissionRequester = PermissionRequesterImpl()
         )
     }
 

@@ -9,6 +9,7 @@ import yin_kio.acceleration.domain.gateways.Apps
 import yin_kio.acceleration.domain.selectable_acceleration.entities.App
 import yin_kio.acceleration.domain.selectable_acceleration.entities.AppsForm
 import yin_kio.acceleration.domain.selectable_acceleration.entities.SelectionStatus
+import yin_kio.acceleration.domain.selectable_acceleration.ui_out.SelectableAccelerationNavigator
 import yin_kio.acceleration.domain.selectable_acceleration.ui_out.SelectableAccelerationOuter
 import yin_kio.acceleration.domain.selectable_acceleration.ui_out.SelectableItem
 import yin_kio.acceleration.domain.selectable_acceleration.ui_out.UpdateStatus
@@ -23,6 +24,7 @@ class SelectableAccelerationUseCasesTest {
     private val outer: SelectableAccelerationOuter = spyk()
     private val apps: Apps = spyk()
     private val ads: Ads = spyk()
+    private val navigator: SelectableAccelerationNavigator = spyk()
     private lateinit var useCases: SelectableAccelerationUseCases
 
 
@@ -40,11 +42,13 @@ class SelectableAccelerationUseCasesTest {
     }
 
 
+
+
     @Test
     fun testClose() = setupTest{
-        useCases.close()
+        useCases.close(navigator)
 
-        coVerify { outer.close() }
+        coVerify { navigator.close() }
     }
 
     @Test
@@ -130,7 +134,7 @@ class SelectableAccelerationUseCasesTest {
         coEvery { appsForm.selectedApps } returns emptyList()
         coEvery { appsForm.selectionStatus } returns SelectionStatus.NoSelected
 
-        useCases.stopSelectedApps()
+        useCases.stopSelectedApps(navigator)
         wait()
 
         coVerify(inverse = true) { apps.stop(appsForm.selectedApps) }
@@ -142,23 +146,23 @@ class SelectableAccelerationUseCasesTest {
         coEvery { appsForm.selectionStatus } returns SelectionStatus.HasSelected
         coEvery { appsForm.selectedApps } returns selectedApps
 
-        useCases.stopSelectedApps()
+        useCases.stopSelectedApps(navigator)
         wait()
 
         coVerifySequence {
             ads.preloadAd()
-            outer.showStopProgress()
+            navigator.showStopProgress()
             apps.stop(selectedApps)
-            outer.showInter()
+            navigator.showInter()
         }
     }
 
     @Test
     fun testComplete() = setupTest{
-        useCases.complete()
+        useCases.complete(navigator)
         wait()
 
-        coVerify( exactly = 1 ) { outer.complete() }
+        coVerify( exactly = 1 ) { navigator.complete() }
     }
 
     @Test

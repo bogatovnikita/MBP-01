@@ -13,10 +13,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
-import yin_kio.acceleration.domain.acceleration.ui_out.AccelerationNavigator
 import yin_kio.acceleration.domain.selectable_acceleration.ui_out.SelectableAccelerationNavigator
-import yin_kio.acceleration.presentation.acceleration.AccelerationNavigatorImpl
-import yin_kio.acceleration.presentation.inter.Inter
 import yin_kio.acceleration.presentation.selectable_acceleration.SelectableAccelerationNavigatorImpl
 
 
@@ -25,7 +22,6 @@ import yin_kio.acceleration.presentation.selectable_acceleration.SelectableAccel
 class SelectableAccelerationNavigatorTest {
 
 
-    private val inter: Inter = spyk()
     private val navController: NavController = mockk()
     private val completeDestination = 0
     private val completeArgs: Bundle = spyk()
@@ -37,11 +33,12 @@ class SelectableAccelerationNavigatorTest {
     private fun setupTest(testBlock: TestScope.() -> Unit) = runTest{
         navigator = SelectableAccelerationNavigatorImpl(
             coroutineScope = this,
-            inter = inter,
             completeDestination = completeDestination,
-            completeArgs = completeArgs
+            completeArgs = completeArgs,
+            activity = spyk(),
+            onInterClosed = {},
+            navController = navController
         )
-        navigator.navController = navController
 
         testBlock()
     }
@@ -62,15 +59,6 @@ class SelectableAccelerationNavigatorTest {
             navAction = { showStopProgress() },
             destination = R.id.toStopProgress
         )
-    }
-
-    @Test
-    fun testShowInter() = setupTest{
-        navigator.showInter()
-
-        advanceUntilIdle()
-
-        coVerify { inter.show() }
     }
 
 

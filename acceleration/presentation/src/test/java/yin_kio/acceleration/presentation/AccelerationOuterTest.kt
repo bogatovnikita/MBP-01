@@ -7,10 +7,11 @@ import org.junit.Test
 import yin_kio.acceleration.domain.acceleration.ui_out.AccelerationNavigator
 import yin_kio.acceleration.domain.acceleration.ui_out.AppsState
 import yin_kio.acceleration.domain.acceleration.ui_out.RamInfoOut
-import yin_kio.acceleration.presentation.acceleration.screen.AccelerationOuterImpl
-import yin_kio.acceleration.presentation.acceleration.screen.AccelerationPresenter
-import yin_kio.acceleration.presentation.acceleration.screen.MutableAccelerationViewModel
-import yin_kio.acceleration.presentation.acceleration.screen.RamInfo
+import yin_kio.acceleration.presentation.acceleration.AccelerationOuterImpl
+import yin_kio.acceleration.presentation.acceleration.presenter.AccelerationPresenter
+import yin_kio.acceleration.presentation.acceleration.view_model.MutableAccelerationViewModel
+import yin_kio.acceleration.presentation.acceleration.view_model.RamInfo
+import yin_kio.acceleration.presentation.permission.PermissionRequester
 
 
 class AccelerationOuterTest {

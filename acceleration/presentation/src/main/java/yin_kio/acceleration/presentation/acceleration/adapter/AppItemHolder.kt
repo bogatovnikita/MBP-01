@@ -1,4 +1,4 @@
-package yin_kio.acceleration.presentation.acceleration.screen.app_item
+package yin_kio.acceleration.presentation.acceleration.adapter
 
 import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
@@ -19,7 +19,7 @@ class AppItemHolder private constructor(
     }
 
     companion object{
-        fun from(parent: ViewGroup) : AppItemHolder{
+        fun from(parent: ViewGroup) : AppItemHolder {
             val inflater = LayoutInflater.from(parent.context)
             val binding = ListItemAppBinding.inflate(inflater, parent, false)
             return AppItemHolder(

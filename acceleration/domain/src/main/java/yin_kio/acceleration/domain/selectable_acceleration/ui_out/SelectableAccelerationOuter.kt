@@ -3,7 +3,7 @@ package yin_kio.acceleration.domain.selectable_acceleration.ui_out
 import yin_kio.acceleration.domain.selectable_acceleration.entities.App
 import yin_kio.acceleration.domain.selectable_acceleration.entities.SelectionStatus
 
-interface SelectableAccelerationOuter : SelectableAccelerationNavigator {
+interface SelectableAccelerationOuter {
 
     fun setSelectionStatus(selectionStatus: SelectionStatus)
 

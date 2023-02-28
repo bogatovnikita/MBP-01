@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/accelerationFragment"
-        android:name="yin_kio.acceleration.presentation.acceleration.screen.AccelerationFragment"
+        android:name="yin_kio.acceleration.presentation.acceleration.views.AccelerationFragment"
         android:label="AccelerationFragment" >
         <action
             android:id="@+id/toAccelerationDialog"
@@ -20,15 +20,15 @@
     </fragment>
     <dialog
         android:id="@+id/accelerationDialog"
-        android:name="yin_kio.acceleration.presentation.acceleration.AccelerationDialog"
+        android:name="yin_kio.acceleration.presentation.acceleration.views.AccelerationDialog"
         android:label="AccelerationDialog" />
     <dialog
         android:id="@+id/accelerationPermissionDialog"
-        android:name="yin_kio.acceleration.presentation.AccelerationPermissionDialog"
+        android:name="yin_kio.acceleration.presentation.permission.AccelerationPermissionDialog"
         android:label="AccelerationPermissionDialog" />
     <fragment
         android:id="@+id/selectableAccelerationFragment"
-        android:name="yin_kio.acceleration.presentation.selectable_acceleration.SelectableAccelerationFragment"
+        android:name="yin_kio.acceleration.presentation.selectable_acceleration.views.SelectableAccelerationFragment"
         android:label="SelectableAccelerationFragment" >
         <action
             android:id="@+id/toStopProgress"
@@ -36,6 +36,6 @@
     </fragment>
     <dialog
         android:id="@+id/selectableAccelerationDialog"
-        android:name="yin_kio.acceleration.presentation.selectable_acceleration.SelectableAccelerationDialog"
+        android:name="yin_kio.acceleration.presentation.selectable_acceleration.views.SelectableAccelerationDialog"
         android:label="SelectableAccelerationDialog" />
 </navigation>

@@ -1,4 +1,4 @@
-package yin_kio.acceleration.presentation
+package yin_kio.acceleration.presentation.permission
 
 import android.app.Activity
 import com.example.permissions.requestPackageUsageStats

@@ -1,4 +1,4 @@
-package yin_kio.acceleration.presentation.selectable_acceleration
+package yin_kio.acceleration.presentation.selectable_acceleration.view_model
 
 import kotlinx.coroutines.flow.Flow
 

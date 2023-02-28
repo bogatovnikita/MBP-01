@@ -7,18 +7,15 @@ import io.mockk.spyk
 import org.junit.Test
 import yin_kio.acceleration.domain.selectable_acceleration.entities.App
 import yin_kio.acceleration.domain.selectable_acceleration.entities.SelectionStatus
-import yin_kio.acceleration.domain.selectable_acceleration.ui_out.SelectableAccelerationNavigator
 import yin_kio.acceleration.domain.selectable_acceleration.ui_out.UpdateStatus
-import yin_kio.acceleration.presentation.selectable_acceleration.MutableSelectableAccelerationViewModel
 import yin_kio.acceleration.presentation.selectable_acceleration.SelectableAccelerationOuterImpl
 import yin_kio.acceleration.presentation.selectable_acceleration.SelectableAccelerationPresenter
+import yin_kio.acceleration.presentation.selectable_acceleration.view_model.MutableSelectableAccelerationViewModel
 
 class SelectableAccelerationOuterTest  {
 
-    private val navigator: SelectableAccelerationNavigator = spyk()
     private val presenter: SelectableAccelerationPresenter = mockk()
     private val outer: SelectableAccelerationOuterImpl = SelectableAccelerationOuterImpl(
-        navigator = navigator,
         presenter = presenter
     )
     private val viewModel: MutableSelectableAccelerationViewModel = spyk()

@@ -1,6 +1,7 @@
-package yin_kio.acceleration.presentation.acceleration.screen
+package yin_kio.acceleration.presentation.acceleration.presenter
 
 import yin_kio.acceleration.domain.acceleration.ui_out.RamInfoOut
+import yin_kio.acceleration.presentation.acceleration.view_model.RamInfo
 
 interface AccelerationPresenter {
 

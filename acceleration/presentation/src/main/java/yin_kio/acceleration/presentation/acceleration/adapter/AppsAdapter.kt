@@ -1,11 +1,11 @@
-package yin_kio.acceleration.presentation.acceleration.screen.app_item
+package yin_kio.acceleration.presentation.acceleration.adapter
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import yin_kio.acceleration.domain.selectable_acceleration.entities.App
 
-class AppsAdapter() : ListAdapter<App, AppItemHolder>(itemCallback()) {
+class AppsAdapter : ListAdapter<App, AppItemHolder>(itemCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AppItemHolder {
         return AppItemHolder.from(parent)

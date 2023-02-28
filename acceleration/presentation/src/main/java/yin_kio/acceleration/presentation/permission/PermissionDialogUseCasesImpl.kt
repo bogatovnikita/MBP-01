@@ -1,4 +1,4 @@
-package yin_kio.acceleration.presentation
+package yin_kio.acceleration.presentation.permission
 
 import androidx.navigation.NavController
 import yin_kio.acceleration.domain.PermissionDialogUseCases

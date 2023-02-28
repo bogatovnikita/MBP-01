@@ -4,14 +4,11 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import yin_kio.acceleration.domain.selectable_acceleration.entities.AppsForm
-import yin_kio.acceleration.domain.selectable_acceleration.ui_out.SelectableAccelerationOuter
-import yin_kio.acceleration.domain.selectable_acceleration.ui_out.UpdateStatus
 import yin_kio.acceleration.domain.gateways.Ads
 import yin_kio.acceleration.domain.gateways.Apps
 import yin_kio.acceleration.domain.selectable_acceleration.entities.App
 import yin_kio.acceleration.domain.selectable_acceleration.entities.SelectionStatus
-import yin_kio.acceleration.domain.selectable_acceleration.ui_out.AppsFormState
-import yin_kio.acceleration.domain.selectable_acceleration.ui_out.SelectableItem
+import yin_kio.acceleration.domain.selectable_acceleration.ui_out.*
 import kotlin.coroutines.CoroutineContext
 
 internal class SelectableAccelerationUseCasesImpl(
@@ -23,8 +20,8 @@ internal class SelectableAccelerationUseCasesImpl(
     private val dispatcher: CoroutineContext
 ) : SelectableAccelerationUseCases, AppsFormState {
 
-    override fun close(){
-        outer.close()
+    override fun close(navigator: SelectableAccelerationNavigator){
+        navigator.close()
     }
 
     override fun switchSelectAllApps(){
@@ -50,20 +47,20 @@ internal class SelectableAccelerationUseCasesImpl(
         outer.setUpdateStatus(UpdateStatus.Complete)
     }
 
-    override fun stopSelectedApps() = async{
+    override fun stopSelectedApps(navigator: SelectableAccelerationNavigator) = async{
         if (appsForm.selectionStatus != SelectionStatus.NoSelected){
             ads.preloadAd()
             val selectedApps = appsForm.selectedApps
 
-            outer.showStopProgress()
+            navigator.showStopProgress()
             apps.stop(selectedApps)
             delay(8000)
-            outer.showInter()
+            navigator.showInter()
         }
     }
 
-    override fun complete(){
-        outer.complete()
+    override fun complete(navigator: SelectableAccelerationNavigator){
+        navigator.complete()
     }
 
     private fun async(action: suspend CoroutineScope.() -> Unit){

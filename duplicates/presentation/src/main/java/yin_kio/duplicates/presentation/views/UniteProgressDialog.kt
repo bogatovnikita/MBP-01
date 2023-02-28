@@ -32,6 +32,7 @@ class UniteProgressDialog : DialogFragment(R.layout.dialog_progress){
             window?.setBackgroundDrawable(ColorDrawable(android.R.color.transparent))
         }
 
+        @Suppress("DEPRECATED")
         override fun onBackPressed() {}
     }
 

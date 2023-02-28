@@ -7,9 +7,9 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import yin_kio.acceleration.domain.acceleration.ui_out.RamInfoOut
-import yin_kio.acceleration.presentation.acceleration.screen.AccelerationPresenter
-import yin_kio.acceleration.presentation.acceleration.screen.AccelerationPresenterImpl
-import yin_kio.acceleration.presentation.acceleration.screen.RamInfo
+import yin_kio.acceleration.presentation.acceleration.presenter.AccelerationPresenter
+import yin_kio.acceleration.presentation.acceleration.presenter.AccelerationPresenterImpl
+import yin_kio.acceleration.presentation.acceleration.view_model.RamInfo
 
 
 @RunWith(RobolectricTestRunner::class)

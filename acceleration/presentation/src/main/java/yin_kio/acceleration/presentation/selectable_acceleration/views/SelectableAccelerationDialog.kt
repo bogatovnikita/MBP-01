@@ -1,4 +1,4 @@
-package yin_kio.acceleration.presentation.selectable_acceleration
+package yin_kio.acceleration.presentation.selectable_acceleration.views
 
 import android.app.Dialog
 import android.graphics.drawable.ColorDrawable
@@ -20,6 +20,8 @@ import yin_kio.acceleration.domain.selectable_acceleration.entities.App
 import yin_kio.acceleration.presentation.R
 import yin_kio.acceleration.presentation.databinding.DialogStopSelectedAppsBinding
 import yin_kio.acceleration.presentation.databinding.ListItmeDialogAppBinding
+import yin_kio.acceleration.presentation.selectable_acceleration.view_model.ScreenState
+import yin_kio.acceleration.presentation.selectable_acceleration.view_model.SelectableAccelerationViewModel
 
 class SelectableAccelerationDialog : DialogFragment(R.layout.dialog_stop_selected_apps) {
 

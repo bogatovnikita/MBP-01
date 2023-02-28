@@ -1,4 +1,4 @@
-package yin_kio.acceleration.presentation.acceleration.screen
+package yin_kio.acceleration.presentation.acceleration.view_model
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow

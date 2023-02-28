@@ -6,6 +6,8 @@ import io.mockk.coVerify
 import io.mockk.mockk
 import io.mockk.spyk
 import org.junit.Test
+import yin_kio.acceleration.presentation.permission.PermissionDialogUseCasesImpl
+import yin_kio.acceleration.presentation.permission.PermissionRequester
 
 class PermissionDialogUseCasesTest {
 

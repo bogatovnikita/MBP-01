@@ -1,6 +1,7 @@
 package yin_kio.acceleration.data
 
 import android.app.ActivityManager
+import android.app.Application
 import android.app.usage.UsageStats
 import android.app.usage.UsageStatsManager
 import android.content.Context
@@ -13,7 +14,7 @@ import yin_kio.acceleration.domain.selectable_acceleration.entities.App
 import java.util.concurrent.TimeUnit
 
 class AndroidApps(
-    private val context: Context
+    private val context: Application
 ) : Apps{
 
     override suspend fun provide(): List<App> {

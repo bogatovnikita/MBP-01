@@ -1,4 +1,4 @@
-package yin_kio.acceleration.presentation.acceleration.screen
+package yin_kio.acceleration.presentation.acceleration.views
 
 import android.os.Bundle
 import android.view.View
@@ -11,10 +11,13 @@ import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import jamycake.lifecycle_aware.lifecycleAware
 import yin_kio.acceleration.domain.acceleration.ui_out.AppsState
-import yin_kio.acceleration.presentation.PermissionRequesterImpl
+import yin_kio.acceleration.presentation.permission.PermissionRequesterImpl
 import yin_kio.acceleration.presentation.R
 import yin_kio.acceleration.presentation.acceleration.AccelerationNavigatorImpl
-import yin_kio.acceleration.presentation.acceleration.screen.app_item.AppsAdapter
+import yin_kio.acceleration.presentation.acceleration.view_model.AccelerationViewModel
+import yin_kio.acceleration.presentation.acceleration.view_model.AccelerationViewModelFactory
+import yin_kio.acceleration.presentation.acceleration.view_model.ScreenState
+import yin_kio.acceleration.presentation.acceleration.adapter.AppsAdapter
 import yin_kio.acceleration.presentation.databinding.FragmentAccelerationBinding
 import yin_kio.acceleration.presentation.inter.OlejaInter
 
@@ -116,7 +119,7 @@ class AccelerationFragment : Fragment(R.layout.fragment_acceleration) {
 
 
     private fun ViewModel.createAccelerationViewModel(): AccelerationViewModel {
-        val context = requireActivity().applicationContext
+        val context = requireActivity().application
 
         return AccelerationViewModelFactory(
             context = context,

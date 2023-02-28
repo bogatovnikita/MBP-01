@@ -1,4 +1,4 @@
-package yin_kio.acceleration.presentation.acceleration
+package yin_kio.acceleration.presentation.acceleration.views
 
 import android.app.Dialog
 import android.graphics.drawable.ColorDrawable

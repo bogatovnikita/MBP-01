@@ -1,4 +1,4 @@
-package yin_kio.acceleration.presentation.selectable_acceleration
+package yin_kio.acceleration.presentation.selectable_acceleration.view_model
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.*
@@ -11,7 +11,7 @@ class SelectableAccelerationViewModel(
     private val useCases: SelectableAccelerationUseCases,
     private val coroutineScope: CoroutineScope
 ) : MutableSelectableAccelerationViewModel,
-        ObservableViewModel,
+    ObservableViewModel,
         SelectableAccelerationUseCases by useCases
 {
 

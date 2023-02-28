@@ -35,11 +35,6 @@ class SelectableAccelerationFragment : Fragment(R.layout.fragment_stop_selected_
     }
 
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.recycler.adapter = adapter
 
@@ -48,9 +43,12 @@ class SelectableAccelerationFragment : Fragment(R.layout.fragment_stop_selected_
     }
 
     private fun setupListeners() {
-        binding.checkbox.setOnClickListener { viewModel.switchSelectAllApps() }
-        binding.checkboxText.setOnClickListener { viewModel.switchSelectAllApps() }
-        binding.stop.setOnClickListener { viewModel.stopSelectedApps() }
+        binding.apply {
+            back.setOnClickListener { viewModel.close() }
+            checkbox.setOnClickListener { viewModel.switchSelectAllApps() }
+            checkboxText.setOnClickListener { viewModel.switchSelectAllApps() }
+            stop.setOnClickListener { viewModel.stopSelectedApps() }
+        }
     }
 
     @SuppressLint("NotifyDataSetChanged")

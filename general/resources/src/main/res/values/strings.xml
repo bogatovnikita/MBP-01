@@ -43,4 +43,16 @@
     <string name="autofocus_camera">Автофокус камеры</string>
     <string name="external_camera">Внешняя камера</string>
     <string name="flash_camera">Вспышка</string>
+    <string name="usb_host">USB-хост</string>
+    <string name="multitouch">Мультитач</string>
+    <string name="microphone">Микрофон</string>
+    <string name="infrared_port">Инфракрасный порт</string>
+    <string name="two_sim">2 сим-карты</string>
+    <string name="e_sim">e-SIM</string>
+    <string name="sd_card">Съемный накопитель</string>
+    <string name="finger_scanner">Сканер отпечатка</string>
+    <string name="wireless_charge">Беспроводная зарядка</string>
+    <string name="full_hd">Запись 1080p видео</string>
+    <string name="four_k">Запись 4K видео</string>
+    <string name="eight_k">Запись 8K видео</string>
 </resources>

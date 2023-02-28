@@ -49,28 +49,45 @@ class BatterySavingFragment :
     }
 
     private fun initCLickListener() {
+        binding.backArrow.setOnClickListener {
+            findNavController().navigateUp()
+        }
+
         binding.backgroundArrowRight.setOnClickListener {
             val args = requireArguments().getInt("toScreenTimeId")
             findNavController().navigate(args)
         }
 
-        binding.backArrow.setOnClickListener {
-            findNavController().navigateUp()
-        }
-
         binding.deleteApp.setOnClickListener {
-            val args = requireArguments().getInt("toAdvices")
-            val dialog = BatteryScanDialog()
-            dialog.show(childFragmentManager, "")
-            dialog.addCallbackCloseDialog(object : CallbackCloseDialog {
-                override fun closeDialog() {
-                    this@BatterySavingFragment.showInter(onClosed = {
-                        findNavController().navigate(args)
-                    })
-                }
-
-            })
+            startScanning()
         }
+    }
+
+    private fun startScanning() {
+        val dialog = BatteryScanDialog()
+        dialog.show(childFragmentManager, "")
+        dialog.addCallbackCloseDialog(object : CallbackCloseDialog {
+            override fun closeDialog() {
+                this@BatterySavingFragment.showInter(onClosed = {
+                    navigateTo()
+                })
+            }
+        })
+    }
+
+    private fun navigateTo() {
+        val args = requireArguments().getInt("toAdvices")
+        val bundle = Bundle().apply {
+            putString(
+                "title_battery_saving",
+                getString(R.string.the_working_time_of_the_phone_has_been_extended)
+            )
+            putString(
+                "description_battery_saving",
+                getString(R.string.the_battery_load_is_reduced)
+            )
+        }
+        findNavController().navigate(args, bundle)
     }
 
     override fun onDestroy() {

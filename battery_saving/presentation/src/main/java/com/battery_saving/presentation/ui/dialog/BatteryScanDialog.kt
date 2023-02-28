@@ -9,6 +9,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.battery_saving.presentation.utils.KillBackgroundProcesses
 import com.hedgehog.battery_saving.presentation.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -21,6 +22,10 @@ class BatteryScanDialog : DialogFragment(R.layout.dialog_battery_scan) {
     private var callbackCloseDialog: CallbackCloseDialog? = null
     fun addCallbackCloseDialog(callbackCloseDialog: CallbackCloseDialog) {
         this.callbackCloseDialog = callbackCloseDialog
+    }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        return noCancelableDialog()
     }
 
     override fun onStart() {
@@ -37,18 +42,32 @@ class BatteryScanDialog : DialogFragment(R.layout.dialog_battery_scan) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val listItems = listOf(
+
+        val adapter = BatteryScanAdapter(makeList())
+        initRecyclerView(adapter)
+
+        scanBattery(adapter)
+    }
+
+    private fun makeList(): List<String> {
+        return listOf(
             getString(R.string.reducing_the_load_on_the_battery),
             getString(R.string.checking_the_system),
             getString(R.string.freezing_background_processes)
         )
-        val adapter = BatteryScanAdapter(listItems)
+    }
+
+    private fun initRecyclerView(adapter: BatteryScanAdapter) {
         val recyclerView: RecyclerView = requireView().findViewById(R.id.recycler_view)
         recyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
             this.adapter = adapter
         }
-        val repeat = listItems.size
+    }
+
+    private fun scanBattery(adapter: BatteryScanAdapter) {
+        KillBackgroundProcesses(requireContext()).killAllProcesses()
+        val repeat = makeList().size
         lifecycleScope.launch(Dispatchers.Default) {
             repeat(repeat) {
                 delay(TimeUnit.SECONDS.toMillis(8) / repeat)
@@ -62,22 +81,15 @@ class BatteryScanDialog : DialogFragment(R.layout.dialog_battery_scan) {
         }
     }
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return noCancelableDialog()
-    }
-
     private fun noCancelableDialog() = object : Dialog(requireContext()) {
         init {
             setCancelable(false)
             setCanceledOnTouchOutside(false)
-
             window?.setBackgroundDrawable(ColorDrawable(android.R.color.transparent))
-
         }
 
         @Deprecated("Deprecated in Java")
         override fun onBackPressed() {
         }
     }
-
 }

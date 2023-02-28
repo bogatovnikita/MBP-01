@@ -13,5 +13,7 @@
     <string name="reducing_the_load_on_the_battery">Уменьшаем нагрузку на аккумулятор</string>
     <string name="checking_the_system">Проверяем систему</string>
     <string name="freezing_background_processes">Замораживаем фоновые процессы</string>
+    <string name="the_working_time_of_the_phone_has_been_extended">Время работы телефона продлено</string>
+    <string name="the_battery_load_is_reduced">Нагрузка на батарею снижена</string>
 
 </resources>

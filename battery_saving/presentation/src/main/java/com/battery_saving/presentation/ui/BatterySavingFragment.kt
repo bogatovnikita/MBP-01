@@ -7,6 +7,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.battery_saving.presentation.base.BaseFragment
 import com.battery_saving.presentation.ui.dialog.BatteryScanDialog
+import com.battery_saving.presentation.ui.dialog.CallbackCloseDialog
+import com.example.ads.preloadAd
+import com.example.ads.showInter
 import com.hedgehog.battery_saving.presentation.R
 import com.hedgehog.battery_saving.presentation.databinding.FragmentBatterySavingBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -21,6 +24,7 @@ class BatterySavingFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        this.preloadAd()
         initObserver()
         initCLickListener()
     }
@@ -55,7 +59,17 @@ class BatterySavingFragment :
         }
 
         binding.deleteApp.setOnClickListener {
-            BatteryScanDialog().show(childFragmentManager, "")
+            val args = requireArguments().getInt("toAdvices")
+            val dialog = BatteryScanDialog()
+            dialog.show(childFragmentManager, "")
+            dialog.addCallbackCloseDialog(object : CallbackCloseDialog {
+                override fun closeDialog() {
+                    this@BatterySavingFragment.showInter(onClosed = {
+                        findNavController().navigate(args)
+                    })
+                }
+
+            })
         }
     }
 

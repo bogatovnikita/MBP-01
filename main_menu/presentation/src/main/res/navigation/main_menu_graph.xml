@@ -91,5 +91,12 @@
         <action
             android:id="@+id/action_batterySavingFragment_to_screen_time_graph"
             app:destination="@id/screen_time_graph" />
+        <action
+            android:id="@+id/action_batterySavingFragment_to_advicesFragment"
+            app:destination="@id/advicesFragment"
+            app:popUpTo="@id/mainMenuFragment" />
+        <argument
+            android:name="toAdvices"
+            app:argType="integer" />
     </fragment>
 </navigation>

@@ -18,6 +18,11 @@ import java.util.concurrent.TimeUnit
 
 class BatteryScanDialog : DialogFragment(R.layout.dialog_battery_scan) {
 
+    private var callbackCloseDialog: CallbackCloseDialog? = null
+    fun addCallbackCloseDialog(callbackCloseDialog: CallbackCloseDialog) {
+        this.callbackCloseDialog = callbackCloseDialog
+    }
+
     override fun onStart() {
         super.onStart()
         setupLayoutParams()
@@ -52,6 +57,7 @@ class BatteryScanDialog : DialogFragment(R.layout.dialog_battery_scan) {
                 }
             }
             delay(100)
+            callbackCloseDialog?.closeDialog()
             dialog?.dismiss()
         }
     }

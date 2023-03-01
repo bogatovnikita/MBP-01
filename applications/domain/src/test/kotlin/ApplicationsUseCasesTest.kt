@@ -102,4 +102,17 @@ class ApplicationsUseCasesTest {
         }
     }
 
+    @Test
+    fun testSortEstablishedApps() {
+        val sortedApps: List<App> = listOf()
+        coEvery { establishedAppsForm.content } returns sortedApps
+
+        useCases.sortEstablishedApps()
+
+        coVerify {
+            establishedAppsForm.sort()
+            outer.outEstablishedApps(sortedApps)
+        }
+    }
+
 }

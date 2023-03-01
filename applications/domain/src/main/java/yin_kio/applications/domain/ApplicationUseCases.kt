@@ -43,4 +43,9 @@ class ApplicationUseCases(
         outer.outSystemApps(systemAppsList.content)
     }
 
+    fun sortEstablishedApps(){
+        establishedAppsForm.sort()
+        outer.outEstablishedApps(establishedAppsForm.content)
+    }
+
 }

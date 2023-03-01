@@ -71,6 +71,11 @@ class ApplicationUseCases(
         outer.collapseSystemApps()
     }
 
+    fun collapseEstablishedApps(){
+        establishedAppsForm.isVisible = false
+        outer.collapseEstablishedApps()
+    }
+
 
 
 }

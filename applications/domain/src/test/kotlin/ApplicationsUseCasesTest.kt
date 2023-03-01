@@ -154,4 +154,14 @@ class ApplicationsUseCasesTest {
         }
     }
 
+    @Test
+    fun testCollapseEstablishedApps(){
+        useCases.collapseEstablishedApps()
+
+        coVerify {
+            establishedAppsForm.isVisible = false
+            outer.collapseEstablishedApps()
+        }
+    }
+
 }

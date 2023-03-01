@@ -9,4 +9,5 @@ interface Outer {
     fun expandEstablishedApps()
     fun expandSystemApps()
     fun collapseSystemApps()
+    fun collapseEstablishedApps()
 }

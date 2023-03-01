@@ -1,6 +1,15 @@
 import io.mockk.*
 import org.junit.jupiter.api.Test
 import yin_kio.applications.domain.*
+import yin_kio.applications.domain.core.App
+import yin_kio.applications.domain.core.EstablishedAppsForm
+import yin_kio.applications.domain.core.SystemAppsList
+import yin_kio.applications.domain.gateways.Apps
+import yin_kio.applications.domain.gateways.AppsInfo
+import yin_kio.applications.domain.ui_out.AppsInfoOut
+import yin_kio.applications.domain.ui_out.Navigator
+import yin_kio.applications.domain.ui_out.Outer
+import yin_kio.applications.domain.ui_out.Selectable
 
 class ApplicationsUseCasesTest {
 

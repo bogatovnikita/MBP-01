@@ -1,4 +1,4 @@
-package yin_kio.applications.domain
+package yin_kio.applications.domain.ui_out
 
 data class AppsInfoOut(
     val established: Long = 0,

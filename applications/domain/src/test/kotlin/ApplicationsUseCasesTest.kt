@@ -6,17 +6,34 @@ class ApplicationsUseCasesTest {
 
     private val outer: Outer = spyk()
     private val appsInfo: AppsInfo = mockk()
-    private val useCases = ApplicationUseCases(outer, appsInfo)
+    private val appsForm: AppsForm = spyk()
+    private val apps: Apps = mockk()
+    private val useCases = ApplicationUseCases(
+        outer = outer,
+        appsInfo = appsInfo,
+        appsForm = appsForm,
+        apps = apps
+    )
     private val navigator: Navigator = spyk()
+    private val selectable: Selectable = spyk()
 
     @Test
     fun testUpdate(){
         val appsInfoOut = AppsInfoOut()
+        val systemApps = listOf(App())
+        val establishedApps = listOf(App(), App())
+
         coEvery { appsInfo.provide() } returns appsInfoOut
+        coEvery { apps.provideSystem() } returns systemApps
+        coEvery { apps.provideEstablished() } returns establishedApps
 
         useCases.update()
 
-        coVerify { outer.outAppsInfo(appsInfoOut) }
+        coVerify {
+            outer.outAppsInfo(appsInfoOut)
+            outer.outSystemApps(systemApps)
+            outer.outEstablishedApps(establishedApps)
+        }
     }
 
     @Test
@@ -48,6 +65,21 @@ class ApplicationsUseCasesTest {
         useCases.complete(navigator)
 
         coVerify { navigator.complete() }
+    }
+
+    @Test
+    fun testSelectApp(){
+        assertAppSelected(true)
+        assertAppSelected(false)
+    }
+
+    private fun assertAppSelected(isSelected: Boolean) {
+        val app = App()
+        coEvery { appsForm.isAppSelected(app) } returns isSelected
+
+        useCases.selectApp(app, selectable)
+
+        coVerify { selectable.setSelected(isSelected) }
     }
 
 }

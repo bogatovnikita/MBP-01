@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="HorizontalDiagram">
+
+        <attr name="colors" format="reference"/>
+        <attr name="corners_radius" format="dimension"/>
+        <attr name="interval" format="dimension"/>
+        <attr name="draw_shadow" format="boolean"/>
+        <attr name="shadow_color" format="color"/>
+
+    </declare-styleable>
+
+</resources>

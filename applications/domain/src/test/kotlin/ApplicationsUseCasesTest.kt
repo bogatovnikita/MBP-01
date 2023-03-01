@@ -49,6 +49,7 @@ class ApplicationsUseCasesTest {
 
         coVerify {
             establishedAppsForm.content = establishedApps
+            establishedAppsForm.isVisible = true
             outer.outEstablishedApps(establishedApps)
         }
     }
@@ -64,6 +65,7 @@ class ApplicationsUseCasesTest {
 
         coVerify {
             systemAppsList.content = systemApps
+            systemAppsList.isVisible = true
             outer.outSystemApps(systemApps)
         }
     }

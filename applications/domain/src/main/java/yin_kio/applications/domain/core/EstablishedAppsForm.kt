@@ -6,4 +6,6 @@ interface EstablishedAppsForm {
     var content: List<App>
     fun sort()
 
+    var isVisible: Boolean
+
 }

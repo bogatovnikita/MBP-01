@@ -29,26 +29,42 @@ class ApplicationsUseCasesTest {
     private val selectable: Selectable = spyk()
 
     @Test
-    fun testUpdate(){
+    fun testUpdateAppsInfo(){
         val appsInfoOut = AppsInfoOut()
-        val systemApps = listOf(App())
-        val establishedApps = listOf(App(), App())
-
         coEvery { appsInfo.provide() } returns appsInfoOut
-        coEvery { apps.provideSystem() } returns systemApps
-        coEvery { systemAppsList.content } returns systemApps
+
+        useCases.updateAppsInfo()
+
+        coVerify { outer.outAppsInfo(appsInfoOut) }
+    }
+
+    @Test
+    fun testUpdateEstablishedApps(){
+        val establishedApps = listOf(App())
+
         coEvery { apps.provideEstablished() } returns establishedApps
         coEvery { establishedAppsForm.content } returns establishedApps
 
-        useCases.update()
+        useCases.updateEstablishedApps()
 
         coVerify {
             establishedAppsForm.content = establishedApps
-            systemAppsList.content = systemApps
-
-            outer.outAppsInfo(appsInfoOut)
-            outer.outSystemApps(systemApps)
             outer.outEstablishedApps(establishedApps)
+        }
+    }
+
+    @Test
+    fun testUpdateSystemApps(){
+        val systemApps = listOf(App())
+
+        coEvery { apps.provideSystem() } returns systemApps
+        coEvery { systemAppsList.content } returns systemApps
+
+        useCases.updateSystemApps()
+
+        coVerify {
+            systemAppsList.content = systemApps
+            outer.outSystemApps(systemApps)
         }
     }
 

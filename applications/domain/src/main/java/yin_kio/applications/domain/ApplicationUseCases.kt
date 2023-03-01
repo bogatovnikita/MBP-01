@@ -17,12 +17,17 @@ class ApplicationUseCases(
     private val systemAppsList: SystemAppsList
 ) {
 
-    fun update(){
-        establishedAppsForm.content = apps.provideEstablished()
-        systemAppsList.content = apps.provideSystem()
-
+    fun updateAppsInfo(){
         outer.outAppsInfo(appsInfo.provide())
+    }
+
+    fun updateSystemApps(){
+        systemAppsList.content = apps.provideSystem()
         outer.outSystemApps(systemAppsList.content)
+    }
+
+    fun updateEstablishedApps(){
+        establishedAppsForm.content = apps.provideEstablished()
         outer.outEstablishedApps(establishedAppsForm.content)
     }
 
@@ -56,5 +61,7 @@ class ApplicationUseCases(
         establishedAppsForm.sort()
         outer.outEstablishedApps(establishedAppsForm.content)
     }
+
+
 
 }

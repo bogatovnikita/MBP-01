@@ -9,6 +9,7 @@ import android.graphics.ImageFormat.JPEG
 import android.hardware.camera2.CameraCharacteristics
 import android.hardware.camera2.CameraManager
 import android.hardware.camera2.params.StreamConfigurationMap
+import android.net.wifi.WifiManager
 import android.nfc.NfcAdapter
 import android.os.BatteryManager
 import android.os.Build
@@ -42,6 +43,19 @@ class FunctionalityInfoImpl @Inject constructor(
                 false
             }
             return isSupported(hasWifiAware)
+        }
+
+    private val isWifiDirectAvailable: String
+        get() {
+            val hasDirectWIFI = hasSystemFeature(PackageManager.FEATURE_WIFI_DIRECT)
+            return isSupported(hasDirectWIFI)
+        }
+
+    private val is5GAvailable: String
+        get() {
+            val mn = context.getSystemService(Context.WIFI_SERVICE) as WifiManager
+            val has5G = mn.is5GHzBandSupported
+            return isSupported(has5G)
         }
 
     ///---------------------------BLE--------------------------------
@@ -103,42 +117,41 @@ class FunctionalityInfoImpl @Inject constructor(
 
     private val isFullHdAvailable: String
         get() {
-            val available = getCameraInformation(FULL_HD)
+            val available = isSupportedQuality(FULL_HD)
             return isSupported(available)
         }
 
     private val is4KAvailable: String
         get() {
-            val available = getCameraInformation(K_4)
+            val available = isSupportedQuality(K_4)
             return isSupported(available)
         }
 
     private val is8KAvailable: String
         get() {
-            val available = getCameraInformation(K_8)
+            val available = isSupportedQuality(K_8)
             return isSupported(available)
         }
 
-    private fun getCameraInformation(format: Pair<Int, Int>): Boolean {
+    private fun isSupportedQuality(format: Pair<Int, Int>): Boolean {
         val mCameraManager =
             context.getSystemService(Context.CAMERA_SERVICE) as CameraManager
-        // Получение списка камер с устройства
         val myCameras = mCameraManager.cameraIdList
-        // выводим информацию по камере
+
         for (cameraID in myCameras) {
-            // Получение характеристик камеры
+
             val cc: CameraCharacteristics = mCameraManager.getCameraCharacteristics(cameraID)
-            // Получение списка выходного формата, который поддерживает камера
             val configurationMap: StreamConfigurationMap? =
                 cc.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP)
-            // Получение списка разрешений которые поддерживаются для формата jpeg
             val sizesJPEG: Array<Size> = configurationMap!!.getOutputSizes(JPEG)
+
             for (item in sizesJPEG) {
                 val width = item.width
                 val height = item.height
                 if (format == Pair(width, height))
                     return true
             }
+
         }
         return false
     }
@@ -212,12 +225,32 @@ class FunctionalityInfoImpl @Inject constructor(
             return context.registerReceiver(null, batFilter)
         }
 
-    val isWirelessChargeAvailable: String
+    private val isWirelessChargeAvailable: String
         get() {
             val batteryManager = context.getSystemService(Context.BATTERY_SERVICE) as BatteryManager
             val present =
                 batteryStatusIntent?.extras?.getString(BatteryManager.ACTION_CHARGING) ?: "none"
-            return isSupported(true)
+            return "none"
+        }
+
+    ///--------------------------------WALLPAPER----------------------------------
+
+    private val isLiveWallpaperAvailable: String
+        get() {
+            val available = hasSystemFeature(PackageManager.FEATURE_LIVE_WALLPAPER)
+            return isSupported(available)
+        }
+
+    ///-----------------------------------VR--------------------------------------
+
+    private val isVRAvailable: String
+        get() {
+            val available = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                hasSystemFeature(PackageManager.FEATURE_VR_HEADTRACKING)
+            } else {
+                false
+            }
+            return isSupported(available)
         }
 
     override fun getFunctionalityInfo(): DeviceFunctionGroup = DeviceFunctionGroup(
@@ -244,6 +277,10 @@ class FunctionalityInfoImpl @Inject constructor(
             ChildFun(name = R.string.full_hd, body = isFullHdAvailable, id = 37),
             ChildFun(name = R.string.four_k, body = is4KAvailable, id = 38),
             ChildFun(name = R.string.eight_k, body = is8KAvailable, id = 39),
+            ChildFun(name = R.string.wifi_direct, body = isWifiDirectAvailable, id = 40),
+            ChildFun(name = R.string.live_wallpaper, body = isLiveWallpaperAvailable, id = 41),
+            ChildFun(name = R.string.vr, body = isVRAvailable, id = 42),
+            ChildFun(name = R.string.five_g, body = is5GAvailable, id = 43),
         )
     )
 

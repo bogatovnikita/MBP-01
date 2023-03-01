@@ -55,4 +55,8 @@
     <string name="full_hd">Запись 1080p видео</string>
     <string name="four_k">Запись 4K видео</string>
     <string name="eight_k">Запись 8K видео</string>
+    <string name="wifi_direct">Локальная сеть</string>
+    <string name="live_wallpaper">Живые обои</string>
+    <string name="vr">Режим VR</string>
+    <string name="five_g">Сеть 5G</string>
 </resources>

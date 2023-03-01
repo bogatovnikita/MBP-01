@@ -81,13 +81,21 @@ class FunctionRecycleAdapter(private val onParentFunClick: OnParentFunClick) :
     ) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(parentFun: ChildFun) {
+        fun bind(childFun: ChildFun) {
             with(binding) {
-                tvFunName.setText(parentFun.name)
-                tvFunBody.text = parentFun.body
+                tvFunName.setText(childFun.name)
+                tvFunBody.setTextColor(getColor(childFun.body))
+                tvFunBody.text = childFun.body
             }
         }
 
+        private fun getColor(body: String): Int {
+            val context = binding.root.context
+            return if (body == context.getString(general.R.string.not_supported))
+                context.getColor(general.R.color.red)
+            else
+                context.getColor(general.R.color.dark_blue)
+        }
     }
 
     class FunctionDiffUtilCallback : DiffUtil.ItemCallback<DeviceFunction>() {

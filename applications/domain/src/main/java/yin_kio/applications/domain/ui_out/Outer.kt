@@ -6,4 +6,6 @@ interface Outer {
     fun outAppsInfo(appsInfoOut: AppsInfoOut)
     fun outSystemApps(apps: List<App>)
     fun outEstablishedApps(apps: List<App>)
+    fun expandEstablishedApps()
+    fun expandSystemApps()
 }

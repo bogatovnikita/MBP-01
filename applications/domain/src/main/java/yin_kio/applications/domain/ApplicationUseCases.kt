@@ -25,12 +25,14 @@ class ApplicationUseCases(
         systemAppsList.content = apps.provideSystem()
         systemAppsList.isVisible = true
         outer.outSystemApps(systemAppsList.content)
+        outer.expandSystemApps()
     }
 
     fun updateEstablishedApps(){
         establishedAppsForm.content = apps.provideEstablished()
         establishedAppsForm.isVisible = true
         outer.outEstablishedApps(establishedAppsForm.content)
+        outer.expandEstablishedApps()
     }
 
     fun close(navigator: Navigator){

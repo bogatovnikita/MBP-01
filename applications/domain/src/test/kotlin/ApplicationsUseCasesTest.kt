@@ -51,6 +51,7 @@ class ApplicationsUseCasesTest {
             establishedAppsForm.content = establishedApps
             establishedAppsForm.isVisible = true
             outer.outEstablishedApps(establishedApps)
+            outer.expandEstablishedApps()
         }
     }
 
@@ -67,6 +68,7 @@ class ApplicationsUseCasesTest {
             systemAppsList.content = systemApps
             systemAppsList.isVisible = true
             outer.outSystemApps(systemApps)
+            outer.expandSystemApps()
         }
     }
 

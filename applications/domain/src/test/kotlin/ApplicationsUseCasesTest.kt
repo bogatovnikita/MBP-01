@@ -144,4 +144,14 @@ class ApplicationsUseCasesTest {
         }
     }
 
+    @Test
+    fun testCollapseSystemApps(){
+        useCases.collapseSystemApps()
+
+        coVerify {
+            systemAppsList.isVisible = false
+            outer.collapseSystemApps()
+        }
+    }
+
 }

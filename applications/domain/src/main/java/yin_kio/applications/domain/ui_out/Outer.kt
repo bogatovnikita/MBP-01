@@ -8,4 +8,5 @@ interface Outer {
     fun outEstablishedApps(apps: List<App>)
     fun expandEstablishedApps()
     fun expandSystemApps()
+    fun collapseSystemApps()
 }

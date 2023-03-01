@@ -3,18 +3,16 @@ package yin_kio.applications.domain
 class ApplicationUseCases(
     private val outer: Outer,
     private val appsInfo: AppsInfo,
-    private val appsForm: AppsForm,
+    private val establishedAppsForm: EstablishedAppsForm,
     private val apps: Apps
 ) {
 
     fun update(){
-        appsForm.systemApps = apps.provideSystem()
-        appsForm.establishedApps = apps.provideEstablished()
+        establishedAppsForm.apps = apps.provideEstablished()
 
         outer.outAppsInfo(appsInfo.provide())
 
-        outer.outSystemApps(appsForm.systemApps)
-        outer.outEstablishedApps(appsForm.establishedApps)
+        outer.outEstablishedApps(establishedAppsForm.apps)
     }
 
     fun close(navigator: Navigator){
@@ -35,7 +33,7 @@ class ApplicationUseCases(
     }
 
     fun selectApp(app: App, selectable: Selectable){
-        selectable.setSelected(appsForm.isAppSelected(app))
+        selectable.setSelected(establishedAppsForm.isAppSelected(app))
     }
 
 }

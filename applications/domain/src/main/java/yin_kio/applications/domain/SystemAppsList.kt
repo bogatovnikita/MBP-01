@@ -4,4 +4,6 @@ interface SystemAppsList {
 
     var content: List<App>
 
+    fun sort()
+
 }

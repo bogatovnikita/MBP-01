@@ -38,4 +38,9 @@ class ApplicationUseCases(
         selectable.setSelected(establishedAppsForm.isAppSelected(app))
     }
 
+    fun sortSystemApps(){
+        systemAppsList.sort()
+        outer.outSystemApps(systemAppsList.content)
+    }
+
 }

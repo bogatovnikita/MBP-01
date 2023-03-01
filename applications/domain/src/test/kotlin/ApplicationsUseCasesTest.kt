@@ -89,4 +89,17 @@ class ApplicationsUseCasesTest {
         coVerify { selectable.setSelected(isSelected) }
     }
 
+    @Test
+    fun testSortSystemApps(){
+        val sortedApps: List<App> = listOf()
+        coEvery { systemAppsList.content } returns sortedApps
+
+        useCases.sortSystemApps()
+
+        coVerify {
+            systemAppsList.sort()
+            outer.outSystemApps(sortedApps)
+        }
+    }
+
 }

@@ -59,4 +59,6 @@
     <string name="live_wallpaper">Живые обои</string>
     <string name="vr">Режим VR</string>
     <string name="five_g">Сеть 5G</string>
+    <string name="core">%d ядро</string>
+    <string name="processor">Процессор</string>
 </resources>

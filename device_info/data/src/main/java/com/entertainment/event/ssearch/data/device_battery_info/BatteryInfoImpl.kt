@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.BatteryManager
 import android.os.BatteryManager.*
+import com.entertainment.event.ssearch.data.util.Util
 import com.entertainment.event.ssearch.domain.device_info.BatteryInfo
 import com.entertainment.event.ssearch.domain.models.ChildFun
 import com.entertainment.event.ssearch.domain.models.DeviceFunctionGroup
@@ -14,14 +15,13 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
-import kotlin.math.pow
-import kotlin.math.roundToInt
+import kotlin.math.round
 
 
 class BatteryInfoImpl @Inject constructor(
     private val context: Application,
     private val batteryChargeReceiver: BatteryChargeReceiver,
-) : BatteryInfo {
+) : Util(context), BatteryInfo {
 
     private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
@@ -45,17 +45,6 @@ class BatteryInfoImpl @Inject constructor(
         batteryChargeReceiver.unregisterReceiver(context)
     }
 
-    private val batteryStatusIntent: Intent?
-        get() {
-            val batFilter = IntentFilter(Intent.ACTION_BATTERY_CHANGED)
-            return context.registerReceiver(null, batFilter)
-        }
-
-    private val batteryPercent: Int
-        get() {
-            return batteryChargeReceiver.batteryPercent.value
-        }
-
     private fun initObserveBatPercent() {
         coroutineScope.launch {
             batteryChargeReceiver.batteryPercent.collect {
@@ -67,11 +56,22 @@ class BatteryInfoImpl @Inject constructor(
     private fun initObserveCurrentAndVoltage() {
         coroutineScope.launch {
             while (true) {
-                delay(3000)
+                delay(1000)
                 _batteryDeviceInfo.value = getBatteryDeviceInfo()
             }
         }
     }
+
+    private val batteryStatusIntent: Intent?
+        get() {
+            val batFilter = IntentFilter(Intent.ACTION_BATTERY_CHANGED)
+            return context.registerReceiver(null, batFilter)
+        }
+
+    private val batteryPercent: Int
+        get() {
+            return batteryChargeReceiver.batteryPercent.value
+        }
 
     private val avgCurrent: Long
         get() {
@@ -148,25 +148,17 @@ class BatteryInfoImpl @Inject constructor(
             return batteryCapacity.toInt()
         }
 
-    private fun getString(id: Int) = context.getString(id)
-
     private fun getBatteryDeviceInfo(): DeviceFunctionGroup = DeviceFunctionGroup(
-        parentFun = ParentFun(name = general.R.string.battery, id = 0),
+        parentFun = ParentFun(name = getString(general.R.string.battery), id = 0),
         listFun = listOf(
-            ChildFun(name = general.R.string.charge_level, body = "$batteryPercent %", id = 1),
-            ChildFun(name = general.R.string.temperature, body = "$batteryTemperature (${round(batteryTemperature.toF())} ℉)", id = 2),
-            ChildFun(name = general.R.string.voltage, body = "$batteryVoltage mV", id = 3),
-            ChildFun(name = general.R.string.current_measurement, body = "$avgCurrent mA", id = 4),
-            ChildFun(name = general.R.string.battery_capacity, body = "$batteryCapacity", id = 5),
-            ChildFun(name = general.R.string.technologies, body = batteryTechnology, id = 6),
-            ChildFun(name = general.R.string.battery_status, body = batteryHealth, id = 7),
-            ChildFun(name = general.R.string.power_supply, body = chargingSource, id = 8),
+            ChildFun(name = getString(general.R.string.charge_level), body = "$batteryPercent %", id = 1),
+            ChildFun(name = getString(general.R.string.temperature), body = "$batteryTemperature (${round(batteryTemperature.toF())} ℉)", id = 2),
+            ChildFun(name = getString(general.R.string.voltage), body = "$batteryVoltage mV", id = 3),
+            ChildFun(name = getString(general.R.string.current_measurement), body = "$avgCurrent mA", id = 4),
+            ChildFun(name = getString(general.R.string.battery_capacity), body = "$batteryCapacity", id = 5),
+            ChildFun(name = getString(general.R.string.technologies), body = batteryTechnology, id = 6),
+            ChildFun(name = getString(general.R.string.battery_status), body = batteryHealth, id = 7),
+            ChildFun(name = getString(general.R.string.power_supply), body = chargingSource, id = 8),
         ))
 
-    private fun Float.toF() = this * 1.8 + 32
-
-    private fun round(value: Double, precision: Int = 1): Double {
-        val scale = 10.0.pow(precision.toDouble()).toInt()
-        return (value * scale).roundToInt().toDouble() / scale
-    }
 }

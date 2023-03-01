@@ -7,7 +7,7 @@
     <fragment
         android:id="@+id/garbageCleanParentFragment"
         android:name="yin_kio.garbage_clean.presentation.views.GarbageCleanParentFragment"
-        android:label="GarbageCleanParentFragment" >
+        android:label="GarbageCleanParentFragment">
         <action
             android:id="@+id/toAdvices"
             app:destination="@id/advicesFragment"
@@ -19,7 +19,7 @@
     <fragment
         android:id="@+id/mainMenuFragment"
         android:name="yin_kio.main_menu.presentation.MainMenuFragment"
-        android:label="MainMenuFragment" >
+        android:label="MainMenuFragment">
         <action
             android:id="@+id/toGarbageClean"
             app:destination="@id/garbageCleanParentFragment" />
@@ -41,11 +41,14 @@
         <action
             android:id="@+id/to_screen_time_graph"
             app:destination="@id/screen_time_graph" />
+        <action
+            android:id="@+id/to_batterySavingFragment"
+            app:destination="@id/batterySavingFragment" />
     </fragment>
     <fragment
         android:id="@+id/advicesFragment"
         android:name="yin_kio.main_menu.presentation.AdvicesFragment"
-        android:label="AdvicesFragment" >
+        android:label="AdvicesFragment">
         <argument
             android:name="dialog_title"
             app:argType="string" />
@@ -58,7 +61,7 @@
     <fragment
         android:id="@+id/duplicatesParentFragment"
         android:name="yin_kio.duplicates.presentation.views.DuplicatesParentFragment"
-        android:label="DuplicatesParentFragment" >
+        android:label="DuplicatesParentFragment">
         <argument
             android:name="completeId"
             app:argType="integer" />
@@ -74,7 +77,26 @@
 
     <include app:graph="@navigation/notification_graph" />
 
-    <include app:graph="@navigation/acceleration_graph"/>
+    <include app:graph="@navigation/acceleration_graph" />
 
     <include app:graph="@navigation/screen_time_graph" />
+
+    <fragment
+        android:id="@+id/batterySavingFragment"
+        android:name="com.battery_saving.presentation.ui.BatterySavingFragment"
+        android:label="BatterySavingFragment">
+        <argument
+            android:name="toScreenTimeId"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_batterySavingFragment_to_screen_time_graph"
+            app:destination="@id/screen_time_graph" />
+        <action
+            android:id="@+id/action_batterySavingFragment_to_advicesFragment"
+            app:destination="@id/advicesFragment"
+            app:popUpTo="@id/mainMenuFragment" />
+        <argument
+            android:name="toAdvices"
+            app:argType="integer" />
+    </fragment>
 </navigation>

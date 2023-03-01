@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/test_onboarding_graph"
+    app:startDestination="@id/onboardingFragment">
+    <fragment
+        android:id="@+id/onboardingFragment"
+        android:name="com.onboarding.test.OnboardingFragment"
+        android:label="OnboardingFragment" >
+        <action
+            android:id="@+id/action_onboardingFragment_to_onboarding_graph"
+            app:destination="@id/onboarding_graph" />
+    </fragment>
+    <include app:graph="@navigation/onboarding_graph" />
+</navigation>

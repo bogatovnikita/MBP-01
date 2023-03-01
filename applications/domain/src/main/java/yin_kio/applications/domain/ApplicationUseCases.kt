@@ -8,9 +8,13 @@ class ApplicationUseCases(
 ) {
 
     fun update(){
+        appsForm.systemApps = apps.provideSystem()
+        appsForm.establishedApps = apps.provideEstablished()
+
         outer.outAppsInfo(appsInfo.provide())
-        outer.outSystemApps(apps.provideSystem())
-        outer.outEstablishedApps(apps.provideEstablished())
+
+        outer.outSystemApps(appsForm.systemApps)
+        outer.outEstablishedApps(appsForm.establishedApps)
     }
 
     fun close(navigator: Navigator){

@@ -25,11 +25,16 @@ class ApplicationsUseCasesTest {
 
         coEvery { appsInfo.provide() } returns appsInfoOut
         coEvery { apps.provideSystem() } returns systemApps
+        coEvery { appsForm.systemApps } returns systemApps
         coEvery { apps.provideEstablished() } returns establishedApps
+        coEvery { appsForm.establishedApps } returns establishedApps
 
         useCases.update()
 
         coVerify {
+            appsForm.systemApps = systemApps
+            appsForm.establishedApps = establishedApps
+
             outer.outAppsInfo(appsInfoOut)
             outer.outSystemApps(systemApps)
             outer.outEstablishedApps(establishedApps)

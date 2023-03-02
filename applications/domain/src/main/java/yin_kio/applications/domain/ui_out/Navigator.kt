@@ -6,6 +6,6 @@ interface Navigator {
     fun showAskDeleteDialog()
     fun showDeleteProgressDialog()
     fun showInter()
-    fun complete()
+    fun complete(freedSpace: Long)
 
 }

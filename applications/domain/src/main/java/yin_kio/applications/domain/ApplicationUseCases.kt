@@ -5,6 +5,7 @@ import yin_kio.applications.domain.core.EstablishedAppsForm
 import yin_kio.applications.domain.core.SystemAppsList
 import yin_kio.applications.domain.gateways.Apps
 import yin_kio.applications.domain.gateways.AppsInfo
+import yin_kio.applications.domain.gateways.StorageInfo
 import yin_kio.applications.domain.ui_out.DeleteRequester
 import yin_kio.applications.domain.ui_out.Navigator
 import yin_kio.applications.domain.ui_out.Outer
@@ -15,7 +16,8 @@ class ApplicationUseCases(
     private val appsInfo: AppsInfo,
     private val establishedAppsForm: EstablishedAppsForm,
     private val apps: Apps,
-    private val systemAppsList: SystemAppsList
+    private val systemAppsList: SystemAppsList,
+    private val storageInfo: StorageInfo
 ) {
 
     fun updateAppsInfo(){
@@ -46,12 +48,16 @@ class ApplicationUseCases(
 
     fun delete(navigator: Navigator, deleteRequester: DeleteRequester){
         navigator.showDeleteProgressDialog()
+
+        storageInfo.saveStartVolume()
         deleteRequester.delete(establishedAppsForm.selectedApps)
+        storageInfo.saveEndVolume()
+
         navigator.showInter()
     }
 
     fun complete(navigator: Navigator){
-        navigator.complete()
+        navigator.complete(storageInfo.freedSpace)
     }
 
     fun selectApp(app: App, selectable: Selectable){

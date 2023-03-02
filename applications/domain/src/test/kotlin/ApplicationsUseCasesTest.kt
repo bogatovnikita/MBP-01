@@ -6,6 +6,7 @@ import yin_kio.applications.domain.core.EstablishedAppsForm
 import yin_kio.applications.domain.core.SystemAppsList
 import yin_kio.applications.domain.gateways.Apps
 import yin_kio.applications.domain.gateways.AppsInfo
+import yin_kio.applications.domain.gateways.StorageInfo
 import yin_kio.applications.domain.ui_out.*
 
 class ApplicationsUseCasesTest {
@@ -15,12 +16,14 @@ class ApplicationsUseCasesTest {
     private val establishedAppsForm: EstablishedAppsForm = spyk()
     private val apps: Apps = mockk()
     private val systemAppsList: SystemAppsList = spyk()
+    private val storageInfo: StorageInfo = spyk()
     private val useCases = ApplicationUseCases(
         outer = outer,
         appsInfo = appsInfo,
         establishedAppsForm = establishedAppsForm,
         apps = apps,
-        systemAppsList = systemAppsList
+        systemAppsList = systemAppsList,
+        storageInfo = storageInfo
     )
     private val navigator: Navigator = spyk()
     private val selectable: Selectable = spyk()
@@ -93,16 +96,23 @@ class ApplicationsUseCasesTest {
 
         coVerifySequence {
             navigator.showDeleteProgressDialog()
+
+            storageInfo.saveStartVolume()
             deleteRequester.delete(selectedApps)
+            storageInfo.saveEndVolume()
+
             navigator.showInter()
         }
     }
 
     @Test
     fun testComplete(){
+        val freedSpace = 100L
+        coEvery { storageInfo.freedSpace } returns freedSpace
+
         useCases.complete(navigator)
 
-        coVerify { navigator.complete() }
+        coVerify { navigator.complete(freedSpace) }
     }
 
     @Test

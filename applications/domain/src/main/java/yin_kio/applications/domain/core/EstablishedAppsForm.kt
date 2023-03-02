@@ -8,6 +8,7 @@ interface EstablishedAppsForm {
 
     var isVisible: Boolean
     val isAllSelected: Boolean
+    val selectedApps: Collection<App>
 
     fun switchIsAllSelected()
 

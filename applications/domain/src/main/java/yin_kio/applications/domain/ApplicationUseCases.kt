@@ -5,6 +5,7 @@ import yin_kio.applications.domain.core.EstablishedAppsForm
 import yin_kio.applications.domain.core.SystemAppsList
 import yin_kio.applications.domain.gateways.Apps
 import yin_kio.applications.domain.gateways.AppsInfo
+import yin_kio.applications.domain.ui_out.DeleteRequester
 import yin_kio.applications.domain.ui_out.Navigator
 import yin_kio.applications.domain.ui_out.Outer
 import yin_kio.applications.domain.ui_out.Selectable
@@ -43,8 +44,9 @@ class ApplicationUseCases(
         navigator.showAskDeleteDialog()
     }
 
-    fun delete(navigator: Navigator){
+    fun delete(navigator: Navigator, deleteRequester: DeleteRequester){
         navigator.showDeleteProgressDialog()
+        deleteRequester.delete(establishedAppsForm.selectedApps)
         navigator.showInter()
     }
 

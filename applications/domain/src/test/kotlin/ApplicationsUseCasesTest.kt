@@ -6,10 +6,7 @@ import yin_kio.applications.domain.core.EstablishedAppsForm
 import yin_kio.applications.domain.core.SystemAppsList
 import yin_kio.applications.domain.gateways.Apps
 import yin_kio.applications.domain.gateways.AppsInfo
-import yin_kio.applications.domain.ui_out.AppsInfoOut
-import yin_kio.applications.domain.ui_out.Navigator
-import yin_kio.applications.domain.ui_out.Outer
-import yin_kio.applications.domain.ui_out.Selectable
+import yin_kio.applications.domain.ui_out.*
 
 class ApplicationsUseCasesTest {
 
@@ -27,6 +24,7 @@ class ApplicationsUseCasesTest {
     )
     private val navigator: Navigator = spyk()
     private val selectable: Selectable = spyk()
+    private val deleteRequester: DeleteRequester = spyk()
 
     @Test
     fun testUpdateAppsInfo(){
@@ -88,10 +86,14 @@ class ApplicationsUseCasesTest {
 
     @Test
     fun testDelete(){
-        useCases.delete(navigator)
+        val selectedApps = listOf(App())
+        coEvery { establishedAppsForm.selectedApps } returns selectedApps
+
+        useCases.delete(navigator, deleteRequester)
 
         coVerifySequence {
             navigator.showDeleteProgressDialog()
+            deleteRequester.delete(selectedApps)
             navigator.showInter()
         }
     }

@@ -1,6 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/onboarding_graph">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/onboarding_graph"
+    app:startDestination="@id/splashFragment">
 
+    <fragment
+        android:id="@+id/splashFragment"
+        android:name="com.onboarding.presentation.ui.splash.SplashFragment"
+        android:label="SplashFragment"
+        tools:layout="@layout/fragment_splash" />
+
+
+    <action
+        android:id="@+id/toOptimizationFragment"
+        app:destination="@id/optimizationFragment"
+        app:popUpTo="@id/onboarding_graph"
+        app:popUpToInclusive="true" />
+    <fragment
+        android:id="@+id/optimizationFragment"
+        android:name="com.onboarding.presentation.ui.optimization.OptimizationFragment"
+        android:label="OptimizationFragment"
+        tools:layout="@layout/fragment_optimization">
+        <argument
+            android:name="typeNextStep"
+            app:argType="integer" />
+    </fragment>
+
+
+    <action
+        android:id="@+id/toFirstStepFragment"
+        app:destination="@id/firstStepFragment" />
+    <fragment
+        android:id="@+id/firstStepFragment"
+        android:name="com.onboarding.presentation.ui.first_step.FirstStepFragment"
+        android:label="FirstStepFragment" />
 </navigation>

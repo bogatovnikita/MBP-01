@@ -8,19 +8,19 @@
         android:id="@+id/file_manager"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="File manager"/>
+        android:text="File manager" />
 
     <Button
         android:id="@+id/duplicates"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="duplicates"/>
+        android:text="duplicates" />
 
     <Button
         android:id="@+id/garbage_clean"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="garbage clean"/>
+        android:text="garbage clean" />
 
     <Button
         android:id="@+id/to_memory"
@@ -51,5 +51,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="To battery saving" />
+
+    <Button
+        android:id="@+id/to_onboarding"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="To onboarding" />
 
 </LinearLayout>

@@ -36,6 +36,7 @@ class MainMenuFragment : Fragment(R.layout.fragment_main_menu) {
             toNotification.setOnClickListener { openNotificationManager() }
             toTimeScreen.setOnClickListener { openScreenTimeManager() }
             toBatterySaving.setOnClickListener { openBatterySaving() }
+            toOnboarding.setOnClickListener { openOnboarding() }
         }
     }
 
@@ -77,6 +78,11 @@ class MainMenuFragment : Fragment(R.layout.fragment_main_menu) {
                 R.id.action_batterySavingFragment_to_advicesFragment
             )
         )
+    }
+
+    private fun openOnboarding() {
+        onBackPressedCallback.isEnabled = true
+        findNavController().navigate(R.id.action_mainMenuFragment_to_onboarding_graph)
     }
 
     private fun completeDestination(): Bundle {

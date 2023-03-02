@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="do_not_close_or_minimize_the_application_while_threats_are_being_eliminated_we_need_a_couple_more_seconds">Не закрывайте и не сворачивайте приложение, пока идет устранение угроз…\n\nНам нужно еще пару секунд…</string>
+</resources>

@@ -180,4 +180,11 @@ class ApplicationsUseCasesTest {
             outer.setIsAllSelected(isAllSelected)
         }
     }
+
+    @Test
+    fun testCancelDelete(){
+        useCases.cancelDelete(navigator)
+
+        coVerify { navigator.close() }
+    }
 }

@@ -81,6 +81,10 @@ class ApplicationUseCases(
         outer.setIsAllSelected(establishedAppsForm.isAllSelected)
     }
 
+    fun cancelDelete(navigator: Navigator){
+        navigator.close()
+    }
+
 
 
 }

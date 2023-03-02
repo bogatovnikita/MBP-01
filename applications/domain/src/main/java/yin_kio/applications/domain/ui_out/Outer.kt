@@ -10,4 +10,5 @@ interface Outer {
     fun expandSystemApps()
     fun collapseSystemApps()
     fun collapseEstablishedApps()
+    fun setIsAllSelected(isAllSelected: Boolean)
 }

@@ -76,6 +76,11 @@ class ApplicationUseCases(
         outer.collapseEstablishedApps()
     }
 
+    fun switchIsAllSelected(){
+        establishedAppsForm.switchIsAllSelected()
+        outer.setIsAllSelected(establishedAppsForm.isAllSelected)
+    }
+
 
 
 }

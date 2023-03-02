@@ -7,5 +7,8 @@ interface EstablishedAppsForm {
     fun sort()
 
     var isVisible: Boolean
+    val isAllSelected: Boolean
+
+    fun switchIsAllSelected()
 
 }

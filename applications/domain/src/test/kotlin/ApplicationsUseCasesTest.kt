@@ -164,4 +164,20 @@ class ApplicationsUseCasesTest {
         }
     }
 
+    @Test
+    fun testSwitchIsAllSelected(){
+        assertIsAllSelected(true)
+        assertIsAllSelected(false)
+    }
+
+    private fun assertIsAllSelected(isAllSelected: Boolean) {
+        coEvery { establishedAppsForm.isAllSelected } returns isAllSelected
+
+        useCases.switchIsAllSelected()
+
+        coVerify {
+            establishedAppsForm.switchIsAllSelected()
+            outer.setIsAllSelected(isAllSelected)
+        }
+    }
 }

@@ -7,6 +7,14 @@
     android:background="@color/white"
     tools:context=".ui.device_info.DeviceInfoFragment">
 
+    <FrameLayout
+        android:id="@+id/gl_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
     <ImageView
         android:id="@+id/btn_go_back"
         android:layout_width="wrap_content"

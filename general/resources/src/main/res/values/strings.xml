@@ -61,4 +61,10 @@
     <string name="five_g">Сеть 5G</string>
     <string name="core">%d ядро</string>
     <string name="processor">Процессор</string>
+    <string name="error">Нет данных</string>
+    <string name="gpu">GPU</string>
+    <string name="instructionSet">Набор инструкций</string>
+    <string name="id">Идентификатор</string>
+    <string name="host">Хост</string>
+    <string name="bootloader">Загрузчик</string>
 </resources>

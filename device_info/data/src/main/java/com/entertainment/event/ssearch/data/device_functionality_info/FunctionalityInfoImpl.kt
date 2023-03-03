@@ -17,6 +17,7 @@ import android.os.Environment
 import android.telephony.TelephonyManager
 import android.telephony.euicc.EuiccManager
 import android.util.Size
+import com.entertainment.event.ssearch.data.util.Util
 import com.entertainment.event.ssearch.domain.device_info.FunctionalityInfo
 import com.entertainment.event.ssearch.domain.models.ChildFun
 import com.entertainment.event.ssearch.domain.models.DeviceFunctionGroup
@@ -26,7 +27,7 @@ import javax.inject.Inject
 
 class FunctionalityInfoImpl @Inject constructor(
     private val context: Application
-) : FunctionalityInfo {
+) : Util(context), FunctionalityInfo {
 
     ///---------------------------WIFI--------------------------------
     private val isWifiAvailable: String
@@ -216,23 +217,6 @@ class FunctionalityInfoImpl @Inject constructor(
             return isSupported(available)
         }
 
-    ///----------------------------WIRELESS CHARGE--------------------------------
-
-
-    private val batteryStatusIntent: Intent?
-        get() {
-            val batFilter = IntentFilter(Intent.ACTION_BATTERY_CHANGED)
-            return context.registerReceiver(null, batFilter)
-        }
-
-    private val isWirelessChargeAvailable: String
-        get() {
-            val batteryManager = context.getSystemService(Context.BATTERY_SERVICE) as BatteryManager
-            val present =
-                batteryStatusIntent?.extras?.getString(BatteryManager.ACTION_CHARGING) ?: "none"
-            return "none"
-        }
-
     ///--------------------------------WALLPAPER----------------------------------
 
     private val isLiveWallpaperAvailable: String
@@ -254,33 +238,32 @@ class FunctionalityInfoImpl @Inject constructor(
         }
 
     override fun getFunctionalityInfo(): DeviceFunctionGroup = DeviceFunctionGroup(
-        parentFun = ParentFun(name = R.string.functions, id = 18),
+        parentFun = ParentFun(name = getString(R.string.functions), id = 18),
         listFun = listOf(
-            ChildFun(name = R.string.wireless_wifi, body = isWifiAvailable, id = 19),
-            ChildFun(name = R.string.wifi_aware, body = isWifiAwareAvailable, id = 20),
-            ChildFun(name = R.string.bluetooth, body = hasBluetooth, id = 21),
-            ChildFun(name = R.string.bluetooth_le, body = hasBluetoothLe, id = 22),
-            ChildFun(name = R.string.gps, body = hasGPS, id = 23),
-            ChildFun(name = R.string.nfc, body = isNfcAvailable, id = 24),
-            ChildFun(name = R.string.camera, body = isCameraAvailable, id = 25),
-            ChildFun(name = R.string.autofocus_camera, body = isCameraAutofocusAvailable, id = 26),
-            ChildFun(name = R.string.external_camera, body = isExternalCameraAvailable, id = 27),
-            ChildFun(name = R.string.flash_camera, body = isFlashCameraAvailable, id = 28),
-            ChildFun(name = R.string.usb_host, body = isUsbHostAvailable, id = 29),
-            ChildFun(name = R.string.multitouch, body = isMultitouchAvailable, id = 30),
-            ChildFun(name = R.string.infrared_port, body = isInfraredPortAvailable, id = 31),
-            ChildFun(name = R.string.two_sim, body = isTwoSimAvailable, id = 32),
-            ChildFun(name = R.string.e_sim, body = isESimAvailable, id = 33),
-            ChildFun(name = R.string.sd_card, body = hasExternalSDCard, id = 34),
-            ChildFun(name = R.string.finger_scanner, body = isFingerScannerAvailable, id = 35),
-            ChildFun(name = R.string.wireless_charge, body = isWirelessChargeAvailable, id = 36),
-            ChildFun(name = R.string.full_hd, body = isFullHdAvailable, id = 37),
-            ChildFun(name = R.string.four_k, body = is4KAvailable, id = 38),
-            ChildFun(name = R.string.eight_k, body = is8KAvailable, id = 39),
-            ChildFun(name = R.string.wifi_direct, body = isWifiDirectAvailable, id = 40),
-            ChildFun(name = R.string.live_wallpaper, body = isLiveWallpaperAvailable, id = 41),
-            ChildFun(name = R.string.vr, body = isVRAvailable, id = 42),
-            ChildFun(name = R.string.five_g, body = is5GAvailable, id = 43),
+            ChildFun(name = getString(R.string.wireless_wifi), body = isWifiAvailable, id = 19),
+            ChildFun(name = getString(R.string.wifi_aware), body = isWifiAwareAvailable, id = 20),
+            ChildFun(name = getString(R.string.bluetooth), body = hasBluetooth, id = 21),
+            ChildFun(name = getString(R.string.bluetooth_le), body = hasBluetoothLe, id = 22),
+            ChildFun(name = getString(R.string.gps), body = hasGPS, id = 23),
+            ChildFun(name = getString(R.string.nfc), body = isNfcAvailable, id = 24),
+            ChildFun(name = getString(R.string.camera), body = isCameraAvailable, id = 25),
+            ChildFun(name = getString(R.string.autofocus_camera), body = isCameraAutofocusAvailable, id = 26),
+            ChildFun(name = getString(R.string.external_camera), body = isExternalCameraAvailable, id = 27),
+            ChildFun(name = getString(R.string.flash_camera), body = isFlashCameraAvailable, id = 28),
+            ChildFun(name = getString(R.string.usb_host), body = isUsbHostAvailable, id = 29),
+            ChildFun(name = getString(R.string.multitouch), body = isMultitouchAvailable, id = 30),
+            ChildFun(name = getString(R.string.infrared_port), body = isInfraredPortAvailable, id = 31),
+            ChildFun(name = getString(R.string.two_sim), body = isTwoSimAvailable, id = 32),
+            ChildFun(name = getString(R.string.e_sim), body = isESimAvailable, id = 33),
+            ChildFun(name = getString(R.string.sd_card), body = hasExternalSDCard, id = 34),
+            ChildFun(name = getString(R.string.finger_scanner), body = isFingerScannerAvailable, id = 35),
+            ChildFun(name = getString(R.string.full_hd), body = isFullHdAvailable, id = 36),
+            ChildFun(name = getString(R.string.four_k), body = is4KAvailable, id = 37),
+            ChildFun(name = getString(R.string.eight_k), body = is8KAvailable, id = 38),
+            ChildFun(name = getString(R.string.wifi_direct), body = isWifiDirectAvailable, id = 39),
+            ChildFun(name = getString(R.string.live_wallpaper), body = isLiveWallpaperAvailable, id = 40),
+            ChildFun(name = getString(R.string.vr), body = isVRAvailable, id = 41),
+            ChildFun(name = getString(R.string.five_g), body = is5GAvailable, id = 42),
         )
     )
 
@@ -288,7 +271,5 @@ class FunctionalityInfoImpl @Inject constructor(
 
     private fun isSupported(isSupported: Boolean) =
         if (isSupported) getString(R.string.supported) else getString(R.string.not_supported)
-
-    private fun getString(id: Int) = context.getString(id)
 
 }

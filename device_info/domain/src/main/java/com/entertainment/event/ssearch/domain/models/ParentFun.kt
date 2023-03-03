@@ -6,6 +6,6 @@ import com.entertainment.event.ssearch.domain.utility.PARENT
 data class ParentFun(
     override val id: Int,
     override var type: Int = PARENT,
-    override val name: Int,
+    override val name: String,
     var isExpanded: Boolean = false,
 ) : DeviceFunction

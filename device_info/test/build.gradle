@@ -44,5 +44,7 @@ dependencies {
     implementation project(':device_info:presentation')
     kapt device_info_kapt.values()
     implementation device_info_presentation.values()
+    implementation device_info_presentation_android_test.values()
+    implementation device_info_presentation_test.values()
 
 }

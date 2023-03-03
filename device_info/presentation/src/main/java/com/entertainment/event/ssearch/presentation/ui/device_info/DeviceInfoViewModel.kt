@@ -35,6 +35,14 @@ class DeviceInfoViewModel @Inject constructor(
         }
     }
 
+    fun startObserve() {
+        deviceInfoUseCase.startObserve()
+    }
+
+    fun stopObserve() {
+        deviceInfoUseCase.stopObserve()
+    }
+
     private fun mergeLists(newList: List<DeviceFunctionGroup>): List<DeviceFunctionGroup> {
         val oldList = screenState.value.mainDeviceInfo
         return if (oldList.isEmpty()) {
@@ -72,6 +80,5 @@ class DeviceInfoViewModel @Inject constructor(
     override fun onCleared() {
         super.onCleared()
         deviceInfoUseCase.unregisterBatteryReceiver()
-        deviceInfoUseCase.stopObserve()
     }
 }

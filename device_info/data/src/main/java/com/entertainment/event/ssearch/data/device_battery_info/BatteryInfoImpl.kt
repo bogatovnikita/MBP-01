@@ -11,9 +11,6 @@ import com.entertainment.event.ssearch.domain.device_info.BatteryInfo
 import com.entertainment.event.ssearch.domain.models.ChildFun
 import com.entertainment.event.ssearch.domain.models.DeviceFunctionGroup
 import com.entertainment.event.ssearch.domain.models.ParentFun
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 import kotlin.math.round
 
@@ -23,43 +20,12 @@ class BatteryInfoImpl @Inject constructor(
     private val batteryChargeReceiver: BatteryChargeReceiver,
 ) : Util(context), BatteryInfo {
 
-    private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
-
-    private val _batteryDeviceInfo: MutableStateFlow<DeviceFunctionGroup> = MutableStateFlow(getBatteryDeviceInfo())
-    override val batteryDeviceInfo = _batteryDeviceInfo.asStateFlow()
-
-    init {
-        initObserveBatPercent()
-        initObserveCurrentAndVoltage()
-    }
-
-    override fun stopObserve() {
-        coroutineScope.cancel()
-    }
-
     override fun registerBatteryReceiver() {
         batteryChargeReceiver.registerReceiver(context)
     }
 
     override fun unregisterBatteryReceiver() {
         batteryChargeReceiver.unregisterReceiver(context)
-    }
-
-    private fun initObserveBatPercent() {
-        coroutineScope.launch {
-            batteryChargeReceiver.batteryPercent.collect {
-                _batteryDeviceInfo.value = getBatteryDeviceInfo()
-            }
-        }
-    }
-
-    private fun initObserveCurrentAndVoltage() {
-        coroutineScope.launch {
-            while (true) {
-                delay(1000)
-                _batteryDeviceInfo.value = getBatteryDeviceInfo()
-            }
-        }
     }
 
     private val batteryStatusIntent: Intent?
@@ -148,7 +114,7 @@ class BatteryInfoImpl @Inject constructor(
             return batteryCapacity.toInt()
         }
 
-    private fun getBatteryDeviceInfo(): DeviceFunctionGroup = DeviceFunctionGroup(
+    override fun getBatteryDeviceInfo(): DeviceFunctionGroup = DeviceFunctionGroup(
         parentFun = ParentFun(name = getString(general.R.string.battery), id = 0),
         listFun = listOf(
             ChildFun(name = getString(general.R.string.charge_level), body = "$batteryPercent %", id = 1),

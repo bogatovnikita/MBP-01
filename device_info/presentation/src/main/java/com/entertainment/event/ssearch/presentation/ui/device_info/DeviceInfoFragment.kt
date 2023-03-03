@@ -55,6 +55,16 @@ class DeviceInfoFragment : Fragment(R.layout.fragment_device_info) {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.startObserve()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        viewModel.stopObserve()
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         binding.glContainer.removeView(glSurfaceView)

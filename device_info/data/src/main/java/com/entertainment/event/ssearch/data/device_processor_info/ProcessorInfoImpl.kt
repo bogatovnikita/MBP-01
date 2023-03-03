@@ -73,6 +73,16 @@ class ProcessorInfoImpl @Inject constructor(
         get() {
             return Build.BOOTLOADER
         }
+    private val radioVer: String
+        get() {
+            val error = getString(R.string.error)
+            val version = Build.getRadioVersion().split(",")
+            var response = ""
+            version.forEachIndexed { index, s ->
+                response = if (index == version.lastIndex) response + s else "$response$s,\n"
+            }
+            return response.ifEmpty { error }
+        }
 
     private fun getCurrentFreq(coreNumber: Int): Long {
         val currentFreqPath = "${CPU_INFO_DIR}cpu$coreNumber/cpufreq/scaling_cur_freq"
@@ -89,6 +99,7 @@ class ProcessorInfoImpl @Inject constructor(
             ChildFun(name = getString(R.string.id), body = id, id = 503),
             ChildFun(name = getString(R.string.host), body = host, id = 504),
             ChildFun(name = getString(R.string.bootloader), body = bootloader, id = 505),
+            ChildFun(name = getString(R.string.radio_version), body = radioVer, id = 505),
         )
 
         return DeviceFunctionGroup(

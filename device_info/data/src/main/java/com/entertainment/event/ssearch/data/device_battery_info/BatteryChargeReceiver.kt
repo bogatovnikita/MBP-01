@@ -35,6 +35,8 @@ class BatteryChargeReceiver @Inject constructor(): BroadcastReceiver() {
     fun unregisterReceiver(app: Application) {
         try {
             app.unregisterReceiver(this)
-        } catch (e: Exception){}
+        } catch (e: Exception){
+            e.printStackTrace()
+        }
     }
 }

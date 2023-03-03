@@ -20,7 +20,7 @@ class SplashFragment : BaseFragment<FragmentSplashBinding>(FragmentSplashBinding
             }
         })
         lifecycleScope.launch {
-            delay(2000)
+//            delay(2000)
             findNavController().navigate(
                 SplashFragmentDirections.toOptimizationFragment(
                     FROM_SPLASH_TO_FIRST_OPTIMIZATION

@@ -33,6 +33,25 @@
         app:destination="@id/firstStepFragment" />
     <fragment
         android:id="@+id/firstStepFragment"
-        android:name="com.onboarding.presentation.ui.first_step.FirstStepFragment"
-        android:label="FirstStepFragment" />
+        android:name="com.onboarding.presentation.ui.first_steps.FirstStepFragment"
+        android:label="FirstStepFragment"
+        tools:layout="@layout/fragment_first_step">
+        <action
+            android:id="@+id/action_firstStepFragment_to_secondStepFragment"
+            app:destination="@id/secondStepFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/secondStepFragment"
+        android:name="com.onboarding.presentation.ui.first_steps.SecondStepFragment"
+        android:label="SecondStepFragment"
+        tools:layout="@layout/fragment_second_step">
+        <action
+            android:id="@+id/action_secondStepFragment_to_rateFragment"
+            app:destination="@id/rateFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/rateFragment"
+        android:name="com.onboarding.presentation.ui.first_steps.RateFragment"
+        android:label="RateFragment"
+        tools:layout="@layout/fragment_rate" />
 </navigation>

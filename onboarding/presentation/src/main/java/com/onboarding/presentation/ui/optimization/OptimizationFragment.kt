@@ -25,7 +25,7 @@ class OptimizationFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        this.preloadAd()
+//        this.preloadAd()
         initDescription()
         startScan()
     }
@@ -39,9 +39,9 @@ class OptimizationFragment :
         lifecycleScope.launch {
             val animator = ObjectAnimator.ofInt(binding.progress, "progress", 0, 100)
             animator.interpolator = DecelerateInterpolator()
-            animator.duration = 8000
+//            animator.duration = 8000
             animator.start()
-            delay(8000)
+//            delay(8000)
             this@OptimizationFragment.showInter { navigateTo() }
         }
     }

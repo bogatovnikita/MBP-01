@@ -6,26 +6,50 @@
 
     <TextView
         android:id="@+id/title"
-        style="@style/Text.Header_3"
+        style="@style/Text.Header_1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/_16sdp"
         android:layout_marginTop="@dimen/_20sdp"
-        android:text="@string/inorder_to_optimize_your_device_we_will_need_to_go_through_several_steps"
+        android:text="@string/rate_our_app"
         android:textColor="@color/dark_blue"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_for_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.25" />
+
     <ImageView
         android:id="@+id/icon_rate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_step_by_step"
-        app:layout_constraintBottom_toTopOf="@id/description"
+        android:src="@drawable/ic_rate_app"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/title" />
+        app:layout_constraintTop_toBottomOf="@id/guideline_for_icon" />
+
+    <RatingBar
+        android:id="@+id/rating_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_20sdp"
+        android:layout_marginTop="@dimen/_25sdp"
+        android:minWidth="@dimen/_20sdp"
+        android:numStars="5"
+        android:progressBackgroundTint="@color/gray"
+        android:progressTint="@color/yellow"
+        android:scaleX="1.4"
+        android:scaleY="1.4"
+        android:secondaryProgressTint="@color/white"
+        android:stepSize="1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/icon_rate" />
 
     <TextView
         android:id="@+id/description"
@@ -34,7 +58,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/_16sdp"
         android:layout_marginBottom="@dimen/_12sdp"
-        android:text="@string/this_is_a_one_time_operation_in_the_future_optimization_will_take_less_time"
+        android:text="@string/we_are_improving_our_product_every_day_and_we_really_hope_that_you_will_like_it"
         android:textColor="@color/gray"
         android:textSize="14sp"
         app:layout_constraintBottom_toTopOf="@id/resume_btn"
@@ -47,8 +71,9 @@
         android:layout_height="0dp"
         android:layout_marginHorizontal="@dimen/_28sdp"
         android:layout_marginBottom="@dimen/_8sdp"
-        android:background="@drawable/background_not_transparent_button_blue"
-        android:text="@string/resume"
+        android:background="@drawable/background_not_transparent_button_gray"
+        android:text="@string/rate"
+        android:clickable="false"
         android:textAllCaps="false"
         android:textAppearance="@style/Text.Header_4"
         android:textColor="@color/white"

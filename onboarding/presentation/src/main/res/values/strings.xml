@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="do_not_close_or_minimize_the_application_while_threats_are_being_eliminated_we_need_a_couple_more_seconds">Не закрывайте и не сворачивайте приложение, пока идет устранение угроз…\n\nНам нужно еще пару секунд…</string>
+    <string name="resume">Продолжить</string>
+    <string name="rate">Оценить</string>
+    <string name="do_not_close_or_minimize_the_application">Не закрывайте и не сворачивайте приложение, пока идет устранение угроз…\n\nНам нужно еще пару секунд…</string>
+    <string name="inorder_to_optimize_your_device_we_will_need_to_go_through_several_steps">Для того, чтобы оптимизировать ваш девайс нам потребуется пройти несколько шагов*</string>
+    <string name="this_is_a_one_time_operation_in_the_future_optimization_will_take_less_time">*Это единоразовая операция, в дальнейшем оптимизация будет занимать меньше времени</string>
+    <string name="have_you_noticed_that_over_time_the_device_starts_to_work_noticeably_slower">А вы замечали, что со временем устройство начинает заметно медленее работать?</string>
+    <string name="we_will_identify_all_the_errors_of_your_device_that_affect_its_operation_and_will_try_to_eliminate_them_together_with_you">Мы выявим все ошибки вашего устройства, которые влияют на его работу и постараемся их устранить вместе с вами </string>
+    <string name="rate_our_app">Оцените наше приложение</string>
+    <string name="we_are_improving_our_product_every_day_and_we_really_hope_that_you_will_like_it">Мы совершенствуем свой продукт каждый день и очень надеемся, что он вам понравится.</string>
 </resources>

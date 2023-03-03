@@ -44,6 +44,9 @@
         <action
             android:id="@+id/to_batterySavingFragment"
             app:destination="@id/batterySavingFragment" />
+        <action
+            android:id="@+id/action_mainMenuFragment_to_onboarding_graph"
+            app:destination="@id/onboarding_graph" />
     </fragment>
     <fragment
         android:id="@+id/advicesFragment"
@@ -99,4 +102,5 @@
             android:name="toAdvices"
             app:argType="integer" />
     </fragment>
+    <include app:graph="@navigation/onboarding_graph" />
 </navigation>

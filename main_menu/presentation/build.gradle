@@ -47,6 +47,7 @@ dependencies {
     implementation project(':screenTime:presentation')
     implementation project(':acceleration:presentation')
     implementation project(':battery_saving:presentation')
+    implementation project(':onboarding:presentation')
 
     implementation presentation.values()
     testImplementation presentation_test.values()

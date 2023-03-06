@@ -53,5 +53,14 @@
         android:id="@+id/rateFragment"
         android:name="com.onboarding.presentation.ui.first_steps.RateFragment"
         android:label="RateFragment"
-        tools:layout="@layout/fragment_rate" />
+        tools:layout="@layout/fragment_rate">
+        <action
+            android:id="@+id/action_rateFragment_to_initialAssessmentFragment"
+            app:destination="@id/initialAssessmentFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/initialAssessmentFragment"
+        android:name="com.onboarding.presentation.ui.first_steps.InitialAssessmentFragment"
+        android:label="InitialAssessmentFragment"
+        tools:layout="@layout/fragment_initial_assessment" />
 </navigation>

@@ -9,6 +9,8 @@ object NavigatorOnboarding {
     init {
         navigatorList.apply {
             add(R.id.toFirstStepFragment)
+            add(R.id.toAboutDeviceFragment)
+            add(R.id.toFullReadyFragment)
         }
     }
 

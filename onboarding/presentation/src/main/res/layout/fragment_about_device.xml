@@ -1,0 +1,378 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/title"
+        style="@style/Text.Header_1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_16sdp"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:text="@string/device_information"
+        android:textColor="@color/dark_blue"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/progress"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_14sdp"
+        android:layout_marginHorizontal="@dimen/_16sdp"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:max="7"
+        android:progressDrawable="@drawable/background_progress_bar_about_device"
+        app:layout_constraintTop_toBottomOf="@id/title" />
+
+    <TextView
+        android:id="@+id/progress_text"
+        style="@style/Text.Subtitle_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/before_the_automatic_transition_to_the_next_step"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="@id/progress"
+        app:layout_constraintEnd_toStartOf="@id/progress_text_value"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="@id/progress"
+        app:layout_constraintTop_toTopOf="@id/progress" />
+
+    <TextView
+        android:id="@+id/progress_text_value"
+        style="@style/Text.Subtitle_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_4sdp"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="@id/progress"
+        app:layout_constraintEnd_toEndOf="@id/progress"
+        app:layout_constraintStart_toEndOf="@id/progress_text"
+        app:layout_constraintTop_toTopOf="@id/progress"
+        tools:text="0:05" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_for_progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.24" />
+
+    <TextView
+        android:id="@+id/model_phone"
+        style="@style/Text.Body_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:text="@string/model_device"
+        android:textColor="@color/dark_blue"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/guideline_for_progress_bar" />
+
+    <TextView
+        android:id="@+id/model_phone_description"
+        style="@style/Text.Body_2.1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:textColor="@color/dark_blue"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/model_phone"
+        tools:text="samsung SM-G950F" />
+
+    <View
+        android:id="@+id/separator_line_for_model"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_1sdp"
+        android:layout_marginHorizontal="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:background="@color/gray_dark"
+        android:paddingBottom="@dimen/_4sdp"
+        app:layout_constraintTop_toBottomOf="@id/model_phone" />
+
+    <TextView
+        android:id="@+id/version_android"
+        style="@style/Text.Body_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:text="@string/android_version"
+        android:textColor="@color/dark_blue"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/separator_line_for_model" />
+
+    <TextView
+        android:id="@+id/version_android_description"
+        style="@style/Text.Body_2.1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:textColor="@color/dark_blue"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/version_android"
+        tools:text="11" />
+
+    <View
+        android:id="@+id/separator_line_for_android_version"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_1sdp"
+        android:layout_marginHorizontal="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:background="@color/gray_dark"
+        android:paddingBottom="@dimen/_4sdp"
+        app:layout_constraintTop_toBottomOf="@id/version_android" />
+
+    <TextView
+        android:id="@+id/time_work"
+        style="@style/Text.Body_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:text="@string/time_work"
+        android:textColor="@color/dark_blue"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/separator_line_for_android_version" />
+
+    <TextView
+        android:id="@+id/time_work_description"
+        style="@style/Text.Body_2.1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:textColor="@color/dark_blue"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/time_work"
+        tools:text="405:58:25" />
+
+    <View
+        android:id="@+id/separator_line_for_time_work"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_1sdp"
+        android:layout_marginHorizontal="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:background="@color/gray_dark"
+        android:paddingBottom="@dimen/_4sdp"
+        app:layout_constraintTop_toBottomOf="@id/time_work" />
+
+    <TextView
+        android:id="@+id/card_version"
+        style="@style/Text.Body_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:text="@string/card_version"
+        android:textColor="@color/dark_blue"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/separator_line_for_time_work" />
+
+    <TextView
+        android:id="@+id/card_version_description"
+        style="@style/Text.Body_2.1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:textColor="@color/dark_blue"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/card_version"
+        tools:text="universal8895" />
+
+    <View
+        android:id="@+id/separator_line_for_card_version"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_1sdp"
+        android:layout_marginHorizontal="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:background="@color/gray_dark"
+        android:paddingBottom="@dimen/_4sdp"
+        app:layout_constraintTop_toBottomOf="@id/card_version" />
+
+    <TextView
+        android:id="@+id/display_size"
+        style="@style/Text.Body_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:text="@string/display_size"
+        android:textColor="@color/dark_blue"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/separator_line_for_card_version" />
+
+    <TextView
+        android:id="@+id/display_size_description"
+        style="@style/Text.Body_2.1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:textColor="@color/dark_blue"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/display_size"
+        tools:text="5.8 дюймов" />
+
+    <View
+        android:id="@+id/separator_line_for_display_size"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_1sdp"
+        android:layout_marginHorizontal="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:background="@color/gray_dark"
+        android:paddingBottom="@dimen/_4sdp"
+        app:layout_constraintTop_toBottomOf="@id/display_size" />
+
+    <TextView
+        android:id="@+id/screen_size"
+        style="@style/Text.Body_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:text="@string/screen_size"
+        android:textColor="@color/dark_blue"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/separator_line_for_display_size" />
+
+    <TextView
+        android:id="@+id/screen_size_description"
+        style="@style/Text.Body_2.1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:textColor="@color/dark_blue"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/screen_size"
+        tools:text="1440 x 2960 пикселей" />
+
+    <View
+        android:id="@+id/separator_line_for_screen_size"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_1sdp"
+        android:layout_marginHorizontal="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:background="@color/gray_dark"
+        android:paddingBottom="@dimen/_4sdp"
+        app:layout_constraintTop_toBottomOf="@id/screen_size" />
+
+    <TextView
+        android:id="@+id/density_px"
+        style="@style/Text.Body_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:text="@string/density_px"
+        android:textColor="@color/dark_blue"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/separator_line_for_screen_size" />
+
+    <TextView
+        android:id="@+id/density_px_description"
+        style="@style/Text.Body_2.1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:textColor="@color/dark_blue"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/density_px"
+        tools:text="564.00 ppi" />
+
+    <View
+        android:id="@+id/separator_line_for_density_px"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_1sdp"
+        android:layout_marginHorizontal="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:background="@color/gray_dark"
+        android:paddingBottom="@dimen/_4sdp"
+        app:layout_constraintTop_toBottomOf="@id/density_px" />
+
+    <TextView
+        android:id="@+id/battery_charge_percent"
+        style="@style/Text.Body_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:text="@string/battery_charge_percent"
+        android:textColor="@color/dark_blue"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/separator_line_for_density_px" />
+
+    <TextView
+        android:id="@+id/battery_charge_percent_description"
+        style="@style/Text.Body_2.1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:textColor="@color/dark_blue"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/battery_charge_percent"
+        tools:text="47.0%" />
+
+    <View
+        android:id="@+id/separator_line_for_battery_charge_percent"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_1sdp"
+        android:layout_marginHorizontal="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:background="@color/gray_dark"
+        android:paddingBottom="@dimen/_4sdp"
+        app:layout_constraintTop_toBottomOf="@id/battery_charge_percent" />
+
+    <TextView
+        android:id="@+id/temperature_battery"
+        style="@style/Text.Body_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:text="@string/temperature_battery"
+        android:textColor="@color/dark_blue"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/separator_line_for_battery_charge_percent" />
+
+    <TextView
+        android:id="@+id/temperature_battery_description"
+        style="@style/Text.Body_2.1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:textColor="@color/dark_blue"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/temperature_battery"
+        tools:text="31.2 C(88.2 F)" />
+
+    <View
+        android:id="@+id/separator_line_for_temperature_battery"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_1sdp"
+        android:layout_marginHorizontal="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:background="@color/gray_dark"
+        android:paddingBottom="@dimen/_4sdp"
+        app:layout_constraintTop_toBottomOf="@id/temperature_battery" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/resume_btn"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginHorizontal="@dimen/_28sdp"
+        android:layout_marginBottom="@dimen/_8sdp"
+        android:background="@drawable/background_not_transparent_button_blue"
+        android:text="@string/resume"
+        android:textAllCaps="false"
+        android:textAppearance="@style/Text.Header_4"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.07"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

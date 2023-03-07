@@ -4,23 +4,23 @@ import android.os.Bundle
 import android.view.View
 import androidx.navigation.fragment.findNavController
 import com.onboarding.presentation.base.BaseFragment
-import com.onboarding.presentation.databinding.FragmentInitialAssessmentBinding
+import com.onboarding.presentation.databinding.FragmentRequiredOptimizationBinding
 
-class InitialAssessmentFragment :
-    BaseFragment<FragmentInitialAssessmentBinding>(FragmentInitialAssessmentBinding::inflate) {
+class RequiredOptimizationFragment :
+    BaseFragment<FragmentRequiredOptimizationBinding>(FragmentRequiredOptimizationBinding::inflate) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.resumeBtn.setOnClickListener {
             findNavController().navigate(
                 InitialAssessmentFragmentDirections.toOptimizationFragment(
-                    FROM_INITIAL_ASSESSMENT_TO_ABOUT_DEVICE
+                    FROM_REQUIRED_OPTIMIZATION_TO_FULL_READY
                 )
             )
         }
     }
 
     companion object {
-        const val FROM_INITIAL_ASSESSMENT_TO_ABOUT_DEVICE = 1
+        const val FROM_REQUIRED_OPTIMIZATION_TO_FULL_READY = 2
     }
 }

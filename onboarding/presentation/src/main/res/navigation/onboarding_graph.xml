@@ -63,4 +63,31 @@
         android:name="com.onboarding.presentation.ui.first_steps.InitialAssessmentFragment"
         android:label="InitialAssessmentFragment"
         tools:layout="@layout/fragment_initial_assessment" />
+
+    <action
+        android:id="@+id/toAboutDeviceFragment"
+        app:destination="@id/aboutDeviceFragment" />
+    <fragment
+        android:id="@+id/aboutDeviceFragment"
+        android:name="com.onboarding.presentation.ui.first_steps.AboutDeviceFragment"
+        android:label="AboutDeviceFragment"
+        tools:layout="@layout/fragment_about_device">
+        <action
+            android:id="@+id/action_aboutDeviceFragment_to_requiredOptimizationFragment"
+            app:destination="@id/requiredOptimizationFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/requiredOptimizationFragment"
+        android:name="com.onboarding.presentation.ui.first_steps.RequiredOptimizationFragment"
+        android:label="RequiredOptimizationFragment"
+        tools:layout="@layout/fragment_required_optimization" />
+
+    <action
+        android:id="@+id/toFullReadyFragment"
+        app:destination="@id/fullReadyFragment" />
+    <fragment
+        android:id="@+id/fullReadyFragment"
+        tools:layout="@layout/fragment_full_ready"
+        android:name="com.onboarding.presentation.ui.first_steps.FullReadyFragment"
+        android:label="FullReadyFragment" />
 </navigation>

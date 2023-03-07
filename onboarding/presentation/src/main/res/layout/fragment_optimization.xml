@@ -24,13 +24,13 @@
         android:layout_marginHorizontal="@dimen/_16sdp"
         android:layout_marginTop="@dimen/_20sdp"
         android:progressDrawable="@drawable/background_progress_bar"
-        app:layout_constraintBottom_toTopOf="@id/description"
+        app:layout_constraintBottom_toTopOf="@id/second_description"
         app:layout_constraintEnd_toStartOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/step_anim" />
 
     <TextView
-        android:id="@+id/description"
+        android:id="@+id/second_description"
         style="@style/Text.Body_1.2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

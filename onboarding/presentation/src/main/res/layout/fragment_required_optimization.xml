@@ -11,45 +11,35 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/_16sdp"
         android:layout_marginTop="@dimen/_20sdp"
-        android:text="@string/rate_our_app"
+        android:text="@string/optimization_required"
         android:textColor="@color/dark_blue"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline_for_icon"
-        android:layout_width="wrap_content"
+    <TextView
+        android:id="@+id/first_description"
+        style="@style/Text.Body_2.1"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.25" />
+        android:layout_marginHorizontal="@dimen/_16sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:text="@string/after_checking_your_phone_we_found_something_that_needs_attention"
+        android:textColor="@color/dark_blue"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title" />
 
     <ImageView
         android:id="@+id/icon_rate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_rate_app"
+        android:src="@drawable/ic_attention"
+        app:layout_constraintBottom_toTopOf="@id/second_description"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/guideline_for_icon" />
-
-    <RatingBar
-        android:id="@+id/rating_bar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/_20sdp"
-        android:layout_marginTop="@dimen/_25sdp"
-        android:minWidth="@dimen/_20sdp"
-        android:numStars="5"
-        android:progressBackgroundTint="@color/gray"
-        android:progressTint="@color/yellow"
-        android:scaleX="1.4"
-        android:scaleY="1.4"
-        android:secondaryProgressTint="@color/white"
-        android:stepSize="1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/icon_rate" />
+        app:layout_constraintTop_toBottomOf="@id/first_description" />
 
     <TextView
         android:id="@+id/second_description"
@@ -58,9 +48,19 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/_16sdp"
         android:layout_marginBottom="@dimen/_12sdp"
-        android:text="@string/we_are_improving_our_product_every_day"
+        android:text="@string/lets_do_the_first_optimization"
         android:textColor="@color/gray"
         android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@id/dot_img"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/dot_img"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_12sdp"
+        android:src="@drawable/ic_dot_the_second"
         app:layout_constraintBottom_toTopOf="@id/resume_btn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -71,9 +71,8 @@
         android:layout_height="0dp"
         android:layout_marginHorizontal="@dimen/_28sdp"
         android:layout_marginBottom="@dimen/_8sdp"
-        android:background="@drawable/background_not_transparent_button_gray"
-        android:text="@string/rate"
-        android:clickable="false"
+        android:background="@drawable/background_not_transparent_button_blue"
+        android:text="@string/start_optimization"
         android:textAllCaps="false"
         android:textAppearance="@style/Text.Header_4"
         android:textColor="@color/white"
@@ -81,5 +80,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_percent="0.07"
         app:layout_constraintStart_toStartOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
